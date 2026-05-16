@@ -1,0 +1,2 @@
+# Render / production install
+-r requirements/production.txt
