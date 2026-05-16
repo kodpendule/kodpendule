@@ -1,1 +1,5 @@
-# Session cart (primary); optional SavedCart for authenticated users — Step 2
+"""
+Cart is session-based — see apps.cart.cart.
+
+No database models in v1.
+"""

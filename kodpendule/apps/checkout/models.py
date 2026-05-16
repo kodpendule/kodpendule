@@ -1,1 +1,3 @@
-# Mostly stateless flow; CheckoutSession optional for recovery — Step 2
+"""
+Checkout orchestrates cart, shipping, and order creation — no models in v1.
+"""

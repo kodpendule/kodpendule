@@ -25,8 +25,8 @@ Open the **`kodpendule`** folder in Cursor (**File → Open Folder**).
 | Step | Description | Status |
 |------|-------------|--------|
 | 1 | Architecture & folder structure | **Done** |
-| 2 | Models, admin, migrations, tests | Next |
-| 3 | Settings, env, Docker, requirements | Pending |
+| 2 | Models, admin, migrations, tests | **Done** |
+| 3 | Settings, env, Docker, requirements | Next |
 | 4–11 | Features, i18n, deploy, tests | Pending |
 
 ## Local setup (after Step 3)

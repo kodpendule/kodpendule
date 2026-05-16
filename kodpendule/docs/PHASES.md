@@ -10,14 +10,13 @@ Use this alongside [ARCHITECTURE.md](../ARCHITECTURE.md). Complete each step bef
 - [x] Architecture docs (`ARCHITECTURE.md`, `docs/*`)
 - [x] Docker/render/requirements placeholders
 
-## Step 2 — Models
+## Step 2 — Models ✅
 
-- [ ] Implement all models per [MODELS.md](MODELS.md)
-- [ ] Register in Django admin (inlines, list filters, low-stock highlight)
-- [ ] `makemigrations` + `migrate`
-- [ ] Serializers for Product, Category, City (read-only)
-- [ ] Forms: none required yet except admin
-- [ ] `tests/test_models.py` per app (creation, constraints, parler)
+- [x] Implement all models per [MODELS.md](MODELS.md)
+- [x] Register in Django admin (inlines, list filters, low-stock highlight)
+- [x] `makemigrations` + `migrate`
+- [x] Serializer: `CitySerializer` (checkout shipping price)
+- [x] `tests/test_models.py` per app (creation, constraints, parler)
 
 ## Step 3 — Settings & infrastructure
 

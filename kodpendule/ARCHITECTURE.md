@@ -193,8 +193,9 @@ Local: `docker-compose` runs `web` + `db`; `.env.local` overrides `DATABASE_URL`
 
 | Step | Scope | Status |
 |------|--------|--------|
-| **1** | Architecture & folder structure | ✅ Current |
-| **2** | Models, admin, migrations, basic tests | Next |
+| **1** | Architecture & folder structure | ✅ Done |
+| **2** | Models, admin, migrations, basic tests | ✅ Done |
+| **3** | Settings, env, Docker, requirements | Next |
 | **3** | Settings, env, Docker, requirements | |
 | **4** | Authentication (login/register/guest) | |
 | **5** | Products & categories (views, templates) | |
