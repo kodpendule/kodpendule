@@ -1,1 +1,51 @@
-/* Custom styles — Step 5+ */
+/* Kod Pendule storefront */
+
+.product-card__img,
+.category-card__img {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+.product-card__img--placeholder {
+    min-height: 12rem;
+}
+
+.hero-carousel__img {
+    max-height: 28rem;
+    object-fit: cover;
+}
+
+.hero-carousel__caption {
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.55));
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding-bottom: 2rem;
+}
+
+.promo-section__img {
+    max-height: 14rem;
+    object-fit: cover;
+}
+
+.product-gallery__img {
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    background: #f8f9fa;
+}
+
+.product-gallery__thumb img {
+    width: 4rem;
+    height: 4rem;
+    object-fit: cover;
+}
+
+.product-description {
+    max-width: 42rem;
+}
+
+@media (max-width: 991.98px) {
+    .hero-carousel__img {
+        max-height: 18rem;
+    }
+}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container py-4 py-lg-5">
+    <h1 class="h2 mb-4">{% trans "Categories" %}</h1>
+    {% if categories %}
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+        {% for category in categories %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <a href="{{ category.get_absolute_url }}" class="text-decoration-none text-dark">
+                    {% if category.image %}
+                    <img src="{{ category.image.url }}" class="card-img-top category-card__img" alt="{{ category.name }}" loading="lazy">
+                    {% else %}
+                    <div class="card-img-top category-card__img bg-light d-flex align-items-center justify-content-center">
+                        <span class="text-muted small">{% trans "No image" %}</span>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h2 class="h5 card-title mb-1">{{ category.name }}</h2>
+                        {% if category.description %}
+                        <p class="card-text small text-muted mb-0">{{ category.description|truncatewords:20 }}</p>
+                        {% endif %}
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-muted">{% trans "No categories available yet." %}</p>
+    {% endif %}
+</div>
+{% endblock %}

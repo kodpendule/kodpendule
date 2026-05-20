@@ -1,1 +1,2 @@
-"""Write operations for apps.accounts. See docs/SERVICES.md."""
+"""Write operations for apps.accounts."""
+

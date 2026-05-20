@@ -1,16 +1,17 @@
 """
 Shared Django settings for Kod Pendule webshop.
 
-Environment-specific overrides: config.settings.local | config.settings.production
-Full wiring (database, middleware, static, parler): Step 3.
+Do not put secrets here. Use config.settings.local or config.settings.production.
+
+Database: local = SQLite, production = PostgreSQL. Use portable ORM only
+(no postgres-only fields, indexes, or raw SQL).
 """
 
 from pathlib import Path
 
-# Build paths inside the project: BASE_DIR / 'templates', etc.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# --- Apps (installed in Step 3) -----------------------------------------------
+# --- Apps ---------------------------------------------------------------------
 
 DJANGO_APPS = [
     "django.contrib.admin",
@@ -27,7 +28,6 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "parler",
     "django_extensions",
-    # "django_ratelimit",  # Step 14
 ]
 
 LOCAL_APPS = [
@@ -45,15 +45,13 @@ LOCAL_APPS = [
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
-# --- Defaults -----------------------------------------------------------------
-
-SECRET_KEY = "django-insecure-placeholder-change-in-env"
-DEBUG = False
-ALLOWED_HOSTS: list[str] = []
+# --- Core ---------------------------------------------------------------------
 
 ROOT_URLCONF = "config.urls"
 WSGI_APPLICATION = "config.wsgi.application"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "accounts.User"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -78,33 +76,28 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.i18n",
+                "apps.core.context_processors.shop_globals",
             ],
         },
     },
 ]
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
-
-STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = BASE_DIR / "staticfiles"
-
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
-
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
 ]
 
-AUTH_USER_MODEL = "accounts.User"
+# --- i18n ---------------------------------------------------------------------
 
 LANGUAGE_CODE = "sr"
 LANGUAGES = [
@@ -117,7 +110,6 @@ USE_I18N = True
 USE_TZ = True
 
 PARLER_DEFAULT_LANGUAGE_CODE = "sr"
-
 PARLER_LANGUAGES = {
     None: (
         {"code": "sr"},
@@ -129,6 +121,41 @@ PARLER_LANGUAGES = {
     },
 }
 
-# Currency display (Serbia)
+# --- Static & media (URLs; storage backends set per environment) --------------
+
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+# --- Session & auth redirects (views wired in Step 4) -------------------------
+
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 14  # 2 weeks
+LOGIN_URL = "/prijava/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
+# --- DRF ----------------------------------------------------------------------
+
+REST_FRAMEWORK = {
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
+}
+
+# --- Shop ---------------------------------------------------------------------
+
 SHOP_CURRENCY = "RSD"
 SHOP_CURRENCY_SYMBOL = "din"
+SHOP_PRODUCTS_PER_PAGE = 12
+
+# --- Email (overridden per environment) ---------------------------------------
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "Kod Pendule <noreply@kodpendule.rs>"

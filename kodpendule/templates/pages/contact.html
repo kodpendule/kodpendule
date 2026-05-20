@@ -1,8 +1,30 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block title %}{% trans "Kontakt" %} — {{ block.super }}{% endblock %}
+
+{% block title %}{% trans "Contact" %} | {{ block.super }}{% endblock %}
+
 {% block content %}
-<div class="container py-4">
-    <h1>{% trans "Kontakt" %}</h1>
+<div class="container py-5">
+    <h1 class="h2 mb-4">{% trans "Contact" %}</h1>
+    {% if footer_settings %}
+    <div class="row g-4">
+        <div class="col-md-6">
+            {% if footer_settings.phone %}
+            <p class="mb-2"><strong>{% trans "Phone" %}:</strong> <a href="tel:{{ footer_settings.phone }}">{{ footer_settings.phone }}</a></p>
+            {% endif %}
+            {% if footer_settings.email %}
+            <p class="mb-2"><strong>{% trans "Email" %}:</strong> <a href="mailto:{{ footer_settings.email }}">{{ footer_settings.email }}</a></p>
+            {% endif %}
+            {% if footer_settings.address %}
+            <p class="mb-2"><strong>{% trans "Address" %}:</strong><br>{{ footer_settings.address|linebreaksbr }}</p>
+            {% endif %}
+            {% if footer_settings.working_hours %}
+            <p class="mb-0"><strong>{% trans "Working hours" %}:</strong><br>{{ footer_settings.working_hours|linebreaksbr }}</p>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <p class="text-muted">{% trans "Contact details will appear here once configured in the admin." %}</p>
+    {% endif %}
 </div>
 {% endblock %}

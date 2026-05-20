@@ -1,0 +1,20 @@
+{% load i18n %}
+{% if nav_categories %}
+<nav class="category-nav mb-4" aria-label="{% trans 'Categories' %}">
+    <ul class="nav nav-pills flex-wrap gap-2">
+        <li class="nav-item">
+            <a class="nav-link{% if not active_category %} active{% endif %}" href="{% url 'products:list' %}">
+                {% trans "All products" %}
+            </a>
+        </li>
+        {% for category in nav_categories %}
+            <li class="nav-item">
+                <a class="nav-link{% if active_category and active_category.pk == category.pk %} active{% endif %}"
+                   href="{{ category.get_absolute_url }}">
+                    {{ category.name }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</nav>
+{% endif %}

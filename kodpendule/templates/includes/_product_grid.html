@@ -1,0 +1,14 @@
+{% load i18n %}
+{% language shop_language %}
+{% if products %}
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+        {% for product in products %}
+            <div class="col">
+                {% include "includes/_product_card.html" with product=product %}
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-muted mb-0">{% trans "No products found." %}</p>
+{% endif %}
+{% endlanguage %}

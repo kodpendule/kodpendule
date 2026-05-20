@@ -1,6 +1,39 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block title %}{% trans "Proizvodi" %} — {{ block.super }}{% endblock %}
+
 {% block content %}
-<div class="container py-4"><h1>{% trans "Proizvodi" %}</h1></div>
+<div class="container py-4 py-lg-5">
+  {% include "includes/_breadcrumb.html" with breadcrumbs=breadcrumb_items %}
+
+  <header class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+    <div>
+      <h1 class="h2 mb-1">
+        {% if search_query %}
+          {% blocktrans with query=search_query %}Search: {{ query }}{% endblocktrans %}
+        {% elif active_category %}
+          {{ active_category.name }}
+        {% else %}
+          {% trans "Products" %}
+        {% endif %}
+      </h1>
+      {% if is_paginated %}
+      <p class="text-muted small mb-0">
+        {% blocktrans with count=page_obj.paginator.count %}Showing {{ count }} products{% endblocktrans %}
+      </p>
+      {% endif %}
+    </div>
+    <form class="d-flex" method="get" action="{% url 'products:list' %}" role="search">
+      {% if active_category %}
+      <input type="hidden" name="kategorija" value="{{ active_category.slug }}">
+      {% endif %}
+      <input class="form-control form-control-sm me-2" type="search" name="q" value="{{ search_query }}"
+             placeholder="{% trans 'Search…' %}" aria-label="{% trans 'Search' %}">
+      <button class="btn btn-primary btn-sm" type="submit">{% trans "Search" %}</button>
+    </form>
+  </header>
+
+  {% include "includes/_category_nav.html" %}
+  {% include "includes/_product_grid.html" with products=products %}
+  {% include "includes/_pagination.html" %}
+</div>
 {% endblock %}

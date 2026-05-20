@@ -1,5 +1,106 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n shop_tags %}
+
 {% block content %}
-<div class="container py-4"><!-- Product detail — Step 5 --></div>
+<div class="container py-4 py-lg-5">
+    {% include "includes/_breadcrumb.html" with breadcrumbs=breadcrumb_items %}
+
+    <div class="row g-4 g-lg-5">
+        <div class="col-lg-6">
+            <div id="productGallery" class="carousel slide product-gallery" data-bs-ride="false">
+                <div class="carousel-inner rounded border bg-light">
+                    {% if product.main_image %}
+                    <div class="carousel-item active">
+                        <img src="{{ product.main_image.url }}" class="d-block w-100 product-gallery__img" alt="{{ product.name }}">
+                    </div>
+                    {% endif %}
+                    {% for image in gallery_images %}
+                    <div class="carousel-item{% if not product.main_image and forloop.first %} active{% endif %}">
+                        <img src="{{ image.image.url }}" class="d-block w-100 product-gallery__img"
+                             alt="{{ image.alt_text|default:product.name }}">
+                    </div>
+                    {% endfor %}
+                    {% if not product.main_image and not gallery_images %}
+                    <div class="carousel-item active">
+                        <div class="product-gallery__img d-flex align-items-center justify-content-center text-muted">
+                            {% trans "No image" %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% if gallery_images or product.main_image and gallery_images %}
+                <button class="carousel-control-prev" type="button" data-bs-target="#productGallery" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">{% trans "Previous" %}</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#productGallery" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">{% trans "Next" %}</span>
+                </button>
+                {% endif %}
+            </div>
+
+            {% if gallery_images %}
+            <div class="d-flex flex-wrap gap-2 mt-3">
+                {% if product.main_image %}
+                <button type="button" class="btn btn-outline-secondary p-0 product-gallery__thumb" data-bs-target="#productGallery" data-bs-slide-to="0">
+                    <img src="{{ product.main_image.url }}" alt="" class="rounded">
+                </button>
+                {% endif %}
+                {% for image in gallery_images %}
+                <button type="button" class="btn btn-outline-secondary p-0 product-gallery__thumb"
+                        data-bs-target="#productGallery"
+                        data-bs-slide-to="{% if product.main_image %}{{ forloop.counter }}{% else %}{{ forloop.counter0 }}{% endif %}">
+                    <img src="{{ image.image.url }}" alt="" class="rounded">
+                </button>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-6">
+            <h1 class="h2 mb-2">{{ product.name }}</h1>
+            <p class="text-muted small mb-3">{% trans "SKU" %}: {{ product.sku }}</p>
+
+            {% if product.has_discount %}
+            <p class="fs-4 mb-2">
+                <span class="fw-bold text-danger">{{ product.effective_price|money }}</span>
+                <span class="text-muted text-decoration-line-through ms-2">{{ product.price|money }}</span>
+            </p>
+            {% else %}
+            <p class="fs-4 fw-bold mb-2">{{ product.effective_price|money }}</p>
+            {% endif %}
+
+            {% if product.stock > 0 %}
+            <span class="badge text-bg-success mb-3">{% trans "In stock" %}</span>
+            {% else %}
+            <span class="badge text-bg-secondary mb-3">{% trans "Out of stock" %}</span>
+            {% endif %}
+
+            {% if product.short_description %}
+            <p class="lead">{{ product.short_description }}</p>
+            {% endif %}
+
+            {% if product.description %}
+            <div class="product-description mt-4">
+                <h2 class="h5">{% trans "Description" %}</h2>
+                <div class="text-muted">{{ product.description|linebreaksbr }}</div>
+            </div>
+            {% endif %}
+
+            <p class="mt-4 mb-0">
+                <a href="{{ product.category.get_absolute_url }}" class="btn btn-outline-primary btn-sm">
+                    {% trans "More in" %} {{ product.category.name }}
+                </a>
+            </p>
+        </div>
+    </div>
+
+    {% if related_products %}
+    <section class="mt-5 pt-4 border-top">
+        <h2 class="h4 mb-4">{% trans "Related products" %}</h2>
+        {% include "includes/_product_grid.html" with products=related_products %}
+    </section>
+    {% endif %}
+</div>
 {% endblock %}

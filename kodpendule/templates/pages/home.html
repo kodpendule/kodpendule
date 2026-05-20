@@ -1,8 +1,24 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 {% load i18n %}
-{% block title %}{% trans "Početna" %} — {{ block.super }}{% endblock %}
+
 {% block content %}
-<div class="container py-4">
-    <p class="text-muted">{% trans "Homepage — hero, categories, featured products (Step 5)." %}</p>
-</div>
+{% include "includes/_hero_carousel.html" %}
+
+{% for block in homepage_blocks %}
+    {% include "includes/_homepage_product_section.html" with block=block %}
+{% endfor %}
+
+{% include "includes/_promo_section.html" with promos=promo_middle %}
+
+{% if not homepage_blocks %}
+<section class="py-5 bg-light">
+    <div class="container text-center">
+        <h1 class="h3">{% trans "Welcome to Kod Pendule" %}</h1>
+        <p class="text-muted">{% trans "Add products and homepage sections in the admin to populate this page." %}</p>
+        <a href="{% url 'products:list' %}" class="btn btn-primary">{% trans "Browse products" %}</a>
+    </div>
+</section>
+{% endif %}
+
+{% include "includes/_promo_section.html" with promos=promo_bottom %}
 {% endblock %}

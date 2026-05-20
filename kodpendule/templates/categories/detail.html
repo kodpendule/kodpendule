@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container py-4 py-lg-5">
+    {% include "includes/_breadcrumb.html" with breadcrumbs=breadcrumb_items %}
+
+    <header class="mb-4">
+        <h1 class="h2 mb-2">{{ category.name }}</h1>
+        {% if category.description %}
+        <div class="text-muted">{{ category.description|linebreaksbr }}</div>
+        {% endif %}
+    </header>
+
+    {% include "includes/_category_nav.html" %}
+
+    {% if child_categories %}
+    <section class="mb-5">
+        <h2 class="h5 mb-3">{% trans "Subcategories" %}</h2>
+        <div class="row row-cols-2 row-cols-md-4 g-3">
+            {% for child in child_categories %}
+            <div class="col">
+                <a href="{{ child.get_absolute_url }}" class="btn btn-outline-secondary w-100">{{ child.name }}</a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <section>
+        <h2 class="h5 mb-3">{% trans "Products" %}</h2>
+        {% include "includes/_product_grid.html" with products=products %}
+        {% include "includes/_pagination.html" %}
+    </section>
+</div>
+{% endblock %}

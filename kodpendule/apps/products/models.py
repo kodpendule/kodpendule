@@ -2,12 +2,11 @@ from decimal import Decimal
 
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from parler.models import TranslatableModel, TranslatedFields
 
 from apps.core.fields import MoneyField
-
-
 class Product(TranslatableModel):
     category = models.ForeignKey(
         "categories.Category",
@@ -71,6 +70,10 @@ class Product(TranslatableModel):
             self.discount_price is not None
             and self.discount_price < self.price
         )
+
+    def get_absolute_url(self) -> str:
+        slug = self.safe_translation_getter("slug", any_language=True)
+        return reverse("products:detail", kwargs={"slug": slug})
 
 
 class ProductImage(models.Model):

@@ -1,1 +1,2 @@
-"""Read/query helpers for apps.newsletter. See docs/SERVICES.md."""
+"""Read/query helpers for apps.newsletter."""
+

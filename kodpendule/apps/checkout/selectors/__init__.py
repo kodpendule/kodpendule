@@ -1,1 +1,2 @@
-"""Read/query helpers for apps.checkout. See docs/SERVICES.md."""
+"""Read/query helpers for apps.checkout."""
+

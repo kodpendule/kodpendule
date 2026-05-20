@@ -17,6 +17,7 @@ media/*
 !media/.gitkeep
 *.log
 db.sqlite3
+test_db.sqlite3
 
 # IDE
 .idea/
@@ -31,6 +32,3 @@ Thumbs.db
 .coverage
 htmlcov/
 .pytest_cache/
-
-# Docker
-*.pid

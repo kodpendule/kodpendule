@@ -1,0 +1,43 @@
+{% load i18n %}
+{% if hero_banners %}
+<div id="heroCarousel" class="carousel slide hero-carousel mb-0" data-bs-ride="carousel">
+    {% if hero_banners|length > 1 %}
+    <div class="carousel-indicators">
+        {% for banner in hero_banners %}
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ forloop.counter0 }}"
+                {% if forloop.first %}class="active" aria-current="true"{% endif %}
+                aria-label="{% trans 'Slide' %} {{ forloop.counter }}"></button>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="carousel-inner">
+        {% for banner in hero_banners %}
+        <div class="carousel-item{% if forloop.first %} active{% endif %}">
+            {% if banner.link_url %}
+            <a href="{{ banner.link_url }}" class="d-block text-decoration-none text-white">
+            {% endif %}
+                <img src="{{ banner.image.url }}" class="d-block w-100 hero-carousel__img" alt="{{ banner.title|default:'' }}">
+                {% if banner.title or banner.subtitle %}
+                <div class="carousel-caption d-none d-md-block hero-carousel__caption">
+                    {% if banner.title %}<h2 class="h3 mb-1">{{ banner.title }}</h2>{% endif %}
+                    {% if banner.subtitle %}<p class="mb-0">{{ banner.subtitle }}</p>{% endif %}
+                </div>
+                {% endif %}
+            {% if banner.link_url %}
+            </a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% if hero_banners|length > 1 %}
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">{% trans "Previous" %}</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">{% trans "Next" %}</span>
+    </button>
+    {% endif %}
+</div>
+{% endif %}

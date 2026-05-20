@@ -1,0 +1,12 @@
+{% load i18n %}
+<section class="homepage-section py-5">
+    <div class="container">
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-4">
+            <h2 class="h3 mb-0">{{ block.section.get_section_type_display }}</h2>
+            <a href="{% url 'products:list' %}" class="btn btn-outline-primary btn-sm">
+                {% trans "View all" %}
+            </a>
+        </div>
+        {% include "includes/_product_grid.html" with products=block.products %}
+    </div>
+</section>

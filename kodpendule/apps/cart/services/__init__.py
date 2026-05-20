@@ -1,1 +1,2 @@
-"""Write operations for apps.cart. See docs/SERVICES.md."""
+"""Write operations for apps.cart."""
+

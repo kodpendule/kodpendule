@@ -1,1 +1,36 @@
-# Render Blueprint — Step 10
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# Attach a PostgreSQL database; Render sets DATABASE_URL automatically.
+
+services:
+  - type: web
+    name: kodpendule
+    runtime: python
+    plan: free
+    buildCommand: >-
+      pip install -r requirements.txt &&
+      python manage.py collectstatic --noinput &&
+      python manage.py migrate --noinput
+    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.production
+      - key: PYTHON_VERSION
+        value: "3.12.0"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kodpendule-db
+          property: connectionString
+
+databases:
+  - name: kodpendule-db
+    plan: free
+    databaseName: kodpendule
+    user: kodpendule
