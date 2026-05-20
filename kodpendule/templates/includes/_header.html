@@ -29,6 +29,16 @@
             </form>
             <ul class="navbar-nav align-items-lg-center gap-lg-2">
                 <li class="nav-item">
+                    <a class="nav-link position-relative" href="{% url 'cart:detail' %}" aria-label="{% trans 'Cart' %}">
+                        {% trans "Cart" %}
+                        {% if cart_item_count %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-primary">
+                            {{ cart_item_count }}
+                        </span>
+                        {% endif %}
+                    </a>
+                </li>
+                <li class="nav-item">
                     {% include "includes/_language_switcher.html" %}
                 </li>
                 {% if user.is_authenticated %}

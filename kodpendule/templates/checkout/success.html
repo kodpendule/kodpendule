@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container py-5 text-center">
+    <h1 class="h2 mb-3">{% trans "Thank you for your order!" %}</h1>
+    {% if order_number %}
+    <p class="lead">
+        {% blocktrans with number=order_number %}Your order number is <strong>{{ number }}</strong>.{% endblocktrans %}
+    </p>
+    <p class="text-muted">{% trans "We will contact you to confirm delivery. Payment on delivery (cash)." %}</p>
+    {% else %}
+    <p class="text-muted">{% trans "Your order has been received." %}</p>
+    {% endif %}
+    <a href="{% url 'products:list' %}" class="btn btn-primary mt-3">{% trans "Continue shopping" %}</a>
+</div>
+{% endblock %}

@@ -1,9 +1,100 @@
 {% extends "base.html" %}
-{% load i18n %}
-{% block title %}{% trans "Plaćanje" %} — {{ block.super }}{% endblock %}
+{% load i18n shop_tags static %}
+
 {% block content %}
-<div class="container py-4">
-    <h1>{% trans "Plaćanje" %}</h1>
-    {# Guest | Login | Register — delivery date, required notes — Step 6 #}
+<div class="container py-4 py-lg-5">
+    <h1 class="h2 mb-4">{% trans "Checkout" %}</h1>
+
+    {% if is_guest %}
+    <p class="text-muted mb-4">
+        {% trans "You can checkout as a guest — no account required." %}
+        <a href="{% url 'accounts:login' %}?next={{ request.path }}">{% trans "Sign in" %}</a>
+        {% trans "or" %}
+        <a href="{% url 'accounts:register' %}?next={{ request.path }}">{% trans "register" %}</a>.
+    </p>
+    {% endif %}
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                <h2 class="h5 mb-3">{% trans "Contact" %}</h2>
+                {% if not is_guest %}{{ form.guest_email }}{% else %}
+                {% include "includes/_form_field.html" with field=form.guest_email %}
+                {% endif %}
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">{% include "includes/_form_field.html" with field=form.first_name %}</div>
+                    <div class="col-md-6">{% include "includes/_form_field.html" with field=form.last_name %}</div>
+                    <div class="col-12">{% include "includes/_form_field.html" with field=form.phone %}</div>
+                </div>
+
+                <h2 class="h5 mb-3">{% trans "Shipping address" %}</h2>
+                <div class="row g-3 mb-2">
+                    <div class="col-12">{% include "includes/_form_field.html" with field=form.shipping_city %}</div>
+                    <div class="col-12">{% include "includes/_form_field.html" with field=form.shipping_street %}</div>
+                    <div class="col-md-6">{% include "includes/_form_field.html" with field=form.shipping_postal_code %}</div>
+                </div>
+                <p class="small text-muted mb-4">
+                    {% trans "Shipping" %}: <span id="shipping-price-display">—</span> {{ shop_currency_symbol }}
+                </p>
+
+                <h2 class="h5 mb-3">{% trans "Billing address" %}</h2>
+                <div class="form-check mb-3">
+                    {{ form.billing_same_as_shipping }}
+                    <label class="form-check-label" for="id_billing_same">{% trans "Same as shipping" %}</label>
+                </div>
+                <div id="billing-fields" class="row g-3 mb-4">
+                    <div class="col-12">{% include "includes/_form_field.html" with field=form.billing_street %}</div>
+                    <div class="col-md-6">{% include "includes/_form_field.html" with field=form.billing_city_name %}</div>
+                    <div class="col-md-6">{% include "includes/_form_field.html" with field=form.billing_postal_code %}</div>
+                </div>
+
+                <h2 class="h5 mb-3">{% trans "Delivery" %}</h2>
+                <div class="mb-3">{% include "includes/_form_field.html" with field=form.order_notes %}</div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">{% include "includes/_form_field.html" with field=form.delivery_date %}</div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            {{ form.flexible_delivery }}
+                            <label class="form-check-label" for="id_flexible_delivery">{{ form.flexible_delivery.label }}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="small text-muted mb-4">{% trans "Payment: cash on delivery (COD)." %}</p>
+
+                <button type="submit" class="btn btn-primary btn-lg">{% trans "Place order" %}</button>
+            </form>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h2 class="h6 text-uppercase text-muted mb-3">{% trans "Order summary" %}</h2>
+                    <ul class="list-unstyled mb-3">
+                        {% for line in cart_lines %}
+                        <li class="d-flex justify-content-between small mb-2">
+                            <span>{{ line.product.name }} × {{ line.quantity }}</span>
+                            <span>{{ line.line_total|money }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="d-flex justify-content-between fw-semibold">
+                        <span>{% trans "Subtotal" %}</span>
+                        <span>{{ cart_subtotal|money }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+{% endblock %}
+
+{{ city_prices|json_script:"city-prices-data" }}
+{% block extra_js %}
+<script src="{% static 'js/checkout.js' %}"></script>
 {% endblock %}

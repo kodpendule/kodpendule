@@ -14,6 +14,8 @@ urlpatterns = [
     path("", include("apps.core.urls")),
     path("", include("apps.categories.urls")),
     path("", include("apps.products.urls")),
+    path("", include("apps.cart.urls")),
+    path("", include("apps.checkout.urls")),
     path("", include("apps.accounts.urls")),
     # path("admin/dashboard/", include("apps.dashboard.urls")),
     # path("api/v1/", include("config.api.urls")),

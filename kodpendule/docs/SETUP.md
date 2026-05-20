@@ -41,6 +41,17 @@ python manage.py test
 
 Tests use `test_db.sqlite3` (separate file, recreated each run).
 
+```powershell
+python manage.py test apps.cart apps.checkout apps.products apps.categories apps.accounts apps.core config
+```
+
+### Cart & checkout (Step 6)
+
+- **Cart:** http://127.0.0.1:8000/korpa/
+- **Checkout:** http://127.0.0.1:8000/placanje/
+- Guest checkout supported; payment is **cash on delivery (COD)** only in v1.
+- In admin, add at least one active **City** (Shipping → Cities) with a delivery price before checkout works.
+
 ### Database portability
 
 - Use the **Django ORM** only (no raw SQL tied to one engine).

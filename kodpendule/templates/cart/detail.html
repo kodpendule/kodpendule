@@ -1,6 +1,71 @@
 {% extends "base.html" %}
-{% load i18n %}
-{% block title %}{% trans "Korpa" %} — {{ block.super }}{% endblock %}
+{% load i18n shop_tags %}
+
 {% block content %}
-<div class="container py-4"><h1>{% trans "Korpa" %}</h1></div>
+<div class="container py-4 py-lg-5">
+    <h1 class="h2 mb-4">{% trans "Cart" %}</h1>
+
+    {% if cart_lines %}
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>{% trans "Product" %}</th>
+                    <th class="text-end">{% trans "Price" %}</th>
+                    <th class="text-center" style="width: 8rem;">{% trans "Qty" %}</th>
+                    <th class="text-end">{% trans "Total" %}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for line in cart_lines %}
+                <tr>
+                    <td>
+                        <a href="{{ line.product.get_absolute_url }}" class="text-decoration-none fw-medium">
+                            {{ line.product.name }}
+                        </a>
+                        <div class="small text-muted">{{ line.product.sku }}</div>
+                    </td>
+                    <td class="text-end">{{ line.unit_price|money }}</td>
+                    <td>
+                        <form method="post" action="{% url 'cart:update' line.product.pk %}" class="d-flex justify-content-center">
+                            {% csrf_token %}
+                            <input type="number" name="quantity" value="{{ line.quantity }}" min="1" max="{{ line.product.stock }}"
+                                   class="form-control form-control-sm text-center" style="width: 4rem;">
+                            <button type="submit" class="btn btn-sm btn-outline-secondary ms-1" aria-label="{% trans 'Update' %}">{% trans "OK" %}</button>
+                        </form>
+                    </td>
+                    <td class="text-end fw-semibold">{{ line.line_total|money }}</td>
+                    <td class="text-end">
+                        <form method="post" action="{% url 'cart:remove' line.product.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-danger">{% trans "Remove" %}</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row justify-content-end">
+        <div class="col-md-5">
+            <div class="card border-0 bg-light">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>{% trans "Subtotal" %}</span>
+                        <span class="fw-semibold">{{ cart_subtotal|money }}</span>
+                    </div>
+                    <p class="small text-muted mb-3">{% trans "Shipping is calculated at checkout." %}</p>
+                    <a href="{% url 'checkout:checkout' %}" class="btn btn-primary w-100">{% trans "Proceed to checkout" %}</a>
+                    <a href="{% url 'products:list' %}" class="btn btn-link w-100 mt-2">{% trans "Continue shopping" %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p class="text-muted">{% trans "Your cart is empty." %}</p>
+    <a href="{% url 'products:list' %}" class="btn btn-primary">{% trans "Browse products" %}</a>
+    {% endif %}
+</div>
 {% endblock %}

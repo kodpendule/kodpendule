@@ -46,4 +46,5 @@ Copy `.env.local.example` → `.env.local` for local development.
 | 1–3 | Structure, models, settings | Done |
 | 4 | Authentication | Done |
 | 5 | Storefront (catalog, search, homepage) | Done |
-| 6+ | Cart, checkout, … | Pending |
+| 6 | Cart & checkout (guest, COD) | Done |
+| 7+ | Orders dashboard, i18n URLs, … | Pending |
