@@ -1,7 +1,8 @@
-from django.db.models import Q, QuerySet
+from django.db.models import Count, Q, QuerySet
 
 from apps.categories.models import Category
 from apps.core.models import HomepageSectionType
+from apps.core.slugs import translation_languages_to_try
 from apps.core.utils import get_shop_language
 from apps.products.models import Product
 
@@ -11,10 +12,15 @@ def _language(language: str | None) -> str:
 
 
 def active_products_qs(language: str | None = None) -> QuerySet[Product]:
-    """Base queryset for storefront product lists."""
-    lang = _language(language)
+    """Products visible on the storefront (active + at least one non-empty slug)."""
+    _language(language)
+    slug_filter = Q(
+        translations__slug__isnull=False,
+    ) & ~Q(translations__slug="")
     return (
         Product.objects.filter(is_active=True)
+        .annotate(slug_count=Count("translations", filter=slug_filter))
+        .filter(slug_count__gt=0)
         .select_related("category")
         .prefetch_related("translations", "category__translations", "gallery_images")
         .order_by("-created_at")
@@ -23,17 +29,20 @@ def active_products_qs(language: str | None = None) -> QuerySet[Product]:
 
 def get_product_by_slug(slug: str, language: str | None = None) -> Product | None:
     lang = _language(language)
-    product = (
-        Product.objects.filter(
-            is_active=True,
-            translations__language_code=lang,
-            translations__slug=slug,
-        )
+    base_qs = (
+        Product.objects.filter(is_active=True)
         .select_related("category")
         .prefetch_related("translations", "category__translations", "gallery_images")
-        .distinct()
-        .first()
     )
+    for try_lang in translation_languages_to_try(lang):
+        product = base_qs.filter(
+            translations__language_code=try_lang,
+            translations__slug=slug,
+        ).distinct().first()
+        if product is not None:
+            product.set_current_language(lang)
+            return product
+    product = base_qs.filter(translations__slug=slug).distinct().first()
     if product is not None:
         product.set_current_language(lang)
     return product

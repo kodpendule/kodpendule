@@ -72,7 +72,11 @@ class Product(TranslatableModel):
         )
 
     def get_absolute_url(self) -> str:
-        slug = self.safe_translation_getter("slug", any_language=True)
+        from apps.core.slugs import localized_slug
+
+        slug = localized_slug(self)
+        if not slug:
+            return reverse("products:list")
         return reverse("products:detail", kwargs={"slug": slug})
 
 

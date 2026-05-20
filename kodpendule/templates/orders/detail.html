@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load i18n shop_tags %}
+
+{% block content %}
+<div class="container py-4 py-lg-5">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">{% trans "Home" %}</a></li>
+            {% if user.is_authenticated %}
+            <li class="breadcrumb-item"><a href="{% url 'orders:history' %}">{% trans "My orders" %}</a></li>
+            {% else %}
+            <li class="breadcrumb-item"><a href="{% url 'orders:track' %}">{% trans "Track order" %}</a></li>
+            {% endif %}
+            <li class="breadcrumb-item active" aria-current="page">{{ order.order_number }}</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-4">
+        <h1 class="h2 mb-0">{% trans "Order" %} {{ order.order_number }}</h1>
+        <span class="badge {{ status_badge_class }}">{{ status_label }}</span>
+    </div>
+    <p class="text-muted">
+        {% blocktrans with date=order.created_at|date:"SHORT_DATETIME_FORMAT" %}Placed on {{ date }}{% endblocktrans %}
+    </p>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <h2 class="h6 text-uppercase text-muted mb-3">{% trans "Status" %}</h2>
+            {% include "orders/includes/_order_status_progress.html" %}
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h2 class="h6 text-uppercase text-muted mb-3">{% trans "Items" %}</h2>
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>{% trans "Product" %}</th>
+                                    <th class="text-center">{% trans "Qty" %}</th>
+                                    <th class="text-end">{% trans "Price" %}</th>
+                                    <th class="text-end">{% trans "Line total" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order.items.all %}
+                                <tr>
+                                    <td>
+                                        <span class="fw-medium">{{ item.product_name }}</span>
+                                        <div class="small text-muted">{{ item.sku }}</div>
+                                    </td>
+                                    <td class="text-center">{{ item.quantity }}</td>
+                                    <td class="text-end">{{ item.unit_price|money }}</td>
+                                    <td class="text-end fw-semibold">{{ item.line_total|money }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h6 text-uppercase text-muted mb-3">{% trans "Totals" %}</h2>
+                    {% include "orders/includes/_order_totals.html" %}
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h6 text-uppercase text-muted mb-3">{% trans "Delivery" %}</h2>
+                    <p class="mb-1 fw-medium">{{ order.customer_full_name }}</p>
+                    <p class="mb-1">{{ order.phone }}</p>
+                    <p class="mb-1 text-muted">{{ order.customer_email }}</p>
+                    <hr>
+                    <p class="mb-0">
+                        {{ order.shipping_street }}<br>
+                        {{ order.shipping_postal_code }} {{ order.shipping_city_name }}
+                    </p>
+                    {% if order.delivery_date %}
+                    <p class="small text-muted mt-2 mb-0">
+                        {% blocktrans with date=order.delivery_date|date:"SHORT_DATE_FORMAT" %}Preferred delivery: {{ date }}{% endblocktrans %}
+                        {% if order.flexible_delivery %} · {% trans "Flexible" %}{% endif %}
+                    </p>
+                    {% endif %}
+                    {% if order.order_notes %}
+                    <p class="small mt-2 mb-0"><strong>{% trans "Notes:" %}</strong> {{ order.order_notes }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card border-0 bg-light">
+                <div class="card-body small text-muted">
+                    <strong>{% trans "Billing address" %}</strong><br>
+                    {{ order.billing_street }}<br>
+                    {{ order.billing_postal_code }} {{ order.billing_city_name }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

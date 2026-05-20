@@ -37,7 +37,10 @@ DATABASES = {
 
 INTERNAL_IPS = ["127.0.0.1", "localhost"]
 
-if DEBUG:
+# Django admin changelist breaks on Python 3.14 (template Context.__copy__).
+# Use Python 3.12 for local dev, or set USE_DEBUG_TOOLBAR=True on 3.12 only.
+_use_toolbar = config("USE_DEBUG_TOOLBAR", default=False, cast=bool)
+if DEBUG and _use_toolbar and sys.version_info < (3, 14):
     try:
         import debug_toolbar  # noqa: F401
 

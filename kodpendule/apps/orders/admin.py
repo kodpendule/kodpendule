@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from apps.orders.models import Order, OrderItem
+from apps.orders.models import Order, OrderItem, OrderStatus
 
 
 class OrderItemInline(admin.TabularInline):
@@ -27,6 +27,7 @@ class OrderAdmin(admin.ModelAdmin):
         "payment_method",
         "created_at",
     )
+    list_editable = ("status",)
     list_filter = ("status", "payment_method", "flexible_delivery", "created_at")
     search_fields = (
         "order_number",
@@ -102,6 +103,20 @@ class OrderAdmin(admin.ModelAdmin):
             .select_related("user", "shipping_city", "shipping_method")
             .prefetch_related("items")
         )
+
+    @admin.action(description="Mark as confirmed")
+    def mark_confirmed(self, request, queryset):
+        queryset.update(status=OrderStatus.CONFIRMED)
+
+    @admin.action(description="Mark as shipped")
+    def mark_shipped(self, request, queryset):
+        queryset.update(status=OrderStatus.SHIPPED)
+
+    @admin.action(description="Mark as delivered")
+    def mark_delivered(self, request, queryset):
+        queryset.update(status=OrderStatus.DELIVERED)
+
+    actions = ["mark_confirmed", "mark_shipped", "mark_delivered"]
 
     @admin.display(description="Customer")
     def customer_display(self, obj: Order) -> str:

@@ -1,0 +1,12 @@
+{% load i18n %}
+{% if show_progress %}
+<ol class="list-group list-group-horizontal flex-wrap order-status-progress mb-0">
+    {% for step in progress_steps %}
+    <li class="list-group-item flex-fill text-center small py-2 {% if forloop.counter0 <= current_step_index %}active{% endif %}">
+        {{ step.label }}
+    </li>
+    {% endfor %}
+</ol>
+{% else %}
+<p class="text-muted small mb-0">{% trans "This order has been cancelled." %}</p>
+{% endif %}

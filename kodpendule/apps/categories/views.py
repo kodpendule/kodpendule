@@ -10,6 +10,7 @@ from apps.categories.selectors import (
 )
 from apps.core.breadcrumbs import categories_crumb, home_crumb
 from apps.core.mixins import ShopLanguageMixin
+from apps.core.utils import activate_parler_language
 from apps.core.templatetags.shop_tags import category_meta_title
 from apps.products.selectors import filter_products_by_category
 
@@ -54,6 +55,8 @@ class CategoryDetailView(ShopLanguageMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        for product in context.get("products", []):
+            activate_parler_language(product, self.shop_language)
         category = self.category
         context.update(
             {

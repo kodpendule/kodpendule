@@ -38,5 +38,9 @@ class Category(TranslatableModel):
         return self.safe_translation_getter("name", any_language=True) or f"Category #{self.pk}"
 
     def get_absolute_url(self) -> str:
-        slug = self.safe_translation_getter("slug", any_language=True)
+        from apps.core.slugs import localized_slug
+
+        slug = localized_slug(self)
+        if not slug:
+            return reverse("categories:list")
         return reverse("categories:detail", kwargs={"slug": slug})

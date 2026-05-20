@@ -1,6 +1,49 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block title %}{% trans "Praćenje porudžbine" %} — {{ block.super }}{% endblock %}
+
 {% block content %}
-<div class="container py-4 col-md-6"><h1>{% trans "Praćenje porudžbine" %}</h1></div>
+<div class="container py-4 py-lg-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <h1 class="h2 mb-2">{% trans "Track your order" %}</h1>
+            <p class="text-muted mb-4">
+                {% trans "Enter the order number from your confirmation and the email address you used at checkout." %}
+            </p>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ form.non_field_errors }}
+                        </div>
+                        {% endif %}
+                        <div class="mb-3">
+                            <label for="{{ form.order_number.id_for_label }}" class="form-label">{{ form.order_number.label }}</label>
+                            {{ form.order_number }}
+                            {% if form.order_number.errors %}
+                            <div class="invalid-feedback d-block">{{ form.order_number.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-4">
+                            <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                            <div class="invalid-feedback d-block">{{ form.email.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">{% trans "Find my order" %}</button>
+                    </form>
+                </div>
+            </div>
+
+            <p class="text-center text-muted small mt-4 mb-0">
+                {% trans "Have an account?" %}
+                <a href="{% url 'accounts:login' %}?next={% url 'orders:history' %}">{% trans "Sign in" %}</a>
+                {% trans "to see all your orders." %}
+            </p>
+        </div>
+    </div>
+</div>
 {% endblock %}

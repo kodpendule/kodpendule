@@ -44,6 +44,19 @@
     max-width: 42rem;
 }
 
+.order-status-progress .list-group-item {
+    border-color: var(--bs-border-color);
+    color: var(--bs-secondary-color);
+    background: var(--bs-light);
+}
+
+.order-status-progress .list-group-item.active {
+    color: var(--bs-primary);
+    background: rgba(var(--bs-primary-rgb), 0.08);
+    font-weight: 600;
+    border-color: var(--bs-primary);
+}
+
 @media (max-width: 991.98px) {
     .hero-carousel__img {
         max-height: 18rem;

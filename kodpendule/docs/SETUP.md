@@ -4,7 +4,7 @@
 
 ### 1. Prerequisites
 
-- Python 3.12+ (3.14 works; 3.12 is recommended for widest Django compatibility)
+- **Python 3.12 recommended** (3.14 breaks Django admin list pages; storefront may work)
 - No PostgreSQL install required locally
 
 Local data is stored in `db.sqlite3` in the project root.  

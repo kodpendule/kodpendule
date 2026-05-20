@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 from parler.admin import TranslatableAdmin
 
+from apps.core.slugs import localized_slug, unique_slug_for_translation
 from apps.products.models import Product, ProductImage
 
 
@@ -15,7 +17,8 @@ class ProductImageInline(admin.TabularInline):
 class ProductAdmin(TranslatableAdmin):
     list_display = (
         "sku",
-        "__str__",
+        "name",
+        "slug_display",
         "category",
         "price_display",
         "stock_display",
@@ -36,7 +39,22 @@ class ProductAdmin(TranslatableAdmin):
     inlines = [ProductImageInline]
     fieldsets = (
         (
-            None,
+            _("Name & description"),
+            {
+                "description": _(
+                    "Fill in for the active language tab (Serbian / English). "
+                    "Name is shown on the shop; slug is used in the URL."
+                ),
+                "fields": (
+                    "name",
+                    "slug",
+                    "short_description",
+                    "description",
+                ),
+            },
+        ),
+        (
+            _("Pricing & stock"),
             {
                 "fields": (
                     "category",
@@ -47,6 +65,13 @@ class ProductAdmin(TranslatableAdmin):
                     "stock",
                     "minimum_stock_alert",
                 ),
+            },
+        ),
+        (
+            _("SEO"),
+            {
+                "classes": ("collapse",),
+                "fields": ("meta_title", "meta_description"),
             },
         ),
         (
@@ -66,6 +91,14 @@ class ProductAdmin(TranslatableAdmin):
         ),
     )
 
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_dbfield(db_field, request, **kwargs)
+        if db_field.name == "sku" and formfield:
+            formfield.help_text = _(
+                "Internal code (e.g. S1). Not the product title on the shop — use Name above."
+            )
+        return formfield
+
     def get_queryset(self, request):
         return (
             super()
@@ -73,6 +106,24 @@ class ProductAdmin(TranslatableAdmin):
             .select_related("category")
             .prefetch_related("translations", "category__translations")
         )
+
+    def save_translation(self, request, obj, form, change):
+        translation = form.instance
+        if not (translation.slug or "").strip():
+            name = (translation.name or "").strip()
+            if name:
+                translation.slug = unique_slug_for_translation(
+                    translation,
+                    fallback=obj.sku,
+                )
+        super().save_translation(request, obj, form, change)
+
+    @admin.display(description="Slug")
+    def slug_display(self, obj: Product) -> str:
+        slug = localized_slug(obj)
+        if slug:
+            return slug
+        return format_html('<span style="color:#b45309;">{}</span>', _("missing — not on shop"))
 
     @admin.display(description="Price")
     def price_display(self, obj: Product) -> str:

@@ -7,7 +7,10 @@ from django.views.generic import FormView, TemplateView
 from apps.cart.cart import get_cart
 from apps.checkout.forms import CheckoutForm
 from apps.core.mixins import ShopLanguageMixin
+from apps.core.utils import activate_parler_language
+from apps.orders.selectors import order_detail_qs
 from apps.orders.services import CheckoutError, create_order_from_checkout
+from apps.orders.services.order_access import grant_order_access
 from apps.shipping.selectors import active_cities
 
 
@@ -51,7 +54,7 @@ class CheckoutView(ShopLanguageMixin, FormView):
         cart = get_cart(self.request)
         lines = cart.get_lines()
         for line in lines:
-            line.product.set_current_language(self.shop_language)
+            activate_parler_language(line.product, self.shop_language)
         cities = list(active_cities())
         context.update(
             {
@@ -91,6 +94,8 @@ class CheckoutView(ShopLanguageMixin, FormView):
             return self.form_invalid(form)
 
         self.request.session["last_order_number"] = order.order_number
+        self.request.session["last_order_id"] = order.pk
+        grant_order_access(self.request, order)
         messages.success(
             self.request,
             _("Thank you! Your order %(number)s has been placed.")
@@ -105,9 +110,14 @@ class CheckoutSuccessView(ShopLanguageMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         order_number = self.request.session.pop("last_order_number", None)
+        order_id = self.request.session.pop("last_order_id", None)
+        order = None
+        if order_id:
+            order = order_detail_qs().filter(pk=order_id).first()
         context.update(
             {
                 "order_number": order_number,
+                "order": order,
                 "meta_title": _("Order confirmed"),
                 "canonical_url": self.request.build_absolute_uri(),
             }

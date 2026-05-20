@@ -8,7 +8,7 @@ from django.views.generic import TemplateView
 
 from apps.cart.cart import get_cart
 from apps.core.mixins import ShopLanguageMixin
-from apps.core.utils import get_shop_language
+from apps.core.utils import activate_parler_language, get_shop_language
 from apps.products.models import Product
 from apps.products.selectors import get_product_by_slug
 
@@ -21,7 +21,7 @@ class CartDetailView(ShopLanguageMixin, TemplateView):
         cart = get_cart(self.request)
         lines = cart.get_lines()
         for line in lines:
-            line.product.set_current_language(self.shop_language)
+            activate_parler_language(line.product, self.shop_language)
         context.update(
             {
                 "cart_lines": lines,

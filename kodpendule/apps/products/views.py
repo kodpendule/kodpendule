@@ -6,6 +6,7 @@ from django.views.generic import DetailView, ListView
 from apps.categories.selectors import get_category_by_slug
 from apps.core.breadcrumbs import categories_crumb, home_crumb, products_crumb
 from apps.core.mixins import ShopLanguageMixin
+from apps.core.utils import activate_parler_language
 from apps.core.templatetags.shop_tags import product_meta_title
 from apps.products.models import Product
 from apps.products.selectors import (
@@ -41,6 +42,8 @@ class ProductListView(ShopLanguageMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        for product in context.get("products", []):
+            activate_parler_language(product, self.shop_language)
         query = self.request.GET.get("q", "").strip()
         category_slug = self.request.GET.get("kategorija", "").strip()
         active_category = None

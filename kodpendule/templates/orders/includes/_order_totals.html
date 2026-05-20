@@ -1,0 +1,17 @@
+{% load i18n shop_tags %}
+<dl class="row mb-0">
+    <dt class="col-6">{% trans "Subtotal" %}</dt>
+    <dd class="col-6 text-end">{{ order.subtotal|money }}</dd>
+    <dt class="col-6">{% trans "Shipping" %}</dt>
+    <dd class="col-6 text-end">
+        {{ order.shipping_price|money }}
+        {% if order.shipping_city_name %}
+        <div class="small text-muted fw-normal">{{ order.shipping_city_name }}</div>
+        {% endif %}
+    </dd>
+    <dt class="col-6 fw-semibold">{% trans "Total" %}</dt>
+    <dd class="col-6 text-end fw-semibold">{{ order.total|money }}</dd>
+</dl>
+<p class="small text-muted mb-0 mt-2">
+    {% trans "Payment on delivery (cash)." %}
+</p>

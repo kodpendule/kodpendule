@@ -47,4 +47,13 @@ Copy `.env.local.example` → `.env.local` for local development.
 | 4 | Authentication | Done |
 | 5 | Storefront (catalog, search, homepage) | Done |
 | 6 | Cart & checkout (guest, COD) | Done |
-| 7+ | Orders dashboard, i18n URLs, … | Pending |
+| 7 | Order tracking & customer history | Done |
+| 8+ | Admin dashboard, i18n URLs, … | Pending |
+
+### Order tracking (Step 7)
+
+| URL | Description |
+|-----|-------------|
+| `/narudzba/pracenje/` | Guest track (order number + email) |
+| `/narudzba/<order_number>/` | Order detail (after track, checkout, or login) |
+| `/nalog/narudzbe/` | Logged-in order history |

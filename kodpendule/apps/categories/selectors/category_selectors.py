@@ -1,6 +1,7 @@
 from django.db.models import Prefetch, QuerySet
 
 from apps.categories.models import Category
+from apps.core.slugs import translation_languages_to_try
 from apps.core.utils import get_shop_language
 
 
@@ -24,17 +25,18 @@ def get_nav_categories(language: str | None = None) -> QuerySet[Category]:
 
 def get_category_by_slug(slug: str, language: str | None = None) -> Category | None:
     lang = _language(language)
-    category = (
-        Category.objects.filter(
-            is_active=True,
-            translations__language_code=lang,
-            translations__slug=slug,
-        )
-        .select_related("parent")
-        .prefetch_related("translations")
-        .distinct()
-        .first()
+    base_qs = Category.objects.filter(is_active=True).select_related("parent").prefetch_related(
+        "translations"
     )
+    for try_lang in translation_languages_to_try(lang):
+        category = base_qs.filter(
+            translations__language_code=try_lang,
+            translations__slug=slug,
+        ).distinct().first()
+        if category is not None:
+            category.set_current_language(lang)
+            return category
+    category = base_qs.filter(translations__slug=slug).distinct().first()
     if category is not None:
         category.set_current_language(lang)
     return category
