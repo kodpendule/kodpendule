@@ -9,6 +9,7 @@ from django.urls import include, path
 from django.views.i18n import set_language
 
 urlpatterns = [
+    path("admin/dashboard/", include("apps.dashboard.urls")),
     path("admin/", admin.site.urls),
     path("jezik/", set_language, name="set_language"),
     path("", include("apps.core.urls")),

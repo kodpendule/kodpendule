@@ -1,2 +1,3 @@
-"""Write operations for apps.dashboard."""
+from apps.dashboard.services.report_service import build_dashboard_context
 
+__all__ = ["build_dashboard_context"]

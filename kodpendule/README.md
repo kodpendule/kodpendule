@@ -48,7 +48,14 @@ Copy `.env.local.example` → `.env.local` for local development.
 | 5 | Storefront (catalog, search, homepage) | Done |
 | 6 | Cart & checkout (guest, COD) | Done |
 | 7 | Order tracking & customer history | Done |
-| 8+ | Admin dashboard, i18n URLs, … | Pending |
+| 8 | Admin analytics dashboard | Done |
+| 9+ | i18n URLs, … | Pending |
+
+### Analytics dashboard (Step 8)
+
+Staff only: **[http://127.0.0.1:8000/admin/dashboard/](http://127.0.0.1:8000/admin/dashboard/)** (link also in admin header).
+
+Filters: last 7/30/90 days, current month/year, specific month+year, or custom date range.
 
 ### Order tracking (Step 7)
 

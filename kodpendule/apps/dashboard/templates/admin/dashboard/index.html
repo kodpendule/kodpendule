@@ -1,1 +1,199 @@
-{# Custom admin dashboard — Step 8 #}
+{% extends "admin/base_site.html" %}
+{% load i18n static humanize %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; {% trans 'Analytics dashboard' %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-page" id="content-main">
+    <h1>{% trans "Shop analytics" %}</h1>
+    <p class="help">
+        {% blocktrans with label=period.label %}Reporting period: <strong>{{ label }}</strong>{% endblocktrans %}
+    </p>
+
+    <div class="dashboard-quick-links">
+        <a href="{% url 'admin:orders_order_changelist' %}">{% trans "Orders" %}</a>
+        <a href="{% url 'admin:products_product_changelist' %}">{% trans "Products" %}</a>
+        <a href="{% url 'admin:categories_category_changelist' %}">{% trans "Categories" %}</a>
+        <a href="{% url 'admin:shipping_city_changelist' %}">{% trans "Cities" %}</a>
+    </div>
+
+    <form method="get" class="dashboard-filters">
+        <div class="row">
+            <div>
+                <label for="id_period">{% trans "Quick range" %}</label>
+                <select name="period" id="id_period" class="vTextField">
+                    {% for key, label in period_choices %}
+                    <option value="{{ key }}" {% if period.preset == key %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                    <option value="custom" {% if period.preset == 'custom' %}selected{% endif %}>{% trans "Custom range (use dates →)" %}</option>
+                </select>
+            </div>
+            <div>
+                <label for="id_month">{% trans "Month" %}</label>
+                <select name="month" id="id_month" class="vTextField">
+                    <option value="">—</option>
+                    {% for m in month_options %}
+                    <option value="{{ m.value }}" {% if m.selected %}selected{% endif %}>{{ m.label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="id_year">{% trans "Year" %}</label>
+                <input type="number" name="year" id="id_year" class="vTextField" min="2020" max="2100"
+                       value="{{ filter_year|default:'' }}" placeholder="{% trans 'e.g. 2026' %}">
+            </div>
+            <div>
+                <label for="id_from">{% trans "Custom from" %}</label>
+                <input type="date" name="from" id="id_from" class="vTextField"
+                       value="{% if period.preset == 'custom' %}{{ period.start|date:'Y-m-d' }}{% endif %}">
+            </div>
+            <div>
+                <label for="id_to">{% trans "Custom to" %}</label>
+                <input type="date" name="to" id="id_to" class="vTextField"
+                       value="{% if period.preset == 'custom' %}{{ period.end|date:'Y-m-d' }}{% endif %}">
+            </div>
+            <div>
+                <button type="submit" class="button default">{% trans "Apply" %}</button>
+            </div>
+        </div>
+    </form>
+
+    <section class="dashboard-section">
+        <h2>{% trans "Overview" %}</h2>
+        <div class="dashboard-kpi-grid">
+            {% include "admin/dashboard/includes/_kpi_card.html" with label=_("Today revenue") value=overview.today_revenue|floatformat:2|intcomma hint="din, excl. cancelled" %}
+            {% include "admin/dashboard/includes/_kpi_card.html" with label=_("This month revenue") value=overview.monthly_revenue|floatformat:2|intcomma hint=_("Calendar month") %}
+            {% include "admin/dashboard/includes/_kpi_card.html" with label=_("Orders in period") value=period_metrics.order_count hint=period.label %}
+            {% include "admin/dashboard/includes/_kpi_card.html" with label=_("Avg. order value") value=period_metrics.avg_order_value|floatformat:2|intcomma hint=_("Selected period") %}
+            {% include "admin/dashboard/includes/_kpi_card.html" with label=_("Pending") value=pipeline.pending hint=_("Current pipeline") %}
+            {% include "admin/dashboard/includes/_kpi_card.html" with label=_("Shipped") value=pipeline.shipped hint=_("Current pipeline") %}
+            {% include "admin/dashboard/includes/_kpi_card.html" with label=_("Delivered") value=pipeline.delivered hint=_("Current pipeline") %}
+            {% include "admin/dashboard/includes/_kpi_card.html" with label=_("Period revenue") value=period_metrics.revenue|floatformat:2|intcomma hint=period.label %}
+        </div>
+    </section>
+
+    {% if low_stock_products %}
+    <section class="dashboard-section">
+        <h2>{% trans "Low stock alerts" %} ({{ low_stock_products|length }})</h2>
+        <ul class="dashboard-alert-list">
+            {% for product in low_stock_products %}
+            <li>
+                <a href="{% url 'admin:products_product_change' product.pk %}">
+                    {{ product }} ({{ product.sku }}) — {% trans "Stock" %}: <strong>{{ product.stock }}</strong>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+
+    <section class="dashboard-section">
+        <h2>{% trans "Charts" %}</h2>
+        <div class="dashboard-charts">
+            <div class="dashboard-chart-card">
+                <h3>{{ time_chart_title }}</h3>
+                <canvas id="chart-revenue" height="200" aria-label="{{ time_chart_title }}"></canvas>
+            </div>
+            <div class="dashboard-chart-card">
+                <h3>{% trans "Top products (revenue)" %}</h3>
+                <canvas id="chart-products" height="200" aria-label="{% trans 'Top products' %}"></canvas>
+            </div>
+            <div class="dashboard-chart-card">
+                <h3>{% trans "Sales by category" %}</h3>
+                <canvas id="chart-categories" height="200" aria-label="{% trans 'Category sales' %}"></canvas>
+            </div>
+            <div class="dashboard-chart-card">
+                <h3>{% trans "Order status (period)" %}</h3>
+                <canvas id="chart-status" height="200" aria-label="{% trans 'Order status' %}"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <section class="dashboard-section dashboard-tables">
+        <div class="dashboard-table-wrap">
+            <h2>{% trans "Best-selling products" %}</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>{% trans "Product" %}</th>
+                        <th>{% trans "SKU" %}</th>
+                        <th class="text-end">{% trans "Qty" %}</th>
+                        <th class="text-end">{% trans "Revenue" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in top_products %}
+                    <tr>
+                        <td>{{ row.name }}</td>
+                        <td>{{ row.sku }}</td>
+                        <td class="text-end">{{ row.quantity_sold }}</td>
+                        <td class="text-end">{{ row.revenue|floatformat:2|intcomma }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4">{% trans "No sales in this period." %}</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="dashboard-table-wrap">
+            <h2>{% trans "Best-selling categories" %}</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>{% trans "Category" %}</th>
+                        <th class="text-end">{% trans "Qty" %}</th>
+                        <th class="text-end">{% trans "Revenue" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in top_categories %}
+                    <tr>
+                        <td>{{ row.name }}</td>
+                        <td class="text-end">{{ row.quantity_sold }}</td>
+                        <td class="text-end">{{ row.revenue|floatformat:2|intcomma }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="3">{% trans "No category sales in this period." %}</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="dashboard-table-wrap">
+            <h2>{% trans "Top customers" %}</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>{% trans "Email" %}</th>
+                        <th class="text-end">{% trans "Orders" %}</th>
+                        <th class="text-end">{% trans "Revenue" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in top_customers %}
+                    <tr>
+                        <td>{{ row.email }}</td>
+                        <td class="text-end">{{ row.order_count }}</td>
+                        <td class="text-end">{{ row.revenue|floatformat:2|intcomma }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="3">{% trans "No customers in this period." %}</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+
+{{ charts.revenue|json_script:"chart-revenue-data" }}
+{{ charts.top_products|json_script:"chart-products-data" }}
+{{ charts.categories|json_script:"chart-categories-data" }}
+{{ charts.order_status|json_script:"chart-status-data" }}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous"></script>
+<script src="{% static 'admin/js/dashboard-charts.js' %}"></script>
+{% endblock %}
