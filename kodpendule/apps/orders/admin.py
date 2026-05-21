@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 
 from apps.orders.models import Order, OrderItem, OrderStatus
 
@@ -7,10 +8,12 @@ from apps.orders.models import Order, OrderItem, OrderStatus
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
     extra = 0
+    verbose_name = _("Order item")
+    verbose_name_plural = _("Order items")
     readonly_fields = ("product_name", "sku", "unit_price", "line_total_display")
     fields = ("product", "product_name", "sku", "unit_price", "quantity", "line_total_display")
 
-    @admin.display(description="Line total")
+    @admin.display(description=_("Line total"))
     def line_total_display(self, obj: OrderItem) -> str:
         if obj.pk:
             return str(obj.line_total)
@@ -45,7 +48,7 @@ class OrderAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (
-            "Order",
+            _("Order"),
             {
                 "fields": (
                     "order_number",
@@ -57,11 +60,11 @@ class OrderAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Customer",
+            _("Customer"),
             {"fields": ("first_name", "last_name", "phone")},
         ),
         (
-            "Shipping",
+            _("Shipping"),
             {
                 "fields": (
                     "shipping_street",
@@ -77,7 +80,7 @@ class OrderAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Billing",
+            _("Billing"),
             {
                 "fields": (
                     "billing_street",
@@ -87,11 +90,11 @@ class OrderAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Totals",
+            _("Totals"),
             {"fields": ("subtotal", "total")},
         ),
         (
-            "Timestamps",
+            _("Timestamps"),
             {"fields": ("created_at", "updated_at"), "classes": ("collapse",)},
         ),
     )
@@ -104,23 +107,27 @@ class OrderAdmin(admin.ModelAdmin):
             .prefetch_related("items")
         )
 
-    @admin.action(description="Mark as confirmed")
+    @admin.action(description=_("Mark as confirmed"))
     def mark_confirmed(self, request, queryset):
         queryset.update(status=OrderStatus.CONFIRMED)
 
-    @admin.action(description="Mark as shipped")
+    @admin.action(description=_("Mark as shipped"))
     def mark_shipped(self, request, queryset):
         queryset.update(status=OrderStatus.SHIPPED)
 
-    @admin.action(description="Mark as delivered")
+    @admin.action(description=_("Mark as delivered"))
     def mark_delivered(self, request, queryset):
         queryset.update(status=OrderStatus.DELIVERED)
 
     actions = ["mark_confirmed", "mark_shipped", "mark_delivered"]
 
-    @admin.display(description="Customer")
+    @admin.display(description=_("Customer"))
     def customer_display(self, obj: Order) -> str:
         name = obj.customer_full_name
         if obj.is_guest_order:
-            return format_html("{} <span style='color:#666;'>(guest)</span>", name)
+            return format_html(
+                '{} <span style="color:#666;">({})</span>',
+                name,
+                _("guest"),
+            )
         return name

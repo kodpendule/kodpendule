@@ -10,19 +10,20 @@ class Category(TranslatableModel):
         null=True,
         blank=True,
         related_name="children",
+        verbose_name=_("Parent"),
     )
-    image = models.ImageField(upload_to="categories/", blank=True)
-    is_active = models.BooleanField(default=True)
-    sort_order = models.PositiveIntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    image = models.ImageField(_("Image"), upload_to="categories/", blank=True)
+    is_active = models.BooleanField(_("Active"), default=True)
+    sort_order = models.PositiveIntegerField(_("Sort order"), default=0)
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
     translations = TranslatedFields(
-        name=models.CharField(max_length=200),
-        slug=models.SlugField(max_length=220, unique=True),
-        description=models.TextField(blank=True),
-        meta_title=models.CharField(max_length=70, blank=True),
-        meta_description=models.CharField(max_length=160, blank=True),
+        name=models.CharField(_("Name"), max_length=200),
+        slug=models.SlugField(_("Slug"), max_length=220, unique=True),
+        description=models.TextField(_("Description"), blank=True),
+        meta_title=models.CharField(_("Meta title"), max_length=70, blank=True),
+        meta_description=models.CharField(_("Meta description"), max_length=160, blank=True),
     )
 
     class Meta:

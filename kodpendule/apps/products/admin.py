@@ -10,6 +10,8 @@ from apps.products.models import Product, ProductImage
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
     extra = 1
+    verbose_name = _("Gallery image")
+    verbose_name_plural = _("Gallery images")
     fields = ("image", "alt_text", "sort_order")
 
 
@@ -75,7 +77,7 @@ class ProductAdmin(TranslatableAdmin):
             },
         ),
         (
-            "Visibility",
+            _("Visibility"),
             {
                 "fields": (
                     "is_active",
@@ -86,7 +88,7 @@ class ProductAdmin(TranslatableAdmin):
             },
         ),
         (
-            "Timestamps",
+            _("Timestamps"),
             {"fields": ("created_at", "updated_at"), "classes": ("collapse",)},
         ),
     )
@@ -118,14 +120,14 @@ class ProductAdmin(TranslatableAdmin):
                 )
         super().save_translation(request, obj, form, change)
 
-    @admin.display(description="Slug")
+    @admin.display(description=_("Slug"))
     def slug_display(self, obj: Product) -> str:
         slug = localized_slug(obj)
         if slug:
             return slug
         return format_html('<span style="color:#b45309;">{}</span>', _("missing — not on shop"))
 
-    @admin.display(description="Price")
+    @admin.display(description=_("Price"))
     def price_display(self, obj: Product) -> str:
         if obj.has_discount:
             return format_html(
@@ -135,11 +137,12 @@ class ProductAdmin(TranslatableAdmin):
             )
         return str(obj.effective_price)
 
-    @admin.display(description="Stock", ordering="stock")
+    @admin.display(description=_("Stock"), ordering="stock")
     def stock_display(self, obj: Product) -> str:
         if obj.is_low_stock:
             return format_html(
-                '<strong style="color:#b45309;">{} ⚠ low</strong>',
+                '<strong style="color:#b45309;">{} ⚠ {}</strong>',
                 obj.stock,
+                _("low"),
             )
         return str(obj.stock)

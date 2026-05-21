@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
+from django.utils.translation import gettext_lazy as _
+
 from apps.accounts.models import Address, CustomerProfile, User
 
 
@@ -7,11 +9,15 @@ class CustomerProfileInline(admin.StackedInline):
     model = CustomerProfile
     can_delete = False
     extra = 0
+    verbose_name = _("Customer profile")
+    verbose_name_plural = _("Customer profiles")
 
 
 class AddressInline(admin.TabularInline):
     model = Address
     extra = 0
+    verbose_name = _("Address")
+    verbose_name_plural = _("Addresses")
     fields = (
         "address_type",
         "label",

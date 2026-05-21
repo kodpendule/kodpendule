@@ -51,6 +51,16 @@ Copy `.env.local.example` → `.env.local` for local development.
 | 8 | Admin analytics dashboard | Done |
 | 9+ | i18n URLs, … | Pending |
 
+### Admin Serbian labels
+
+Admin UI uses English `gettext` msgids and Serbian translations in `locale/sr/LC_MESSAGES/`. After editing `django.po`, compile:
+
+```powershell
+python manage.py compilemessages -l sr
+```
+
+(On Windows without GNU gettext, `django.mo` is checked in; regenerate with `msgfmt` or `polib` if needed.)
+
 ### Analytics dashboard (Step 8)
 
 Staff only: **[http://127.0.0.1:8000/admin/dashboard/](http://127.0.0.1:8000/admin/dashboard/)** (link also in admin header).

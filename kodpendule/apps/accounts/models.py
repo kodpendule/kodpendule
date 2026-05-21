@@ -26,8 +26,8 @@ class CustomerProfile(models.Model):
         on_delete=models.CASCADE,
         related_name="profile",
     )
-    phone = models.CharField(max_length=32, blank=True)
-    newsletter_opt_in = models.BooleanField(default=False)
+    phone = models.CharField(_("Phone"), max_length=32, blank=True)
+    newsletter_opt_in = models.BooleanField(_("Newsletter opt-in"), default=False)
 
     class Meta:
         verbose_name = _("customer profile")
@@ -47,18 +47,20 @@ class Address(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="addresses",
+        verbose_name=_("User"),
     )
     address_type = models.CharField(
+        _("Address type"),
         max_length=20,
         choices=AddressType.choices,
         default=AddressType.SHIPPING,
     )
-    label = models.CharField(max_length=64, blank=True)
-    street_line_1 = models.CharField(max_length=255)
-    street_line_2 = models.CharField(max_length=255, blank=True)
-    city = models.CharField(max_length=120)
-    postal_code = models.CharField(max_length=20)
-    is_default = models.BooleanField(default=False)
+    label = models.CharField(_("Label"), max_length=64, blank=True)
+    street_line_1 = models.CharField(_("Street line 1"), max_length=255)
+    street_line_2 = models.CharField(_("Street line 2"), max_length=255, blank=True)
+    city = models.CharField(_("City"), max_length=120)
+    postal_code = models.CharField(_("Postal code"), max_length=20)
+    is_default = models.BooleanField(_("Default address"), default=False)
 
     class Meta:
         verbose_name = _("address")

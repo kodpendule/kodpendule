@@ -94,4 +94,5 @@ class DashboardViewTests(TestCase):
         self.client.login(username="admin", password="pass")
         response = self.client.get(reverse("dashboard:index"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Shop analytics")
+        self.assertContains(response, "Analitika prodavnice")
+        self.assertContains(response, "Pregled")

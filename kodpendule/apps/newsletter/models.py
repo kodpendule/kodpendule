@@ -10,14 +10,15 @@ class SubscriberSource(models.TextChoices):
 
 
 class Subscriber(models.Model):
-    email = models.EmailField(unique=True)
-    is_active = models.BooleanField(default=True)
+    email = models.EmailField(_("Email"), unique=True)
+    is_active = models.BooleanField(_("Active"), default=True)
     source = models.CharField(
+        _("Source"),
         max_length=20,
         choices=SubscriberSource.choices,
         default=SubscriberSource.MANUAL,
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
 
     class Meta:
         verbose_name = _("subscriber")
@@ -39,16 +40,17 @@ class CampaignStatus(models.TextChoices):
 class EmailCampaign(models.Model):
     """Prepared for future promotional sends (no Celery in v1)."""
 
-    subject = models.CharField(max_length=255)
-    body = models.TextField()
+    subject = models.CharField(_("Subject"), max_length=255)
+    body = models.TextField(_("Body"))
     status = models.CharField(
+        _("Status"),
         max_length=20,
         choices=CampaignStatus.choices,
         default=CampaignStatus.DRAFT,
     )
-    sent_at = models.DateTimeField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    sent_at = models.DateTimeField(_("Sent at"), null=True, blank=True)
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
     class Meta:
         verbose_name = _("email campaign")

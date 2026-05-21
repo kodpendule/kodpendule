@@ -1,0 +1,677 @@
+# Serbian (Latin) translations for Kod Pendule admin.
+# English msgids — internal DB/constants stay English.
+msgid ""
+msgstr ""
+"Project-Id-Version: Kod Pendule\n"
+"Language: sr\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+# --- App labels ---
+msgid "Core"
+msgstr "Osnovno"
+
+msgid "Accounts"
+msgstr "Nalozi"
+
+msgid "Categories"
+msgstr "Kategorije"
+
+msgid "Products"
+msgstr "Proizvodi"
+
+msgid "Cart"
+msgstr "Korpa"
+
+msgid "Checkout"
+msgstr "Plaćanje"
+
+msgid "Orders"
+msgstr "Narudžbine"
+
+msgid "Shipping"
+msgstr "Dostava"
+
+msgid "Dashboard"
+msgstr "Kontrolna tabla"
+
+msgid "Newsletter"
+msgstr "Bilten"
+
+# --- Models: meta ---
+msgid "site settings"
+msgstr "Podešavanja sajta"
+
+msgid "footer settings"
+msgstr "Podešavanja podnožja"
+
+msgid "social link"
+msgstr "Link društvenih mreža"
+
+msgid "social links"
+msgstr "Linkovi društvenih mreža"
+
+msgid "hero banner"
+msgstr "Baner početne"
+
+msgid "hero banners"
+msgstr "Baneri početne"
+
+msgid "promo section"
+msgstr "Promo sekcija"
+
+msgid "promo sections"
+msgstr "Promo sekcije"
+
+msgid "homepage section"
+msgstr "Sekcija početne"
+
+msgid "homepage sections"
+msgstr "Sekcije početne"
+
+msgid "category"
+msgstr "Kategorija"
+
+msgid "categories"
+msgstr "Kategorije"
+
+msgid "product"
+msgstr "Proizvod"
+
+msgid "products"
+msgstr "Proizvodi"
+
+msgid "product image"
+msgstr "Slika proizvoda"
+
+msgid "product images"
+msgstr "Slike proizvoda"
+
+msgid "order"
+msgstr "Narudžba"
+
+msgid "orders"
+msgstr "Narudžbine"
+
+msgid "order item"
+msgstr "Stavka narudžbine"
+
+msgid "order items"
+msgstr "Stavke narudžbine"
+
+msgid "city"
+msgstr "Grad"
+
+msgid "cities"
+msgstr "Gradovi"
+
+msgid "shipping method"
+msgstr "Način dostave"
+
+msgid "shipping methods"
+msgstr "Načini dostave"
+
+msgid "user"
+msgstr "Korisnik"
+
+msgid "users"
+msgstr "Korisnici"
+
+msgid "customer profile"
+msgstr "Profil kupca"
+
+msgid "customer profiles"
+msgstr "Profili kupaca"
+
+msgid "address"
+msgstr "Adresa"
+
+msgid "addresses"
+msgstr "Adrese"
+
+msgid "subscriber"
+msgstr "Pretplatnik"
+
+msgid "subscribers"
+msgstr "Pretplatnici"
+
+msgid "email campaign"
+msgstr "Email kampanja"
+
+msgid "email campaigns"
+msgstr "Email kampanje"
+
+# --- Model fields ---
+msgid "Site name"
+msgstr "Naziv sajta"
+
+msgid "Default meta title"
+msgstr "Podrazumevani meta naslov"
+
+msgid "Default meta description"
+msgstr "Podrazumevani meta opis"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Address"
+msgstr "Adresa"
+
+msgid "Working hours"
+msgstr "Radno vreme"
+
+msgid "Platform"
+msgstr "Platforma"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Sort order"
+msgstr "Redosled"
+
+msgid "Active"
+msgstr "Aktivno"
+
+msgid "Image"
+msgstr "Slika"
+
+msgid "Link URL"
+msgstr "Link URL"
+
+msgid "Title"
+msgstr "Naslov"
+
+msgid "Subtitle"
+msgstr "Podnaslov"
+
+msgid "Placement"
+msgstr "Pozicija"
+
+msgid "Body"
+msgstr "Tekst"
+
+msgid "Section type"
+msgstr "Tip sekcije"
+
+msgid "Max products"
+msgstr "Maks. proizvoda"
+
+msgid "Parent"
+msgstr "Roditelj"
+
+msgid "Name"
+msgstr "Naziv"
+
+msgid "Slug"
+msgstr "Slug"
+
+msgid "Description"
+msgstr "Opis"
+
+msgid "Meta title"
+msgstr "Meta naslov"
+
+msgid "Meta description"
+msgstr "Meta opis"
+
+msgid "SKU"
+msgstr "Šifra (SKU)"
+
+msgid "Price"
+msgstr "Cena"
+
+msgid "Discount price"
+msgstr "Cena sa popustom"
+
+msgid "Main image"
+msgstr "Glavna slika"
+
+msgid "Stock"
+msgstr "Zaliha"
+
+msgid "Minimum stock alert"
+msgstr "Upozorenje za minimalnu zalihu"
+
+msgid "Featured"
+msgstr "Istaknuto"
+
+msgid "Recommended"
+msgstr "Preporučeno"
+
+msgid "On sale"
+msgstr "Na akciji"
+
+msgid "Created at"
+msgstr "Kreirano"
+
+msgid "Updated at"
+msgstr "Ažurirano"
+
+msgid "Short description"
+msgstr "Kratak opis"
+
+msgid "Alt text"
+msgstr "Alt tekst"
+
+msgid "Product"
+msgstr "Proizvod"
+
+msgid "Order number"
+msgstr "Broj narudžbine"
+
+msgid "Guest email"
+msgstr "Email gosta"
+
+msgid "Used for guest orders and order tracking."
+msgstr "Koristi se za narudžbine gostiju i praćenje."
+
+msgid "First name"
+msgstr "Ime"
+
+msgid "Last name"
+msgstr "Prezime"
+
+msgid "Shipping street"
+msgstr "Ulica za dostavu"
+
+msgid "Shipping city name"
+msgstr "Naziv grada dostave"
+
+msgid "City name as entered by customer."
+msgstr "Naziv grada kako ga je uneo kupac."
+
+msgid "Shipping postal code"
+msgstr "Poštanski broj dostave"
+
+msgid "Shipping city"
+msgstr "Grad dostave"
+
+msgid "Billing street"
+msgstr "Ulica za naplatu"
+
+msgid "Billing city name"
+msgstr "Naziv grada naplate"
+
+msgid "Billing postal code"
+msgstr "Poštanski broj naplate"
+
+msgid "Order notes"
+msgstr "Napomene uz narudžbinu"
+
+msgid "Required at checkout — delivery instructions."
+msgstr "Obavezno pri plaćanju — uputstva za dostavu."
+
+msgid "Delivery date"
+msgstr "Datum dostave"
+
+msgid "Flexible delivery"
+msgstr "Fleksibilna dostava"
+
+msgid "Shipping method"
+msgstr "Način dostave"
+
+msgid "Shipping price"
+msgstr "Cena dostave"
+
+msgid "Payment method"
+msgstr "Način plaćanja"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Subtotal"
+msgstr "Međuzbir"
+
+msgid "Total"
+msgstr "Ukupno"
+
+msgid "Unit price"
+msgstr "Jedinična cena"
+
+msgid "Quantity"
+msgstr "Količina"
+
+msgid "Product name"
+msgstr "Naziv proizvoda"
+
+msgid "Shipping price (RSD)"
+msgstr "Cena dostave (RSD)"
+
+msgid "Default"
+msgstr "Podrazumevano"
+
+msgid "Newsletter opt-in"
+msgstr "Prijava na bilten"
+
+msgid "Address type"
+msgstr "Tip adrese"
+
+msgid "Label"
+msgstr "Oznaka"
+
+msgid "Street line 1"
+msgstr "Ulica 1"
+
+msgid "Street line 2"
+msgstr "Ulica 2"
+
+msgid "City"
+msgstr "Grad"
+
+msgid "Postal code"
+msgstr "Poštanski broj"
+
+msgid "Default address"
+msgstr "Podrazumevana adresa"
+
+msgid "Source"
+msgstr "Izvor"
+
+msgid "Subject"
+msgstr "Naslov"
+
+msgid "Sent at"
+msgstr "Poslato"
+
+# --- Choices ---
+msgid "Other"
+msgstr "Ostalo"
+
+msgid "Homepage middle"
+msgstr "Sredina početne"
+
+msgid "Homepage bottom"
+msgstr "Dno početne"
+
+msgid "Featured products"
+msgstr "Istaknuti proizvodi"
+
+msgid "Recommended products"
+msgstr "Preporučeni proizvodi"
+
+msgid "Sale / action products"
+msgstr "Proizvodi na akciji"
+
+msgid "Pending"
+msgstr "Na čekanju"
+
+msgid "Confirmed"
+msgstr "Potvrđeno"
+
+msgid "Processing"
+msgstr "U obradi"
+
+msgid "Shipped"
+msgstr "Poslato"
+
+msgid "Delivered"
+msgstr "Isporučeno"
+
+msgid "Cancelled"
+msgstr "Otkazano"
+
+msgid "Cash on delivery"
+msgstr "Plaćanje pouzećem"
+
+msgid "Shipping"
+msgstr "Dostava"
+
+msgid "Billing"
+msgstr "Naplata"
+
+msgid "Checkout"
+msgstr "Plaćanje"
+
+msgid "Footer form"
+msgstr "Forma u podnožju"
+
+msgid "Admin import"
+msgstr "Uvoz u adminu"
+
+msgid "Manual"
+msgstr "Ručno"
+
+msgid "Draft"
+msgstr "Nacrt"
+
+msgid "Sent"
+msgstr "Poslato"
+
+msgid "email address"
+msgstr "email adresa"
+
+# --- Admin ---
+msgid "Name & description"
+msgstr "Naziv i opis"
+
+msgid "Fill in for the active language tab (Serbian / English). Name is shown on the shop; slug is used in the URL."
+msgstr "Popunite za aktivni jezički tab (srpski / engleski). Naziv se prikazuje u prodavnici; slug se koristi u URL-u."
+
+msgid "Pricing & stock"
+msgstr "Cena i zaliha"
+
+msgid "SEO"
+msgstr "SEO"
+
+msgid "Visibility"
+msgstr "Vidljivost"
+
+msgid "Timestamps"
+msgstr "Vremenske oznake"
+
+msgid "Internal code (e.g. S1). Not the product title on the shop — use Name above."
+msgstr "Interna šifra (npr. S1). Nije naslov na prodavnici — koristite Naziv iznad."
+
+msgid "missing — not on shop"
+msgstr "nedostaje — nije u prodavnici"
+
+msgid "low"
+msgstr "malo"
+
+msgid "Name & URL"
+msgstr "Naziv i URL"
+
+msgid "Order"
+msgstr "Narudžba"
+
+msgid "Customer"
+msgstr "Kupac"
+
+msgid "Totals"
+msgstr "Ukupno"
+
+msgid "Line total"
+msgstr "Ukupno stavke"
+
+msgid "Mark as confirmed"
+msgstr "Označi kao potvrđeno"
+
+msgid "Mark as shipped"
+msgstr "Označi kao poslato"
+
+msgid "Mark as delivered"
+msgstr "Označi kao isporučeno"
+
+msgid "guest"
+msgstr "gost"
+
+msgid "Gallery image"
+msgstr "Slika galerije"
+
+msgid "Gallery images"
+msgstr "Slike galerije"
+
+msgid "User"
+msgstr "Korisnik"
+
+msgid "Recommended"
+msgstr "Preporučeno"
+
+# --- Dashboard / analytics ---
+msgid "Shop analytics"
+msgstr "Analitika prodavnice"
+
+msgid "Home"
+msgstr "Početna"
+
+msgid "Reporting period: %(label)s"
+msgstr "Period izveštaja: %(label)s"
+
+msgid "Quick range"
+msgstr "Brzi period"
+
+msgid "Last 7 days"
+msgstr "Poslednjih 7 dana"
+
+msgid "Last 30 days"
+msgstr "Poslednjih 30 dana"
+
+msgid "Last 90 days"
+msgstr "Poslednjih 90 dana"
+
+msgid "This month ({month_year})"
+msgstr "Ovaj mesec ({month_year})"
+
+msgid "This year ({year})"
+msgstr "Ova godina ({year})"
+
+msgid "Custom range (use dates below)"
+msgstr "Prilagođen period (koristite datume ispod)"
+
+msgid "All months"
+msgstr "Svi meseci"
+
+msgid "e.g. 2026"
+msgstr "npr. 2026"
+
+msgid "Custom from"
+msgstr "Od datuma"
+
+msgid "Custom to"
+msgstr "Do datuma"
+
+msgid "Apply filters"
+msgstr "Primeni filtere"
+
+msgid "Apply"
+msgstr "Primeni"
+
+msgid "Overview"
+msgstr "Pregled"
+
+msgid "Today revenue"
+msgstr "Prihod danas"
+
+msgid "RSD, excl. cancelled orders"
+msgstr "RSD, bez otkazanih narudžbina"
+
+msgid "This month revenue"
+msgstr "Prihod ovog meseca"
+
+msgid "Calendar month"
+msgstr "Kalendarski mesec"
+
+msgid "Orders in period"
+msgstr "Narudžbine u periodu"
+
+msgid "Avg. order value"
+msgstr "Prosečna vrednost narudžbine"
+
+msgid "Selected period"
+msgstr "Izabrani period"
+
+msgid "Current pipeline"
+msgstr "Aktivan tok narudžbina"
+
+msgid "Period revenue"
+msgstr "Prihod u periodu"
+
+msgid "Low stock alerts"
+msgstr "Upozorenja na nisku zalihu"
+
+msgid "Charts"
+msgstr "Grafikoni"
+
+msgid "Daily revenue"
+msgstr "Dnevni prihod"
+
+msgid "Monthly revenue"
+msgstr "Mesečni prihod"
+
+msgid "Top products (revenue)"
+msgstr "Najprodavaniji proizvodi (prihod)"
+
+msgid "Top products"
+msgstr "Najprodavaniji proizvodi"
+
+msgid "Sales by category"
+msgstr "Prodaja po kategorijama"
+
+msgid "Category sales"
+msgstr "Prodaja po kategorijama"
+
+msgid "Order status (period)"
+msgstr "Status narudžbina (period)"
+
+msgid "Order status"
+msgstr "Status narudžbina"
+
+msgid "Best-selling products"
+msgstr "Najprodavaniji proizvodi"
+
+msgid "Qty"
+msgstr "Kol."
+
+msgid "No sales in this period."
+msgstr "Nema prodaje u ovom periodu."
+
+msgid "Best-selling categories"
+msgstr "Najprodavanije kategorije"
+
+msgid "No category sales in this period."
+msgstr "Nema prodaje po kategorijama u ovom periodu."
+
+msgid "Top customers"
+msgstr "Najbolji kupci"
+
+msgid "No customers in this period."
+msgstr "Nema kupaca u ovom periodu."
+
+msgid "January"
+msgstr "Januar"
+
+msgid "February"
+msgstr "Februar"
+
+msgid "March"
+msgstr "Mart"
+
+msgid "April"
+msgstr "April"
+
+msgid "May"
+msgstr "Maj"
+
+msgid "June"
+msgstr "Jun"
+
+msgid "July"
+msgstr "Jul"
+
+msgid "August"
+msgstr "Avgust"
+
+msgid "September"
+msgstr "Septembar"
+
+msgid "October"
+msgstr "Oktobar"
+
+msgid "November"
+msgstr "Novembar"
+
+msgid "December"
+msgstr "Decembar"

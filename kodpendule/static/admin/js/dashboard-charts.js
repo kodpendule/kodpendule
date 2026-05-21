@@ -17,12 +17,17 @@
     return typeof window.Chart !== "undefined";
   }
 
-  function lineChart(canvasId, dataId, label) {
+  function legendLabel(canvas) {
+    return (canvas && canvas.dataset.legendLabel) || "";
+  }
+
+  function lineChart(canvasId, dataId) {
     var canvas = document.getElementById(canvasId);
     var data = readChartData(dataId);
     if (!canvas || !hasChartJs() || !data.labels.length) {
       return;
     }
+    var label = legendLabel(canvas);
     new Chart(canvas, {
       type: "line",
       data: {
@@ -49,12 +54,13 @@
     });
   }
 
-  function barChart(canvasId, dataId, label) {
+  function barChart(canvasId, dataId) {
     var canvas = document.getElementById(canvasId);
     var data = readChartData(dataId);
     if (!canvas || !hasChartJs() || !data.labels.length) {
       return;
     }
+    var label = legendLabel(canvas);
     new Chart(canvas, {
       type: "bar",
       data: {
@@ -112,9 +118,9 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    lineChart("chart-revenue", "chart-revenue-data", "Revenue");
-    barChart("chart-products", "chart-products-data", "Revenue");
-    barChart("chart-categories", "chart-categories-data", "Revenue");
+    lineChart("chart-revenue", "chart-revenue-data");
+    barChart("chart-products", "chart-products-data");
+    barChart("chart-categories", "chart-categories-data");
     doughnutChart("chart-status", "chart-status-data");
   });
 })();

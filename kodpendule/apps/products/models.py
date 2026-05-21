@@ -12,31 +12,39 @@ class Product(TranslatableModel):
         "categories.Category",
         on_delete=models.PROTECT,
         related_name="products",
+        verbose_name=_("Category"),
     )
-    sku = models.CharField(max_length=64, unique=True, db_index=True)
-    price = MoneyField(validators=[MinValueValidator(Decimal("0"))])
+    sku = models.CharField(_("SKU"), max_length=64, unique=True, db_index=True)
+    price = MoneyField(
+        verbose_name=_("Price"),
+        validators=[MinValueValidator(Decimal("0"))],
+    )
     discount_price = MoneyField(
+        verbose_name=_("Discount price"),
         null=True,
         blank=True,
         validators=[MinValueValidator(Decimal("0"))],
     )
-    main_image = models.ImageField(upload_to="products/", blank=True)
-    stock = models.PositiveIntegerField(default=0)
-    minimum_stock_alert = models.PositiveIntegerField(default=5)
-    is_active = models.BooleanField(default=True, db_index=True)
-    is_featured = models.BooleanField(default=False, db_index=True)
-    is_recommended = models.BooleanField(default=False, db_index=True)
-    is_on_sale = models.BooleanField(default=False, db_index=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    main_image = models.ImageField(_("Main image"), upload_to="products/", blank=True)
+    stock = models.PositiveIntegerField(_("Stock"), default=0)
+    minimum_stock_alert = models.PositiveIntegerField(
+        _("Minimum stock alert"),
+        default=5,
+    )
+    is_active = models.BooleanField(_("Active"), default=True, db_index=True)
+    is_featured = models.BooleanField(_("Featured"), default=False, db_index=True)
+    is_recommended = models.BooleanField(_("Recommended"), default=False, db_index=True)
+    is_on_sale = models.BooleanField(_("On sale"), default=False, db_index=True)
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
     translations = TranslatedFields(
-        name=models.CharField(max_length=255),
-        slug=models.SlugField(max_length=270, unique=True),
-        short_description=models.CharField(max_length=500, blank=True),
-        description=models.TextField(blank=True),
-        meta_title=models.CharField(max_length=70, blank=True),
-        meta_description=models.CharField(max_length=160, blank=True),
+        name=models.CharField(_("Name"), max_length=255),
+        slug=models.SlugField(_("Slug"), max_length=270, unique=True),
+        short_description=models.CharField(_("Short description"), max_length=500, blank=True),
+        description=models.TextField(_("Description"), blank=True),
+        meta_title=models.CharField(_("Meta title"), max_length=70, blank=True),
+        meta_description=models.CharField(_("Meta description"), max_length=160, blank=True),
     )
 
     class Meta:
@@ -85,10 +93,11 @@ class ProductImage(models.Model):
         Product,
         on_delete=models.CASCADE,
         related_name="gallery_images",
+        verbose_name=_("Product"),
     )
-    image = models.ImageField(upload_to="products/gallery/")
-    alt_text = models.CharField(max_length=255, blank=True)
-    sort_order = models.PositiveIntegerField(default=0)
+    image = models.ImageField(_("Image"), upload_to="products/gallery/")
+    alt_text = models.CharField(_("Alt text"), max_length=255, blank=True)
+    sort_order = models.PositiveIntegerField(_("Sort order"), default=0)
 
     class Meta:
         verbose_name = _("product image")

@@ -22,7 +22,12 @@ class PaymentMethod(models.TextChoices):
 
 
 class Order(models.Model):
-    order_number = models.CharField(max_length=32, unique=True, db_index=True)
+    order_number = models.CharField(
+        _("Order number"),
+        max_length=32,
+        unique=True,
+        db_index=True,
+    )
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -30,36 +35,41 @@ class Order(models.Model):
         null=True,
         blank=True,
         related_name="orders",
+        verbose_name=_("User"),
     )
     guest_email = models.EmailField(
+        _("Guest email"),
         help_text=_("Used for guest orders and order tracking."),
     )
 
-    first_name = models.CharField(max_length=120)
-    last_name = models.CharField(max_length=120)
-    phone = models.CharField(max_length=32)
+    first_name = models.CharField(_("First name"), max_length=120)
+    last_name = models.CharField(_("Last name"), max_length=120)
+    phone = models.CharField(_("Phone"), max_length=32)
 
-    shipping_street = models.CharField(max_length=255)
+    shipping_street = models.CharField(_("Shipping street"), max_length=255)
     shipping_city_name = models.CharField(
+        _("Shipping city name"),
         max_length=120,
         help_text=_("City name as entered by customer."),
     )
-    shipping_postal_code = models.CharField(max_length=20)
+    shipping_postal_code = models.CharField(_("Shipping postal code"), max_length=20)
     shipping_city = models.ForeignKey(
         "shipping.City",
         on_delete=models.PROTECT,
         related_name="orders",
+        verbose_name=_("Shipping city"),
     )
 
-    billing_street = models.CharField(max_length=255)
-    billing_city_name = models.CharField(max_length=120)
-    billing_postal_code = models.CharField(max_length=20)
+    billing_street = models.CharField(_("Billing street"), max_length=255)
+    billing_city_name = models.CharField(_("Billing city name"), max_length=120)
+    billing_postal_code = models.CharField(_("Billing postal code"), max_length=20)
 
     order_notes = models.TextField(
+        _("Order notes"),
         help_text=_("Required at checkout — delivery instructions."),
     )
-    delivery_date = models.DateField(null=True, blank=True)
-    flexible_delivery = models.BooleanField(default=False)
+    delivery_date = models.DateField(_("Delivery date"), null=True, blank=True)
+    flexible_delivery = models.BooleanField(_("Flexible delivery"), default=False)
 
     shipping_method = models.ForeignKey(
         "shipping.ShippingMethod",
@@ -67,26 +77,29 @@ class Order(models.Model):
         null=True,
         blank=True,
         related_name="orders",
+        verbose_name=_("Shipping method"),
     )
-    shipping_price = MoneyField(default=0)
+    shipping_price = MoneyField(verbose_name=_("Shipping price"), default=0)
 
     payment_method = models.CharField(
+        _("Payment method"),
         max_length=20,
         choices=PaymentMethod.choices,
         default=PaymentMethod.COD,
     )
     status = models.CharField(
+        _("Status"),
         max_length=20,
         choices=OrderStatus.choices,
         default=OrderStatus.PENDING,
         db_index=True,
     )
 
-    subtotal = MoneyField(default=0)
-    total = MoneyField(default=0)
+    subtotal = MoneyField(verbose_name=_("Subtotal"), default=0)
+    total = MoneyField(verbose_name=_("Total"), default=0)
 
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
     class Meta:
         verbose_name = _("order")
@@ -121,6 +134,7 @@ class OrderItem(models.Model):
         Order,
         on_delete=models.CASCADE,
         related_name="items",
+        verbose_name=_("Order"),
     )
     product = models.ForeignKey(
         "products.Product",
@@ -128,11 +142,18 @@ class OrderItem(models.Model):
         null=True,
         blank=True,
         related_name="order_items",
+        verbose_name=_("Product"),
     )
-    product_name = models.CharField(max_length=255)
-    sku = models.CharField(max_length=64)
-    unit_price = MoneyField(validators=[MinValueValidator(Decimal("0"))])
-    quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    product_name = models.CharField(_("Product name"), max_length=255)
+    sku = models.CharField(_("SKU"), max_length=64)
+    unit_price = MoneyField(
+        verbose_name=_("Unit price"),
+        validators=[MinValueValidator(Decimal("0"))],
+    )
+    quantity = models.PositiveIntegerField(
+        _("Quantity"),
+        validators=[MinValueValidator(1)],
+    )
 
     class Meta:
         verbose_name = _("order item")

@@ -7,11 +7,11 @@ from apps.core.fields import MoneyField
 class City(models.Model):
     """Delivery location with flat shipping price (RSD)."""
 
-    name = models.CharField(max_length=120, unique=True)
-    slug = models.SlugField(max_length=140, unique=True)
-    shipping_price = MoneyField(default=0)
-    is_active = models.BooleanField(default=True)
-    sort_order = models.PositiveIntegerField(default=0)
+    name = models.CharField(_("Name"), max_length=120, unique=True)
+    slug = models.SlugField(_("Slug"), max_length=140, unique=True)
+    shipping_price = MoneyField(verbose_name=_("Shipping price (RSD)"), default=0)
+    is_active = models.BooleanField(_("Active"), default=True)
+    sort_order = models.PositiveIntegerField(_("Sort order"), default=0)
 
     class Meta:
         verbose_name = _("city")
@@ -28,10 +28,10 @@ class City(models.Model):
 class ShippingMethod(models.Model):
     """Reserved for future carrier / pickup options."""
 
-    name = models.CharField(max_length=120)
-    description = models.TextField(blank=True)
-    is_active = models.BooleanField(default=True)
-    is_default = models.BooleanField(default=False)
+    name = models.CharField(_("Name"), max_length=120)
+    description = models.TextField(_("Description"), blank=True)
+    is_active = models.BooleanField(_("Active"), default=True)
+    is_default = models.BooleanField(_("Default"), default=False)
 
     class Meta:
         verbose_name = _("shipping method")

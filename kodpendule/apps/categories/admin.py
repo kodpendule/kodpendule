@@ -30,7 +30,7 @@ class CategoryAdmin(TranslatableAdmin):
                 translation.slug = unique_slug_for_translation(translation)
         super().save_translation(request, obj, form, change)
 
-    @admin.display(description="Slug")
+    @admin.display(description=_("Slug"))
     def slug_display(self, obj: Category) -> str:
         return localized_slug(obj) or "—"
 

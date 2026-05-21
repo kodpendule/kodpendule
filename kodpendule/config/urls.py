@@ -8,6 +8,8 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.i18n import set_language
 
+import config.admin_branding  # noqa: F401 — Serbian admin site headers
+
 urlpatterns = [
     path("admin/dashboard/", include("apps.dashboard.urls")),
     path("admin/", admin.site.urls),

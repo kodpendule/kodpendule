@@ -5,6 +5,8 @@ from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 
 from django.utils import timezone
+from django.utils.formats import date_format
+from django.utils.translation import gettext as _
 
 
 @dataclass(frozen=True)
@@ -112,10 +114,13 @@ def _parse_date(value: str) -> date | None:
 
 def period_filter_choices(today: date | None = None) -> list[tuple[str, str]]:
     today = today or _local_today()
+    month_label = _("This month ({month_year})").format(
+        month_year=date_format(today, format="F Y", use_l10n=True),
+    )
     return [
-        ("7d", "Last 7 days"),
-        ("30d", "Last 30 days"),
-        ("90d", "Last 90 days"),
-        ("month", f"This month ({today.strftime('%B %Y')})"),
-        ("year", f"This year ({today.year})"),
+        ("7d", _("Last 7 days")),
+        ("30d", _("Last 30 days")),
+        ("90d", _("Last 90 days")),
+        ("month", month_label),
+        ("year", _("This year ({year})").format(year=today.year)),
     ]

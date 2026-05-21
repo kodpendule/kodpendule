@@ -7,6 +7,7 @@ from decimal import Decimal
 from typing import Any
 
 from django.utils.formats import date_format
+from django.utils.translation import gettext as _
 
 from apps.dashboard.filters import ReportPeriod, period_filter_choices
 from apps.dashboard.selectors import analytics_selectors as analytics
@@ -23,12 +24,12 @@ def build_dashboard_context(period: ReportPeriod) -> dict[str, Any]:
         time_series = analytics.sales_by_day(period)
         time_labels = [_format_day(row["day"]) for row in time_series]
         time_revenue = [float(row["revenue"]) for row in time_series]
-        time_chart_title = "Daily revenue"
+        time_chart_title = _("Daily revenue")
     else:
         time_series = analytics.sales_by_month(period)
         time_labels = [_format_month(row["month"]) for row in time_series]
         time_revenue = [float(row["revenue"]) for row in time_series]
-        time_chart_title = "Monthly revenue"
+        time_chart_title = _("Monthly revenue")
 
     top_products = analytics.top_products(period)
     top_categories = analytics.top_categories(period)
@@ -46,6 +47,9 @@ def build_dashboard_context(period: ReportPeriod) -> dict[str, Any]:
         "top_categories": top_categories,
         "top_customers": top_customers,
         "time_chart_title": time_chart_title,
+        "chart_legends": {
+            "revenue": _("Revenue"),
+        },
         "charts": {
             "revenue": {
                 "labels": time_labels,
