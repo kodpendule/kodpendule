@@ -14,6 +14,7 @@ Production on **Render** uses **PostgreSQL** via `DATABASE_URL`.
 
 ```powershell
 cd "E:\Stefan Spremo\Firme\Projekti\Web development\Kod Pendule\kodpendule"
+# This folder is the Git + Django project root.
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements/local.txt
