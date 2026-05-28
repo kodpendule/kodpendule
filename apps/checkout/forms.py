@@ -86,7 +86,6 @@ class CheckoutForm(forms.Form):
     )
     delivery_date = forms.DateField(
         label=_("Preferred delivery date"),
-        required=False,
         widget=forms.DateInput(attrs={"class": "form-control", "type": "date"}),
     )
     flexible_delivery = forms.BooleanField(
@@ -105,12 +104,27 @@ class CheckoutForm(forms.Form):
             self.fields["guest_email"].required = True
 
         min_date = timezone.localdate() + timedelta(days=1)
+        self._min_delivery_date = min_date
         self.fields["delivery_date"].widget.attrs["min"] = min_date.isoformat()
+
+    def clean_delivery_date(self):
+        delivery_date = self.cleaned_data.get("delivery_date")
+        if not delivery_date:
+            raise forms.ValidationError(_("This field is required."))
+        min_date = getattr(self, "_min_delivery_date", timezone.localdate() + timedelta(days=1))
+        if delivery_date < min_date:
+            raise forms.ValidationError(
+                _("Delivery date must be at least tomorrow.")
+            )
+        return delivery_date
 
     def clean_guest_email(self) -> str:
         email = self.cleaned_data.get("guest_email", "").strip()
         if self.user and self.user.is_authenticated:
-            return self.user.email or email
+            account_email = (self.user.email or "").strip()
+            if not account_email:
+                raise forms.ValidationError(_("Email is required for checkout."))
+            return account_email
         if not email:
             raise forms.ValidationError(_("Email is required for guest checkout."))
         return email

@@ -1,7 +1,6 @@
 from django.db.models import Count, Q, QuerySet
 
 from apps.categories.models import Category
-from apps.core.models import HomepageSectionType
 from apps.core.slugs import translation_languages_to_try
 from apps.core.utils import get_shop_language
 from apps.products.models import Product
@@ -18,7 +17,7 @@ def active_products_qs(language: str | None = None) -> QuerySet[Product]:
         translations__slug__isnull=False,
     ) & ~Q(translations__slug="")
     return (
-        Product.objects.filter(is_active=True)
+        Product.objects.all()
         .annotate(slug_count=Count("translations", filter=slug_filter))
         .filter(slug_count__gt=0)
         .select_related("category")
@@ -30,7 +29,7 @@ def active_products_qs(language: str | None = None) -> QuerySet[Product]:
 def get_product_by_slug(slug: str, language: str | None = None) -> Product | None:
     lang = _language(language)
     base_qs = (
-        Product.objects.filter(is_active=True)
+        Product.objects.all()
         .select_related("category")
         .prefetch_related("translations", "category__translations", "gallery_images")
     )
@@ -89,21 +88,12 @@ def search_products(query: str, language: str | None = None) -> QuerySet[Product
     ).distinct()
 
 
-def products_for_homepage_section(
-    section_type: str,
-    limit: int,
-    language: str | None = None,
-) -> QuerySet[Product]:
-    qs = active_products_qs(language)
-    if section_type == HomepageSectionType.FEATURED:
-        qs = qs.filter(is_featured=True)
-    elif section_type == HomepageSectionType.RECOMMENDED:
-        qs = qs.filter(is_recommended=True)
-    elif section_type == HomepageSectionType.SALE:
-        qs = qs.filter(is_on_sale=True)
-    else:
-        return qs.none()
-    return qs[:limit]
+def recommended_products_qs(language: str | None = None) -> QuerySet[Product]:
+    return (
+        active_products_qs(language)
+        .filter(is_recommended=True)
+        .order_by("recommended_order", "-updated_at")
+    )
 
 
 def related_products(product: Product, language: str | None = None, limit: int = 4) -> QuerySet[Product]:

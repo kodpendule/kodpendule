@@ -1,40 +1,67 @@
 {% load i18n shop_tags %}
-<article class="card h-100 product-card shadow-sm">
-    <a href="{{ product.get_absolute_url }}" class="text-decoration-none text-dark">
-        {% if product.main_image %}
-            <img src="{{ product.main_image.url }}" class="card-img-top product-card__img" alt="{{ product.name }}" loading="lazy">
-        {% else %}
-            <div class="card-img-top product-card__img product-card__img--placeholder bg-light d-flex align-items-center justify-content-center">
-                <span class="text-muted small">{% trans "No image" %}</span>
+<article class="shop-product-card" aria-label="{{ product.name }}">
+    <div class="shop-product-card__media">
+        <a href="{{ product.get_absolute_url }}" class="shop-product-card__media-link" aria-label="{{ product.name }}">
+            {% if product.main_image %}
+                <img src="{{ product.main_image.url }}" class="shop-product-card__img" alt="{{ product.name }}" loading="lazy">
+            {% else %}
+                <div class="shop-product-card__img shop-product-card__img--placeholder" aria-hidden="true"></div>
+            {% endif %}
+        </a>
+
+        {% if product.has_discount %}
+        <div class="shop-product-card__badges" aria-hidden="true">
+            <span class="shop-badge shop-badge--sale">{% trans "Sale" %}</span>
+        </div>
+        {% endif %}
+
+        {% if product.stock == 0 %}
+            <div class="shop-product-card__stock" aria-hidden="true">
+                <span class="shop-badge shop-badge--stock-out">{% trans "Out of stock" %}</span>
             </div>
         {% endif %}
-    </a>
-    <div class="card-body d-flex flex-column">
-        {% if product.is_on_sale %}
-            <span class="badge text-bg-danger align-self-start mb-2">{% trans "Sale" %}</span>
-        {% elif product.is_featured %}
-            <span class="badge text-bg-primary align-self-start mb-2">{% trans "Featured" %}</span>
-        {% endif %}
-        <h3 class="h6 card-title mb-1">
-            <a href="{{ product.get_absolute_url }}" class="text-decoration-none text-dark">
+    </div>
+
+    <div class="shop-product-card__body">
+        <h3 class="shop-product-card__title">
+            <a href="{{ product.get_absolute_url }}" class="shop-product-card__title-link">
                 {{ product.name }}
             </a>
         </h3>
+
         {% if product.short_description %}
-            <p class="card-text small text-muted mb-2 flex-grow-1">{{ product.short_description|truncatewords:12 }}</p>
+            <p class="shop-product-card__desc">{{ product.short_description|truncatewords:12 }}</p>
+        {% else %}
+            <div class="shop-product-card__desc shop-product-card__desc--empty" aria-hidden="true"></div>
         {% endif %}
-        <div class="mt-auto">
-            {% if product.has_discount %}
-                <p class="mb-0">
-                    <span class="fw-semibold text-danger">{{ product.effective_price|money }}</span>
-                    <span class="small text-muted text-decoration-line-through ms-1">{{ product.price|money }}</span>
-                </p>
-            {% else %}
-                <p class="fw-semibold mb-0">{{ product.effective_price|money }}</p>
-            {% endif %}
-            {% if product.stock == 0 %}
-                <span class="badge text-bg-secondary mt-1">{% trans "Out of stock" %}</span>
-            {% endif %}
+
+        <div class="shop-product-card__bottom">
+            <div class="shop-product-card__price">
+                {% if product.has_discount %}
+                    <span class="shop-price shop-price--sale">{{ product.effective_price|money }}</span>
+                    <span class="shop-price shop-price--was">{{ product.price|money }}</span>
+                {% else %}
+                    <span class="shop-price">{{ product.effective_price|money }}</span>
+                {% endif %}
+            </div>
+
+            <div class="shop-product-card__actions">
+                {% if product.stock > 0 %}
+                <form method="post" action="{% url 'cart:add' %}" class="shop-product-card__cart-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ product.pk }}">
+                    <input type="hidden" name="quantity" value="1">
+                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                    <button type="submit" class="shop-btn shop-btn--primary shop-btn--sm shop-product-card__add">
+                        {% trans "Add to cart" %}
+                    </button>
+                </form>
+                {% else %}
+                <a href="{{ product.get_absolute_url }}" class="shop-btn shop-btn--secondary shop-btn--sm shop-product-card__details">
+                    {% trans "Details" %}
+                </a>
+                {% endif %}
+            </div>
         </div>
     </div>
 </article>

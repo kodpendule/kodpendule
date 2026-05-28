@@ -32,6 +32,16 @@ Run the full test suite:
 python manage.py test apps config
 ```
 
+### Storefront translations (Serbian Latin)
+
+After any task that adds or changes translatable UI strings, agents must automatically:
+
+1. `python manage.py makemessages -l sr`
+2. Add/fill new entries in `scripts/fill_sr_translations.py` and run that script
+3. `python manage.py compilemessages -l sr`
+
+Full steps (dedupe, admin merge): **[docs/ADMIN_LOCALE.md](docs/ADMIN_LOCALE.md)** · **`.cursor/rules/i18n-after-changes.mdc`**
+
 ## Settings
 
 | Module | Use | Database |
@@ -61,7 +71,11 @@ Admin UI uses English `gettext` msgids and Serbian translations in `locale/sr/LC
 python manage.py compilemessages -l sr
 ```
 
-(On Windows without GNU gettext, `django.mo` is checked in; regenerate with `msgfmt` or `polib` if needed.)
+On Windows without GNU gettext (`msgfmt`), use the project script instead (updates `django.po` storefront strings and compiles `django.mo`):
+
+```powershell
+python scripts/compile_sr_messages.py
+```
 
 ### Analytics dashboard (Step 8)
 

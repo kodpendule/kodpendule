@@ -1,0 +1,437 @@
+/**
+ * Kod Pendule — mobile & responsive polish (Frontend Phase 8)
+ * Desktop layouts unchanged above lg; focused on touch, readability, and flow.
+ */
+
+/* —— Global: overflow, safe areas —— */
+.shop-body {
+    overflow-x: clip;
+}
+
+@supports not (overflow-x: clip) {
+    .shop-body {
+        overflow-x: hidden;
+    }
+}
+
+.shop-body main.flex-grow-1 {
+    scroll-padding-top: 5rem;
+}
+
+@media (max-width: 991.98px) {
+    .shop-container,
+    .container.shop-container,
+    .shop-body .container:not(.container-fluid) {
+        padding-left: max(var(--shop-space-4), env(safe-area-inset-left, 0px));
+        padding-right: max(var(--shop-space-4), env(safe-area-inset-right, 0px));
+    }
+}
+
+/* —— Typography & hierarchy (small screens) —— */
+@media (max-width: 767.98px) {
+    .shop-page-header__title,
+    .shop-catalog-header h1,
+    .shop-pdp__title {
+        font-size: var(--shop-font-size-xl);
+        line-height: var(--shop-line-height-tight);
+        word-break: break-word;
+    }
+
+    .shop-body .breadcrumb {
+        font-size: var(--shop-font-size-sm);
+        flex-wrap: wrap;
+    }
+
+    .shop-body p,
+    .shop-body .shop-lead {
+        max-width: 40rem;
+    }
+}
+
+@media (max-width: 380px) {
+    :root {
+        --shop-touch-target: 3rem;
+    }
+
+    .shop-page-header__title,
+    .shop-catalog-header h1 {
+        font-size: var(--shop-font-size-lg);
+    }
+}
+
+/* —— Forms: prevent iOS zoom, comfortable taps —— */
+@media (max-width: 767.98px) {
+    .shop-body .form-control,
+    .shop-body .form-select,
+    .shop-body textarea {
+        font-size: max(1rem, 16px);
+    }
+
+    .shop-body .form-check-input {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-top: 0.15rem;
+    }
+
+    .shop-body .form-check-label {
+        padding-left: var(--shop-space-1);
+        line-height: var(--shop-line-height-relaxed);
+    }
+}
+
+/* —— Touch: larger targets, less accidental motion —— */
+@media (hover: none) and (pointer: coarse) {
+    .shop-btn:active {
+        transform: none;
+    }
+
+    .shop-product-card:hover,
+    .shop-category-tile:hover,
+    .product-card:hover {
+        box-shadow: var(--shop-shadow-card);
+    }
+
+    .shop-header__action,
+    .shop-header__menu-btn,
+    .shop-chip,
+    .shop-lang__btn {
+        min-height: var(--shop-touch-target);
+        min-width: var(--shop-touch-target);
+    }
+
+    .shop-header__cart {
+        min-width: var(--shop-touch-target);
+        justify-content: center;
+    }
+}
+
+/* —— Header (mobile) —— */
+@media (max-width: 991.98px) {
+    .shop-header__actions {
+        gap: var(--shop-space-1);
+    }
+
+    .shop-header__action {
+        padding: var(--shop-space-2);
+    }
+
+    .shop-header__action .d-none.d-md-inline {
+        display: none !important;
+    }
+
+    .shop-header__menu-btn {
+        margin-left: var(--shop-space-1);
+    }
+}
+
+@media (max-width: 575.98px) {
+    .shop-header__brand {
+        min-width: 0;
+        flex: 1 1 auto;
+        max-width: calc(100% - 7.5rem);
+    }
+
+    .shop-header__name {
+        max-width: 100%;
+    }
+}
+
+/* —— Messages —— */
+@media (max-width: 767.98px) {
+    .shop-alerts .alert {
+        font-size: var(--shop-font-size-sm);
+        padding: var(--shop-space-3) var(--shop-space-4);
+    }
+}
+
+/* —— Catalog —— */
+@media (max-width: 575.98px) {
+    .shop-catalog-header h1 {
+        margin-bottom: var(--shop-space-2);
+    }
+
+    .shop-search--catalog .shop-btn {
+        min-height: var(--shop-touch-target);
+        width: 100%;
+    }
+
+    .shop-category-chips {
+        margin-inline: calc(-1 * var(--shop-space-4));
+        padding-inline: var(--shop-space-4);
+        scroll-padding-inline: var(--shop-space-4);
+    }
+
+    .shop-chip {
+        min-height: var(--shop-touch-target);
+        padding-inline: var(--shop-space-5);
+    }
+}
+
+/* Tablet: 3-column product grid */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .shop-product-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+/* —— Product cards —— */
+@media (max-width: 575.98px) {
+    .shop-product-card__bottom {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--shop-space-3);
+    }
+
+    .shop-product-card__actions {
+        width: 100%;
+    }
+
+    .shop-product-card__cart-form {
+        width: 100%;
+    }
+
+    .shop-product-card__add,
+    .shop-product-card__details {
+        width: 100%;
+        min-height: var(--shop-touch-target);
+        white-space: normal;
+    }
+
+    .shop-product-card__title-link {
+        -webkit-line-clamp: 3;
+    }
+}
+
+/* —— Product detail —— */
+main.flex-grow-1:has(.shop-page--pdp) {
+    padding-bottom: calc(var(--shop-space-10) + env(safe-area-inset-bottom, 0px));
+}
+
+@media (max-width: 991.98px) {
+    main.flex-grow-1:has(.shop-page--pdp) {
+        padding-bottom: calc(7.5rem + env(safe-area-inset-bottom, 0px));
+    }
+
+    .shop-pdp__title {
+        letter-spacing: -0.01em;
+    }
+
+    .shop-pdp__price-now {
+        font-size: 1.45rem;
+    }
+
+    .shop-gallery__main {
+        min-height: 16rem;
+    }
+
+    .shop-gallery__img {
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+    }
+
+    .shop-thumb {
+        min-height: 3.25rem;
+    }
+
+    .shop-qty__btn {
+        min-height: var(--shop-touch-target);
+    }
+
+    .shop-buybox__cta {
+        min-height: 3.25rem;
+    }
+}
+
+/* —— Cart —— */
+@media (max-width: 991.98px) {
+    main.flex-grow-1:has(.shop-page--cart) {
+        padding-bottom: calc(var(--shop-space-6) + env(safe-area-inset-bottom, 0px));
+    }
+}
+
+@media (max-width: 575.98px) {
+    .shop-cart-line__actions {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .shop-cart-line__qty-form {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .shop-qty--compact {
+        max-width: none;
+        flex: 1 1 auto;
+    }
+
+    .shop-cart-line__update,
+    .shop-cart-line__remove-form .shop-btn {
+        width: 100%;
+        min-height: var(--shop-touch-target);
+    }
+
+    .shop-cart-line__name {
+        word-break: break-word;
+    }
+}
+
+/* —— Checkout —— */
+main.flex-grow-1:has(.shop-page--checkout) {
+    padding-bottom: calc(var(--shop-space-8) + env(safe-area-inset-bottom, 0px));
+}
+
+@media (max-width: 991.98px) {
+    main.flex-grow-1:has(.shop-page--checkout) {
+        padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+    }
+
+    .shop-checkout-mobile-bar {
+        padding-left: max(var(--shop-space-4), env(safe-area-inset-left, 0px));
+        padding-right: max(var(--shop-space-4), env(safe-area-inset-right, 0px));
+    }
+
+    .shop-checkout-mobile-bar .shop-btn {
+        min-height: 3.25rem;
+    }
+
+    .shop-checkout-shipping-note {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* —— Orders (stacked table on phone) —— */
+@media (max-width: 767.98px) {
+    .shop-order-table thead {
+        display: none;
+    }
+
+    .shop-order-table tbody tr {
+        display: block;
+        padding: var(--shop-space-4) 0;
+        border-bottom: 1px solid var(--shop-color-border-subtle);
+    }
+
+    .shop-order-table tbody tr:last-child {
+        border-bottom: 0;
+    }
+
+    .shop-order-table td {
+        display: flex;
+        justify-content: space-between;
+        gap: var(--shop-space-3);
+        padding: var(--shop-space-2) 0;
+        border: 0;
+        text-align: start !important;
+    }
+
+    .shop-order-table td::before {
+        content: attr(data-label);
+        font-weight: var(--shop-font-weight-semibold);
+        color: var(--shop-color-text-quiet);
+        font-size: var(--shop-font-size-xs);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        flex-shrink: 0;
+    }
+
+    .shop-order-table td.shop-order-table__product {
+        display: block;
+        padding-top: 0;
+    }
+
+    .shop-order-table td.shop-order-table__product::before {
+        display: none;
+    }
+
+    .shop-order-page .card-body {
+        padding: var(--shop-space-4);
+    }
+
+    .shop-order-page .d-flex.flex-wrap.align-items-center {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+
+    .shop-order-page .order-status-progress .list-group {
+        font-size: var(--shop-font-size-sm);
+    }
+
+    .shop-order-table--history td.shop-order-table__action {
+        display: block;
+        padding-top: var(--shop-space-3);
+    }
+
+    .shop-order-table--history td.shop-order-table__action::before {
+        display: none;
+    }
+
+    .shop-order-table--history .shop-btn--block {
+        width: 100%;
+        min-height: var(--shop-touch-target);
+    }
+}
+
+/* —— Account / track forms —— */
+@media (max-width: 575.98px) {
+    .shop-form-page .card-body {
+        padding: var(--shop-space-4) !important;
+    }
+
+    .shop-form-page .btn-primary,
+    .shop-form-page .shop-btn {
+        min-height: 3.25rem;
+    }
+}
+
+/* —— Footer & trust strip —— */
+@media (max-width: 575.98px) {
+    .shop-trust-strip__list {
+        gap: var(--shop-space-4);
+    }
+
+    .shop-trust-strip__label {
+        font-size: var(--shop-font-size-xs);
+        line-height: 1.35;
+    }
+
+    .shop-footer__bottom-inner {
+        gap: var(--shop-space-3);
+    }
+}
+
+/* —— Landscape phones: avoid double sticky bars —— */
+@media (max-height: 32rem) and (orientation: landscape) {
+    .shop-pdp__buy {
+        position: static;
+        background: none;
+        padding-top: 0;
+    }
+
+    main.flex-grow-1:has(.shop-page--pdp) {
+        padding-bottom: var(--shop-space-8);
+    }
+
+    .shop-checkout-mobile-bar {
+        position: static;
+        background: none;
+        padding-bottom: 0;
+    }
+
+    main.flex-grow-1:has(.shop-page--checkout) {
+        padding-bottom: var(--shop-space-8);
+    }
+}
+
+/* —— Reduced motion —— */
+@media (prefers-reduced-motion: reduce) {
+    .shop-btn,
+    .shop-product-card,
+    .shop-category-tile,
+    .shop-thumb,
+    .shop-chip {
+        transition: none;
+    }
+}

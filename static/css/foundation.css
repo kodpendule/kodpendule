@@ -1,0 +1,155 @@
+/**
+ * Kod Pendule — storefront foundation (Frontend Phase 1)
+ */
+
+html {
+    scroll-behavior: smooth;
+}
+
+body.shop-body {
+    font-family: var(--shop-font-family);
+    font-size: var(--shop-font-size-base);
+    line-height: var(--shop-line-height-normal);
+    color: var(--shop-color-text);
+    background-color: var(--shop-color-bg);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* —— Typography hierarchy —— */
+.shop-body h1,
+.shop-body .h1 {
+    font-size: var(--shop-font-size-3xl);
+    font-weight: var(--shop-font-weight-bold);
+    line-height: var(--shop-line-height-tight);
+    letter-spacing: -0.02em;
+    color: var(--shop-color-text);
+}
+
+.shop-body h2,
+.shop-body .h2 {
+    font-size: var(--shop-font-size-2xl);
+    font-weight: var(--shop-font-weight-semibold);
+    line-height: var(--shop-line-height-tight);
+}
+
+.shop-body h3,
+.shop-body .h3 {
+    font-size: var(--shop-font-size-xl);
+    font-weight: var(--shop-font-weight-semibold);
+}
+
+.shop-body h4,
+.shop-body .h4,
+.shop-body h5,
+.shop-body .h5,
+.shop-body h6,
+.shop-body .h6 {
+    font-weight: var(--shop-font-weight-semibold);
+    line-height: var(--shop-line-height-tight);
+}
+
+.shop-body p {
+    margin-bottom: var(--shop-space-4);
+}
+
+.shop-lead {
+    font-size: var(--shop-font-size-md);
+    line-height: var(--shop-line-height-relaxed);
+    color: var(--shop-color-text-muted);
+}
+
+.shop-text-muted {
+    color: var(--shop-color-text-muted) !important;
+}
+
+.shop-price {
+    font-variant-numeric: tabular-nums;
+    font-weight: var(--shop-font-weight-semibold);
+    color: var(--shop-color-text);
+}
+
+.shop-price--sale {
+    color: var(--shop-color-sale);
+}
+
+.shop-price--was {
+    color: var(--shop-color-text-quiet);
+    text-decoration: line-through;
+    font-weight: var(--shop-font-weight-normal);
+    font-size: var(--shop-font-size-sm);
+}
+
+/* —— Containers —— */
+.shop-container,
+.container.shop-container {
+    max-width: var(--shop-container-max);
+}
+
+.shop-container--narrow {
+    max-width: var(--shop-container-narrow);
+}
+
+.shop-container--wide {
+    max-width: var(--shop-container-wide);
+}
+
+main.flex-grow-1 {
+    padding-bottom: var(--shop-space-10);
+}
+
+/* —— Links —— */
+.shop-body a:not(.btn):not(.shop-btn):not(.nav-link):not(.card):not(.page-link) {
+    color: var(--shop-color-primary);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+}
+
+.shop-body a:not(.btn):not(.shop-btn):not(.nav-link):hover {
+    color: var(--shop-color-primary-hover);
+}
+
+/* —— Focus —— */
+.shop-body :focus-visible {
+    outline: 2px solid var(--shop-color-primary);
+    outline-offset: 2px;
+}
+
+.shop-body .btn:focus-visible {
+    outline: none;
+    box-shadow: var(--shop-focus-ring);
+}
+
+/* Header/nav: see header.css (Phase 2) */
+/* Footer & trust bar: see footer.css (Phase 7) */
+
+/* —— Bootstrap form control tune —— */
+.shop-body .form-control,
+.shop-body .form-select {
+    border-color: var(--shop-color-border);
+    border-radius: var(--shop-radius-sm);
+    padding: var(--shop-space-3) var(--shop-space-4);
+    min-height: var(--shop-touch-target);
+    font-size: var(--shop-font-size-base);
+}
+
+.shop-body .form-control:focus,
+.shop-body .form-select:focus {
+    border-color: var(--shop-color-primary);
+    box-shadow: var(--shop-focus-ring);
+}
+
+.shop-body .form-control-sm {
+    min-height: 2.5rem;
+    font-size: var(--shop-font-size-sm);
+}
+
+@media (max-width: 767.98px) {
+    .shop-body h1,
+    .shop-body .h1 {
+        font-size: var(--shop-font-size-2xl);
+    }
+
+    main.flex-grow-1 {
+        padding-bottom: var(--shop-space-8);
+    }
+}

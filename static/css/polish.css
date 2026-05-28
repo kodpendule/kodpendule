@@ -1,0 +1,367 @@
+/**
+ * Kod Pendule — final visual consistency (Frontend Phase 9)
+ * Loads last; bridges Bootstrap to design tokens without redesigning layouts.
+ */
+
+/* —— Shared motion —— */
+:root {
+    --shop-transition-ui: 0.15s ease;
+    --shop-section-gap: var(--shop-space-8);
+}
+
+/* —— Page rhythm —— */
+.shop-page .container > header,
+.shop-page .container > .shop-page-header,
+.shop-page .container > .shop-catalog-header {
+    margin-bottom: var(--shop-section-gap);
+}
+
+.shop-body .container > .breadcrumb,
+.shop-body nav[aria-label="breadcrumb"] {
+    margin-bottom: var(--shop-space-4);
+}
+
+.shop-body .breadcrumb {
+    font-size: var(--shop-font-size-sm);
+    padding: 0;
+    margin-bottom: var(--shop-space-4);
+}
+
+.shop-body .breadcrumb-item a {
+    color: var(--shop-color-text-muted);
+    text-decoration: none;
+    font-weight: var(--shop-font-weight-medium);
+}
+
+.shop-body .breadcrumb-item a:hover {
+    color: var(--shop-color-primary);
+}
+
+.shop-body .breadcrumb-item.active {
+    color: var(--shop-color-text);
+    font-weight: var(--shop-font-weight-medium);
+}
+
+.shop-body .breadcrumb-item + .breadcrumb-item::before {
+    color: var(--shop-color-text-quiet);
+}
+
+/* —— Panels (Bootstrap card bridge) —— */
+.shop-panel,
+.shop-body .card.shop-panel,
+.shop-body .card:not(.shop-product-card):not(.category-card):not(.promo-card) {
+    background: var(--shop-color-surface);
+    border: 1px solid var(--shop-color-border-subtle) !important;
+    border-radius: var(--shop-radius-lg) !important;
+    box-shadow: var(--shop-shadow-card) !important;
+}
+
+.shop-panel .card-body,
+.shop-body .card.shop-panel .card-body {
+    padding: var(--shop-space-5);
+}
+
+.shop-panel__title,
+.shop-body .card .h6.text-uppercase.text-muted,
+.shop-body .card h2.h6.text-uppercase.text-muted {
+    font-size: var(--shop-font-size-xs);
+    font-weight: var(--shop-font-weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--shop-color-primary-active) !important;
+    margin-bottom: var(--shop-space-4);
+}
+
+.shop-panel--subtle,
+.shop-body .card.bg-light {
+    background: var(--shop-color-surface-subtle) !important;
+    border-color: var(--shop-color-border-subtle) !important;
+    box-shadow: none !important;
+}
+
+/* —— Empty states —— */
+.shop-empty-state {
+    text-align: center;
+    padding: var(--shop-space-8) var(--shop-space-5);
+    background: var(--shop-color-surface);
+    border: 1px solid var(--shop-color-border-subtle);
+    border-radius: var(--shop-radius-lg);
+    box-shadow: var(--shop-shadow-sm);
+}
+
+.shop-empty-state__title {
+    font-size: var(--shop-font-size-lg);
+    font-weight: var(--shop-font-weight-semibold);
+    margin: 0 0 var(--shop-space-2);
+    color: var(--shop-color-text);
+}
+
+.shop-empty-state__text {
+    margin: 0 0 var(--shop-space-5);
+    color: var(--shop-color-text-muted);
+    font-size: var(--shop-font-size-sm);
+    line-height: var(--shop-line-height-relaxed);
+    max-width: 28rem;
+    margin-inline: auto;
+}
+
+.shop-empty-cart {
+    max-width: 28rem;
+    margin: var(--shop-space-8) auto;
+    text-align: center;
+    padding: var(--shop-space-8) var(--shop-space-5);
+    background: var(--shop-color-surface);
+    border: 1px solid var(--shop-color-border-subtle);
+    border-radius: var(--shop-radius-lg);
+    box-shadow: var(--shop-shadow-sm);
+}
+
+/* —— Notices (guest checkout, info) —— */
+.shop-notice {
+    padding: var(--shop-space-4);
+    background: var(--shop-color-surface-subtle);
+    border: 1px solid var(--shop-color-border-subtle);
+    border-radius: var(--shop-radius-md);
+    font-size: var(--shop-font-size-sm);
+    color: var(--shop-color-text-muted);
+    line-height: var(--shop-line-height-relaxed);
+}
+
+.shop-notice a {
+    font-weight: var(--shop-font-weight-semibold);
+}
+
+/* —— Alerts (global + dismissible) —— */
+.shop-body .alert {
+    border-radius: var(--shop-radius-md);
+    border-width: 1px;
+    font-size: var(--shop-font-size-sm);
+    line-height: var(--shop-line-height-relaxed);
+    box-shadow: var(--shop-shadow-sm);
+}
+
+.shop-body .alert-light,
+.shop-body .alert-secondary {
+    background: var(--shop-color-surface-subtle);
+    border-color: var(--shop-color-border-subtle);
+    color: var(--shop-color-text-muted);
+}
+
+.shop-body .alert-success {
+    background: var(--shop-color-success-bg);
+    border-color: var(--shop-color-success-border);
+    color: var(--shop-color-primary-active);
+}
+
+.shop-body .alert-danger {
+    background: var(--shop-color-danger-bg);
+    border-color: var(--shop-color-danger-border);
+    color: var(--shop-color-danger);
+}
+
+.shop-body .alert-warning {
+    background: var(--shop-color-warning-bg);
+    border-color: var(--shop-color-warning-border);
+    color: var(--shop-color-warning);
+}
+
+.shop-body .alert-info {
+    background: var(--shop-color-info-bg);
+    border-color: var(--shop-color-info-border);
+    color: var(--shop-color-info);
+}
+
+.shop-alerts {
+    position: relative;
+    z-index: 5;
+}
+
+/* —— Status badges (orders) —— */
+.shop-body .badge {
+    font-size: var(--shop-font-size-xs);
+    font-weight: var(--shop-font-weight-semibold);
+    padding: 0.35em 0.65em;
+    border-radius: var(--shop-radius-full);
+    letter-spacing: 0.02em;
+}
+
+.shop-body .badge.text-bg-primary {
+    background: var(--shop-color-primary-soft) !important;
+    color: var(--shop-color-primary-active) !important;
+}
+
+.shop-body .badge.text-bg-success {
+    background: var(--shop-color-success-bg) !important;
+    color: var(--shop-color-primary-active) !important;
+}
+
+.shop-body .badge.text-bg-danger {
+    background: var(--shop-color-danger-bg) !important;
+    color: var(--shop-color-danger) !important;
+}
+
+.shop-body .badge.text-bg-warning {
+    background: var(--shop-color-warning-bg) !important;
+    color: var(--shop-color-warning) !important;
+}
+
+.shop-body .badge.text-bg-info {
+    background: var(--shop-color-info-bg) !important;
+    color: var(--shop-color-info) !important;
+}
+
+.shop-body .badge.text-bg-secondary {
+    background: var(--shop-color-surface-subtle) !important;
+    color: var(--shop-color-text-muted) !important;
+    border: 1px solid var(--shop-color-border-subtle);
+}
+
+/* —— Buttons: disabled + loading —— */
+.shop-btn:disabled,
+.shop-body .btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.shop-btn.is-loading,
+.shop-body .btn.is-loading {
+    position: relative;
+    color: transparent !important;
+    pointer-events: none;
+}
+
+.shop-btn.is-loading::after,
+.shop-body .btn.is-loading::after {
+    content: "";
+    position: absolute;
+    width: 1.125rem;
+    height: 1.125rem;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: shop-spin 0.55s linear infinite;
+}
+
+.shop-btn--primary.is-loading::after,
+.shop-body .btn-primary.is-loading::after {
+    border-color: var(--shop-color-on-primary);
+    border-right-color: transparent;
+}
+
+.shop-btn--secondary.is-loading::after,
+.shop-body .btn-outline-secondary.is-loading::after {
+    border-color: var(--shop-color-primary);
+    border-right-color: transparent;
+}
+
+@keyframes shop-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* —— Forms: invalid state (account + legacy fields) —— */
+.shop-body .form-control.is-invalid,
+.shop-body .form-select.is-invalid {
+    border-color: var(--shop-color-danger);
+}
+
+.shop-body .invalid-feedback,
+.shop-body .form-text {
+    font-size: var(--shop-font-size-sm);
+}
+
+/* —— Tables —— */
+.shop-body .table {
+    font-size: var(--shop-font-size-sm);
+}
+
+.shop-body .table > :not(caption) > * > * {
+    padding: var(--shop-space-3) var(--shop-space-2);
+    border-color: var(--shop-color-border-subtle);
+}
+
+.shop-body .table thead th {
+    font-size: var(--shop-font-size-xs);
+    font-weight: var(--shop-font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--shop-color-text-quiet);
+    border-bottom-width: 1px;
+}
+
+/* —— Pagination —— */
+.shop-body .pagination {
+    gap: var(--shop-space-2);
+}
+
+.shop-body .page-item.disabled .page-link {
+    color: var(--shop-color-text-quiet);
+    background: var(--shop-color-surface-subtle);
+}
+
+/* —— Account pages —— */
+.shop-account-page .shop-account-card {
+    max-width: 28rem;
+    margin-inline: auto;
+    padding: var(--shop-space-6);
+}
+
+.shop-account-page--wide .shop-account-card {
+    max-width: 36rem;
+}
+
+.shop-account-page .shop-account-card h1 {
+    font-size: var(--shop-font-size-xl);
+    margin-bottom: var(--shop-space-3);
+}
+
+.shop-account-page .shop-account-card > .text-muted {
+    font-size: var(--shop-font-size-sm);
+    line-height: var(--shop-line-height-relaxed);
+}
+
+/* —— Contact —— */
+.shop-contact-card {
+    padding: var(--shop-space-6);
+    max-width: 36rem;
+}
+
+.shop-contact-card p {
+    margin-bottom: var(--shop-space-3);
+    font-size: var(--shop-font-size-sm);
+    line-height: var(--shop-line-height-relaxed);
+}
+
+.shop-contact-card strong {
+    display: block;
+    font-size: var(--shop-font-size-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--shop-color-text-quiet);
+    margin-bottom: var(--shop-space-1);
+}
+
+/* —— Hover polish (pointer devices only) —— */
+@media (hover: hover) and (pointer: fine) {
+    .shop-btn--primary:hover,
+    .shop-body .btn-primary:hover {
+        box-shadow: var(--shop-shadow-sm);
+    }
+
+    .shop-product-card:hover,
+    .shop-panel:hover {
+        transition: box-shadow var(--shop-transition-ui), border-color var(--shop-transition-ui);
+    }
+}
+
+/* —— Reduced motion —— */
+@media (prefers-reduced-motion: reduce) {
+    .shop-btn.is-loading::after,
+    .shop-body .btn.is-loading::after {
+        animation: none;
+        border-right-color: currentColor;
+        opacity: 0.5;
+    }
+}

@@ -1,0 +1,14 @@
+{% load i18n %}
+<button class="sticky toggle-nav-sidebar" id="toggle-nav-sidebar" aria-label="{% translate 'Toggle navigation' %}"></button>
+<nav class="sticky kp-admin-sidebar" id="nav-sidebar" aria-label="{% translate 'Sidebar' %}">
+    <div class="kp-admin-sidebar__brand">
+        <a href="{% url 'admin:index' %}" class="kp-admin-sidebar__home">
+            <span class="kp-admin-sidebar__home-title">{% trans "Admin home" %}</span>
+            <span class="kp-admin-sidebar__home-sub">{% trans "Sales and inventory overview" %}</span>
+        </a>
+    </div>
+    <input type="search" id="nav-filter"
+           placeholder="{% translate 'Filter menu…' %}"
+           aria-label="{% translate 'Filter navigation items' %}">
+    {% include "admin/includes/kp_nav_sections.html" with layout="sidebar" %}
+</nav>

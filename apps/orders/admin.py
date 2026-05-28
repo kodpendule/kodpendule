@@ -1,7 +1,9 @@
+from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
+from apps.core.admin_display import money_cell, order_status_badge
 from apps.orders.models import Order, OrderItem, OrderStatus
 
 
@@ -11,12 +13,20 @@ class OrderItemInline(admin.TabularInline):
     verbose_name = _("Order item")
     verbose_name_plural = _("Order items")
     readonly_fields = ("product_name", "sku", "unit_price", "line_total_display")
-    fields = ("product", "product_name", "sku", "unit_price", "quantity", "line_total_display")
+    fields = (
+        "product",
+        "product_name",
+        "sku",
+        "unit_price",
+        "quantity",
+        "line_total_display",
+    )
+    classes = ("kp-inline-order-items",)
 
     @admin.display(description=_("Line total"))
     def line_total_display(self, obj: OrderItem) -> str:
         if obj.pk:
-            return str(obj.line_total)
+            return money_cell(obj.line_total, emphasize=True)
         return "—"
 
 
@@ -25,13 +35,11 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = (
         "order_number",
         "customer_display",
-        "status",
-        "total",
+        "status_badge",
+        "total_display",
         "payment_method",
         "created_at",
     )
-    list_editable = ("status",)
-    list_filter = ("status", "payment_method", "flexible_delivery", "created_at")
     search_fields = (
         "order_number",
         "guest_email",
@@ -45,11 +53,16 @@ class OrderAdmin(admin.ModelAdmin):
     list_select_related = ("user", "shipping_city")
     inlines = [OrderItemInline]
     date_hierarchy = "created_at"
-
+    list_per_page = 25
+    save_on_top = True
     fieldsets = (
         (
             _("Order"),
             {
+                "classes": ("kp-fieldset", "kp-fieldset--order-core"),
+                "description": _(
+                    "Update order status when you confirm, ship, or complete the order."
+                ),
                 "fields": (
                     "order_number",
                     "user",
@@ -61,11 +74,15 @@ class OrderAdmin(admin.ModelAdmin):
         ),
         (
             _("Customer"),
-            {"fields": ("first_name", "last_name", "phone")},
+            {
+                "classes": ("kp-fieldset", "kp-fieldset--customer"),
+                "fields": ("first_name", "last_name", "phone"),
+            },
         ),
         (
             _("Shipping"),
             {
+                "classes": ("kp-fieldset", "kp-fieldset--shipping"),
                 "fields": (
                     "shipping_street",
                     "shipping_city_name",
@@ -82,6 +99,7 @@ class OrderAdmin(admin.ModelAdmin):
         (
             _("Billing"),
             {
+                "classes": ("collapse", "kp-fieldset", "kp-fieldset--billing"),
                 "fields": (
                     "billing_street",
                     "billing_city_name",
@@ -91,13 +109,29 @@ class OrderAdmin(admin.ModelAdmin):
         ),
         (
             _("Totals"),
-            {"fields": ("subtotal", "total")},
+            {
+                "classes": ("kp-fieldset", "kp-fieldset--totals"),
+                "description": _("Amounts charged to the customer."),
+                "fields": ("subtotal", "total"),
+            },
         ),
         (
             _("Timestamps"),
             {"fields": ("created_at", "updated_at"), "classes": ("collapse",)},
         ),
     )
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_dbfield(db_field, request, **kwargs)
+        if db_field.name == "status" and formfield:
+            formfield.widget = forms.Select(
+                attrs={
+                    **formfield.widget.attrs,
+                    "class": "kp-status-select",
+                },
+                choices=formfield.choices,
+            )
+        return formfield
 
     def get_queryset(self, request):
         return (
@@ -121,12 +155,20 @@ class OrderAdmin(admin.ModelAdmin):
 
     actions = ["mark_confirmed", "mark_shipped", "mark_delivered"]
 
+    @admin.display(description=_("Status"), ordering="status")
+    def status_badge(self, obj: Order) -> str:
+        return order_status_badge(obj.status)
+
+    @admin.display(description=_("Total"), ordering="total")
+    def total_display(self, obj: Order) -> str:
+        return money_cell(obj.total, emphasize=True)
+
     @admin.display(description=_("Customer"))
     def customer_display(self, obj: Order) -> str:
         name = obj.customer_full_name
         if obj.is_guest_order:
             return format_html(
-                '{} <span style="color:#666;">({})</span>',
+                '{} <span class="kp-guest-tag">({})</span>',
                 name,
                 _("guest"),
             )

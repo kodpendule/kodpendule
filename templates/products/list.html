@@ -1,11 +1,17 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/catalog.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="container py-4 py-lg-5">
+<div class="shop-page shop-page--catalog">
+<div class="container shop-container py-4 py-lg-5">
   {% include "includes/_breadcrumb.html" with breadcrumbs=breadcrumb_items %}
 
-  <header class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+  <header class="shop-catalog-header mb-4">
     <div>
       <h1 class="h2 mb-1">
         {% if search_query %}
@@ -22,18 +28,21 @@
       </p>
       {% endif %}
     </div>
-    <form class="d-flex" method="get" action="{% url 'products:list' %}" role="search">
+    <form class="shop-catalog-search" method="get" action="{% url 'products:list' %}" role="search">
       {% if active_category %}
       <input type="hidden" name="kategorija" value="{{ active_category.slug }}">
       {% endif %}
-      <input class="form-control form-control-sm me-2" type="search" name="q" value="{{ search_query }}"
-             placeholder="{% trans 'Search…' %}" aria-label="{% trans 'Search' %}">
-      <button class="btn btn-primary btn-sm" type="submit">{% trans "Search" %}</button>
+      <div class="shop-search shop-search--catalog">
+        <input class="form-control shop-search__input" type="search" name="q" value="{{ search_query }}"
+               placeholder="{% trans 'Search products…' %}" aria-label="{% trans 'Search' %}">
+        <button class="shop-btn shop-btn--primary shop-btn--sm" type="submit">{% trans "Search" %}</button>
+      </div>
     </form>
   </header>
 
   {% include "includes/_category_nav.html" %}
   {% include "includes/_product_grid.html" with products=products %}
   {% include "includes/_pagination.html" %}
+</div>
 </div>
 {% endblock %}

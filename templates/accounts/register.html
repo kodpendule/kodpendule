@@ -1,48 +1,45 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 {% load i18n %}
 
 {% block title %}{% trans "Registracija" %} — {{ block.super }}{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <h1 class="h3 mb-4">{% trans "Registracija" %}</h1>
-            <p class="text-muted">{% trans "Create an account to track orders and save your details." %}</p>
+<div class="shop-page shop-account-page shop-account-page--wide">
+<div class="container shop-container py-5">
+    <div class="shop-account-card shop-card">
+        <h1 class="h3 mb-3">{% trans "Registracija" %}</h1>
+        <p class="text-muted mb-4">{% trans "Create an account to track orders and save your details." %}</p>
 
-            <form method="post" novalidate>
-                {% csrf_token %}
-                {% if form.non_field_errors %}
-                    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
-                {% endif %}
-                <div class="row">
-                    <div class="col-md-6">
-                        {% include "includes/_form_field.html" with field=form.username %}
-                    </div>
-                    <div class="col-md-6">
-                        {% include "includes/_form_field.html" with field=form.email %}
-                    </div>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+            {% endif %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    {% include "includes/_form_field.html" with field=form.username %}
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        {% include "includes/_form_field.html" with field=form.first_name %}
-                    </div>
-                    <div class="col-md-6">
-                        {% include "includes/_form_field.html" with field=form.last_name %}
-                    </div>
+                <div class="col-md-6">
+                    {% include "includes/_form_field.html" with field=form.email %}
                 </div>
-                {% include "includes/_form_field.html" with field=form.phone %}
-                {% include "includes/_form_field.html" with field=form.password1 %}
-                {% include "includes/_form_field.html" with field=form.password2 %}
-                {% include "includes/_form_field.html" with field=form.newsletter_opt_in %}
-                <button type="submit" class="btn btn-primary w-100">{% trans "Create account" %}</button>
-            </form>
+                <div class="col-md-6">
+                    {% include "includes/_form_field.html" with field=form.first_name %}
+                </div>
+                <div class="col-md-6">
+                    {% include "includes/_form_field.html" with field=form.last_name %}
+                </div>
+            </div>
+            {% include "includes/_form_field.html" with field=form.phone %}
+            {% include "includes/_form_field.html" with field=form.password1 %}
+            {% include "includes/_form_field.html" with field=form.password2 %}
+            <button type="submit" class="shop-btn shop-btn--primary shop-btn--block">{% trans "Create account" %}</button>
+        </form>
 
-            <p class="mt-4 mb-0 text-center">
-                {% trans "Already have an account?" %}
-                <a href="{% url 'accounts:login' %}">{% trans "Sign in" %}</a>
-            </p>
-        </div>
+        <p class="mt-4 mb-0 text-center">
+            {% trans "Already have an account?" %}
+            <a href="{% url 'accounts:login' %}">{% trans "Sign in" %}</a>
+        </p>
     </div>
+</div>
 </div>
 {% endblock %}

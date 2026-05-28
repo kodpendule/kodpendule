@@ -1,0 +1,543 @@
+/**
+ * Kod Pendule — operational admin UX (Phase 3)
+ * Forms, changelists, inlines — products, orders, inventory.
+ */
+
+/* —— Forms: fieldsets & labels —— */
+.change-form fieldset.module.aligned {
+    margin-bottom: var(--kp-space-6);
+    padding: var(--kp-space-2) 0 var(--kp-space-4);
+}
+
+.change-form fieldset.module.aligned .fieldset-heading {
+    font-size: var(--kp-font-size-md);
+    font-weight: var(--kp-font-weight-semibold);
+    color: var(--kp-color-primary-active);
+    padding: var(--kp-space-3) var(--kp-space-4);
+    margin: 0;
+    background: var(--kp-color-surface-subtle);
+    border-bottom: 1px solid var(--kp-color-border-subtle);
+}
+
+.change-form fieldset.module.aligned .description {
+    margin: 0;
+    padding: var(--kp-space-3) var(--kp-space-4);
+    font-size: var(--kp-font-size-sm);
+    line-height: var(--kp-line-height-relaxed);
+    color: var(--kp-color-text-muted);
+    background: var(--kp-color-primary-soft);
+    border-bottom: 1px solid var(--kp-color-success-border);
+}
+
+.change-form .form-row {
+    padding: var(--kp-space-4);
+    border-bottom: 1px solid var(--kp-color-border-subtle);
+}
+
+.change-form .form-row:last-child {
+    border-bottom: none;
+}
+
+.change-form .form-row > div > label,
+.change-form .aligned label {
+    font-size: var(--kp-font-size-sm);
+    font-weight: var(--kp-font-weight-semibold);
+    color: var(--kp-color-text);
+    margin-bottom: var(--kp-space-2);
+}
+
+.change-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+.change-form select,
+.change-form textarea {
+    min-height: 2.75rem;
+    font-size: var(--kp-font-size-base);
+    max-width: 42rem;
+}
+
+.change-form textarea {
+    min-height: 8rem;
+    line-height: var(--kp-line-height-relaxed);
+}
+
+.change-form .help,
+.change-form .helptext {
+    margin-top: var(--kp-space-2);
+    padding: var(--kp-space-2) var(--kp-space-3);
+    background: var(--kp-color-surface-subtle);
+    border-left: 3px solid var(--kp-color-primary-muted);
+    border-radius: 0 var(--kp-radius-sm) var(--kp-radius-sm) 0;
+    max-width: 42rem;
+}
+
+.change-form .readonly {
+    font-size: var(--kp-font-size-base);
+    padding: var(--kp-space-2) 0;
+}
+
+/* Priority fieldsets */
+.change-form .kp-fieldset--order-core .field-status select {
+    font-size: var(--kp-font-size-md);
+    font-weight: var(--kp-font-weight-semibold);
+    min-height: 3rem;
+    border: 2px solid var(--kp-color-primary-muted);
+    background: var(--kp-color-primary-soft);
+}
+
+.change-form .kp-fieldset--totals .form-row {
+    background: var(--kp-color-surface-subtle);
+}
+
+.change-form .kp-fieldset--totals .field-total .readonly,
+.change-form .kp-fieldset--totals .field-total input {
+    font-size: var(--kp-font-size-xl);
+    font-weight: var(--kp-font-weight-bold);
+    color: var(--kp-color-primary-active);
+}
+
+/* —— Inlines —— */
+.inline-group {
+    margin-top: var(--kp-space-6);
+    border: 1px solid var(--kp-color-border-subtle);
+    border-radius: var(--kp-radius-md);
+    overflow: hidden;
+    box-shadow: var(--kp-shadow-sm);
+}
+
+.inline-group h2 {
+    font-size: var(--kp-font-size-md);
+    font-weight: var(--kp-font-weight-semibold);
+    padding: var(--kp-space-3) var(--kp-space-4);
+    margin: 0;
+    background: var(--kp-color-surface-subtle);
+    border-bottom: 1px solid var(--kp-color-border-subtle);
+}
+
+.inline-group .tabular table {
+    font-size: var(--kp-font-size-sm);
+}
+
+.inline-group .tabular thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--kp-color-surface-subtle);
+    padding: var(--kp-space-3);
+    font-weight: var(--kp-font-weight-semibold);
+    border-bottom: 2px solid var(--kp-color-border);
+}
+
+.inline-group .tabular tbody td {
+    padding: var(--kp-space-3);
+    vertical-align: middle;
+}
+
+.inline-group .tabular tbody tr:nth-child(even) {
+    background: var(--kp-color-surface-subtle);
+}
+
+.inline-group .tabular input,
+.inline-group .tabular select {
+    min-height: 2.5rem;
+    width: 100%;
+    max-width: none;
+}
+
+/* —— Changelist: no right-hand filter sidebar, fit viewport —— */
+#changelist-filter {
+    display: none !important;
+}
+
+.change-list #changelist {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    border-radius: var(--kp-radius-md);
+    overflow: hidden;
+}
+
+.change-list #changelist .changelist-form-container {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: visible;
+}
+
+#changelist-form .results,
+.change-list .results {
+    overflow-x: visible;
+    max-width: 100%;
+}
+
+#changelist #result_list {
+    width: 100%;
+    max-width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+#changelist #result_list thead th {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    background: var(--kp-color-surface-subtle);
+    box-shadow: 0 1px 0 var(--kp-color-border);
+    padding: var(--kp-space-2) var(--kp-space-3);
+    font-size: var(--kp-font-size-xs);
+    font-weight: var(--kp-font-weight-semibold);
+    line-height: 1.25;
+    white-space: normal;
+    word-break: break-word;
+    vertical-align: bottom;
+}
+
+#changelist #result_list thead th.action-checkbox-column {
+    width: 2.25rem;
+    white-space: nowrap;
+}
+
+#changelist #result_list tbody td {
+    padding: var(--kp-space-2) var(--kp-space-3);
+    font-size: var(--kp-font-size-sm);
+    line-height: var(--kp-line-height-normal);
+    vertical-align: middle;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+#changelist #result_list tbody td.action-checkbox {
+    white-space: nowrap;
+    width: 2.25rem;
+}
+
+#changelist #result_list tbody tr {
+    border-bottom: 1px solid var(--kp-color-border-subtle);
+}
+
+#changelist #result_list tbody tr:hover {
+    background: var(--kp-color-primary-soft);
+}
+
+/* Order rows — status accent */
+.change-list.model-order #result_list tbody tr.kp-order-row--pending {
+    box-shadow: inset 4px 0 0 #9ca3af;
+}
+
+.change-list.model-order #result_list tbody tr.kp-order-row--confirmed,
+.change-list.model-order #result_list tbody tr.kp-order-row--processing {
+    box-shadow: inset 4px 0 0 #1e4d63;
+}
+
+.change-list.model-order #result_list tbody tr.kp-order-row--shipped {
+    box-shadow: inset 4px 0 0 #92400e;
+}
+
+.change-list.model-order #result_list tbody tr.kp-order-row--delivered {
+    box-shadow: inset 4px 0 0 var(--kp-color-primary);
+}
+
+.change-list.model-order #result_list tbody tr.kp-order-row--cancelled {
+    box-shadow: inset 4px 0 0 var(--kp-color-error);
+    opacity: 0.85;
+}
+
+.change-list.model-order #result_list td.field-status select {
+    min-height: 2.75rem;
+    font-weight: var(--kp-font-weight-semibold);
+    font-size: var(--kp-font-size-sm);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    border: 2px solid var(--kp-color-border);
+    background: var(--kp-color-surface);
+    box-sizing: border-box;
+}
+
+.change-list.model-order #result_list td.field-order_number {
+    font-weight: var(--kp-font-weight-semibold);
+    font-family: var(--kp-font-family-mono);
+    font-size: var(--kp-font-size-sm);
+}
+
+/* Product rows — low stock */
+.change-list.model-product #result_list tbody tr:has(.kp-stock--low) {
+    background: var(--kp-color-warning-bg);
+}
+
+.change-list.model-product #result_list tbody tr:has(.kp-stock--low):hover {
+    background: #fef3e2;
+}
+
+.change-list.model-product #result_list td.field-sku {
+    font-family: var(--kp-font-family-mono);
+    font-weight: var(--kp-font-weight-medium);
+}
+
+.change-list.model-product #result_list td.field-name {
+    font-weight: var(--kp-font-weight-medium);
+}
+
+/* —— Cell components —— */
+.kp-badge {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 100%;
+}
+
+.kp-money {
+    font-variant-numeric: tabular-nums;
+}
+
+.kp-money--emphasis {
+    font-size: var(--kp-font-size-md);
+    font-weight: var(--kp-font-weight-bold);
+    color: var(--kp-color-primary-active);
+}
+
+.kp-price {
+    font-variant-numeric: tabular-nums;
+}
+
+.kp-price__was {
+    color: var(--kp-color-text-muted);
+    text-decoration: line-through;
+    font-size: var(--kp-font-size-xs);
+    margin-right: var(--kp-space-1);
+}
+
+.kp-price__now {
+    font-weight: var(--kp-font-weight-semibold);
+    color: var(--kp-color-primary-active);
+}
+
+.kp-stock {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--kp-space-2);
+    font-variant-numeric: tabular-nums;
+}
+
+.kp-stock__value {
+    font-weight: var(--kp-font-weight-semibold);
+}
+
+.kp-stock--low .kp-stock__value {
+    color: var(--kp-color-warning);
+}
+
+.kp-stock__flag {
+    font-size: var(--kp-font-size-xs);
+    font-weight: var(--kp-font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: var(--kp-space-1) var(--kp-space-2);
+    border-radius: var(--kp-radius-full);
+    background: var(--kp-color-warning-bg);
+    color: var(--kp-color-warning);
+    border: 1px solid var(--kp-color-warning-border);
+}
+
+.kp-slug {
+    font-family: var(--kp-font-family-mono);
+    font-size: var(--kp-font-size-xs);
+}
+
+.kp-slug--missing {
+    color: var(--kp-color-warning);
+    font-weight: var(--kp-font-weight-semibold);
+}
+
+.kp-guest-tag {
+    font-size: var(--kp-font-size-xs);
+    color: var(--kp-color-text-muted);
+    font-weight: var(--kp-font-weight-normal);
+}
+
+/* —— Actions bar —— */
+.change-list .actions,
+.change-list #changelist .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--kp-space-2) var(--kp-space-3);
+    padding: var(--kp-space-3) var(--kp-space-4);
+    background: var(--kp-color-surface-subtle);
+    border-bottom: 1px solid var(--kp-color-border-subtle);
+    margin-bottom: 0;
+}
+
+.change-list .actions label {
+    font-weight: var(--kp-font-weight-medium);
+}
+
+.change-list .actions select {
+    min-height: var(--kp-touch-target-min);
+    min-width: 0;
+    max-width: 100%;
+    flex: 1 1 10rem;
+}
+
+.change-list .actions .button {
+    flex: 0 0 auto;
+}
+
+.change-list .actions .button,
+.change-list input[type="submit"].default {
+    min-height: var(--kp-touch-target-min);
+    font-weight: var(--kp-font-weight-semibold);
+}
+
+/* —— Object tools —— */
+.change-form .object-tools,
+.change-list .object-tools {
+    margin-bottom: var(--kp-space-5);
+}
+
+.change-form .object-tools a,
+.change-list .object-tools a {
+    font-weight: var(--kp-font-weight-semibold);
+}
+
+/* —— Analytics tables (layout unchanged) —— */
+.dashboard-page .dashboard-table-wrap {
+    border: 1px solid var(--kp-color-border-subtle);
+    border-radius: var(--kp-radius-md);
+    box-shadow: var(--kp-shadow-sm);
+    background: var(--kp-color-surface);
+}
+
+.dashboard-page .dashboard-table-wrap table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--kp-color-surface-subtle);
+    font-weight: var(--kp-font-weight-semibold);
+    padding: var(--kp-space-3);
+}
+
+.dashboard-page .dashboard-table-wrap table tbody td {
+    padding: var(--kp-space-3);
+}
+
+.dashboard-page .dashboard-table-wrap table tbody tr:nth-child(even) {
+    background: var(--kp-color-surface-subtle);
+}
+
+.dashboard-page .dashboard-alert-list a {
+    font-weight: var(--kp-font-weight-medium);
+    text-decoration: none;
+}
+
+.dashboard-page .dashboard-alert-list a:hover {
+    text-decoration: underline;
+}
+
+.dashboard-page .dashboard-alert-list strong {
+    color: var(--kp-color-warning);
+}
+
+/* —— Changelist toolbar & date nav —— */
+#changelist .toplinks,
+#changelist #toolbar {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+#toolbar form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--kp-space-2);
+    align-items: center;
+    max-width: 100%;
+}
+
+#toolbar form input[type="text"] {
+    flex: 1 1 12rem;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.change-list .xfull,
+.change-list .paginator {
+    max-width: 100%;
+}
+
+/* —— Responsive —— */
+@media (max-width: 1024px) {
+    .change-form input:not([type="checkbox"]):not([type="radio"]),
+    .change-form select,
+    .change-form textarea {
+        max-width: 100%;
+    }
+
+    #changelist #result_list thead th {
+        position: static;
+    }
+
+    .inline-group .tabular thead th {
+        position: static;
+    }
+}
+
+@media (max-width: 767px) {
+    .change-form .form-row {
+        padding: var(--kp-space-3);
+    }
+
+    #changelist #result_list tbody td,
+    #changelist #result_list thead th {
+        padding: var(--kp-space-2) var(--kp-space-3);
+        font-size: var(--kp-font-size-xs);
+    }
+
+    .change-list.model-order #result_list td.field-status select {
+        min-width: 8rem;
+    }
+
+    .kp-money--emphasis {
+        font-size: var(--kp-font-size-sm);
+    }
+
+    .dashboard-kpi-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* —— Recommended products picker —— */
+.kp-recommended-admin__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--kp-space-2);
+    margin: var(--kp-space-4) var(--kp-space-4) 0;
+}
+
+.kp-recommended-admin__table {
+    width: calc(100% - var(--kp-space-8));
+    margin: var(--kp-space-4);
+    border-collapse: collapse;
+    font-size: var(--kp-font-size-sm);
+}
+
+.kp-recommended-admin__table th,
+.kp-recommended-admin__table td {
+    padding: var(--kp-space-3) var(--kp-space-4);
+    border-bottom: 1px solid var(--kp-color-border-subtle);
+    text-align: left;
+    vertical-align: middle;
+}
+
+.kp-recommended-admin__table thead th {
+    background: var(--kp-color-surface-subtle);
+    font-weight: var(--kp-font-weight-semibold);
+    color: var(--kp-color-primary-active);
+}
+
+.kp-recommended-admin__check-col {
+    width: 3rem;
+    text-align: center;
+}
+
+.kp-recommended-admin__table tbody tr:hover {
+    background: var(--kp-color-primary-soft);
+}

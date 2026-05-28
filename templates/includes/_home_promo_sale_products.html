@@ -1,0 +1,20 @@
+{% load i18n %}
+{% if products %}
+<section class="shop-section shop-products-section shop-home-promo" aria-labelledby="home-section-promo-sale">
+    <div class="container shop-container">
+        <header class="shop-section__header shop-reveal" data-reveal>
+            <div>
+                <p class="shop-section__eyebrow shop-section__eyebrow--sale">{% trans "Special offers" %}</p>
+                <h2 class="shop-section__title" id="home-section-promo-sale">{% trans "Promo sale" %}</h2>
+                <p class="shop-section__subtitle mb-0">{% trans "Limited-time discounts on selected products." %}</p>
+            </div>
+            <a class="shop-btn shop-btn--secondary shop-btn--sm" href="{% url 'products:list' %}">
+                {% trans "View all" %}
+            </a>
+        </header>
+        <div class="shop-reveal-stagger" data-reveal-stagger>
+            {% include "includes/_product_grid.html" with products=products %}
+        </div>
+    </div>
+</section>
+{% endif %}

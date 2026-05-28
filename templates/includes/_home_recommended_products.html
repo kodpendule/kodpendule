@@ -1,0 +1,91 @@
+{% load i18n %}
+{% if recommended_product_pages %}
+<section
+    class="shop-section shop-home-recommended shop-reveal"
+    data-reveal
+    aria-labelledby="home-section-recommended"
+    data-recommended-carousel
+>
+    <div class="container shop-container">
+        <header class="shop-section__header shop-reveal" data-reveal>
+            <div>
+                <p class="shop-section__eyebrow">{% trans "Staff picks" %}</p>
+                <h2 class="shop-section__title" id="home-section-recommended">{% trans "Recommended products" %}</h2>
+                <p class="shop-section__subtitle mb-0">{% trans "Products we highlight for you — browse page by page." %}</p>
+            </div>
+            <a class="shop-btn shop-btn--secondary shop-btn--sm" href="{% url 'products:list' %}">
+                {% trans "View all" %}
+            </a>
+        </header>
+
+        <div
+            class="shop-recommended-carousel"
+            data-page-count="{{ recommended_product_pages|length }}"
+        >
+            <button
+                type="button"
+                class="shop-recommended-carousel__arrow shop-recommended-carousel__arrow--prev"
+                aria-label="{% trans 'Previous products' %}"
+                data-recommended-prev
+                {% if recommended_product_pages|length <= 1 %}hidden{% endif %}
+            >
+                <span aria-hidden="true">‹</span>
+            </button>
+
+            <div class="shop-recommended-carousel__viewport" data-recommended-viewport>
+                <div class="shop-recommended-carousel__track" data-recommended-track>
+                    {% for page_products in recommended_product_pages %}
+                    <div
+                        class="shop-recommended-carousel__page"
+                        role="group"
+                        aria-roledescription="{% trans 'slide' %}"
+                        aria-label="{% blocktrans with num=forloop.counter total=recommended_product_pages|length %}Page {{ num }} of {{ total }}{% endblocktrans %}"
+                        data-recommended-page
+                    >
+                        <div class="shop-product-grid shop-product-grid--recommended" role="list">
+                            {% language shop_language %}
+                            {% for product in page_products %}
+                            <div class="shop-product-grid__item" role="listitem">
+                                {% include "includes/_product_card.html" with product=product %}
+                            </div>
+                            {% endfor %}
+                            {% endlanguage %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <button
+                type="button"
+                class="shop-recommended-carousel__arrow shop-recommended-carousel__arrow--next"
+                aria-label="{% trans 'Next products' %}"
+                data-recommended-next
+                {% if recommended_product_pages|length <= 1 %}hidden{% endif %}
+            >
+                <span aria-hidden="true">›</span>
+            </button>
+        </div>
+
+        {% if recommended_product_pages|length > 1 %}
+        <div class="shop-recommended-carousel__footer">
+            <p class="shop-recommended-carousel__status" data-recommended-status aria-live="polite">
+                {% blocktrans with num=1 total=recommended_product_pages|length %}Page {{ num }} of {{ total }}{% endblocktrans %}
+            </p>
+            <div class="shop-recommended-carousel__dots" data-recommended-dots role="tablist" aria-label="{% trans 'Recommended product pages' %}">
+                {% for page_products in recommended_product_pages %}
+                <button
+                    type="button"
+                    class="shop-recommended-carousel__dot{% if forloop.first %} is-active{% endif %}"
+                    role="tab"
+                    aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                    aria-label="{% blocktrans with num=forloop.counter %}Go to page {{ num }}{% endblocktrans %}"
+                    data-recommended-dot="{{ forloop.counter0 }}"
+                ></button>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endif %}

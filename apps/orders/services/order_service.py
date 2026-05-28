@@ -8,6 +8,7 @@ from django.db import transaction
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from apps.accounts.services import archive_customer_from_checkout
 from apps.cart.cart import Cart, CartLine
 from apps.orders.models import Order, OrderItem, OrderStatus, PaymentMethod
 from apps.orders.payments.cod import CashOnDeliveryProvider
@@ -113,6 +114,14 @@ def create_order_from_checkout(
     result = provider.charge(order)
     if not result.success:
         raise CheckoutError(result.message)
+
+    archive_customer_from_checkout(
+        email=email,
+        first_name=first_name,
+        last_name=last_name,
+        phone=phone,
+        user=user,
+    )
 
     cart.clear()
     return order

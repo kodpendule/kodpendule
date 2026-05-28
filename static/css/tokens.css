@@ -1,0 +1,134 @@
+/**
+ * Kod Pendule — storefront design tokens (Frontend Phase 1)
+ * Brand primary: #0B3528
+ */
+
+:root {
+    /* —— Brand —— */
+    --shop-color-primary: #0b3528;
+    --shop-color-primary-hover: #08291f;
+    --shop-color-primary-active: #061f18;
+    --shop-color-primary-soft: #e7eeeb;
+    --shop-color-primary-muted: #abc1b9;
+    --shop-color-on-primary: #ffffff;
+
+    --shop-color-accent: #590f37;
+    --shop-color-accent-soft: #f3e7ee;
+
+    /* —— Neutrals —— */
+    --shop-color-bg: #fafaf9;
+    --shop-color-surface: #ffffff;
+    --shop-color-surface-subtle: #f5f6f4;
+    --shop-color-border: #dde3df;
+    --shop-color-border-subtle: #eaeeeb;
+
+    --shop-color-text: #1c1917;
+    --shop-color-text-muted: #57534e;
+    --shop-color-text-quiet: #78716c;
+    --shop-color-text-inverse: #ffffff;
+
+    /* —— Semantic —— */
+    --shop-color-success: #0b3528;
+    --shop-color-success-bg: #e7eeeb;
+    --shop-color-success-border: #abc1b9;
+
+    --shop-color-danger: #b42318;
+    --shop-color-danger-bg: #fef2f2;
+    --shop-color-danger-border: #fecdca;
+
+    --shop-color-warning: #b45309;
+    --shop-color-warning-bg: #fffbeb;
+    --shop-color-warning-border: #fde68a;
+
+    --shop-color-info: #1e4d63;
+    --shop-color-info-bg: #eef4f7;
+    --shop-color-info-border: #c5d9e3;
+
+    --shop-color-sale: #b42318;
+
+    /* —— Typography —— */
+    --shop-font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+    --shop-font-family-heading: var(--shop-font-family);
+
+    --shop-font-size-xs: 0.75rem;
+    --shop-font-size-sm: 0.875rem;
+    --shop-font-size-base: 1rem;
+    --shop-font-size-md: 1.0625rem;
+    --shop-font-size-lg: 1.25rem;
+    --shop-font-size-xl: 1.5rem;
+    --shop-font-size-2xl: 1.875rem;
+    --shop-font-size-3xl: 2.25rem;
+
+    --shop-line-height-tight: 1.25;
+    --shop-line-height-normal: 1.55;
+    --shop-line-height-relaxed: 1.7;
+
+    --shop-font-weight-normal: 400;
+    --shop-font-weight-medium: 500;
+    --shop-font-weight-semibold: 600;
+    --shop-font-weight-bold: 700;
+
+  /* —— Spacing (4px grid) —— */
+    --shop-space-0: 0;
+    --shop-space-1: 0.25rem;
+    --shop-space-2: 0.5rem;
+    --shop-space-3: 0.75rem;
+    --shop-space-4: 1rem;
+    --shop-space-5: 1.25rem;
+    --shop-space-6: 1.5rem;
+    --shop-space-8: 2rem;
+    --shop-space-10: 2.5rem;
+    --shop-space-12: 3rem;
+    --shop-space-16: 4rem;
+
+    /* —— Radius —— */
+    --shop-radius-sm: 6px;
+    --shop-radius-md: 10px;
+    --shop-radius-lg: 14px;
+    --shop-radius-xl: 18px;
+    --shop-radius-full: 9999px;
+
+    /* —— Shadows —— */
+    --shop-shadow-sm: 0 1px 2px rgba(28, 25, 23, 0.06);
+    --shop-shadow-md: 0 4px 14px rgba(28, 25, 23, 0.08);
+    --shop-shadow-lg: 0 12px 32px rgba(28, 25, 23, 0.1);
+    --shop-shadow-card: 0 2px 8px rgba(11, 53, 40, 0.08);
+    --shop-shadow-card-hover: 0 8px 24px rgba(11, 53, 40, 0.16);
+
+    /* —— Layout —— */
+    --shop-container-max: 1200px;
+    --shop-container-narrow: 720px;
+    --shop-container-wide: 1320px;
+    --shop-touch-target: 2.75rem;
+
+    /* —— Focus —— */
+    --shop-focus-ring: 0 0 0 3px rgba(11, 53, 40, 0.28);
+
+    /* —— Breakpoints (reference) —— */
+    --shop-breakpoint-sm: 576px;
+    --shop-breakpoint-md: 768px;
+    --shop-breakpoint-lg: 992px;
+    --shop-breakpoint-xl: 1200px;
+
+    /* —— Bootstrap bridge —— */
+    --bs-primary: var(--shop-color-primary);
+    --bs-primary-rgb: 11, 53, 40;
+    --bs-secondary: #57534e;
+    --bs-secondary-rgb: 87, 83, 78;
+    --bs-success: var(--shop-color-success);
+    --bs-success-rgb: 11, 53, 40;
+    --bs-danger: var(--shop-color-danger);
+    --bs-danger-rgb: 180, 35, 24;
+    --bs-warning: var(--shop-color-warning);
+    --bs-warning-rgb: 180, 83, 9;
+    --bs-info: var(--shop-color-info);
+    --bs-info-rgb: 30, 77, 99;
+    --bs-body-bg: var(--shop-color-bg);
+    --bs-body-color: var(--shop-color-text);
+    --bs-border-color: var(--shop-color-border-subtle);
+    --bs-link-color: var(--shop-color-primary);
+    --bs-link-hover-color: var(--shop-color-primary-active);
+    --bs-border-radius: var(--shop-radius-md);
+    --bs-border-radius-sm: var(--shop-radius-sm);
+    --bs-border-radius-lg: var(--shop-radius-lg);
+}

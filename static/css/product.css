@@ -1,0 +1,283 @@
+/**
+ * Kod Pendule — product detail page (Frontend Phase 5)
+ */
+
+.shop-pdp {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--shop-space-6);
+}
+
+@media (min-width: 992px) {
+    .shop-pdp {
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+        gap: var(--shop-space-10);
+        align-items: start;
+    }
+}
+
+/* —— Gallery —— */
+.shop-gallery {
+    position: relative;
+}
+
+.shop-gallery__main {
+    border-radius: var(--shop-radius-lg);
+    border: 1px solid var(--shop-color-border-subtle);
+    background: var(--shop-color-surface-subtle);
+    overflow: hidden;
+    box-shadow: var(--shop-shadow-sm);
+}
+
+.shop-gallery__img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    background: var(--shop-color-surface-subtle);
+    display: block;
+}
+
+.shop-gallery__img--placeholder {
+    display: grid;
+    place-items: center;
+    min-height: 20rem;
+}
+
+.shop-gallery__nav {
+    opacity: 0.85;
+}
+
+.shop-gallery-thumbs {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--shop-space-2);
+    margin-top: var(--shop-space-3);
+}
+
+@media (max-width: 575.98px) {
+    .shop-gallery-thumbs {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+.shop-thumb {
+    border: 1px solid var(--shop-color-border-subtle);
+    background: var(--shop-color-surface);
+    border-radius: var(--shop-radius-md);
+    padding: 0;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    display: block;
+    box-shadow: var(--shop-shadow-sm);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.shop-thumb:hover {
+    border-color: var(--shop-color-primary-muted);
+    box-shadow: var(--shop-shadow-md);
+}
+
+.shop-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* —— Info hierarchy —— */
+.shop-pdp__title {
+    font-size: var(--shop-font-size-2xl);
+    margin: 0 0 var(--shop-space-2);
+    letter-spacing: -0.02em;
+}
+
+.shop-pdp__sku {
+    margin: 0;
+    color: var(--shop-color-text-quiet);
+    font-size: var(--shop-font-size-sm);
+}
+
+.shop-pdp__sku span {
+    color: var(--shop-color-text-muted);
+    font-weight: var(--shop-font-weight-medium);
+}
+
+.shop-pdp__pricing {
+    margin-top: var(--shop-space-5);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--shop-space-3);
+}
+
+.shop-pdp__price {
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: var(--shop-space-3);
+}
+
+.shop-pdp__price-now {
+    font-size: 1.6rem;
+}
+
+.shop-pdp__price-was {
+    margin-top: 0.15rem;
+}
+
+.shop-pdp__trust {
+    margin-top: var(--shop-space-5);
+    padding: var(--shop-space-4);
+    border-radius: var(--shop-radius-md);
+    border: 1px solid var(--shop-color-border-subtle);
+    background: var(--shop-color-surface);
+}
+
+.shop-pdp__trust-list {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--shop-color-text-muted);
+    font-size: var(--shop-font-size-sm);
+    line-height: var(--shop-line-height-relaxed);
+}
+
+.shop-pdp__trust-list strong {
+    color: var(--shop-color-text);
+    font-weight: var(--shop-font-weight-semibold);
+}
+
+.shop-pdp__trust-list a {
+    color: var(--shop-color-primary);
+    text-decoration: none;
+    font-weight: var(--shop-font-weight-semibold);
+}
+
+.shop-pdp__trust-list a:hover {
+    text-decoration: underline;
+}
+
+/* —— Buy box —— */
+.shop-pdp__buy {
+    margin-top: var(--shop-space-5);
+}
+
+.shop-buybox {
+    border: 1px solid var(--shop-color-primary-muted);
+    background: var(--shop-color-primary-soft);
+    border-radius: var(--shop-radius-lg);
+    padding: var(--shop-space-4);
+}
+
+.shop-buybox__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--shop-space-3);
+    align-items: end;
+}
+
+@media (min-width: 576px) {
+    .shop-buybox__row {
+        grid-template-columns: 12rem 1fr;
+    }
+}
+
+.shop-buybox__cta {
+    width: 100%;
+}
+
+.shop-buybox__hint {
+    margin: var(--shop-space-3) 0 0;
+    font-size: var(--shop-font-size-xs);
+    color: var(--shop-color-text-muted);
+}
+
+.shop-qty__label {
+    display: block;
+    font-size: var(--shop-font-size-xs);
+    font-weight: var(--shop-font-weight-semibold);
+    color: var(--shop-color-text-quiet);
+    margin-bottom: var(--shop-space-2);
+}
+
+.shop-qty__control {
+    display: grid;
+    grid-template-columns: 2.75rem 1fr 2.75rem;
+    border: 1px solid var(--shop-color-border);
+    border-radius: var(--shop-radius-md);
+    background: var(--shop-color-surface);
+    overflow: hidden;
+    box-shadow: var(--shop-shadow-sm);
+}
+
+.shop-qty__btn {
+    border: 0;
+    background: var(--shop-color-surface);
+    color: var(--shop-color-primary-active);
+    font-size: 1.125rem;
+    font-weight: var(--shop-font-weight-bold);
+    cursor: pointer;
+    min-height: var(--shop-touch-target);
+}
+
+.shop-qty__btn:hover {
+    background: var(--shop-color-surface-subtle);
+}
+
+.shop-qty__input {
+    border: 0;
+    text-align: center;
+    font-weight: var(--shop-font-weight-semibold);
+    padding: 0;
+    outline: none;
+    min-height: 2.75rem;
+}
+
+.shop-buybox--disabled {
+    border: 1px solid var(--shop-color-border);
+    background: var(--shop-color-surface-subtle);
+    border-radius: var(--shop-radius-lg);
+    padding: var(--shop-space-4);
+}
+
+/* Sticky buy box on mobile */
+@media (max-width: 991.98px) {
+    .shop-pdp__buy {
+        position: sticky;
+        bottom: 0;
+        z-index: 10;
+        padding-top: var(--shop-space-2);
+        background: linear-gradient(transparent, var(--shop-color-bg) 30%);
+    }
+    .shop-buybox {
+        box-shadow: var(--shop-shadow-md);
+    }
+}
+
+/* —— Copy sections —— */
+.shop-pdp__lead {
+    margin-top: var(--shop-space-5);
+    font-size: var(--shop-font-size-md);
+    color: var(--shop-color-text-muted);
+    line-height: var(--shop-line-height-relaxed);
+}
+
+.shop-pdp__section-title {
+    margin: var(--shop-space-8) 0 var(--shop-space-3);
+    font-size: var(--shop-font-size-lg);
+}
+
+.shop-pdp__description-body {
+    color: var(--shop-color-text-muted);
+    line-height: var(--shop-line-height-relaxed);
+}
+
+.shop-pdp__more {
+    margin-top: var(--shop-space-6);
+}
+
+.shop-pdp-related {
+    margin-top: var(--shop-space-10);
+    padding-top: var(--shop-space-8);
+    border-top: 1px solid var(--shop-color-border-subtle);
+}
+

@@ -4,27 +4,65 @@
 {% block title %}{% trans "Contact" %} | {{ block.super }}{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <h1 class="h2 mb-4">{% trans "Contact" %}</h1>
-    {% if footer_settings %}
-    <div class="row g-4">
-        <div class="col-md-6">
-            {% if footer_settings.phone %}
-            <p class="mb-2"><strong>{% trans "Phone" %}:</strong> <a href="tel:{{ footer_settings.phone }}">{{ footer_settings.phone }}</a></p>
-            {% endif %}
-            {% if footer_settings.email %}
-            <p class="mb-2"><strong>{% trans "Email" %}:</strong> <a href="mailto:{{ footer_settings.email }}">{{ footer_settings.email }}</a></p>
-            {% endif %}
-            {% if footer_settings.address %}
-            <p class="mb-2"><strong>{% trans "Address" %}:</strong><br>{{ footer_settings.address|linebreaksbr }}</p>
-            {% endif %}
-            {% if footer_settings.working_hours %}
-            <p class="mb-0"><strong>{% trans "Working hours" %}:</strong><br>{{ footer_settings.working_hours|linebreaksbr }}</p>
-            {% endif %}
+<div class="shop-page shop-page--contact">
+<div class="container shop-container py-5">
+    <header class="shop-page-header mb-4">
+        <h1 class="shop-page-header__title">{% trans "Contact" %}</h1>
+        <p class="shop-page-header__meta mb-0">{% trans "Questions about products, delivery, or your order? Write to us." %}</p>
+    </header>
+
+    <div class="row g-4 g-lg-5 shop-contact__layout">
+        <div class="col-lg-5">
+            <div class="shop-card shop-contact-card h-100">
+                <h2 class="h5 mb-3">{% trans "Contact information" %}</h2>
+                {% if contact_details.phone %}
+                <p class="mb-3">
+                    <strong>{% trans "Phone" %}</strong><br>
+                    <a href="tel:{{ contact_details.phone|cut:' ' }}">{{ contact_details.phone }}</a>
+                </p>
+                {% endif %}
+                {% if contact_details.email %}
+                <p class="mb-3">
+                    <strong>{% trans "Email" %}</strong><br>
+                    <a href="mailto:{{ contact_details.email }}">{{ contact_details.email }}</a>
+                </p>
+                {% endif %}
+                {% if contact_details.address %}
+                <p class="mb-3">
+                    <strong>{% trans "Address" %}</strong><br>
+                    {{ contact_details.address|linebreaksbr }}
+                </p>
+                {% endif %}
+                {% if contact_details.working_hours %}
+                <p class="mb-0">
+                    <strong>{% trans "Working hours" %}</strong><br>
+                    {{ contact_details.working_hours|linebreaksbr }}
+                </p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="shop-card shop-contact-form-card">
+                <h2 class="h5 mb-3">{% trans "Send us a message" %}</h2>
+                <form method="post" novalidate class="shop-contact-form">
+                    {% csrf_token %}
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>
+                    {% endif %}
+                    <div class="row g-3">
+                        <div class="col-md-6">{% include "includes/_shop_form_field.html" with field=form.name %}</div>
+                        <div class="col-md-6">{% include "includes/_shop_form_field.html" with field=form.email %}</div>
+                        <div class="col-12">{% include "includes/_shop_form_field.html" with field=form.subject %}</div>
+                        <div class="col-12">{% include "includes/_shop_form_field.html" with field=form.message %}</div>
+                    </div>
+                    <button type="submit" class="shop-btn shop-btn--primary shop-btn--block">
+                        {% trans "Send message" %}
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
-    {% else %}
-    <p class="text-muted">{% trans "Contact details will appear here once configured in the admin." %}</p>
-    {% endif %}
+</div>
 </div>
 {% endblock %}

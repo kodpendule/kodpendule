@@ -1,0 +1,38 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans "Home" %}</a>
+    &rsaquo; <a href="{% url 'admin:products_product_changelist' %}">{% trans "Products" %}</a>
+    &rsaquo; {% trans "Promo sales" %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main" class="change-form">
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <fieldset class="module aligned">
+            <h2 class="fieldset-heading">{% trans "Promo sales" %}</h2>
+            <div class="description">
+                {% trans "Select products and apply a percentage discount from the regular price." %}
+            </div>
+            {% for field in form %}
+            <div class="form-row">
+                <div>
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}<div class="help">{{ field.help_text }}</div>{% endif %}
+                    {% for error in field.errors %}<div class="errornote">{{ error }}</div>{% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </fieldset>
+        <div class="submit-row">
+            <input type="submit" value="{% trans 'Apply promo sale' %}" class="default">
+            <a href="{% url 'admin:products_product_changelist' %}" class="button cancel-link">{% trans "Cancel" %}</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

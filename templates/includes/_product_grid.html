@@ -1,14 +1,18 @@
 {% load i18n %}
 {% language shop_language %}
 {% if products %}
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+    <div class="shop-product-grid" role="list">
         {% for product in products %}
-            <div class="col">
+            <div class="shop-product-grid__item" role="listitem">
                 {% include "includes/_product_card.html" with product=product %}
             </div>
         {% endfor %}
     </div>
 {% else %}
-    <p class="text-muted mb-0">{% trans "No products found." %}</p>
+    <div class="shop-empty-state" role="status">
+        <p class="shop-empty-state__title">{% trans "No products found." %}</p>
+        <p class="shop-empty-state__text">{% trans "Try another category or adjust your search." %}</p>
+        <a href="{% url 'products:list' %}" class="shop-btn shop-btn--primary">{% trans "Browse all products" %}</a>
+    </div>
 {% endif %}
 {% endlanguage %}

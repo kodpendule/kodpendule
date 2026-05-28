@@ -1,4 +1,7 @@
-/* Kod Pendule storefront */
+/**
+ * Kod Pendule — page-specific storefront styles
+ * Design tokens: tokens.css · foundation.css · components.css
+ */
 
 .product-card__img,
 .category-card__img {
@@ -8,57 +11,30 @@
 
 .product-card__img--placeholder {
     min-height: 12rem;
+    background: var(--shop-color-surface-subtle);
+    color: var(--shop-color-text-quiet);
 }
 
-.hero-carousel__img {
-    max-height: 28rem;
-    object-fit: cover;
-}
+/* Homepage hero/promos: see home.css (Phase 3) */
 
-.hero-carousel__caption {
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.55));
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding-bottom: 2rem;
-}
-
-.promo-section__img {
-    max-height: 14rem;
-    object-fit: cover;
-}
-
-.product-gallery__img {
-    aspect-ratio: 1 / 1;
-    object-fit: contain;
-    background: #f8f9fa;
-}
-
-.product-gallery__thumb img {
-    width: 4rem;
-    height: 4rem;
-    object-fit: cover;
-}
+/* Product detail gallery: see product.css (Phase 5) */
 
 .product-description {
     max-width: 42rem;
+    line-height: var(--shop-line-height-relaxed);
 }
 
 .order-status-progress .list-group-item {
-    border-color: var(--bs-border-color);
-    color: var(--bs-secondary-color);
-    background: var(--bs-light);
+    border-color: var(--shop-color-border-subtle);
+    color: var(--shop-color-text-muted);
+    background: var(--shop-color-surface-subtle);
+    border-radius: var(--shop-radius-sm);
 }
 
 .order-status-progress .list-group-item.active {
-    color: var(--bs-primary);
-    background: rgba(var(--bs-primary-rgb), 0.08);
-    font-weight: 600;
-    border-color: var(--bs-primary);
+    color: var(--shop-color-primary-active);
+    background: var(--shop-color-primary-soft);
+    font-weight: var(--shop-font-weight-semibold);
+    border-color: var(--shop-color-primary-muted);
 }
 
-@media (max-width: 991.98px) {
-    .hero-carousel__img {
-        max-height: 18rem;
-    }
-}

@@ -1,0 +1,33 @@
+{% load i18n %}
+{# layout: "sidebar" (default) or "cards" for admin home #}
+{% if kp_admin_nav_sections %}
+<div class="kp-admin-nav kp-admin-nav--{{ layout|default:'sidebar' }}">
+    {% for section in kp_admin_nav_sections %}
+    <section class="kp-admin-nav__section" id="kp-nav-{{ section.id }}" aria-labelledby="kp-nav-heading-{{ section.id }}">
+        <h2 class="kp-admin-nav__heading" id="kp-nav-heading-{{ section.id }}">{{ section.title }}</h2>
+        <ul class="kp-admin-nav__list">
+            {% for item in section.items %}
+            <li class="kp-admin-nav__item{% if item.active %} is-active{% endif %}">
+                <a href="{{ item.url }}" class="kp-admin-nav__link"
+                   {% if item.active %}aria-current="page"{% endif %}>
+                    <span class="kp-admin-nav__link-label">{{ item.name }}</span>
+                    {% if item.description and layout == "cards" %}
+                    <span class="kp-admin-nav__link-desc">{{ item.description }}</span>
+                    {% endif %}
+                </a>
+                {% if item.add_url %}
+                <a href="{{ item.add_url }}" class="kp-admin-nav__add" title="{% trans 'Add' %}">+</a>
+                {% endif %}
+            </li>
+            {% empty %}
+            <li class="kp-admin-nav__empty">{% trans "No items in this section." %}</li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endfor %}
+</div>
+{% else %}
+<p class="kp-admin-nav__empty kp-admin-nav__empty--global">
+    {% trans "You don’t have permission to view or edit anything." %}
+</p>
+{% endif %}

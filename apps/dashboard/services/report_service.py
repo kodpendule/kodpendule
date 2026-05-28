@@ -6,9 +6,9 @@ from datetime import date
 from decimal import Decimal
 from typing import Any
 
-from django.utils.formats import date_format
 from django.utils.translation import gettext as _
 
+from apps.core.locale_dates import latin_month_year, latin_short_date
 from apps.dashboard.filters import ReportPeriod, period_filter_choices
 from apps.dashboard.selectors import analytics_selectors as analytics
 from apps.orders.models import OrderStatus
@@ -72,11 +72,11 @@ def build_dashboard_context(period: ReportPeriod) -> dict[str, Any]:
 
 
 def _format_day(value: date) -> str:
-    return date_format(value, format="SHORT_DATE_FORMAT", use_l10n=True)
+    return latin_short_date(value)
 
 
 def _format_month(value: date) -> str:
-    return date_format(value, format="YEAR_MONTH_FORMAT", use_l10n=True)
+    return latin_month_year(value)
 
 
 def _status_label(code: str) -> str:

@@ -1,71 +1,127 @@
-﻿{% load i18n %}
-<header class="border-bottom bg-white sticky-top">
-    <nav class="navbar navbar-expand-lg container py-2">
-        <a class="navbar-brand fw-semibold" href="{% url 'core:home' %}">
-            {% if site_settings %}{{ site_settings.site_name }}{% else %}{% trans "Kod Pendule" %}{% endif %}
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
-                aria-controls="mainNav" aria-expanded="false" aria-label="{% trans 'Toggle navigation' %}">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="mainNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'core:home' %}">{% trans "Home" %}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'products:list' %}">{% trans "Products" %}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'categories:list' %}">{% trans "Categories" %}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'core:contact' %}">{% trans "Contact" %}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'orders:track' %}">{% trans "Track order" %}</a>
-                </li>
-            </ul>
-            <form class="d-flex flex-grow-1 flex-lg-grow-0 mb-3 mb-lg-0 me-lg-3" method="get" action="{% url 'products:list' %}" role="search">
-                <input class="form-control form-control-sm" type="search" name="q" value="{{ request.GET.q|default:'' }}"
-                       placeholder="{% trans 'Search products…' %}" aria-label="{% trans 'Search' %}">
+{% load i18n static %}
+<header class="shop-header sticky-top" role="banner">
+    <div class="shop-header__bar">
+        <div class="container shop-container shop-header__bar-inner">
+            <a class="shop-header__brand" href="{% url 'core:home' %}" aria-label="{% if site_settings %}{{ site_settings.site_name }}{% else %}{% trans 'Kod Pendule' %}{% endif %}">
+                <span class="shop-header__mark" aria-hidden="true">
+                    <img src="{% static 'images/logo.webp' %}" class="shop-header__logo" alt="">
+                </span>
+            </a>
+
+            <form class="shop-header__search shop-search d-none d-lg-flex align-items-center" method="get"
+                  action="{% url 'products:list' %}" role="search">
+                <label class="visually-hidden" for="shop-header-search">{% trans "Search" %}</label>
+                <span class="shop-header__search-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/>
+                    </svg>
+                </span>
+                <input id="shop-header-search" class="form-control shop-header__search-input" type="search"
+                       name="q" value="{{ request.GET.q|default:'' }}"
+                       placeholder="{% trans 'Search products…' %}" autocomplete="off">
+                <button type="submit" class="shop-btn shop-btn--primary shop-btn--sm shop-header__search-btn">
+                    {% trans "Search" %}
+                </button>
             </form>
-            <ul class="navbar-nav align-items-lg-center gap-lg-2">
-                <li class="nav-item">
-                    <a class="nav-link position-relative" href="{% url 'cart:detail' %}" aria-label="{% trans 'Cart' %}">
-                        {% trans "Cart" %}
-                        {% if cart_item_count %}
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-primary">
-                            {{ cart_item_count }}
-                        </span>
-                        {% endif %}
-                    </a>
-                </li>
-                <li class="nav-item">
+
+            <div class="shop-header__actions">
+                <a class="shop-header__action shop-header__cart" href="{% url 'cart:detail' %}"
+                   aria-label="{% trans 'Cart' %}{% if cart_item_count %} ({{ cart_item_count }}){% endif %}">
+                    <span class="shop-header__action-icon" aria-hidden="true">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                            <path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6l-1-3H3"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/>
+                        </svg>
+                    </span>
+                    <span class="d-none d-md-inline">{% trans "Cart" %}</span>
+                    {% if cart_item_count %}
+                    <span class="shop-header__badge">{{ cart_item_count }}</span>
+                    {% endif %}
+                </a>
+
+                <div class="shop-header__action shop-header__lang-wrap d-none d-md-block">
                     {% include "includes/_language_switcher.html" %}
-                </li>
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'orders:history' %}">{% trans "My orders" %}</a>
-                    </li>
-                    <li class="nav-item">
-                        <span class="nav-link text-muted py-lg-1">{% trans "Hello" %}, {{ user.get_short_name|default:user.username }}</span>
-                    </li>
-                    <li class="nav-item">
-                        <form method="post" action="{% url 'accounts:logout' %}" class="d-inline">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-secondary btn-sm">{% trans "Sign out" %}</button>
-                        </form>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'accounts:login' %}">{% trans "Sign in" %}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn btn-primary btn-sm" href="{% url 'accounts:register' %}">{% trans "Register" %}</a>
-                    </li>
-                {% endif %}
+                </div>
+
+                <div class="shop-header__account d-none d-lg-flex align-items-center gap-2">
+                    {% if user.is_authenticated %}
+                    <a class="shop-header__account-link" href="{% url 'orders:history' %}">{% trans "My orders" %}</a>
+                    <span class="shop-header__account-name text-muted small">
+                        {{ user.get_short_name|default:user.username }}
+                    </span>
+                    <form method="post" action="{% url 'accounts:logout' %}" class="m-0">
+                        {% csrf_token %}
+                        <button type="submit" class="shop-btn shop-btn--secondary shop-btn--sm">{% trans "Sign out" %}</button>
+                    </form>
+                    {% else %}
+                    <a class="shop-header__account-link" href="{% url 'accounts:login' %}">{% trans "Sign in" %}</a>
+                    <a class="shop-btn shop-btn--primary shop-btn--sm" href="{% url 'accounts:register' %}">{% trans "Register" %}</a>
+                    {% endif %}
+                </div>
+
+                <button class="shop-header__menu-btn d-lg-none" type="button"
+                        data-bs-toggle="offcanvas" data-bs-target="#shopMobileNav"
+                        aria-controls="shopMobileNav" aria-label="{% trans 'Open menu' %}">
+                    <span class="shop-header__menu-icon" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="shop-header__nav d-none d-lg-block" aria-label="{% trans 'Main navigation' %}">
+        <div class="container shop-container">
+            <ul class="nav shop-header__nav-list">
+                {% include "includes/_header_nav_links.html" with link_class="shop-header__nav-link" %}
             </ul>
         </div>
     </nav>
 </header>
+
+<div class="offcanvas offcanvas-end shop-offcanvas" tabindex="-1" id="shopMobileNav"
+     aria-labelledby="shopMobileNavLabel">
+    <div class="offcanvas-header shop-offcanvas__header">
+        <p class="offcanvas-title shop-offcanvas__title" id="shopMobileNavLabel">{% trans "Menu" %}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="{% trans 'Close' %}"></button>
+    </div>
+    <div class="offcanvas-body shop-offcanvas__body">
+        <form class="shop-header__search shop-search shop-header__search--mobile mb-4" method="get"
+              action="{% url 'products:list' %}" role="search">
+            <label class="visually-hidden" for="shop-mobile-search">{% trans "Search" %}</label>
+            <input id="shop-mobile-search" class="form-control shop-header__search-input" type="search"
+                   name="q" value="{{ request.GET.q|default:'' }}"
+                   placeholder="{% trans 'Search products…' %}" autocomplete="off">
+            <button type="submit" class="shop-btn shop-btn--primary shop-btn--block mt-2">
+                {% trans "Search" %}
+            </button>
+        </form>
+
+        <nav aria-label="{% trans 'Main navigation' %}">
+            <ul class="nav flex-column shop-offcanvas__nav">
+                {% include "includes/_header_nav_links.html" with link_class="shop-offcanvas__link" %}
+            </ul>
+        </nav>
+
+        <div class="shop-offcanvas__section">
+            <p class="shop-offcanvas__section-title">{% trans "Language" %}</p>
+            {% include "includes/_language_switcher.html" %}
+        </div>
+
+        <div class="shop-offcanvas__section shop-offcanvas__account">
+            {% if user.is_authenticated %}
+            <p class="shop-offcanvas__greeting text-muted small mb-2">
+                {% blocktrans with name=user.get_short_name|default:user.username %}Hello, {{ name }}{% endblocktrans %}
+            </p>
+            <a class="shop-btn shop-btn--secondary shop-btn--block mb-2" href="{% url 'orders:history' %}">{% trans "My orders" %}</a>
+            <form method="post" action="{% url 'accounts:logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="shop-btn shop-btn--ghost shop-btn--block">{% trans "Sign out" %}</button>
+            </form>
+            {% else %}
+            <a class="shop-btn shop-btn--primary shop-btn--block mb-2" href="{% url 'accounts:register' %}">{% trans "Register" %}</a>
+            <a class="shop-btn shop-btn--secondary shop-btn--block" href="{% url 'accounts:login' %}">{% trans "Sign in" %}</a>
+            {% endif %}
+        </div>
+
+        <a class="shop-btn shop-btn--primary shop-btn--block shop-offcanvas__cta mt-4"
+           href="{% url 'products:list' %}">{% trans "Browse products" %}</a>
+    </div>
+</div>

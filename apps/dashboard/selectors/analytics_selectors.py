@@ -265,7 +265,7 @@ def top_customers(period: ReportPeriod, *, limit: int = 10) -> list[dict[str, An
 
 def low_stock_products(*, limit: int = 15) -> list[Product]:
     return list(
-        Product.objects.filter(is_active=True)
+        Product.objects.all()
         .filter(stock__lte=F("minimum_stock_alert"))
         .select_related("category")
         .prefetch_related("translations", "category__translations")

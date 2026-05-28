@@ -2,6 +2,7 @@
 {% load i18n %}
 
 {% block content %}
+<div class="shop-page shop-form-page">
 <div class="container py-4 py-lg-5">
     <div class="row justify-content-center">
         <div class="col-lg-6">
@@ -10,8 +11,7 @@
                 {% trans "Enter the order number from your confirmation and the email address you used at checkout." %}
             </p>
 
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-4">
+            <div class="shop-card shop-account-card">
                     <form method="post" novalidate>
                         {% csrf_token %}
                         {% if form.non_field_errors %}
@@ -33,9 +33,8 @@
                             <div class="invalid-feedback d-block">{{ form.email.errors }}</div>
                             {% endif %}
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">{% trans "Find my order" %}</button>
+                        <button type="submit" class="shop-btn shop-btn--primary shop-btn--block">{% trans "Find my order" %}</button>
                     </form>
-                </div>
             </div>
 
             <p class="text-center text-muted small mt-4 mb-0">
@@ -45,5 +44,6 @@
             </p>
         </div>
     </div>
+</div>
 </div>
 {% endblock %}

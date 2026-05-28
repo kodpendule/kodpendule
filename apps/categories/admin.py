@@ -9,7 +9,6 @@ from apps.core.slugs import localized_slug, unique_slug_for_translation
 @admin.register(Category)
 class CategoryAdmin(TranslatableAdmin):
     list_display = ("name", "slug_display", "parent", "is_active", "sort_order")
-    list_filter = ("is_active", "parent")
     search_fields = ("translations__name", "translations__slug")
     list_select_related = ("parent",)
     fieldsets = (

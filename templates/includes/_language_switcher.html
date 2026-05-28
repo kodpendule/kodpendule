@@ -1,15 +1,17 @@
 {% load i18n %}
-<form action="{% url 'set_language' %}" method="post" class="d-flex align-items-center">
+<form action="{% url 'set_language' %}" method="post" class="shop-lang">
     {% csrf_token %}
     <input type="hidden" name="next" value="{{ request.get_full_path }}">
-    <label for="language-select" class="visually-hidden">{% trans "Language" %}</label>
-    <select id="language-select" name="language" class="form-select form-select-sm" onchange="this.form.submit()">
+    <span class="visually-hidden" id="shop-lang-label">{% trans "Language" %}</span>
+    <div class="shop-lang__group" role="group" aria-labelledby="shop-lang-label">
         {% get_current_language as CURRENT_LANG %}
         {% get_available_languages as LANGUAGES %}
         {% for lang_code, lang_name in LANGUAGES %}
-            <option value="{{ lang_code }}"{% if lang_code == CURRENT_LANG %} selected{% endif %}>
-                {{ lang_name }}
-            </option>
+        <button type="submit" name="language" value="{{ lang_code }}"
+                class="shop-lang__btn{% if lang_code == CURRENT_LANG %} is-active{% endif %}"
+                title="{{ lang_name }}" aria-pressed="{% if lang_code == CURRENT_LANG %}true{% else %}false{% endif %}">
+            {% if lang_code == 'sr' %}SR{% else %}{{ lang_code|upper }}{% endif %}
+        </button>
         {% endfor %}
-    </select>
+    </div>
 </form>

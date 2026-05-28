@@ -21,8 +21,6 @@ urlpatterns = [
     path("", include("apps.checkout.urls")),
     path("", include("apps.orders.urls")),
     path("", include("apps.accounts.urls")),
-    # path("admin/dashboard/", include("apps.dashboard.urls")),
-    # path("api/v1/", include("config.api.urls")),
 ]
 
 if settings.DEBUG:
@@ -37,5 +35,3 @@ if settings.DEBUG:
         ]
     except ImportError:
         pass
-
-# Step 9: wrap storefront URLs with i18n_patterns()

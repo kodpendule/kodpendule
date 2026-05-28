@@ -1,0 +1,16 @@
+{% load i18n %}
+{% if status == "pending" %}
+<span class="kp-badge kp-badge--neutral">{% trans "Pending" %}</span>
+{% elif status == "confirmed" %}
+<span class="kp-badge kp-badge--info">{% trans "Confirmed" %}</span>
+{% elif status == "processing" %}
+<span class="kp-badge kp-badge--info">{% trans "Processing" %}</span>
+{% elif status == "shipped" %}
+<span class="kp-badge kp-badge--warning">{% trans "Shipped" %}</span>
+{% elif status == "delivered" %}
+<span class="kp-badge kp-badge--success">{% trans "Delivered" %}</span>
+{% elif status == "cancelled" %}
+<span class="kp-badge kp-badge--error">{% trans "Cancelled" %}</span>
+{% else %}
+<span class="kp-badge kp-badge--neutral">{{ status }}</span>
+{% endif %}

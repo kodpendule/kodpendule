@@ -50,9 +50,13 @@ STORAGES = {
 
 WHITENOISE_MAX_AGE = 60 * 60 * 24 * 30  # 30 days
 
-# --- Media --------------------------------------------------------------------
-# Uploaded files stay on disk. On Render, use a persistent disk or external
-# storage (S3, etc.) before relying on uploads in production.
+# --- Media (Cloudflare R2 when USE_R2=True) -----------------------------------
+
+import sys  # noqa: E402
+
+from config.settings.r2 import configure_r2  # noqa: E402
+
+configure_r2(sys.modules[__name__], config)
 
 # --- Security -----------------------------------------------------------------
 
@@ -75,14 +79,25 @@ else:
 
 # --- Email --------------------------------------------------------------------
 
-EMAIL_BACKEND = config(
-    "EMAIL_BACKEND",
-    default="django.core.mail.backends.console.EmailBackend",
-)
 DEFAULT_FROM_EMAIL = config(
     "DEFAULT_FROM_EMAIL",
     default="Kod Pendule <noreply@kodpendule.rs>",
 )
+CONTACT_EMAIL_TO = config("CONTACT_EMAIL_TO", default=DEFAULT_FROM_EMAIL)
+
+_sendgrid_api_key = config("SENDGRID_API_KEY", default="")
+if _sendgrid_api_key:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = "smtp.sendgrid.net"
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = "apikey"
+    EMAIL_HOST_PASSWORD = _sendgrid_api_key
+else:
+    EMAIL_BACKEND = config(
+        "EMAIL_BACKEND",
+        default="django.core.mail.backends.console.EmailBackend",
+    )
 
 # --- Logging ------------------------------------------------------------------
 

@@ -1,0 +1,48 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans "Home" %}</a>
+    &rsaquo; <a href="{% url 'admin:accounts_customercontact_changelist' %}">{% trans "Customer contacts" %}</a>
+    &rsaquo; {% trans "Import CSV" %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main" class="change-form kp-customer-import">
+    <fieldset class="module aligned">
+        <h2 class="fieldset-heading">{% trans "Import customer contacts" %}</h2>
+        <p class="description">
+            {% trans "Upload a CSV file to create or update customer contacts by email. Rows with an existing email are updated; new emails are added." %}
+        </p>
+        <p class="description">
+            <strong>{% trans "Columns" %}:</strong>
+            {{ export_columns|join:", " }}
+        </p>
+        <p class="description mb-3">
+            <a href="{% url 'admin:accounts_customercontact_export_csv' %}">{% trans "Download current data as CSV" %}</a>
+        </p>
+    </fieldset>
+
+    <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        <fieldset class="module aligned">
+            {% for field in form %}
+            <div class="form-row">
+                <div>
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}<div class="help">{{ field.help_text }}</div>{% endif %}
+                    {% for error in field.errors %}<div class="errornote">{{ error }}</div>{% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </fieldset>
+        <div class="submit-row">
+            <input type="submit" value="{% trans 'Import CSV' %}" class="default">
+            <a href="{% url 'admin:accounts_customercontact_changelist' %}" class="button cancel-link">{% trans "Cancel" %}</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

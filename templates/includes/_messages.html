@@ -1,5 +1,5 @@
-﻿{% if messages %}
-<div class="container mt-3">
+{% if messages %}
+<div class="container shop-container shop-alerts mt-3">
     {% for message in messages %}
         <div class="alert alert-{% if 'error' in message.tags %}danger{% elif 'success' in message.tags %}success{% elif 'warning' in message.tags %}warning{% else %}info{% endif %} alert-dismissible fade show" role="alert">
             {{ message }}

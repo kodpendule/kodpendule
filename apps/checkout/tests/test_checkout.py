@@ -1,7 +1,9 @@
 import uuid
+from datetime import timedelta
 from decimal import Decimal
 
 from django.test import RequestFactory, TestCase
+from django.utils import timezone
 
 from apps.cart.cart import get_cart
 from apps.categories.models import Category
@@ -10,6 +12,10 @@ from apps.orders.models import Order
 from apps.orders.services import create_order_from_checkout
 from apps.products.models import Product
 from apps.shipping.models import City
+
+
+def _tomorrow_iso() -> str:
+    return (timezone.localdate() + timedelta(days=1)).isoformat()
 
 
 class CheckoutServiceTests(TestCase):
@@ -37,7 +43,6 @@ class CheckoutServiceTests(TestCase):
             sku=f"SKU-CHK-{suffix}",
             price=Decimal("2000.00"),
             stock=10,
-            is_active=True,
         )
         self.product.set_current_language("sr")
         self.product.name = "Checkout product"
@@ -63,7 +68,7 @@ class CheckoutServiceTests(TestCase):
             billing_city_name="Beograd",
             billing_postal_code="11000",
             order_notes="Pozvati pre dostave.",
-            delivery_date=None,
+            delivery_date=timezone.localdate() + timedelta(days=1),
             flexible_delivery=True,
         )
         self.assertTrue(order.order_number.startswith("KP-"))
@@ -85,7 +90,26 @@ class CheckoutServiceTests(TestCase):
                 "shipping_postal_code": "11000",
                 "billing_same_as_shipping": True,
                 "order_notes": "",
+                "delivery_date": _tomorrow_iso(),
             },
             user=None,
         )
         self.assertFalse(form.is_valid())
+
+    def test_checkout_form_requires_delivery_date(self) -> None:
+        form = CheckoutForm(
+            data={
+                "guest_email": "a@b.rs",
+                "first_name": "A",
+                "last_name": "B",
+                "phone": "123",
+                "shipping_city": self.city.pk,
+                "shipping_street": "St",
+                "shipping_postal_code": "11000",
+                "billing_same_as_shipping": True,
+                "order_notes": "Notes",
+            },
+            user=None,
+        )
+        self.assertFalse(form.is_valid())
+        self.assertIn("delivery_date", form.errors)

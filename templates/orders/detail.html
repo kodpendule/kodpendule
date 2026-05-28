@@ -2,6 +2,7 @@
 {% load i18n shop_tags %}
 
 {% block content %}
+<div class="shop-page shop-order-page">
 <div class="container py-4 py-lg-5">
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb">
@@ -23,20 +24,20 @@
         {% blocktrans with date=order.created_at|date:"SHORT_DATETIME_FORMAT" %}Placed on {{ date }}{% endblocktrans %}
     </p>
 
-    <div class="card border-0 shadow-sm mb-4">
+    <div class="card shop-panel mb-4">
         <div class="card-body">
-            <h2 class="h6 text-uppercase text-muted mb-3">{% trans "Status" %}</h2>
+            <h2 class="h6 shop-panel__title">{% trans "Status" %}</h2>
             {% include "orders/includes/_order_status_progress.html" %}
         </div>
     </div>
 
     <div class="row g-4">
         <div class="col-lg-8">
-            <div class="card border-0 shadow-sm">
+            <div class="card shop-panel">
                 <div class="card-body">
-                    <h2 class="h6 text-uppercase text-muted mb-3">{% trans "Items" %}</h2>
+                    <h2 class="h6 shop-panel__title">{% trans "Items" %}</h2>
                     <div class="table-responsive">
-                        <table class="table align-middle mb-0">
+                        <table class="table align-middle mb-0 shop-order-table">
                             <thead>
                                 <tr>
                                     <th>{% trans "Product" %}</th>
@@ -48,13 +49,13 @@
                             <tbody>
                                 {% for item in order.items.all %}
                                 <tr>
-                                    <td>
+                                    <td class="shop-order-table__product" data-label="{% trans 'Product' %}">
                                         <span class="fw-medium">{{ item.product_name }}</span>
                                         <div class="small text-muted">{{ item.sku }}</div>
                                     </td>
-                                    <td class="text-center">{{ item.quantity }}</td>
-                                    <td class="text-end">{{ item.unit_price|money }}</td>
-                                    <td class="text-end fw-semibold">{{ item.line_total|money }}</td>
+                                    <td class="text-center" data-label="{% trans 'Qty' %}">{{ item.quantity }}</td>
+                                    <td class="text-end" data-label="{% trans 'Price' %}">{{ item.unit_price|money }}</td>
+                                    <td class="text-end fw-semibold" data-label="{% trans 'Line total' %}">{{ item.line_total|money }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -65,16 +66,16 @@
         </div>
 
         <div class="col-lg-4">
-            <div class="card border-0 shadow-sm mb-4">
+            <div class="card shop-panel mb-4">
                 <div class="card-body">
-                    <h2 class="h6 text-uppercase text-muted mb-3">{% trans "Totals" %}</h2>
+                    <h2 class="h6 shop-panel__title">{% trans "Totals" %}</h2>
                     {% include "orders/includes/_order_totals.html" %}
                 </div>
             </div>
 
-            <div class="card border-0 shadow-sm mb-4">
+            <div class="card shop-panel mb-4">
                 <div class="card-body">
-                    <h2 class="h6 text-uppercase text-muted mb-3">{% trans "Delivery" %}</h2>
+                    <h2 class="h6 shop-panel__title">{% trans "Delivery" %}</h2>
                     <p class="mb-1 fw-medium">{{ order.customer_full_name }}</p>
                     <p class="mb-1">{{ order.phone }}</p>
                     <p class="mb-1 text-muted">{{ order.customer_email }}</p>
@@ -95,7 +96,7 @@
                 </div>
             </div>
 
-            <div class="card border-0 bg-light">
+            <div class="card shop-panel shop-panel--subtle">
                 <div class="card-body small text-muted">
                     <strong>{% trans "Billing address" %}</strong><br>
                     {{ order.billing_street }}<br>
@@ -104,5 +105,6 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 {% endblock %}

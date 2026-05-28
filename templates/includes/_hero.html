@@ -1,0 +1,66 @@
+{% load i18n static %}
+<section class="shop-hero shop-hero--rich" aria-label="{% trans 'Welcome' %}">
+    <div class="shop-hero__bg" aria-hidden="true">
+        <span class="shop-hero__orb shop-hero__orb--1"></span>
+        <span class="shop-hero__orb shop-hero__orb--2"></span>
+        <span class="shop-hero__orb shop-hero__orb--3"></span>
+    </div>
+
+    <div class="container shop-container shop-hero__inner">
+        <div class="shop-hero__copy shop-reveal" data-reveal>
+            <p class="shop-hero__eyebrow">{% trans "Serbian online store" %}</p>
+            <h1 class="shop-hero__title">
+                {% if site_settings %}{{ site_settings.site_name }}{% else %}{% trans "Kod Pendule" %}{% endif %}
+            </h1>
+            <p class="shop-hero__lead">
+                {% trans "Discover clocks, décor, and gifts with a calm checkout — order online and pay when your package arrives." %}
+            </p>
+
+            <div class="shop-hero__actions">
+                <a href="{% url 'products:list' %}" class="shop-btn shop-btn--primary shop-btn--lg">
+                    {% trans "Shop collection" %}
+                </a>
+                <a href="{% url 'categories:list' %}" class="shop-btn shop-btn--secondary shop-btn--lg">
+                    {% trans "Browse categories" %}
+                </a>
+            </div>
+
+            {% if home_stats %}
+            <dl class="shop-hero__stats">
+                <div class="shop-hero__stat">
+                    <dt class="shop-hero__stat-value" data-count-to="{{ home_stats.product_count }}">{{ home_stats.product_count }}</dt>
+                    <dd class="shop-hero__stat-label">{% trans "Products" %}</dd>
+                </div>
+                <div class="shop-hero__stat">
+                    <dt class="shop-hero__stat-value" data-count-to="{{ home_stats.category_count }}">{{ home_stats.category_count }}</dt>
+                    <dd class="shop-hero__stat-label">{% trans "Categories" %}</dd>
+                </div>
+                <div class="shop-hero__stat">
+                    <dt class="shop-hero__stat-value">COD</dt>
+                    <dd class="shop-hero__stat-label">{% trans "Pay on delivery" %}</dd>
+                </div>
+            </dl>
+            {% endif %}
+        </div>
+
+        <div class="shop-hero__media shop-reveal shop-reveal--delay-2" data-reveal aria-hidden="true">
+            <div class="shop-hero__visual">
+                <div class="shop-hero__card shop-hero__card--back">
+                    {% if featured_product and featured_product.main_image %}
+                    <img src="{{ featured_product.main_image.url }}" alt="" class="shop-hero__card-img" width="400" height="400" loading="eager">
+                    {% else %}
+                    <img src="{% static 'images/logo.webp' %}" alt="" class="shop-hero__card-logo" width="280" height="280" loading="eager">
+                    {% endif %}
+                </div>
+                <div class="shop-hero__card shop-hero__card--float shop-hero__card--accent">
+                    <span class="shop-hero__chip">{% trans "New season" %}</span>
+                    <p class="shop-hero__chip-text mb-0">{% trans "Curated pieces for every room" %}</p>
+                </div>
+                <div class="shop-hero__card shop-hero__card--float shop-hero__card--trust">
+                    <span class="shop-hero__mini-icon" aria-hidden="true">✓</span>
+                    <p class="mb-0"><strong>{% trans "Free guidance" %}</strong><br><span>{% trans "We help before & after purchase" %}</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

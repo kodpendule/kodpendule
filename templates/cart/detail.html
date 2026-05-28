@@ -1,71 +1,118 @@
 {% extends "base.html" %}
-{% load i18n shop_tags %}
+{% load i18n shop_tags static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="container py-4 py-lg-5">
-    <h1 class="h2 mb-4">{% trans "Cart" %}</h1>
+<div class="shop-page shop-page--cart">
+<div class="container shop-container py-4 py-lg-5">
+    <header class="shop-page-header mb-4">
+        <h1 class="shop-page-header__title">{% trans "Cart" %}</h1>
+        {% if cart_lines %}
+        <p class="shop-page-header__meta mb-0">
+            {% blocktrans count count=cart_item_count %}{{ count }} item in your cart{% plural %}{{ count }} items in your cart{% endblocktrans %}
+        </p>
+        {% endif %}
+    </header>
 
     {% if cart_lines %}
-    <div class="table-responsive">
-        <table class="table align-middle">
-            <thead>
-                <tr>
-                    <th>{% trans "Product" %}</th>
-                    <th class="text-end">{% trans "Price" %}</th>
-                    <th class="text-center" style="width: 8rem;">{% trans "Qty" %}</th>
-                    <th class="text-end">{% trans "Total" %}</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for line in cart_lines %}
-                <tr>
-                    <td>
-                        <a href="{{ line.product.get_absolute_url }}" class="text-decoration-none fw-medium">
-                            {{ line.product.name }}
+    <div class="shop-cart">
+        <div class="shop-cart__layout">
+            <section class="shop-cart__items" aria-label="{% trans 'Cart items' %}">
+                <ul class="shop-cart-lines list-unstyled mb-0">
+                    {% for line in cart_lines %}
+                    <li class="shop-cart-line">
+                        <a href="{{ line.product.get_absolute_url }}" class="shop-cart-line__media">
+                            {% if line.product.main_image %}
+                            <img src="{{ line.product.main_image.url }}" alt="" loading="lazy">
+                            {% else %}
+                            <span class="shop-cart-line__media--placeholder" aria-hidden="true"></span>
+                            {% endif %}
                         </a>
-                        <div class="small text-muted">{{ line.product.sku }}</div>
-                    </td>
-                    <td class="text-end">{{ line.unit_price|money }}</td>
-                    <td>
-                        <form method="post" action="{% url 'cart:update' line.product.pk %}" class="d-flex justify-content-center">
-                            {% csrf_token %}
-                            <input type="number" name="quantity" value="{{ line.quantity }}" min="1" max="{{ line.product.stock }}"
-                                   class="form-control form-control-sm text-center" style="width: 4rem;">
-                            <button type="submit" class="btn btn-sm btn-outline-secondary ms-1" aria-label="{% trans 'Update' %}">{% trans "OK" %}</button>
-                        </form>
-                    </td>
-                    <td class="text-end fw-semibold">{{ line.line_total|money }}</td>
-                    <td class="text-end">
-                        <form method="post" action="{% url 'cart:remove' line.product.pk %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-outline-danger">{% trans "Remove" %}</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
 
-    <div class="row justify-content-end">
-        <div class="col-md-5">
-            <div class="card border-0 bg-light">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between mb-3">
-                        <span>{% trans "Subtotal" %}</span>
-                        <span class="fw-semibold">{{ cart_subtotal|money }}</span>
-                    </div>
-                    <p class="small text-muted mb-3">{% trans "Shipping is calculated at checkout." %}</p>
-                    <a href="{% url 'checkout:checkout' %}" class="btn btn-primary w-100">{% trans "Proceed to checkout" %}</a>
-                    <a href="{% url 'products:list' %}" class="btn btn-link w-100 mt-2">{% trans "Continue shopping" %}</a>
+                        <div class="shop-cart-line__body">
+                            <div class="shop-cart-line__top">
+                                <div>
+                                    <a href="{{ line.product.get_absolute_url }}" class="shop-cart-line__name">
+                                        {{ line.product.name }}
+                                    </a>
+                                    <p class="shop-cart-line__sku">{% trans "SKU" %}: {{ line.product.sku }}</p>
+                                </div>
+                                <p class="shop-cart-line__unit">{{ line.unit_price|money }}</p>
+                            </div>
+
+                            <div class="shop-cart-line__actions">
+                                <form method="post" action="{% url 'cart:update' line.product.pk %}" class="shop-cart-line__qty-form" data-shop-cart-qty>
+                                    {% csrf_token %}
+                                    <div class="shop-qty shop-qty--compact" data-shop-qty>
+                                        <button class="shop-qty__btn" type="button" data-shop-qty-dec aria-label="{% trans 'Decrease quantity' %}">−</button>
+                                        <input type="number" name="quantity" value="{{ line.quantity }}" min="1" max="{{ line.product.stock }}"
+                                               class="shop-qty__input" inputmode="numeric" aria-label="{% trans 'Quantity' %}">
+                                        <button class="shop-qty__btn" type="button" data-shop-qty-inc aria-label="{% trans 'Increase quantity' %}">+</button>
+                                    </div>
+                                    <button type="submit" class="shop-btn shop-btn--secondary shop-btn--sm shop-cart-line__update">
+                                        {% trans "Update" %}
+                                    </button>
+                                </form>
+
+                                <form method="post" action="{% url 'cart:remove' line.product.pk %}" class="shop-cart-line__remove-form">
+                                    {% csrf_token %}
+                                    <button type="submit" class="shop-btn shop-btn--ghost shop-btn--sm">
+                                        {% trans "Remove" %}
+                                    </button>
+                                </form>
+                            </div>
+
+                            <p class="shop-cart-line__total">
+                                <span class="shop-cart-line__total-label">{% trans "Line total" %}</span>
+                                <span class="shop-cart-line__total-value">{{ line.line_total|money }}</span>
+                            </p>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </section>
+
+            <aside class="shop-cart__summary" aria-label="{% trans 'Order summary' %}">
+                <div class="shop-summary-card shop-summary-card--sticky">
+                    <h2 class="shop-summary-card__title">{% trans "Order summary" %}</h2>
+
+                    <dl class="shop-summary-card__totals">
+                        <div class="shop-summary-card__row">
+                            <dt>{% trans "Subtotal" %}</dt>
+                            <dd>{{ cart_subtotal|money }}</dd>
+                        </div>
+                    </dl>
+
+                    <p class="shop-summary-card__hint">{% trans "Shipping is calculated at checkout." %}</p>
+
+                    <a href="{% url 'checkout:checkout' %}" class="shop-btn shop-btn--primary shop-btn--lg shop-btn--block">
+                        {% trans "Proceed to checkout" %}
+                    </a>
+                    <a href="{% url 'products:list' %}" class="shop-btn shop-btn--secondary shop-btn--block mt-2">
+                        {% trans "Continue shopping" %}
+                    </a>
                 </div>
-            </div>
+
+                {% include "includes/_checkout_trust.html" %}
+            </aside>
         </div>
     </div>
     {% else %}
-    <p class="text-muted">{% trans "Your cart is empty." %}</p>
-    <a href="{% url 'products:list' %}" class="btn btn-primary">{% trans "Browse products" %}</a>
+    <div class="shop-empty-cart">
+        <h2 class="shop-empty-cart__title">{% trans "Your cart is empty" %}</h2>
+        <p class="shop-empty-cart__text">{% trans "Browse our catalog and add products you like — checkout is simple and secure." %}</p>
+        <a href="{% url 'products:list' %}" class="shop-btn shop-btn--primary shop-btn--lg">
+            {% trans "Browse products" %}
+        </a>
+    </div>
     {% endif %}
 </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/product.js' %}"></script>
 {% endblock %}

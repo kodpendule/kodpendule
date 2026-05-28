@@ -26,7 +26,6 @@ class CartTests(TestCase):
             sku=f"SKU-CART-{suffix}",
             price=Decimal("500.00"),
             stock=5,
-            is_active=True,
         )
         self.product.set_current_language("sr")
         self.product.name = "Cart product"

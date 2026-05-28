@@ -1,0 +1,31 @@
+{% load i18n %}
+<section class="shop-trust-strip{% if trust_strip_modifier %} shop-trust-strip--{{ trust_strip_modifier }}{% endif %}" aria-label="{% trans 'Why shop with us' %}">
+    <div class="container shop-container">
+        <ul class="shop-trust-strip__list">
+            <li class="shop-trust-strip__item">
+                <span class="shop-trust-strip__icon" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 3l7 4v5c0 4-3 7-7 9-4-2-7-5-7-9V7l7-4z"/><path d="M9 12l2 2 4-4"/></svg>
+                </span>
+                <span class="shop-trust-strip__label">{% trans "Secure ordering" %}</span>
+            </li>
+            <li class="shop-trust-strip__item">
+                <span class="shop-trust-strip__icon" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 7h13l3 5v5H6a2 2 0 01-2-2V7z"/><circle cx="7" cy="19" r="1"/><circle cx="17" cy="19" r="1"/></svg>
+                </span>
+                <span class="shop-trust-strip__label">{% trans "Fast delivery" %}</span>
+            </li>
+            <li class="shop-trust-strip__item">
+                <span class="shop-trust-strip__icon" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                </span>
+                <span class="shop-trust-strip__label">{% trans "Pay on delivery (COD)" %}</span>
+            </li>
+            <li class="shop-trust-strip__item">
+                <span class="shop-trust-strip__icon" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M4 6h16v12H4z"/><path d="M4 10h16M8 14h4"/></svg>
+                </span>
+                <span class="shop-trust-strip__label">{% trans "Order tracking" %}</span>
+            </li>
+        </ul>
+    </div>
+</section>

@@ -7,6 +7,8 @@ from django.utils.translation import gettext_lazy as _
 from parler.models import TranslatableModel, TranslatedFields
 
 from apps.core.fields import MoneyField
+
+
 class Product(TranslatableModel):
     category = models.ForeignKey(
         "categories.Category",
@@ -31,10 +33,15 @@ class Product(TranslatableModel):
         _("Minimum stock alert"),
         default=5,
     )
-    is_active = models.BooleanField(_("Active"), default=True, db_index=True)
-    is_featured = models.BooleanField(_("Featured"), default=False, db_index=True)
-    is_recommended = models.BooleanField(_("Recommended"), default=False, db_index=True)
-    is_on_sale = models.BooleanField(_("On sale"), default=False, db_index=True)
+    is_recommended = models.BooleanField(
+        _("Recommended product"),
+        default=False,
+        db_index=True,
+    )
+    recommended_order = models.PositiveIntegerField(
+        _("Recommended sort order"),
+        default=0,
+    )
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
@@ -52,11 +59,9 @@ class Product(TranslatableModel):
         verbose_name_plural = _("products")
         ordering = ["-created_at"]
         indexes = [
-            models.Index(fields=["category", "is_active"]),
-            models.Index(fields=["is_featured", "is_active"]),
-            models.Index(fields=["is_recommended", "is_active"]),
-            models.Index(fields=["is_on_sale", "is_active"]),
+            models.Index(fields=["category"]),
             models.Index(fields=["stock"]),
+            models.Index(fields=["is_recommended", "recommended_order"]),
         ]
 
     def __str__(self) -> str:

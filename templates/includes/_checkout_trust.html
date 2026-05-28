@@ -1,0 +1,13 @@
+{% load i18n %}
+<aside class="shop-trust-panel" aria-label="{% trans 'Why shop with us' %}">
+    <ul class="shop-trust-panel__list">
+        <li>{% trans "Secure ordering — your details are handled carefully." %}</li>
+        <li>{% trans "Fast delivery — we prepare orders quickly." %}</li>
+        <li>{% trans "Pay on delivery (COD) — pay when your package arrives." %}</li>
+        {% if footer_settings.phone %}
+        <li>{% trans "Support" %}: <a href="tel:{{ footer_settings.phone }}">{{ footer_settings.phone }}</a></li>
+        {% else %}
+        <li>{% trans "Questions? Contact us anytime." %}</li>
+        {% endif %}
+    </ul>
+</aside>

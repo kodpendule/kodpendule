@@ -42,7 +42,7 @@ class CartAddView(View):
         product = None
         if "product_id" in request.POST:
             product = get_object_or_404(
-                Product.objects.filter(is_active=True),
+                Product.objects.all(),
                 pk=request.POST.get("product_id"),
             )
         elif "slug" in kwargs:
@@ -84,7 +84,7 @@ class CartUpdateView(View):
     def post(self, request, *args, **kwargs):
         cart = get_cart(request)
         product = get_object_or_404(
-            Product.objects.filter(is_active=True),
+            Product.objects.all(),
             pk=kwargs["product_id"],
         )
         try:

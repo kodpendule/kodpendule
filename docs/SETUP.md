@@ -82,4 +82,17 @@ pip install -r requirements.txt && python manage.py collectstatic --noinput && p
 gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2
 ```
 
-**Media uploads:** Render’s filesystem is ephemeral unless you add a persistent disk or external storage (S3, etc.).
+**Product images (Cloudflare R2):** Set on Render (see `.env.production.example`):
+
+| Variable | Description |
+|----------|-------------|
+| `USE_R2` | `True` to store uploads on R2 |
+| `R2_ACCESS_KEY_ID` | R2 API token access key |
+| `R2_SECRET_ACCESS_KEY` | R2 API token secret |
+| `R2_BUCKET_NAME` | Bucket name |
+| `R2_ENDPOINT_URL` | Account endpoint, e.g. `https://<account_id>.r2.cloudflarestorage.com` |
+| `R2_CUSTOM_DOMAIN` | Optional public domain, e.g. `media.yourdomain.rs` |
+
+When `USE_R2=True`, product images (`media/products/`, `media/products/gallery/`) and category images (`media/categories/`) are stored on R2. Deleting or replacing images in admin removes the old objects from the bucket automatically.
+
+Locally, `USE_R2` defaults to `False` (files in `media/`). You can enable R2 in `.env.local` for integration tests.

@@ -1,96 +1,136 @@
 {% extends "base.html" %}
 {% load i18n shop_tags static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="container py-4 py-lg-5">
-    <h1 class="h2 mb-4">{% trans "Checkout" %}</h1>
+<div class="shop-page shop-page--checkout">
+<div class="container shop-container py-4 py-lg-5 shop-checkout">
+    <header class="shop-page-header mb-4">
+        <h1 class="shop-page-header__title">{% trans "Checkout" %}</h1>
+        <p class="shop-page-header__meta mb-0">{% trans "Cash on delivery — simple and secure." %}</p>
+    </header>
 
     {% if is_guest %}
-    <p class="text-muted mb-4">
-        {% trans "You can checkout as a guest — no account required." %}
-        <a href="{% url 'accounts:login' %}?next={{ request.path }}">{% trans "Sign in" %}</a>
-        {% trans "or" %}
-        <a href="{% url 'accounts:register' %}?next={{ request.path }}">{% trans "register" %}</a>.
-    </p>
+    <div class="shop-checkout-guest shop-notice mb-4" role="note">
+        <p class="mb-0">
+            {% trans "You can checkout as a guest — no account required." %}
+            <a href="{% url 'accounts:login' %}?next={{ request.path }}">{% trans "Sign in" %}</a>
+            {% trans "or" %}
+            <a href="{% url 'accounts:register' %}?next={{ request.path }}">{% trans "register" %}</a>.
+        </p>
+    </div>
     {% endif %}
 
-    <div class="row g-4">
-        <div class="col-lg-7">
-            <form method="post" novalidate>
+    <div class="shop-checkout__layout">
+        <div class="shop-checkout__form-col">
+            <form method="post" novalidate class="shop-checkout-form" id="shop-checkout-form">
                 {% csrf_token %}
                 {% if form.non_field_errors %}
-                <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                <div class="alert alert-danger shop-checkout-alert" role="alert">{{ form.non_field_errors }}</div>
                 {% endif %}
 
-                <h2 class="h5 mb-3">{% trans "Contact" %}</h2>
-                {% if not is_guest %}{{ form.guest_email }}{% else %}
-                {% include "includes/_form_field.html" with field=form.guest_email %}
-                {% endif %}
-                <div class="row g-3 mb-4">
-                    <div class="col-md-6">{% include "includes/_form_field.html" with field=form.first_name %}</div>
-                    <div class="col-md-6">{% include "includes/_form_field.html" with field=form.last_name %}</div>
-                    <div class="col-12">{% include "includes/_form_field.html" with field=form.phone %}</div>
-                </div>
+                <section class="shop-checkout-section" aria-labelledby="checkout-contact-heading">
+                    <h2 id="checkout-contact-heading" class="shop-checkout-section__title">{% trans "Contact" %}</h2>
+                    <p class="shop-checkout-section__lead">{% trans "We will use these details to confirm your order." %}</p>
+                    {% if not is_guest %}{{ form.guest_email }}{% else %}
+                    {% include "includes/_shop_form_field.html" with field=form.guest_email %}
+                    {% endif %}
+                    <div class="row g-3">
+                        <div class="col-md-6">{% include "includes/_shop_form_field.html" with field=form.first_name %}</div>
+                        <div class="col-md-6">{% include "includes/_shop_form_field.html" with field=form.last_name %}</div>
+                        <div class="col-12">{% include "includes/_shop_form_field.html" with field=form.phone %}</div>
+                    </div>
+                </section>
 
-                <h2 class="h5 mb-3">{% trans "Shipping address" %}</h2>
-                <div class="row g-3 mb-2">
-                    <div class="col-12">{% include "includes/_form_field.html" with field=form.shipping_city %}</div>
-                    <div class="col-12">{% include "includes/_form_field.html" with field=form.shipping_street %}</div>
-                    <div class="col-md-6">{% include "includes/_form_field.html" with field=form.shipping_postal_code %}</div>
-                </div>
-                <p class="small text-muted mb-4">
-                    {% trans "Shipping" %}: <span id="shipping-price-display">—</span> {{ shop_currency_symbol }}
-                </p>
+                <section class="shop-checkout-section" aria-labelledby="checkout-shipping-heading">
+                    <h2 id="checkout-shipping-heading" class="shop-checkout-section__title">{% trans "Shipping address" %}</h2>
+                    <p class="shop-checkout-section__lead">{% trans "Where should we deliver your order?" %}</p>
+                    <div class="row g-3">
+                        <div class="col-12">{% include "includes/_shop_form_field.html" with field=form.shipping_city %}</div>
+                        <div class="col-12">{% include "includes/_shop_form_field.html" with field=form.shipping_street %}</div>
+                        <div class="col-md-6">{% include "includes/_shop_form_field.html" with field=form.shipping_postal_code %}</div>
+                    </div>
+                    <p class="shop-checkout-shipping-note mb-0" aria-live="polite">
+                        <span class="shop-checkout-shipping-note__label">{% trans "Delivery cost for selected city" %}</span>
+                        <span class="shop-checkout-shipping-note__value">
+                            <span class="js-shipping-price">—</span> {{ shop_currency_symbol }}
+                        </span>
+                    </p>
+                </section>
 
-                <h2 class="h5 mb-3">{% trans "Billing address" %}</h2>
-                <div class="form-check mb-3">
-                    {{ form.billing_same_as_shipping }}
-                    <label class="form-check-label" for="id_billing_same">{% trans "Same as shipping" %}</label>
-                </div>
-                <div id="billing-fields" class="row g-3 mb-4">
-                    <div class="col-12">{% include "includes/_form_field.html" with field=form.billing_street %}</div>
-                    <div class="col-md-6">{% include "includes/_form_field.html" with field=form.billing_city_name %}</div>
-                    <div class="col-md-6">{% include "includes/_form_field.html" with field=form.billing_postal_code %}</div>
-                </div>
-
-                <h2 class="h5 mb-3">{% trans "Delivery" %}</h2>
-                <div class="mb-3">{% include "includes/_form_field.html" with field=form.order_notes %}</div>
-                <div class="row g-3 mb-3">
-                    <div class="col-md-6">{% include "includes/_form_field.html" with field=form.delivery_date %}</div>
-                    <div class="col-12">
-                        <div class="form-check">
-                            {{ form.flexible_delivery }}
-                            <label class="form-check-label" for="id_flexible_delivery">{{ form.flexible_delivery.label }}</label>
+                <section class="shop-checkout-section" aria-labelledby="checkout-billing-heading">
+                    <h2 id="checkout-billing-heading" class="shop-checkout-section__title">{% trans "Billing address" %}</h2>
+                    <div class="shop-field mb-3">
+                        <div class="form-check shop-field__check">
+                            {{ form.billing_same_as_shipping }}
+                            <label class="form-check-label" for="id_billing_same">{% trans "Same as shipping" %}</label>
                         </div>
                     </div>
-                </div>
-
-                <p class="small text-muted mb-4">{% trans "Payment: cash on delivery (COD)." %}</p>
-
-                <button type="submit" class="btn btn-primary btn-lg">{% trans "Place order" %}</button>
-            </form>
-        </div>
-
-        <div class="col-lg-5">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <h2 class="h6 text-uppercase text-muted mb-3">{% trans "Order summary" %}</h2>
-                    <ul class="list-unstyled mb-3">
-                        {% for line in cart_lines %}
-                        <li class="d-flex justify-content-between small mb-2">
-                            <span>{{ line.product.name }} × {{ line.quantity }}</span>
-                            <span>{{ line.line_total|money }}</span>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                    <div class="d-flex justify-content-between fw-semibold">
-                        <span>{% trans "Subtotal" %}</span>
-                        <span>{{ cart_subtotal|money }}</span>
+                    <div id="billing-fields" class="row g-3">
+                        <div class="col-12">{% include "includes/_shop_form_field.html" with field=form.billing_street %}</div>
+                        <div class="col-md-6">{% include "includes/_shop_form_field.html" with field=form.billing_city_name %}</div>
+                        <div class="col-md-6">{% include "includes/_shop_form_field.html" with field=form.billing_postal_code %}</div>
                     </div>
+                </section>
+
+                <section class="shop-checkout-section" aria-labelledby="checkout-delivery-heading">
+                    <h2 id="checkout-delivery-heading" class="shop-checkout-section__title">{% trans "Delivery" %}</h2>
+                    <p class="shop-checkout-section__lead">{% trans "Tell us when and how you prefer delivery." %}</p>
+                    <div class="mb-0">{% include "includes/_shop_form_field.html" with field=form.order_notes %}</div>
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-6">{% include "includes/_shop_form_field.html" with field=form.delivery_date %}</div>
+                        <div class="col-12">
+                            <div class="shop-field mb-3">
+                                <div class="form-check shop-field__check">
+                                    {{ form.flexible_delivery }}
+                                    <label class="form-check-label" for="id_flexible_delivery">{{ form.flexible_delivery.label }}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="shop-checkout-section shop-checkout-section--payment" aria-labelledby="checkout-payment-heading">
+                    <h2 id="checkout-payment-heading" class="shop-checkout-section__title">{% trans "Payment" %}</h2>
+                    <div class="shop-cod-card">
+                        <p class="shop-cod-card__title">{% trans "Cash on delivery (COD)" %}</p>
+                        <p class="shop-cod-card__text mb-0">
+                            {% trans "Pay the courier in cash when your order arrives. No online payment or card required." %}
+                        </p>
+                    </div>
+                </section>
+
+                <div class="shop-checkout-submit d-none d-lg-block">
+                    <button type="submit" class="shop-btn shop-btn--primary shop-btn--lg shop-btn--block">
+                        {% trans "Place order" %}
+                    </button>
+                    <p class="shop-checkout-submit__note">{% trans "By placing the order you confirm your details are correct." %}</p>
                 </div>
+            </form>
+
+            <div class="d-lg-none mt-4">
+                {% include "includes/_checkout_trust.html" %}
             </div>
         </div>
+
+        <aside class="shop-checkout__summary-col" aria-label="{% trans 'Order summary' %}">
+            {% include "includes/_order_summary_card.html" with summary_sticky=True %}
+
+            <div class="d-none d-lg-block mt-4">
+                {% include "includes/_checkout_trust.html" %}
+            </div>
+
+            <div class="shop-checkout-mobile-bar d-lg-none">
+                <button type="submit" form="shop-checkout-form" class="shop-btn shop-btn--primary shop-btn--lg shop-btn--block">
+                    {% trans "Place order" %}
+                </button>
+            </div>
+        </aside>
     </div>
+</div>
 </div>
 {% endblock %}
 

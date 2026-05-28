@@ -1,0 +1,91 @@
+/**
+ * Kod Pendule — admin design tokens (Phase 1)
+ * Brand primary: #0B3528
+ * Load before foundation.css; maps into Django admin CSS variables in foundation.css.
+ */
+
+:root {
+    /* —— Brand —— */
+    --kp-color-primary: #0b3528;
+    --kp-color-primary-hover: #08291f;
+    --kp-color-primary-active: #061f18;
+    --kp-color-primary-soft: #e7eeeb;
+    --kp-color-primary-muted: #abc1b9;
+    --kp-color-on-primary: #ffffff;
+
+    /* —— Neutrals —— */
+    --kp-color-surface: #ffffff;
+    --kp-color-surface-subtle: #f6f8f7;
+    --kp-color-surface-raised: #ffffff;
+    --kp-color-border: #d1dbd6;
+    --kp-color-border-subtle: #e5ebe8;
+    --kp-color-text: #1f2937;
+    --kp-color-text-muted: #6b7280;
+    --kp-color-text-quiet: #4b5563;
+    --kp-color-text-inverse: #ffffff;
+
+    /* —— Semantic —— */
+    --kp-color-success: #0b3528;
+    --kp-color-success-bg: #e7eeeb;
+    --kp-color-success-border: #abc1b9;
+    --kp-color-warning: #92400e;
+    --kp-color-warning-bg: #fef6e7;
+    --kp-color-warning-border: #f3d9a6;
+    --kp-color-error: #b42318;
+    --kp-color-error-bg: #fef2f2;
+    --kp-color-error-border: #fecdca;
+    --kp-color-info: #1e4d63;
+    --kp-color-info-bg: #eef4f7;
+    --kp-color-info-border: #c5d9e3;
+
+    /* —— Typography —— */
+    --kp-font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue",
+        Arial, sans-serif;
+    --kp-font-family-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
+        Consolas, monospace;
+    --kp-font-size-xs: 0.75rem;
+    --kp-font-size-sm: 0.8125rem;
+    --kp-font-size-base: 0.875rem;
+    --kp-font-size-md: 1rem;
+    --kp-font-size-lg: 1.125rem;
+    --kp-font-size-xl: 1.25rem;
+    --kp-font-size-2xl: 1.5rem;
+    --kp-line-height-tight: 1.25;
+    --kp-line-height-normal: 1.5;
+    --kp-line-height-relaxed: 1.625;
+    --kp-font-weight-normal: 400;
+    --kp-font-weight-medium: 500;
+    --kp-font-weight-semibold: 600;
+    --kp-font-weight-bold: 700;
+
+    /* —— Spacing (4px grid) —— */
+    --kp-space-0: 0;
+    --kp-space-1: 0.25rem;
+    --kp-space-2: 0.5rem;
+    --kp-space-3: 0.75rem;
+    --kp-space-4: 1rem;
+    --kp-space-5: 1.25rem;
+    --kp-space-6: 1.5rem;
+    --kp-space-8: 2rem;
+    --kp-space-10: 2.5rem;
+    --kp-space-12: 3rem;
+
+    /* —— Radius —— */
+    --kp-radius-sm: 4px;
+    --kp-radius-md: 8px;
+    --kp-radius-lg: 12px;
+    --kp-radius-full: 9999px;
+
+    /* —— Shadows —— */
+    --kp-shadow-sm: 0 1px 2px rgba(15, 41, 25, 0.06);
+    --kp-shadow-md: 0 2px 8px rgba(15, 41, 25, 0.08);
+    --kp-shadow-lg: 0 4px 16px rgba(15, 41, 25, 0.1);
+
+    /* —— Focus (accessibility) —— */
+    --kp-focus-ring: 0 0 0 3px rgba(11, 53, 40, 0.28);
+    --kp-focus-ring-offset: 2px;
+
+    /* —— Layout —— */
+    --kp-content-max-width: 1400px;
+    --kp-touch-target-min: 2.25rem;
+}

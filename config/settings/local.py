@@ -66,6 +66,15 @@ EMAIL_BACKEND = config(
     "EMAIL_BACKEND",
     default="django.core.mail.backends.console.EmailBackend",
 )
+CONTACT_EMAIL_TO = config("CONTACT_EMAIL_TO", default="info@kodpendule.rs")
+
+# --- Media (optional Cloudflare R2 via .env.local) ----------------------------
+
+import sys  # noqa: E402
+
+from config.settings.r2 import configure_r2  # noqa: E402
+
+configure_r2(sys.modules[__name__], config)
 
 # --- Logging ------------------------------------------------------------------
 

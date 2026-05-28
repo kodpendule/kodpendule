@@ -29,7 +29,6 @@ class CategoryViewTests(TestCase):
             sku=f"SKU-{suffix}",
             price=Decimal("1500.00"),
             stock=5,
-            is_active=True,
         )
         self.product.set_current_language("sr")
         self.product.name = "Klasični sat"

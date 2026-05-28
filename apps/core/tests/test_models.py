@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from apps.core.models import FooterSettings, HomepageSection, HomepageSectionType, SiteSettings
+from apps.core.models import FooterSettings, SiteSettings
 
 
 class CoreModelTests(TestCase):
@@ -14,13 +14,3 @@ class CoreModelTests(TestCase):
     def test_footer_settings_singleton(self) -> None:
         footer = FooterSettings.load()
         self.assertEqual(footer.pk, 1)
-
-    def test_homepage_section_unique_type(self) -> None:
-        HomepageSection.objects.create(
-            section_type=HomepageSectionType.FEATURED,
-            max_products=8,
-        )
-        with self.assertRaises(Exception):
-            HomepageSection.objects.create(
-                section_type=HomepageSectionType.FEATURED,
-            )

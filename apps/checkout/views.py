@@ -86,7 +86,7 @@ class CheckoutView(ShopLanguageMixin, FormView):
                 billing_city_name=form.cleaned_data["billing_city_name"],
                 billing_postal_code=form.cleaned_data["billing_postal_code"],
                 order_notes=form.cleaned_data["order_notes"],
-                delivery_date=form.cleaned_data.get("delivery_date"),
+                delivery_date=form.cleaned_data["delivery_date"],
                 flexible_delivery=form.cleaned_data.get("flexible_delivery", False),
             )
         except CheckoutError as exc:

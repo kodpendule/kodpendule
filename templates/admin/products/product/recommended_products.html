@@ -1,0 +1,85 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans "Home" %}</a>
+    &rsaquo; <a href="{% url 'admin:products_product_changelist' %}">{% trans "Products" %}</a>
+    &rsaquo; {% trans "Recommended products" %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main" class="change-form kp-recommended-admin">
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <fieldset class="module aligned">
+            <h2 class="fieldset-heading">{% trans "Recommended products" %}</h2>
+            <p class="description">
+                {% trans "Check products to show in the “Recommended products” section on the homepage. Order follows the list below (top to bottom)." %}
+            </p>
+
+            {% if products %}
+            <div class="kp-recommended-admin__toolbar">
+                <button type="button" class="button" id="kp-recommended-select-all">{% trans "Select all" %}</button>
+                <button type="button" class="button" id="kp-recommended-select-none">{% trans "Clear all" %}</button>
+            </div>
+            <table class="kp-recommended-admin__table">
+                <thead>
+                    <tr>
+                        <th scope="col" class="kp-recommended-admin__check-col">{% trans "Recommended" %}</th>
+                        <th scope="col">{% trans "SKU" %}</th>
+                        <th scope="col">{% trans "Name" %}</th>
+                        <th scope="col">{% trans "Category" %}</th>
+                        <th scope="col">{% trans "Stock" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td class="kp-recommended-admin__check-col">
+                            <input
+                                type="checkbox"
+                                name="recommended"
+                                value="{{ product.pk }}"
+                                id="recommended-{{ product.pk }}"
+                                class="kp-recommended-checkbox"
+                                {% if product.pk in selected_ids %}checked{% endif %}
+                            >
+                        </td>
+                        <td><label for="recommended-{{ product.pk }}">{{ product.sku }}</label></td>
+                        <td>{{ product }}</td>
+                        <td>{{ product.category }}</td>
+                        <td>{{ product.stock }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>{% trans "No products yet. Add products first, then mark them as recommended." %}</p>
+            {% endif %}
+        </fieldset>
+        <div class="submit-row">
+            <input type="submit" value="{% trans 'Save recommended products' %}" class="default">
+            <a href="{% url 'admin:products_product_changelist' %}" class="button cancel-link">{% trans "Cancel" %}</a>
+        </div>
+    </form>
+</div>
+<script>
+(function () {
+    var selectAll = document.getElementById("kp-recommended-select-all");
+    var selectNone = document.getElementById("kp-recommended-select-none");
+    var boxes = document.querySelectorAll(".kp-recommended-checkbox");
+    if (selectAll) {
+        selectAll.addEventListener("click", function () {
+            boxes.forEach(function (cb) { cb.checked = true; });
+        });
+    }
+    if (selectNone) {
+        selectNone.addEventListener("click", function () {
+            boxes.forEach(function (cb) { cb.checked = false; });
+        });
+    }
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% load i18n %}
+<div class="shop-field mb-3{% if field.errors %} shop-field--invalid{% endif %}">
+    {% if field.field.widget.input_type == "checkbox" %}
+        <div class="form-check shop-field__check">
+            {{ field }}
+            <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+        </div>
+    {% else %}
+        <label class="shop-field__label" for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} <span class="shop-field__req" aria-hidden="true">*</span>{% endif %}</label>
+        {{ field }}
+    {% endif %}
+    {% if field.help_text %}
+        <p class="shop-field__help">{{ field.help_text }}</p>
+    {% endif %}
+    {% for error in field.errors %}
+        <p class="shop-field__error" role="alert">{{ error }}</p>
+    {% endfor %}
+</div>

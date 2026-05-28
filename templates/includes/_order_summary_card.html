@@ -1,0 +1,43 @@
+{% load i18n shop_tags %}
+<div class="shop-summary-card{% if summary_sticky %} shop-summary-card--sticky{% endif %}"
+     {% if cart_subtotal is not None %}data-checkout-subtotal="{{ cart_subtotal }}"{% endif %}
+     data-currency="{{ shop_currency_symbol }}">
+    <h2 class="shop-summary-card__title">{% trans "Order summary" %}</h2>
+
+    {% if cart_lines %}
+    <ul class="shop-summary-card__lines list-unstyled mb-0">
+        {% for line in cart_lines %}
+        <li class="shop-summary-card__line">
+            <div class="shop-summary-card__line-name">
+                <span class="shop-summary-card__product">{{ line.product.name }}</span>
+                <span class="shop-summary-card__meta">× {{ line.quantity }}</span>
+            </div>
+            <span class="shop-summary-card__line-price">{{ line.line_total|money }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <dl class="shop-summary-card__totals">
+        <div class="shop-summary-card__row">
+            <dt>{% trans "Subtotal" %}</dt>
+            <dd>{{ cart_subtotal|money }}</dd>
+        </div>
+        <div class="shop-summary-card__row shop-summary-card__row--muted">
+            <dt>{% trans "Shipping" %}</dt>
+            <dd>
+                <span class="js-shipping-price" id="shipping-price-display">—</span> {{ shop_currency_symbol }}
+            </dd>
+        </div>
+        <div class="shop-summary-card__row shop-summary-card__row--total">
+            <dt>{% trans "Estimated total" %}</dt>
+            <dd id="checkout-total-display">{{ cart_subtotal|money }}</dd>
+        </div>
+    </dl>
+
+    <p class="shop-summary-card__cod">
+        {% trans "Payment: cash on delivery (COD) when the order is delivered." %}
+    </p>
+    {% else %}
+    <p class="text-muted mb-0">{% trans "No items in cart." %}</p>
+    {% endif %}
+</div>

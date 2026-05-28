@@ -52,7 +52,6 @@ class AuthViewTests(TestCase):
                 "phone": "+381601112233",
                 "password1": "SecurePass123!",
                 "password2": "SecurePass123!",
-                "newsletter_opt_in": True,
             },
         )
         self.assertEqual(response.status_code, 302)
@@ -61,13 +60,16 @@ class AuthViewTests(TestCase):
         self.assertEqual(user.email, "novi@example.com")
         profile = CustomerProfile.objects.get(user=user)
         self.assertEqual(profile.phone, "+381601112233")
-        self.assertTrue(profile.newsletter_opt_in)
 
     def test_register_logs_user_in(self) -> None:
         self.client.post(
             reverse("accounts:register"),
             {
                 "username": "logged_in",
+                "email": "logged_in@example.com",
+                "first_name": "Logged",
+                "last_name": "In",
+                "phone": "+381601112233",
                 "password1": "SecurePass123!",
                 "password2": "SecurePass123!",
             },
@@ -98,6 +100,18 @@ class AuthViewTests(TestCase):
         response = self.client.post(reverse("accounts:logout"))
         self.assertEqual(response.status_code, 302)
         self.assertNotIn("_auth_user_id", self.client.session)
+
+    def test_register_requires_profile_fields(self) -> None:
+        response = self.client.post(
+            reverse("accounts:register"),
+            {
+                "username": "incomplete",
+                "password1": "SecurePass123!",
+                "password2": "SecurePass123!",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(User.objects.filter(username="incomplete").exists())
 
     def test_authenticated_user_redirected_from_register(self) -> None:
         User.objects.create_user(username="pera", password="SecurePass123!")

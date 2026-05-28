@@ -1,39 +1,46 @@
 {% extends "base.html" %}
 {% load i18n shop_tags %}
 
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/product.css' %}">
+{% endblock %}
+
 {% block content %}
+<div class="shop-page shop-page--pdp">
 <div class="container py-4 py-lg-5">
     {% include "includes/_breadcrumb.html" with breadcrumbs=breadcrumb_items %}
 
-    <div class="row g-4 g-lg-5">
-        <div class="col-lg-6">
-            <div id="productGallery" class="carousel slide product-gallery" data-bs-ride="false">
-                <div class="carousel-inner rounded border bg-light">
+    <div class="shop-pdp">
+        <div class="shop-pdp__gallery">
+            <div id="productGallery" class="carousel slide shop-gallery" data-bs-ride="false" aria-label="{% trans 'Product gallery' %}">
+                <div class="carousel-inner shop-gallery__main" data-shop-gallery-main>
                     {% if product.main_image %}
                     <div class="carousel-item active">
-                        <img src="{{ product.main_image.url }}" class="d-block w-100 product-gallery__img" alt="{{ product.name }}">
+                        <img src="{{ product.main_image.url }}" class="d-block w-100 shop-gallery__img" alt="{{ product.name }}">
                     </div>
                     {% endif %}
                     {% for image in gallery_images %}
                     <div class="carousel-item{% if not product.main_image and forloop.first %} active{% endif %}">
-                        <img src="{{ image.image.url }}" class="d-block w-100 product-gallery__img"
+                        <img src="{{ image.image.url }}" class="d-block w-100 shop-gallery__img"
                              alt="{{ image.alt_text|default:product.name }}">
                     </div>
                     {% endfor %}
                     {% if not product.main_image and not gallery_images %}
                     <div class="carousel-item active">
-                        <div class="product-gallery__img d-flex align-items-center justify-content-center text-muted">
-                            {% trans "No image" %}
+                        <div class="shop-gallery__img shop-gallery__img--placeholder" aria-hidden="true">
+                            <span class="text-muted">{% trans "No image" %}</span>
                         </div>
                     </div>
                     {% endif %}
                 </div>
+
                 {% if gallery_images or product.main_image and gallery_images %}
-                <button class="carousel-control-prev" type="button" data-bs-target="#productGallery" data-bs-slide="prev">
+                <button class="carousel-control-prev shop-gallery__nav" type="button" data-bs-target="#productGallery" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">{% trans "Previous" %}</span>
                 </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#productGallery" data-bs-slide="next">
+                <button class="carousel-control-next shop-gallery__nav" type="button" data-bs-target="#productGallery" data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">{% trans "Next" %}</span>
                 </button>
@@ -41,80 +48,124 @@
             </div>
 
             {% if gallery_images %}
-            <div class="d-flex flex-wrap gap-2 mt-3">
+            <div class="shop-gallery-thumbs" aria-label="{% trans 'Gallery thumbnails' %}">
                 {% if product.main_image %}
-                <button type="button" class="btn btn-outline-secondary p-0 product-gallery__thumb" data-bs-target="#productGallery" data-bs-slide-to="0">
-                    <img src="{{ product.main_image.url }}" alt="" class="rounded">
+                <button type="button" class="shop-thumb" data-bs-target="#productGallery" data-bs-slide-to="0" aria-label="{% trans 'Image' %} 1">
+                    <img src="{{ product.main_image.url }}" alt="">
                 </button>
                 {% endif %}
                 {% for image in gallery_images %}
-                <button type="button" class="btn btn-outline-secondary p-0 product-gallery__thumb"
+                <button type="button" class="shop-thumb"
                         data-bs-target="#productGallery"
-                        data-bs-slide-to="{% if product.main_image %}{{ forloop.counter }}{% else %}{{ forloop.counter0 }}{% endif %}">
-                    <img src="{{ image.image.url }}" alt="" class="rounded">
+                        data-bs-slide-to="{% if product.main_image %}{{ forloop.counter }}{% else %}{{ forloop.counter0 }}{% endif %}"
+                        aria-label="{% trans 'Image' %} {% if product.main_image %}{{ forloop.counter|add:1 }}{% else %}{{ forloop.counter|add:0 }}{% endif %}">
+                    <img src="{{ image.image.url }}" alt="">
                 </button>
                 {% endfor %}
             </div>
             {% endif %}
         </div>
 
-        <div class="col-lg-6">
-            <h1 class="h2 mb-2">{{ product.name }}</h1>
-            <p class="text-muted small mb-3">{% trans "SKU" %}: {{ product.sku }}</p>
+        <div class="shop-pdp__info">
+            <header class="shop-pdp__header">
+                <h1 class="shop-pdp__title">{{ product.name }}</h1>
+                <p class="shop-pdp__sku">{% trans "SKU" %}: <span>{{ product.sku }}</span></p>
+            </header>
 
-            {% if product.has_discount %}
-            <p class="fs-4 mb-2">
-                <span class="fw-bold text-danger">{{ product.effective_price|money }}</span>
-                <span class="text-muted text-decoration-line-through ms-2">{{ product.price|money }}</span>
-            </p>
-            {% else %}
-            <p class="fs-4 fw-bold mb-2">{{ product.effective_price|money }}</p>
-            {% endif %}
+            <section class="shop-pdp__pricing" aria-label="{% trans 'Pricing' %}">
+                {% if product.has_discount %}
+                    <p class="shop-pdp__price">
+                        <span class="shop-price shop-price--sale shop-pdp__price-now">{{ product.effective_price|money }}</span>
+                        <span class="shop-price shop-price--was shop-pdp__price-was">{{ product.price|money }}</span>
+                    </p>
+                {% else %}
+                    <p class="shop-pdp__price">
+                        <span class="shop-price shop-pdp__price-now">{{ product.effective_price|money }}</span>
+                    </p>
+                {% endif %}
 
-            {% if product.stock > 0 %}
-            <span class="badge text-bg-success mb-3">{% trans "In stock" %}</span>
-            {% else %}
-            <span class="badge text-bg-secondary mb-3">{% trans "Out of stock" %}</span>
-            {% endif %}
+                {% if product.stock > 0 %}
+                    <span class="shop-badge shop-badge--success shop-pdp__stock">{% trans "In stock" %}</span>
+                {% else %}
+                    <span class="shop-badge shop-badge--stock-out shop-pdp__stock">{% trans "Out of stock" %}</span>
+                {% endif %}
+            </section>
 
-            {% if product.stock > 0 %}
-            <form method="post" action="{% url 'cart:add' %}" class="d-flex flex-wrap align-items-end gap-2 mb-4">
-                {% csrf_token %}
-                <input type="hidden" name="product_id" value="{{ product.pk }}">
-                <input type="hidden" name="next" value="{{ request.get_full_path }}">
-                <div>
-                    <label for="qty-{{ product.pk }}" class="form-label small">{% trans "Quantity" %}</label>
-                    <input type="number" id="qty-{{ product.pk }}" name="quantity" value="1" min="1" max="{{ product.stock }}"
-                           class="form-control form-control-sm" style="width: 5rem;">
+            <section class="shop-pdp__trust" aria-label="{% trans 'Delivery and payment' %}">
+                <ul class="shop-pdp__trust-list">
+                    <li><strong>{% trans "Payment" %}:</strong> {% trans "cash on delivery (COD)" %}</li>
+                    <li><strong>{% trans "Delivery" %}:</strong> {% trans "calculated at checkout" %}</li>
+                    {% if footer_settings.phone %}
+                    <li><strong>{% trans "Support" %}:</strong> <a href="tel:{{ footer_settings.phone }}">{{ footer_settings.phone }}</a></li>
+                    {% endif %}
+                </ul>
+            </section>
+
+            <section class="shop-pdp__buy" aria-label="{% trans 'Add to cart' %}">
+                {% if product.stock > 0 %}
+                <form method="post" action="{% url 'cart:add' %}" class="shop-buybox" data-shop-buybox>
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ product.pk }}">
+                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                    <div class="shop-buybox__row">
+                        <div class="shop-qty" data-shop-qty>
+                            <label class="shop-qty__label" for="qty-{{ product.pk }}">{% trans "Quantity" %}</label>
+                            <div class="shop-qty__control">
+                                <button class="shop-qty__btn" type="button" data-shop-qty-dec aria-label="{% trans 'Decrease quantity' %}">−</button>
+                                <input type="number" id="qty-{{ product.pk }}" name="quantity" value="1" min="1" max="{{ product.stock }}"
+                                       class="shop-qty__input" inputmode="numeric">
+                                <button class="shop-qty__btn" type="button" data-shop-qty-inc aria-label="{% trans 'Increase quantity' %}">+</button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="shop-btn shop-btn--primary shop-btn--lg shop-buybox__cta">
+                            {% trans "Add to cart" %}
+                        </button>
+                    </div>
+                    <p class="shop-buybox__hint">{% trans "You can checkout as a guest — no account required." %}</p>
+                </form>
+                {% else %}
+                <div class="shop-buybox shop-buybox--disabled">
+                    <p class="mb-0 text-muted">{% trans "This product is currently out of stock." %}</p>
                 </div>
-                <button type="submit" class="btn btn-primary">{% trans "Add to cart" %}</button>
-            </form>
-            {% endif %}
+                {% endif %}
+            </section>
 
             {% if product.short_description %}
-            <p class="lead">{{ product.short_description }}</p>
+            <p class="shop-pdp__lead">{{ product.short_description }}</p>
             {% endif %}
 
             {% if product.description %}
-            <div class="product-description mt-4">
-                <h2 class="h5">{% trans "Description" %}</h2>
-                <div class="text-muted">{{ product.description|linebreaksbr }}</div>
-            </div>
+            <section class="shop-pdp__description">
+                <h2 class="shop-pdp__section-title">{% trans "Description" %}</h2>
+                <div class="shop-pdp__description-body">{{ product.description|linebreaksbr }}</div>
+            </section>
             {% endif %}
 
-            <p class="mt-4 mb-0">
-                <a href="{{ product.category.get_absolute_url }}" class="btn btn-outline-primary btn-sm">
+            <div class="shop-pdp__more">
+                <a href="{{ product.category.get_absolute_url }}" class="shop-btn shop-btn--secondary shop-btn--sm">
                     {% trans "More in" %} {{ product.category.name }}
                 </a>
-            </p>
+            </div>
         </div>
     </div>
 
     {% if related_products %}
-    <section class="mt-5 pt-4 border-top">
-        <h2 class="h4 mb-4">{% trans "Related products" %}</h2>
+    <section class="shop-pdp-related">
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-3">
+            <div>
+                <h2 class="h4 mb-1">{% trans "Related products" %}</h2>
+                <p class="text-muted small mb-0">{% trans "More options in the same category." %}</p>
+            </div>
+            <a class="shop-btn shop-btn--secondary shop-btn--sm" href="{{ product.category.get_absolute_url }}">{% trans "View category" %}</a>
+        </div>
         {% include "includes/_product_grid.html" with products=related_products %}
     </section>
     {% endif %}
 </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/product.js' %}"></script>
 {% endblock %}

@@ -1,0 +1,22 @@
+{% load i18n %}
+{# Shared primary nav links — include with optional link_class #}
+<li class="nav-item">
+    <a class="nav-link {{ link_class }}{% if request.resolver_match.namespace == 'core' and request.resolver_match.view_name == 'home' %} active{% endif %}"
+       href="{% url 'core:home' %}">{% trans "Home" %}</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link {{ link_class }}{% if request.resolver_match.namespace == 'products' %} active{% endif %}"
+       href="{% url 'products:list' %}">{% trans "Products" %}</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link {{ link_class }}{% if request.resolver_match.namespace == 'categories' %} active{% endif %}"
+       href="{% url 'categories:list' %}">{% trans "Categories" %}</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link {{ link_class }}{% if request.resolver_match.view_name == 'contact' %} active{% endif %}"
+       href="{% url 'core:contact' %}">{% trans "Contact" %}</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link {{ link_class }}{% if request.resolver_match.view_name == 'track' %} active{% endif %}"
+       href="{% url 'orders:track' %}">{% trans "Track order" %}</a>
+</li>

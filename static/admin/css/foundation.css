@@ -1,0 +1,505 @@
+/**
+ * Kod Pendule — admin theme foundation (Phase 1)
+ * Maps tokens into Django admin CSS variables + light structural polish.
+ * Does not replace Django admin markup or behavior.
+ */
+
+html[data-theme="light"],
+:root {
+    --primary: var(--kp-color-primary);
+    --secondary: var(--kp-color-primary-hover);
+    --accent: var(--kp-color-primary-soft);
+    --primary-fg: var(--kp-color-on-primary);
+
+    --body-fg: var(--kp-color-text);
+    --body-bg: var(--kp-color-surface);
+    --body-quiet-color: var(--kp-color-text-muted);
+    --body-medium-color: var(--kp-color-text-quiet);
+    --body-loud-color: var(--kp-color-text);
+
+    --header-color: var(--kp-color-on-primary);
+    --header-branding-color: var(--kp-color-on-primary);
+    --header-bg: var(--kp-color-primary);
+    --header-link-color: var(--kp-color-on-primary);
+
+    --breadcrumbs-fg: var(--kp-color-primary-muted);
+    --breadcrumbs-link-fg: var(--kp-color-on-primary);
+    --breadcrumbs-bg: var(--kp-color-primary-active);
+
+    --link-fg: var(--kp-color-primary);
+    --link-hover-color: var(--kp-color-primary-active);
+    --link-selected-fg: var(--kp-color-primary-hover);
+
+    --hairline-color: var(--kp-color-border-subtle);
+    --border-color: var(--kp-color-border);
+
+    --error-fg: var(--kp-color-error);
+
+    --message-success-bg: var(--kp-color-success-bg);
+    --message-warning-bg: var(--kp-color-warning-bg);
+    --message-error-bg: var(--kp-color-error-bg);
+
+    --darkened-bg: var(--kp-color-surface-subtle);
+    --selected-bg: var(--kp-color-primary-soft);
+    --selected-row: var(--kp-color-primary-soft);
+
+    --button-fg: var(--kp-color-on-primary);
+    --button-bg: var(--kp-color-primary);
+    --button-hover-bg: var(--kp-color-primary-hover);
+    --default-button-bg: #4b5563;
+    --default-button-hover-bg: #374151;
+    --close-button-bg: #6b7280;
+    --close-button-hover-bg: #4b5563;
+    --delete-button-bg: var(--kp-color-error);
+    --delete-button-hover-bg: #912018;
+
+    --object-tools-fg: var(--kp-color-on-primary);
+    --object-tools-bg: var(--kp-color-primary-hover);
+    --object-tools-hover-bg: var(--kp-color-primary-active);
+
+    --font-family-primary: var(--kp-font-family);
+    --font-family-monospace: var(--kp-font-family-mono);
+
+    color-scheme: light;
+}
+
+/* —— Base readability —— */
+body {
+    font-size: var(--kp-font-size-base);
+    line-height: var(--kp-line-height-normal);
+    -webkit-font-smoothing: antialiased;
+}
+
+h1 {
+    font-weight: var(--kp-font-weight-semibold);
+    font-size: var(--kp-font-size-xl);
+    line-height: var(--kp-line-height-tight);
+    color: var(--kp-color-text);
+}
+
+h2 {
+    font-weight: var(--kp-font-weight-semibold);
+    color: var(--kp-color-text);
+}
+
+/* —— Header & nav —— */
+#container {
+    max-width: 100%;
+    overflow-x: clip;
+}
+
+#header {
+    box-shadow: var(--kp-shadow-sm);
+    flex-wrap: wrap;
+    gap: var(--kp-space-2);
+}
+
+#user-tools {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+#branding #site-name a {
+    font-weight: var(--kp-font-weight-semibold);
+    letter-spacing: 0.01em;
+}
+
+#user-tools a {
+    min-height: var(--kp-touch-target-min);
+    display: inline-flex;
+    align-items: center;
+    padding: var(--kp-space-1) var(--kp-space-2);
+    border-radius: var(--kp-radius-sm);
+}
+
+#user-tools a:focus,
+#user-tools a:hover {
+    background: rgba(255, 255, 255, 0.12);
+    text-decoration: none;
+}
+
+.dashboard-nav-link a {
+    font-weight: var(--kp-font-weight-semibold);
+    color: var(--header-link-color);
+    padding: var(--kp-space-1) var(--kp-space-2);
+    border-radius: var(--kp-radius-sm);
+    text-decoration: none;
+}
+
+.dashboard-nav-link a:hover,
+.dashboard-nav-link a:focus {
+    background: rgba(255, 255, 255, 0.12);
+    text-decoration: none;
+}
+
+div.breadcrumbs {
+    border-bottom: 1px solid var(--kp-color-border-subtle);
+}
+
+/* —— Content area —— */
+.main > .content {
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: clip;
+    box-sizing: border-box;
+}
+
+#content {
+    max-width: min(100%, var(--kp-content-max-width));
+    box-sizing: border-box;
+}
+
+#content-main {
+    padding-top: var(--kp-space-2);
+    max-width: 100%;
+}
+
+/* —— Cards / modules (panels) —— */
+.module,
+fieldset.module {
+    border: 1px solid var(--kp-color-border-subtle);
+    border-radius: var(--kp-radius-md);
+    box-shadow: var(--kp-shadow-sm);
+    background: var(--kp-color-surface-raised);
+    margin-bottom: var(--kp-space-6);
+}
+
+.module h2,
+.module caption,
+.inline-group h2 {
+    background: var(--kp-color-surface-subtle);
+    color: var(--kp-color-text);
+    font-weight: var(--kp-font-weight-semibold);
+    font-size: var(--kp-font-size-sm);
+    border-bottom: 1px solid var(--kp-color-border-subtle);
+    padding: var(--kp-space-3) var(--kp-space-4);
+}
+
+.module table {
+    border-radius: 0 0 var(--kp-radius-md) var(--kp-radius-md);
+}
+
+/* —— Tables —— */
+#changelist table,
+.change-list table,
+.module table,
+.results table {
+    border-collapse: collapse;
+}
+
+#result_list thead th,
+.module thead th {
+    background: var(--kp-color-surface-subtle);
+    color: var(--kp-color-text-quiet);
+    font-weight: var(--kp-font-weight-semibold);
+    font-size: var(--kp-font-size-sm);
+    padding: var(--kp-space-3) var(--kp-space-3);
+    border-bottom: 1px solid var(--kp-color-border);
+}
+
+#result_list tbody td,
+.module tbody td {
+    padding: var(--kp-space-3);
+    font-size: var(--kp-font-size-sm);
+    vertical-align: middle;
+}
+
+#result_list tbody tr:nth-child(even) {
+    background: var(--kp-color-surface-subtle);
+}
+
+#result_list tbody tr:hover,
+.module tbody tr:hover {
+    background: var(--kp-color-primary-soft);
+}
+
+.row1,
+.row2 {
+    border-bottom: 1px solid var(--kp-color-border-subtle);
+}
+
+/* —— Forms —— */
+input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="image"]),
+select,
+textarea {
+    border: 1px solid var(--kp-color-border);
+    border-radius: var(--kp-radius-sm);
+    padding: var(--kp-space-2) var(--kp-space-3);
+    min-height: var(--kp-touch-target-min);
+    font-size: var(--kp-font-size-sm);
+    background: var(--kp-color-surface);
+    color: var(--kp-color-text);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--kp-color-primary);
+    outline: none;
+    box-shadow: var(--kp-focus-ring);
+}
+
+.form-row {
+    padding: var(--kp-space-3) var(--kp-space-4);
+}
+
+.aligned label {
+    font-weight: var(--kp-font-weight-medium);
+    color: var(--kp-color-text-quiet);
+}
+
+.help,
+.help-block,
+.helptext {
+    color: var(--kp-color-text-muted);
+    font-size: var(--kp-font-size-xs);
+    line-height: var(--kp-line-height-relaxed);
+}
+
+/* —— Buttons (uniform size across inputs and links) —— */
+.button,
+input[type="submit"],
+input[type="button"],
+button,
+a.button,
+.submit-row input,
+.submit-row a.button,
+.submit-row a.deletelink,
+.submit-row a.closelink {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--kp-radius-sm);
+    font-weight: var(--kp-font-weight-medium);
+    font-size: var(--kp-font-size-sm);
+    line-height: 1.2;
+    min-height: var(--kp-touch-target-min);
+    height: auto;
+    padding: var(--kp-space-2) var(--kp-space-4);
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.button:focus,
+input[type="submit"]:focus,
+button:focus {
+    outline: none;
+    box-shadow: var(--kp-focus-ring);
+}
+
+.button.default,
+input[type="submit"].default {
+    background: var(--kp-color-primary);
+}
+
+.button.default:hover,
+input[type="submit"].default:hover {
+    background: var(--kp-color-primary-hover);
+}
+
+.deletelink,
+.deletelink-box a {
+    color: var(--kp-color-error);
+}
+
+/* Delete / cancel pairs (Django base uses mismatched heights on <a>) */
+.delete-confirmation form > div,
+.delete-selected-confirmation form > div,
+.kp-admin-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--kp-space-3);
+    margin-top: var(--kp-space-5);
+}
+
+.delete-confirmation form input[type="submit"],
+.delete-selected-confirmation form input[type="submit"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--kp-touch-target-min);
+    height: auto;
+    line-height: 1.2;
+    padding: var(--kp-space-2) var(--kp-space-4);
+    background: var(--delete-button-bg);
+    color: var(--button-fg);
+    margin: 0;
+}
+
+.delete-confirmation form input[type="submit"]:hover,
+.delete-confirmation form input[type="submit"]:focus,
+.delete-selected-confirmation form input[type="submit"]:hover,
+.delete-selected-confirmation form input[type="submit"]:focus {
+    background: var(--delete-button-hover-bg);
+}
+
+.delete-confirmation form .cancel-link,
+.delete-selected-confirmation form .cancel-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    min-height: var(--kp-touch-target-min);
+    line-height: 1.2;
+    padding: var(--kp-space-2) var(--kp-space-4);
+    background: var(--close-button-bg);
+    color: var(--button-fg);
+    margin: 0;
+}
+
+.delete-confirmation form .cancel-link:hover,
+.delete-confirmation form .cancel-link:focus,
+.delete-selected-confirmation form .cancel-link:hover,
+.delete-selected-confirmation form .cancel-link:focus {
+    background: var(--close-button-hover-bg);
+    color: var(--button-fg);
+}
+
+/* —— Messages / alerts —— */
+ul.messagelist li {
+    border-radius: var(--kp-radius-md);
+    border: 1px solid transparent;
+    padding: var(--kp-space-3) var(--kp-space-4);
+    margin-bottom: var(--kp-space-2);
+    font-size: var(--kp-font-size-sm);
+    line-height: var(--kp-line-height-normal);
+    box-shadow: var(--kp-shadow-sm);
+}
+
+ul.messagelist li.success {
+    background: var(--kp-color-success-bg);
+    border-color: var(--kp-color-success-border);
+    color: var(--kp-color-primary-active);
+}
+
+ul.messagelist li.warning {
+    background: var(--kp-color-warning-bg);
+    border-color: var(--kp-color-warning-border);
+    color: var(--kp-color-warning);
+}
+
+ul.messagelist li.error {
+    background: var(--kp-color-error-bg);
+    border-color: var(--kp-color-error-border);
+    color: var(--kp-color-error);
+}
+
+/* —— Object tools —— */
+ul.object-tools a {
+    border-radius: var(--kp-radius-sm);
+    padding: var(--kp-space-2) var(--kp-space-3);
+    font-weight: var(--kp-font-weight-medium);
+}
+
+/* —— Reusable utility components (Phase 1) —— */
+.kp-card {
+    background: var(--kp-color-surface);
+    border: 1px solid var(--kp-color-border-subtle);
+    border-radius: var(--kp-radius-md);
+    box-shadow: var(--kp-shadow-sm);
+    padding: var(--kp-space-4);
+}
+
+.kp-card__title {
+    margin: 0 0 var(--kp-space-3);
+    font-size: var(--kp-font-size-md);
+    font-weight: var(--kp-font-weight-semibold);
+    color: var(--kp-color-text);
+}
+
+.kp-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--kp-space-2);
+    min-height: var(--kp-touch-target-min);
+    padding: var(--kp-space-2) var(--kp-space-4);
+    border-radius: var(--kp-radius-sm);
+    border: 1px solid transparent;
+    font-size: var(--kp-font-size-sm);
+    font-weight: var(--kp-font-weight-medium);
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.kp-btn--primary {
+    background: var(--kp-color-primary);
+    color: var(--kp-color-on-primary);
+}
+
+.kp-btn--primary:hover,
+.kp-btn--primary:focus {
+    background: var(--kp-color-primary-hover);
+    color: var(--kp-color-on-primary);
+    box-shadow: var(--kp-focus-ring);
+}
+
+.kp-btn--secondary {
+    background: var(--kp-color-surface);
+    color: var(--kp-color-text);
+    border-color: var(--kp-color-border);
+}
+
+.kp-btn--secondary:hover,
+.kp-btn--secondary:focus {
+    background: var(--kp-color-surface-subtle);
+    border-color: var(--kp-color-primary-muted);
+    box-shadow: var(--kp-focus-ring);
+}
+
+.kp-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--kp-space-1) var(--kp-space-2);
+    border-radius: var(--kp-radius-full);
+    font-size: var(--kp-font-size-xs);
+    font-weight: var(--kp-font-weight-semibold);
+    line-height: 1;
+    border: 1px solid transparent;
+}
+
+.kp-badge--success {
+    background: var(--kp-color-success-bg);
+    color: var(--kp-color-primary-active);
+    border-color: var(--kp-color-success-border);
+}
+
+.kp-badge--warning {
+    background: var(--kp-color-warning-bg);
+    color: var(--kp-color-warning);
+    border-color: var(--kp-color-warning-border);
+}
+
+.kp-badge--error {
+    background: var(--kp-color-error-bg);
+    color: var(--kp-color-error);
+    border-color: var(--kp-color-error-border);
+}
+
+.kp-badge--neutral {
+    background: var(--kp-color-surface-subtle);
+    color: var(--kp-color-text-quiet);
+    border-color: var(--kp-color-border-subtle);
+}
+
+.kp-badge--info {
+    background: var(--kp-color-info-bg);
+    color: var(--kp-color-info);
+    border-color: var(--kp-color-info-border);
+}
+
+/* —— Focus visible (keyboard) —— */
+a:focus-visible,
+.button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.kp-btn:focus-visible {
+    outline: 2px solid var(--kp-color-primary);
+    outline-offset: var(--kp-focus-ring-offset);
+}

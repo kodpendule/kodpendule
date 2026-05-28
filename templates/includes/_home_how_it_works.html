@@ -1,0 +1,38 @@
+{% load i18n %}
+<section class="shop-section shop-home-steps" aria-labelledby="home-steps-title">
+    <div class="container shop-container">
+        <header class="shop-section__header shop-section__header--center shop-reveal" data-reveal>
+            <p class="shop-section__eyebrow">{% trans "Simple process" %}</p>
+            <h2 class="shop-section__title" id="home-steps-title">{% trans "How shopping works" %}</h2>
+            <p class="shop-section__subtitle">{% trans "From browsing to doorstep — four clear steps." %}</p>
+        </header>
+
+        <ol class="shop-home-steps__list shop-reveal-stagger" data-reveal-stagger>
+            <li class="shop-home-steps__item shop-reveal-child">
+                <span class="shop-home-steps__num" aria-hidden="true">1</span>
+                <h3 class="shop-home-steps__title">{% trans "Browse & choose" %}</h3>
+                <p class="shop-home-steps__text">{% trans "Explore categories or search the catalog for the right product." %}</p>
+            </li>
+            <li class="shop-home-steps__item shop-reveal-child">
+                <span class="shop-home-steps__num" aria-hidden="true">2</span>
+                <h3 class="shop-home-steps__title">{% trans "Add to cart" %}</h3>
+                <p class="shop-home-steps__text">{% trans "Review items and quantities before checkout — no account required for guests." %}</p>
+            </li>
+            <li class="shop-home-steps__item shop-reveal-child">
+                <span class="shop-home-steps__num" aria-hidden="true">3</span>
+                <h3 class="shop-home-steps__title">{% trans "Checkout" %}</h3>
+                <p class="shop-home-steps__text">{% trans "Enter delivery details and confirm your order in a few minutes." %}</p>
+            </li>
+            <li class="shop-home-steps__item shop-reveal-child">
+                <span class="shop-home-steps__num" aria-hidden="true">4</span>
+                <h3 class="shop-home-steps__title">{% trans "Pay on delivery" %}</h3>
+                <p class="shop-home-steps__text">{% trans "Receive your package and pay the courier in cash — track status anytime." %}</p>
+            </li>
+        </ol>
+
+        <div class="shop-home-steps__cta shop-reveal" data-reveal>
+            <a href="{% url 'products:list' %}" class="shop-btn shop-btn--primary shop-btn--lg">{% trans "Start shopping" %}</a>
+            <a href="{% url 'orders:track' %}" class="shop-btn shop-btn--ghost shop-btn--lg">{% trans "Track your order" %}</a>
+        </div>
+    </div>
+</section>

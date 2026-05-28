@@ -3,7 +3,7 @@ Tell me how to do that, but be precise where to add codes and when you tel me to
 
 python manage.py runserver
 
-.\venv\Scripts\activate
+.\.venv\Scripts\Activate.ps1
 
 deactivate
 

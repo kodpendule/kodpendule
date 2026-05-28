@@ -18,11 +18,17 @@ class ReportPeriodTests(TestCase):
         self.assertEqual(period.preset, "30d")
         self.assertEqual((period.end - period.start).days, 29)
 
-    def test_custom_month(self) -> None:
-        period = parse_report_period({"month": "3", "year": "2026"})
-        self.assertEqual(period.start.month, 3)
-        self.assertEqual(period.end.month, 3)
-        self.assertEqual(period.end.year, 2026)
+    def test_manual_date_range(self) -> None:
+        period = parse_report_period(
+            {
+                "filter_mode": "manual",
+                "from": "2026-03-01",
+                "to": "2026-03-31",
+            }
+        )
+        self.assertEqual(period.preset, "custom")
+        self.assertEqual(period.start.isoformat(), "2026-03-01")
+        self.assertEqual(period.end.isoformat(), "2026-03-31")
 
 
 class AnalyticsSelectorTests(TestCase):
@@ -96,3 +102,9 @@ class DashboardViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Analitika prodavnice")
         self.assertContains(response, "Pregled")
+        self.assertContains(response, 'id="nav-sidebar"')
+        self.assertContains(response, "kp-admin-nav")
+        self.assertContains(response, 'id="id_filter_mode"')
+        self.assertNotContains(response, "dashboard-quick-links")
+        content = response.content.decode()
+        self.assertEqual(content.count("<h1>"), 1)

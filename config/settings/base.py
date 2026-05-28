@@ -40,6 +40,7 @@ LOCAL_APPS = [
     "apps.orders",
     "apps.shipping",
     "apps.dashboard",
+    # Tombstone app: migrations only (newsletter feature removed).
     "apps.newsletter",
 ]
 
@@ -106,7 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = "sr"
 LANGUAGES = [
     ("sr", "Srpski"),
-    ("en", "English"),
+    ("en", "Engleski"),
 ]
 LOCALE_PATHS = [BASE_DIR / "locale"]
 TIME_ZONE = "Europe/Belgrade"
@@ -133,6 +134,9 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# Cloudflare R2 (enabled in production/local via configure_r2)
+USE_R2 = False
 
 # --- Session & auth redirects (views wired in Step 4) -------------------------
 
@@ -163,3 +167,4 @@ SHOP_PRODUCTS_PER_PAGE = 12
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = "Kod Pendule <noreply@kodpendule.rs>"
+CONTACT_EMAIL_TO = "info@kodpendule.rs"

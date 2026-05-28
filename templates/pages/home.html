@@ -1,24 +1,28 @@
-﻿{% extends "base.html" %}
-{% load i18n %}
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block pre_footer %}{% endblock %}
 
 {% block content %}
-{% include "includes/_hero_carousel.html" %}
+<div class="shop-home">
+    {% include "includes/_hero.html" %}
+    {% include "includes/_home_trust_strip.html" %}
+    {% include "includes/_home_categories.html" %}
+    {% include "includes/_home_recommended_products.html" %}
+    {% include "includes/_home_new_arrivals.html" %}
+    {% include "includes/_home_editorial.html" %}
+    {% include "includes/_home_promo_sale_products.html" with products=promo_sale_products %}
+    {% include "includes/_home_how_it_works.html" %}
+    {% include "includes/_home_trust_details.html" %}
+    {% include "includes/_home_cta_band.html" %}
+</div>
+{% endblock %}
 
-{% for block in homepage_blocks %}
-    {% include "includes/_homepage_product_section.html" with block=block %}
-{% endfor %}
-
-{% include "includes/_promo_section.html" with promos=promo_middle %}
-
-{% if not homepage_blocks %}
-<section class="py-5 bg-light">
-    <div class="container text-center">
-        <h1 class="h3">{% trans "Welcome to Kod Pendule" %}</h1>
-        <p class="text-muted">{% trans "Add products and homepage sections in the admin to populate this page." %}</p>
-        <a href="{% url 'products:list' %}" class="btn btn-primary">{% trans "Browse products" %}</a>
-    </div>
-</section>
-{% endif %}
-
-{% include "includes/_promo_section.html" with promos=promo_bottom %}
+{% block extra_js %}
+<script src="{% static 'js/home.js' %}" defer></script>
+<script src="{% static 'js/home-recommended.js' %}" defer></script>
 {% endblock %}

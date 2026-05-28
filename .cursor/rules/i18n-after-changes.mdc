@@ -1,0 +1,65 @@
+---
+description: After UI tasks — makemessages, fill new Serbian translations, compilemessages
+alwaysApply: true
+---
+
+# i18n — mandatory after translatable UI changes
+
+When a task adds or changes user-facing copy (`{% trans %}`, `gettext`, form labels, admin templates, etc.), **do not mark the task complete** until translations are extracted, filled, and compiled. Do this yourself — do not ask the user to run it unless they opt out.
+
+## When to run
+
+- New/changed `templates/**`
+- New/changed `gettext` / `_()` in Python
+- Storefront, admin, or checkout UX work
+
+**Skip only** if the change has zero new or modified translatable strings.
+
+## Required steps (use `.venv\Scripts\python.exe` from project root)
+
+### 1. Extract strings
+
+```powershell
+python scripts/dedupe_po.py
+python manage.py makemessages -l sr --ignore=.venv
+```
+
+Always run **`makemessages -l sr`** when new `{% trans %}` / `_()` strings were added.
+
+### 2. Solve new translations
+
+- Add every new `msgid` (and plurals) to `scripts/fill_sr_translations.py` → Serbian **Latin** `msgstr`
+- Run `python scripts/fill_sr_translations.py`
+- If output shows `MISSING:` or **Still untranslated > 0**, add those entries and re-run until **0 untranslated**
+
+### 3. Preserve admin Latin overrides
+
+```powershell
+python scripts/merge_admin_latin.py
+python scripts/merge_djangojs_latin.py
+python scripts/merge_contrib_latin.py
+python scripts/fill_sr_translations.py
+```
+
+### 4. Compile
+
+```powershell
+python scripts/dedupe_po.py
+python manage.py compilemessages -l sr
+```
+
+Always run **`compilemessages -l sr`** after updating `django.po`.
+
+### 5. Verify (when relevant)
+
+- Admin UI changes: `python manage.py test apps.core.tests.test_admin_locale`
+
+## Conventions
+
+- English `msgid` in code; Serbian only in `locale/sr/LC_MESSAGES/django.po`
+- On Windows: **dedupe before makemessages** (duplicates break msgmerge)
+- Details: `docs/ADMIN_LOCALE.md`
+
+## Tell the user
+
+One line in the task summary: makemessages run, new strings translated, compilemessages done.

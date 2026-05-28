@@ -3,6 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.utils.translation import gettext_lazy as _
 
 from apps.accounts.models import CustomerProfile, User
+from apps.accounts.services import archive_customer_from_registration
 
 
 class LoginForm(AuthenticationForm):
@@ -30,37 +31,36 @@ class LoginForm(AuthenticationForm):
 
 
 class RegistrationForm(UserCreationForm):
-    """Create account with optional profile fields."""
+    """Create account with profile fields."""
 
     email = forms.EmailField(
-        required=False,
+        label=_("Email"),
+        required=True,
         widget=forms.EmailInput(
             attrs={"class": "form-control", "autocomplete": "email"},
         ),
     )
     first_name = forms.CharField(
-        required=False,
+        label=_("First name"),
+        required=True,
         widget=forms.TextInput(
             attrs={"class": "form-control", "autocomplete": "given-name"},
         ),
     )
     last_name = forms.CharField(
-        required=False,
+        label=_("Last name"),
+        required=True,
         widget=forms.TextInput(
             attrs={"class": "form-control", "autocomplete": "family-name"},
         ),
     )
     phone = forms.CharField(
-        required=False,
+        label=_("Phone"),
+        required=True,
         max_length=32,
         widget=forms.TextInput(
             attrs={"class": "form-control", "autocomplete": "tel"},
         ),
-    )
-    newsletter_opt_in = forms.BooleanField(
-        required=False,
-        label=_("Subscribe to newsletter"),
-        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
     )
 
     class Meta:
@@ -91,6 +91,13 @@ class RegistrationForm(UserCreationForm):
             CustomerProfile.objects.create(
                 user=user,
                 phone=self.cleaned_data.get("phone", ""),
-                newsletter_opt_in=self.cleaned_data.get("newsletter_opt_in", False),
             )
+            archive_customer_from_registration(user)
         return user
+
+
+class CustomerContactImportForm(forms.Form):
+    csv_file = forms.FileField(
+        label=_("CSV file"),
+        help_text=_("UTF-8 CSV with a header row. Required column: email."),
+    )

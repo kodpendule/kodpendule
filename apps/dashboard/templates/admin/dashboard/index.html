@@ -1,6 +1,8 @@
 {% extends "admin/base_site.html" %}
 {% load i18n static humanize %}
 
+{% block bodyclass %}{{ block.super }} kp-admin-analytics{% endblock %}
+
 {% block breadcrumbs %}
 <div class="breadcrumbs">
     <a href="{% url 'admin:index' %}">{% trans "Home" %}</a>
@@ -8,58 +10,51 @@
 </div>
 {% endblock %}
 
+{% block content_title %}
+<h1>{% trans "Shop analytics" %}</h1>
+{% endblock %}
+
 {% block content %}
 <div class="dashboard-page" id="content-main">
-    <h1>{% trans "Shop analytics" %}</h1>
     <p class="help">
         {% blocktrans with label=period.label %}Reporting period: <strong>{{ label }}</strong>{% endblocktrans %}
     </p>
 
-    <div class="dashboard-quick-links">
-        <a href="{% url 'admin:orders_order_changelist' %}">{% trans "Orders" %}</a>
-        <a href="{% url 'admin:products_product_changelist' %}">{% trans "Products" %}</a>
-        <a href="{% url 'admin:categories_category_changelist' %}">{% trans "Categories" %}</a>
-        <a href="{% url 'admin:shipping_city_changelist' %}">{% trans "Cities" %}</a>
-    </div>
+    <form method="get" class="dashboard-filters" id="dashboard-period-form">
+        <div class="dashboard-filters__mode">
+            <label for="id_filter_mode">{% trans "Period type" %}</label>
+            <select name="filter_mode" id="id_filter_mode" class="vTextField">
+                <option value="quick" {% if filter_mode == "quick" %}selected{% endif %}>{% trans "Quick overview" %}</option>
+                <option value="manual" {% if filter_mode == "manual" %}selected{% endif %}>{% trans "Manual period" %}</option>
+            </select>
+        </div>
 
-    <form method="get" class="dashboard-filters">
-        <div class="row">
-            <div>
-                <label for="id_period">{% trans "Quick range" %}</label>
-                <select name="period" id="id_period" class="vTextField">
-                    {% for key, label in period_choices %}
-                    <option value="{{ key }}" {% if period.preset == key %}selected{% endif %}>{{ label }}</option>
-                    {% endfor %}
-                    <option value="custom" {% if period.preset == 'custom' %}selected{% endif %}>{% trans "Custom range (use dates below)" %}</option>
-                </select>
+        <div class="dashboard-filters__panel" data-filter-panel="quick" {% if filter_mode != "quick" %}hidden{% endif %}>
+            <label for="id_period">{% trans "Quick overview" %}</label>
+            <select name="period" id="id_period" class="vTextField">
+                {% for key, label in period_choices %}
+                <option value="{{ key }}" {% if period.preset == key %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="dashboard-filters__panel" data-filter-panel="manual" {% if filter_mode != "manual" %}hidden{% endif %}>
+            <div class="dashboard-filters__dates">
+                <div>
+                    <label for="id_from">{% trans "From date" %}</label>
+                    <input type="date" name="from" id="id_from" class="vTextField"
+                           value="{% if period.preset == 'custom' %}{{ period.start|date:'Y-m-d' }}{% endif %}">
+                </div>
+                <div>
+                    <label for="id_to">{% trans "To date" %}</label>
+                    <input type="date" name="to" id="id_to" class="vTextField"
+                           value="{% if period.preset == 'custom' %}{{ period.end|date:'Y-m-d' }}{% endif %}">
+                </div>
             </div>
-            <div>
-                <label for="id_month">{% trans "Month" %}</label>
-                <select name="month" id="id_month" class="vTextField">
-                    <option value="">{% trans "All months" %}</option>
-                    {% for m in month_options %}
-                    <option value="{{ m.value }}" {% if m.selected %}selected{% endif %}>{{ m.label }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div>
-                <label for="id_year">{% trans "Year" %}</label>
-                <input type="number" name="year" id="id_year" class="vTextField" min="2020" max="2100"
-                       value="{{ filter_year|default:'' }}" placeholder="{% trans 'e.g. 2026' %}">
-            </div>
-            <div>
-                <label for="id_from">{% trans "Custom from" %}</label>
-                <input type="date" name="from" id="id_from" class="vTextField"
-                       value="{% if period.preset == 'custom' %}{{ period.start|date:'Y-m-d' }}{% endif %}">
-            </div>
-            <div>
-                <label for="id_to">{% trans "Custom to" %}</label>
-                <input type="date" name="to" id="id_to" class="vTextField"
-                       value="{% if period.preset == 'custom' %}{{ period.end|date:'Y-m-d' }}{% endif %}">
-            </div>
-            <div>
-                <button type="submit" class="button default">{% trans "Apply filters" %}</button>
-            </div>
+        </div>
+
+        <div class="dashboard-filters__actions">
+            <button type="submit" class="button default">{% trans "Apply filter" %}</button>
         </div>
     </form>
 
@@ -97,7 +92,7 @@
     </section>
 
     {% if low_stock_products %}
-    <section class="dashboard-section">
+    <section class="dashboard-section" id="kp-low-stock-alerts">
         <h2>{% trans "Low stock alerts" %} ({{ low_stock_products|length }})</h2>
         <ul class="dashboard-alert-list">
             {% for product in low_stock_products %}
@@ -216,6 +211,7 @@
 {{ charts.categories|json_script:"chart-categories-data" }}
 {{ charts.order_status|json_script:"chart-status-data" }}
 
+<script src="{% static 'admin/js/dashboard-period-filter.js' %}" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous"></script>
 <script src="{% static 'admin/js/dashboard-charts.js' %}"></script>
 {% endblock %}

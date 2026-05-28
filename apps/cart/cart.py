@@ -87,10 +87,7 @@ class Cart:
         product_ids = [int(pk) for pk in self._data]
         products = {
             p.pk: p
-            for p in Product.objects.filter(
-                pk__in=product_ids,
-                is_active=True,
-            ).select_related("category")
+            for p in Product.objects.filter(pk__in=product_ids).select_related("category")
         }
         lines: list[CartLine] = []
         for pk_str, qty in self._data.items():

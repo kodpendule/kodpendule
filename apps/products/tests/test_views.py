@@ -5,7 +5,6 @@ from django.http import Http404
 from django.test import RequestFactory, TestCase
 
 from apps.categories.models import Category
-from apps.core.models import HomepageSection, HomepageSectionType
 from apps.core.tests.test_utils import apply_request_middleware
 from apps.products.models import Product
 from apps.products.selectors import get_product_by_slug, search_products
@@ -29,18 +28,11 @@ class ProductViewTests(TestCase):
             sku=f"SKU-{suffix}",
             price=Decimal("1000.00"),
             stock=10,
-            is_active=True,
-            is_featured=True,
         )
         self.product.set_current_language("sr")
         self.product.name = "Proizvod test"
         self.product.slug = self.product_slug
         self.product.save()
-
-        HomepageSection.objects.get_or_create(
-            section_type=HomepageSectionType.FEATURED,
-            defaults={"is_active": True, "max_products": 4},
-        )
 
     def _get(self, view_class, path: str, **kwargs):
         request = self.factory.get(path)
