@@ -77,28 +77,6 @@ if _csrf_origins:
 else:
     CSRF_TRUSTED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS if host]
 
-# --- Email --------------------------------------------------------------------
-
-DEFAULT_FROM_EMAIL = config(
-    "DEFAULT_FROM_EMAIL",
-    default="Kod Pendule <noreply@kodpendule.rs>",
-)
-CONTACT_EMAIL_TO = config("CONTACT_EMAIL_TO", default=DEFAULT_FROM_EMAIL)
-
-_sendgrid_api_key = config("SENDGRID_API_KEY", default="")
-if _sendgrid_api_key:
-    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-    EMAIL_HOST = "smtp.sendgrid.net"
-    EMAIL_PORT = 587
-    EMAIL_USE_TLS = True
-    EMAIL_HOST_USER = "apikey"
-    EMAIL_HOST_PASSWORD = _sendgrid_api_key
-else:
-    EMAIL_BACKEND = config(
-        "EMAIL_BACKEND",
-        default="django.core.mail.backends.console.EmailBackend",
-    )
-
 # --- Logging ------------------------------------------------------------------
 
 LOGGING = {

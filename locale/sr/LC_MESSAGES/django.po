@@ -4,20 +4,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kod Pendule\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-28 23:04+0200\n"
+"POT-Creation-Date: 2026-05-29 01:29+0200\n"
 "Language: sr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: .\apps\accounts\admin.py:19
+#: .\apps\accounts\admin.py:23
 msgid "Customer profile"
 msgstr "Profil kupca"
 
-#: .\apps\accounts\admin.py:20
+#: .\apps\accounts\admin.py:24
 msgid "Customer profiles"
 msgstr "Profili kupaca"
 
-#: .\apps\accounts\admin.py:108
+#: .\apps\accounts\admin.py:112
 #, python-format
 msgid ""
 "Import finished: %(created)s created, %(updated)s updated, %(skipped)s "
@@ -26,20 +26,19 @@ msgstr ""
 "Uvoz završen: %(created)s novo, %(updated)s ažurirano, %(skipped)s "
 "preskočeno."
 
-#: .\apps\accounts\admin.py:120
+#: .\apps\accounts\admin.py:124
 #: .\templates\admin\accounts\customercontact\import_csv.html:15
-#| msgid "customer contacts"
 msgid "Import customer contacts"
 msgstr "Uvoz kontakata kupaca"
 
-#: .\apps\accounts\admin.py:137 .\apps\categories\models.py:22
+#: .\apps\accounts\admin.py:131 .\apps\categories\models.py:22
 #: .\apps\products\models.py:49 .\apps\shipping\models.py:10
 #: .\apps\shipping\models.py:31
 #: .\templates\admin\products\product\recommended_products.html:32
 msgid "Name"
 msgstr "Naziv"
 
-#: .\apps\accounts\admin.py:141
+#: .\apps\accounts\admin.py:135
 msgid "Account"
 msgstr "Nalog"
 
@@ -58,7 +57,7 @@ msgstr "Lozinka"
 #: .\apps\accounts\forms.py:37 .\apps\accounts\models.py:31
 #: .\apps\checkout\forms.py:15 .\apps\core\models.py:42
 #: .\apps\dashboard\templates\admin\dashboard\index.html:188
-#: .\templates\includes\_footer.html:57 .\templates\pages\contact.html:26
+#: .\templates\includes\_footer.html:57 .\templates\pages\contact.html:24
 msgid "Email"
 msgstr "Email"
 
@@ -510,26 +509,6 @@ msgstr ""
 "Pon–Pet: 09:00–17:00\n"
 "Sub: 09:00–13:00"
 
-#: .\apps\core\forms.py:7
-msgid "Your name"
-msgstr "Vaše ime"
-
-#: .\apps\core\forms.py:14
-msgid "Your email"
-msgstr "Vaš email"
-
-#: .\apps\core\forms.py:20
-msgid "Subject"
-msgstr "Naslov"
-
-#: .\apps\core\forms.py:25
-msgid "Message"
-msgstr "Poruka"
-
-#: .\apps\core\forms.py:30
-msgid "How can we help you?"
-msgstr "Kako vam možemo pomoći?"
-
 #: .\apps\core\locale_dates.py:10
 msgid "January"
 msgstr "Januar"
@@ -597,11 +576,11 @@ msgid "site settings"
 msgstr "Podešavanja sajta"
 
 #: .\apps\core\models.py:45 .\templates\includes\_footer.html:61
-#: .\templates\pages\contact.html:32
+#: .\templates\pages\contact.html:28
 msgid "Address"
 msgstr "Adresa"
 
-#: .\apps\core\models.py:46 .\templates\pages\contact.html:38
+#: .\apps\core\models.py:46 .\templates\pages\contact.html:34
 msgid "Working hours"
 msgstr "Radno vreme"
 
@@ -609,41 +588,12 @@ msgstr "Radno vreme"
 msgid "footer settings"
 msgstr "Podešavanja podnožja"
 
-#: .\apps\core\services\contact_email.py:17
-#, python-format
-msgid "Contact form: %(subject)s"
-msgstr "Kontakt forma: %(subject)s"
-
-#: .\apps\core\services\contact_email.py:19
-#, python-format
-msgid ""
-"Name: %(name)s\n"
-"Email: %(email)s\n"
-"Subject: %(subject)s\n"
-"\n"
-"%(message)s"
-msgstr ""
-"Ime: %(name)s\n"
-"Email: %(email)s\n"
-"Naslov: %(subject)s\n"
-"\n"
-"%(message)s"
-
-#: .\apps\core\views.py:104 .\templates\checkout\checkout.html:36
+#: .\apps\core\views.py:99 .\templates\checkout\checkout.html:36
 #: .\templates\includes\_footer.html:40 .\templates\includes\_footer.html:50
 #: .\templates\includes\_header_nav_links.html:17
 #: .\templates\pages\contact.html:4 .\templates\pages\contact.html:10
 msgid "Contact"
 msgstr "Kontakt"
-
-#: .\apps\core\views.py:122
-msgid "We could not send your message. Please try again later or call us."
-msgstr "Poruka nije poslata. Pokušajte ponovo kasnije ili nas pozovite."
-
-#: .\apps\core\views.py:128
-msgid ""
-"Thank you! We received your message and will reply as soon as possible."
-msgstr "Hvala! Primili smo vašu poruku i odgovorićemo vam u najkraćem roku."
 
 #: .\apps\dashboard\apps.py:8
 msgid "Dashboard"
@@ -1321,7 +1271,6 @@ msgid "Import CSV"
 msgstr "Uvezi CSV"
 
 #: .\templates\admin\accounts\customercontact\import_csv.html:7
-#| msgid "customer contacts"
 msgid "Customer contacts"
 msgstr "Kontakti kupaca"
 
@@ -1778,7 +1727,7 @@ msgstr "Prodavnica"
 msgid "Customer service"
 msgstr "Korisnička podrška"
 
-#: .\templates\includes\_footer.html:66
+#: .\templates\includes\_footer.html:66 .\templates\pages\contact.html:39
 msgid "Nationwide delivery — shipping cost is shown at checkout."
 msgstr "Dostava širom Srbije — cena dostave se prikazuje pri plaćanju."
 
@@ -2254,20 +2203,18 @@ msgid "to see all your orders."
 msgstr "da vidite sve svoje narudžbine."
 
 #: .\templates\pages\contact.html:11
-msgid "Questions about products, delivery, or your order? Write to us."
-msgstr "Pitanja o proizvodima, dostavi ili narudžbini? Pišite nam."
+#| msgid ""
+#| "Questions about products, delivery, or your order? Write to us."
+msgid ""
+"Questions about products, delivery, or your order? Reach us using the "
+"details below."
+msgstr ""
+"Pitanja o proizvodima, dostavi ili porudžbini? Javite nam se putem podataka "
+"ispod."
 
 #: .\templates\pages\contact.html:17
 msgid "Contact information"
 msgstr "Kontakt informacije"
-
-#: .\templates\pages\contact.html:47
-msgid "Send us a message"
-msgstr "Pošaljite nam poruku"
-
-#: .\templates\pages\contact.html:60
-msgid "Send message"
-msgstr "Pošaljite poruku"
 
 #: .\templates\products\detail.html:16
 msgid "Product gallery"

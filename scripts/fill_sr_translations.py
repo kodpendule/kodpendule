@@ -264,6 +264,9 @@ TRANSLATIONS: dict[str, str] = {
     "Have an account?": "Imate nalog?",
     "to see all your orders.": "da vidite sve svoje narudžbine.",
     "Contact information": "Kontakt informacije",
+    "Questions about products, delivery, or your order? Reach us using the details below.": (
+        "Pitanja o proizvodima, dostavi ili porudžbini? Javite nam se putem podataka ispod."
+    ),
     "Questions about products, delivery, or your order? Write to us.": "Pitanja o proizvodima, dostavi ili narudžbini? Pišite nam.",
     "Send us a message": "Pošaljite nam poruku",
     "Your name": "Vaše ime",

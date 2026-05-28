@@ -1,7 +1,4 @@
-from unittest.mock import patch
-
-from django.core import mail
-from django.test import TestCase, override_settings
+from django.test import TestCase
 from django.urls import reverse
 
 from apps.core.contact_details import resolve_contact_details
@@ -29,48 +26,12 @@ class ContactDetailsTests(TestCase):
         self.assertEqual(details.email, "prodavnica@example.com")
 
 
-@override_settings(CONTACT_EMAIL_TO="shop@example.com")
 class ContactViewTests(TestCase):
     def test_contact_page_shows_dummy_details(self) -> None:
         response = self.client.get(reverse("core:contact"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "+381 11 123 4567")
         self.assertContains(response, "info@kodpendule.rs")
-        self.assertNotContains(
-            response,
-            "Kontakt podaci će se pojaviti kada budu podešeni u administraciji.",
-        )
-
-    @patch("apps.core.views.send_contact_message")
-    def test_contact_form_submits(self, send_mock) -> None:
-        response = self.client.post(
-            reverse("core:contact"),
-            {
-                "name": "Milan",
-                "email": "milan@example.com",
-                "subject": "Pitanje",
-                "message": "Zdravo, imam pitanje o dostavi.",
-            },
-        )
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response["Location"], reverse("core:contact"))
-        send_mock.assert_called_once_with(
-            name="Milan",
-            email="milan@example.com",
-            subject="Pitanje",
-            message="Zdravo, imam pitanje o dostavi.",
-        )
-
-    def test_send_contact_message_uses_mail_backend(self) -> None:
-        from apps.core.services.contact_email import send_contact_message
-
-        mail.outbox.clear()
-        send_contact_message(
-            name="Ana",
-            email="ana@example.com",
-            subject="Test",
-            message="Poruka iz testa.",
-        )
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].to, ["shop@example.com"])
-        self.assertEqual(mail.outbox[0].reply_to, ["ana@example.com"])
+        self.assertNotContains(response, "Send us a message")
+        self.assertNotContains(response, 'name="subject"')
+        self.assertNotContains(response, 'name="message"')

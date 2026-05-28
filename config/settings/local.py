@@ -60,14 +60,6 @@ SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 
-# --- Email --------------------------------------------------------------------
-
-EMAIL_BACKEND = config(
-    "EMAIL_BACKEND",
-    default="django.core.mail.backends.console.EmailBackend",
-)
-CONTACT_EMAIL_TO = config("CONTACT_EMAIL_TO", default="info@kodpendule.rs")
-
 # --- Media (optional Cloudflare R2 via .env.local) ----------------------------
 
 import sys  # noqa: E402

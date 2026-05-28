@@ -163,8 +163,3 @@ SHOP_CURRENCY = "RSD"
 SHOP_CURRENCY_SYMBOL = "din"
 SHOP_PRODUCTS_PER_PAGE = 12
 
-# --- Email (overridden per environment) ---------------------------------------
-
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-DEFAULT_FROM_EMAIL = "Kod Pendule <noreply@kodpendule.rs>"
-CONTACT_EMAIL_TO = "info@kodpendule.rs"

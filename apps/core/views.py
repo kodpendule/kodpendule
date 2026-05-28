@@ -1,15 +1,12 @@
 from django.conf import settings
-from django.contrib import messages
 from django.db.models import F
-from django.urls import reverse_lazy
+from django.http import HttpRequest, HttpResponse
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import FormView, TemplateView
+from django.views.generic import TemplateView
 
 from apps.core.contact_details import resolve_contact_details
-from apps.core.forms import ContactForm
 from apps.core.mixins import ShopLanguageMixin
 from apps.core.models import FooterSettings, SiteSettings
-from apps.core.services import send_contact_message
 from apps.core.utils import activate_parler_language
 from apps.categories.models import Category
 from apps.categories.selectors import get_nav_categories
@@ -90,10 +87,8 @@ class HomeView(ShopLanguageMixin, TemplateView):
         return context
 
 
-class ContactView(ShopLanguageMixin, FormView):
+class ContactView(ShopLanguageMixin, TemplateView):
     template_name = "pages/contact.html"
-    form_class = ContactForm
-    success_url = reverse_lazy("core:contact")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -108,23 +103,25 @@ class ContactView(ShopLanguageMixin, FormView):
         )
         return context
 
-    def form_valid(self, form):
-        try:
-            send_contact_message(
-                name=form.cleaned_data["name"],
-                email=form.cleaned_data["email"],
-                subject=form.cleaned_data["subject"],
-                message=form.cleaned_data["message"],
-            )
-        except Exception:
-            messages.error(
-                self.request,
-                _("We could not send your message. Please try again later or call us."),
-            )
-            return self.form_invalid(form)
 
-        messages.success(
-            self.request,
-            _("Thank you! We received your message and will reply as soon as possible."),
-        )
-        return super().form_valid(form)
+def robots_txt(request: HttpRequest) -> HttpResponse:
+    """Crawler rules for the storefront; sitemap URL follows the current host."""
+    sitemap_url = request.build_absolute_uri("/sitemap.xml")
+    lines = [
+        "User-agent: *",
+        "Disallow: /admin/",
+        "Disallow: /korpa/",
+        "Disallow: /placanje/",
+        "Disallow: /prijava/",
+        "Disallow: /registracija/",
+        "Disallow: /odjava/",
+        "Disallow: /nalog/",
+        "Disallow: /narudzba/",
+        "Disallow: /jezik/",
+        "",
+        f"Sitemap: {sitemap_url}",
+    ]
+    if settings.DEBUG:
+        lines.insert(2, "Disallow: /")
+    body = "\n".join(lines) + "\n"
+    return HttpResponse(body, content_type="text/plain; charset=utf-8")
