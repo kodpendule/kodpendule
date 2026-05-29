@@ -288,6 +288,8 @@ textarea {
     background: var(--kp-color-surface);
     color: var(--kp-color-text);
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    box-sizing: border-box;
+    max-width: 100%;
 }
 
 input:focus,

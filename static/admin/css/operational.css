@@ -32,6 +32,7 @@
 .change-form .form-row {
     padding: var(--kp-space-4);
     border-bottom: 1px solid var(--kp-color-border-subtle);
+    overflow: visible;
 }
 
 .change-form .form-row:last-child {
@@ -471,10 +472,64 @@
 
 /* —— Responsive —— */
 @media (max-width: 1024px) {
-    .change-form input:not([type="checkbox"]):not([type="radio"]),
+    .change-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
     .change-form select,
-    .change-form textarea {
+    .change-form textarea,
+    .change-form .vTextField,
+    .change-form .vUUIDField,
+    .change-form .vLargeTextField,
+    .change-form .vXMLLargeTextField,
+    .change-form .vURLField {
+        width: 100%;
         max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    .change-form .form-row > div,
+    .aligned .form-row > div {
+        width: 100% !important;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    .change-form .help,
+    .change-form .helptext {
+        max-width: 100%;
+    }
+
+    form .aligned p.help,
+    form .aligned div.help,
+    form .aligned input + p.help,
+    form .aligned textarea + p.help,
+    form .aligned select + p.help,
+    form .aligned input + div.help,
+    form .aligned textarea + div.help,
+    form .aligned select + div.help {
+        margin-left: 0;
+        padding-left: 0;
+        max-width: 100%;
+    }
+
+    .change-form .related-widget-wrapper select,
+    .change-form .related-widget-wrapper input.vTextField {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    body.popup .form-row > div,
+    body.popup input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+    body.popup select,
+    body.popup textarea,
+    body.popup .vTextField,
+    body.popup .vLargeTextField,
+    body.popup .vXMLLargeTextField {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
     }
 
     #changelist #result_list thead th {
@@ -489,6 +544,18 @@
 @media (max-width: 767px) {
     .change-form .form-row {
         padding: var(--kp-space-3);
+        overflow: visible;
+    }
+
+    .change-form fieldset.module.aligned {
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    #content-main.change-form,
+    .change-form #content-main {
+        max-width: 100%;
+        overflow-x: clip;
     }
 
     .change-list #changelist {
