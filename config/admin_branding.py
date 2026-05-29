@@ -3,6 +3,9 @@
 from django.contrib import admin
 
 from apps.core.admin_navigation import get_admin_nav_sections
+from apps.core.admin_site import patch_admin_site_urls
+
+patch_admin_site_urls()
 
 admin.site.site_header = "Kod Pendule — administracija"
 admin.site.site_title = "Kod Pendule admin"
@@ -14,10 +17,18 @@ _original_each_context = admin.site.each_context
 def _each_context_with_nav(request):
     context = _original_each_context(request)
     if request.path.startswith("/admin"):
-        context["kp_admin_nav_sections"] = get_admin_nav_sections(
-            context.get("available_apps", []),
-            request,
-        )
+        try:
+            context["kp_admin_nav_sections"] = get_admin_nav_sections(
+                context.get("available_apps", []),
+                request,
+            )
+        except Exception:
+            import logging
+
+            logging.getLogger(__name__).exception(
+                "Failed to build admin navigation sections",
+            )
+            context["kp_admin_nav_sections"] = []
     return context
 
 

@@ -8,6 +8,17 @@ from apps.core.utils import get_shop_language
 
 
 def shop_globals(request):
+    if request.path.startswith("/admin"):
+        return {
+            "site_settings": None,
+            "footer_settings": None,
+            "footer_contact": resolve_contact_details(None),
+            "nav_categories": [],
+            "shop_currency_symbol": settings.SHOP_CURRENCY_SYMBOL,
+            "shop_language": "sr",
+            "cart_item_count": 0,
+        }
+
     language = get_shop_language(request)
     site = SiteSettings.objects.language(language).filter(pk=1).first()
     footer = FooterSettings.objects.language(language).filter(pk=1).first()

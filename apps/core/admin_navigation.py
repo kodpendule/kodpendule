@@ -61,12 +61,22 @@ def _model_lookup(available_apps: list[dict[str, Any]]) -> dict[str, dict[str, A
 
 def _is_promo_sales_page(request: HttpRequest) -> bool:
     promo_path = reverse("admin:products_product_promo_sales")
-    return request.path == promo_path or request.path.startswith(promo_path.rstrip("/") + "/")
+    legacy = "/admin/products/product/promo-sales/"
+    return (
+        request.path == promo_path
+        or request.path.startswith(promo_path.rstrip("/") + "/")
+        or request.path.startswith(legacy)
+    )
 
 
 def _is_recommended_products_page(request: HttpRequest) -> bool:
     path = reverse("admin:products_product_recommended")
-    return request.path == path or request.path.startswith(path.rstrip("/") + "/")
+    legacy = "/admin/products/product/recommended/"
+    return (
+        request.path == path
+        or request.path.startswith(path.rstrip("/") + "/")
+        or request.path.startswith(legacy)
+    )
 
 
 def _is_active(url: str, request: HttpRequest) -> bool:

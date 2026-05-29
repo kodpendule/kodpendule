@@ -16,10 +16,10 @@ class AdminNavigationTests(TestCase):
 
         analytics = next(s for s in sections if s.id == "analytics")
         self.assertGreaterEqual(len(analytics.items), 1)
-        self.assertTrue(any("dashboard" in item.url for item in analytics.items))
+        self.assertTrue(any("analitika" in item.url for item in analytics.items))
 
     def test_products_section_includes_promo_sales(self):
-        request = RequestFactory().get("/admin/products/product/")
+        request = RequestFactory().get("/admin/proizvodi/")
         request.user = self._superuser()
         sections = get_admin_nav_sections(site.get_app_list(request), request)
         products = next(s for s in sections if s.id == "products")
@@ -29,7 +29,7 @@ class AdminNavigationTests(TestCase):
         )
 
     def test_products_section_includes_recommended_products(self):
-        request = RequestFactory().get("/admin/products/product/")
+        request = RequestFactory().get("/admin/proizvodi/")
         request.user = self._superuser()
         sections = get_admin_nav_sections(site.get_app_list(request), request)
         products = next(s for s in sections if s.id == "products")

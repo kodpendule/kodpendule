@@ -79,7 +79,7 @@ python scripts/compile_sr_messages.py
 
 ### Analytics dashboard (Step 8)
 
-Staff only: **[http://127.0.0.1:8000/admin/dashboard/](http://127.0.0.1:8000/admin/dashboard/)** (link also in admin header).
+Staff only: **[http://127.0.0.1:8000/admin/analitika/](http://127.0.0.1:8000/admin/analitika/)** (link also in admin header).
 
 Filters: last 7/30/90 days, current month/year, specific month+year, or custom date range.
 
