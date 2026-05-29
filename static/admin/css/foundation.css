@@ -94,9 +94,36 @@ h2 {
     gap: var(--kp-space-2);
 }
 
-#user-tools {
+#user-tools,
+.kp-admin-user-tools {
     flex-wrap: wrap;
     justify-content: flex-end;
+    align-items: center;
+    gap: var(--kp-space-3);
+}
+
+.kp-admin-user-tools__welcome {
+    margin: 0;
+}
+
+.kp-admin-user-tools__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--kp-space-2);
+}
+
+.kp-admin-user-tools__logout {
+    margin: 0;
+    display: inline;
+}
+
+.kp-admin-user-tools__link--button {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
 }
 
 #branding #site-name a {

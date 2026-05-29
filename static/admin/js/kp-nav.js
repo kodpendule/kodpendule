@@ -1,40 +1,157 @@
 /**
- * Kod Pendule admin navigation helpers (Phase 2)
+ * Kod Pendule admin navigation helpers
  */
 (function () {
     "use strict";
 
+    /* Django's nav_sidebar.js also binds the toggle; replace node to avoid double-toggle on mobile. */
+    (function resetToggleButton() {
+        var toggle = document.getElementById("toggle-nav-sidebar");
+        if (toggle && toggle.parentNode) {
+            toggle.parentNode.replaceChild(toggle.cloneNode(true), toggle);
+        }
+    })();
+
+    var MOBILE_MQ = "(max-width: 767px)";
+    var DESKTOP_MQ = "(min-width: 1024px)";
+
+    function getMain() {
+        return document.getElementById("main");
+    }
+
+    function getSidebar() {
+        return document.getElementById("nav-sidebar");
+    }
+
+    function getToggle() {
+        return document.getElementById("toggle-nav-sidebar");
+    }
+
+    function isMobile() {
+        return window.matchMedia(MOBILE_MQ).matches;
+    }
+
+    function setToggleLabel(open) {
+        var toggle = getToggle();
+        if (!toggle) {
+            return;
+        }
+        var label = toggle.querySelector(".kp-nav-toggle__label");
+        if (!label) {
+            return;
+        }
+        var openText = toggle.getAttribute("data-label-open") || "Open menu";
+        var closeText = toggle.getAttribute("data-label-close") || "Close menu";
+        label.textContent = open ? closeText : openText;
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+
+    function setSidebarOpen(open) {
+        var main = getMain();
+        var sidebar = getSidebar();
+        if (!main || !sidebar) {
+            return;
+        }
+        main.classList.toggle("shifted", open);
+        sidebar.setAttribute("aria-expanded", open ? "true" : "false");
+        document.body.classList.toggle("kp-admin-nav-open", open);
+        setToggleLabel(open);
+        try {
+            localStorage.setItem("django.admin.navSidebarIsOpen", open ? "true" : "false");
+        } catch (e) {
+            /* ignore */
+        }
+    }
+
     function openSidebarOnDesktop() {
-        var main = document.getElementById("main");
-        var navSidebar = document.getElementById("nav-sidebar");
-        if (!main) {
+        var main = getMain();
+        var sidebar = getSidebar();
+        if (!main || isMobile()) {
             return;
         }
         var forceOpen = document.body.classList.contains("kp-admin-analytics");
         try {
             if (
                 forceOpen ||
-                (window.matchMedia("(min-width: 1024px)").matches &&
+                (window.matchMedia(DESKTOP_MQ).matches &&
                     localStorage.getItem("django.admin.navSidebarIsOpen") !== "false")
             ) {
-                main.classList.add("shifted");
-                if (navSidebar) {
-                    navSidebar.setAttribute("aria-expanded", "true");
-                }
+                setSidebarOpen(true);
             }
         } catch (e) {
             if (forceOpen) {
-                main.classList.add("shifted");
-                if (navSidebar) {
-                    navSidebar.setAttribute("aria-expanded", "true");
-                }
+                setSidebarOpen(true);
             }
         }
     }
 
+    function initMobileSidebarState() {
+        if (!isMobile()) {
+            document.body.classList.remove("kp-admin-nav-open");
+            return;
+        }
+        var shouldOpen = false;
+        try {
+            shouldOpen = localStorage.getItem("django.admin.navSidebarIsOpen") === "true";
+        } catch (e) {
+            shouldOpen = false;
+        }
+        setSidebarOpen(shouldOpen);
+    }
+
+    function initMobileNav() {
+        var main = getMain();
+        var sidebar = getSidebar();
+        var toggle = getToggle();
+        if (!main || !sidebar) {
+            return;
+        }
+
+        initMobileSidebarState();
+
+        window.matchMedia(MOBILE_MQ).addEventListener("change", function () {
+            if (isMobile()) {
+                initMobileSidebarState();
+            } else {
+                document.body.classList.remove("kp-admin-nav-open");
+                openSidebarOnDesktop();
+            }
+        });
+
+        if (toggle) {
+            toggle.addEventListener("click", function () {
+                setSidebarOpen(!main.classList.contains("shifted"));
+            });
+        }
+
+        main.addEventListener("click", function (event) {
+            if (!isMobile() || !main.classList.contains("shifted")) {
+                return;
+            }
+            if (event.target.closest("#nav-sidebar, #toggle-nav-sidebar")) {
+                return;
+            }
+            setSidebarOpen(false);
+        });
+
+        sidebar.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", function () {
+                if (isMobile()) {
+                    setSidebarOpen(false);
+                }
+            });
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape" && isMobile() && main.classList.contains("shifted")) {
+                setSidebarOpen(false);
+            }
+        });
+    }
+
     function enhanceNavFilter() {
         var input = document.getElementById("nav-filter");
-        var sidebar = document.getElementById("nav-sidebar");
+        var sidebar = getSidebar();
         if (!input || !sidebar) {
             return;
         }
@@ -59,6 +176,7 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         openSidebarOnDesktop();
+        initMobileNav();
         enhanceNavFilter();
     });
 })();

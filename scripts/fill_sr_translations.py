@@ -148,6 +148,10 @@ TRANSLATIONS: dict[str, str] = {
     "View category": "Pogledaj kategoriju",
     "Sign out": "Odjava",
     "Open menu": "Otvori meni",
+    "Close menu": "Zatvori meni",
+    "Overview of sales, orders, and inventory. Open the menu button above to reach all sections.": (
+        "Pregled prodaje, narudžbina i zaliha. Otvorite dugme menija iznad da biste pristupili svim sekcijama."
+    ),
     "Main navigation": "Glavna navigacija",
     "Menu": "Meni",
     "Language": "Jezik",

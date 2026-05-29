@@ -17,6 +17,33 @@
 </div>
 {% endblock %}
 
+{% block usertools %}
+{% if has_permission %}
+<div id="user-tools" class="kp-admin-user-tools">
+    <p class="kp-admin-user-tools__welcome">
+        {% block welcome-msg %}
+        {% translate 'Welcome,' %}
+        <strong>{% firstof user.get_short_name user.get_username %}</strong>
+        {% endblock %}
+    </p>
+    <div class="kp-admin-user-tools__actions">
+        {% block userlinks %}
+        {% if site_url %}
+        <a href="{{ site_url }}" class="kp-admin-user-tools__link">{% translate 'View site' %}</a>
+        {% endif %}
+        {% if user.has_usable_password %}
+        <a href="{% url 'admin:password_change' %}" class="kp-admin-user-tools__link">{% translate 'Change password' %}</a>
+        {% endif %}
+        <form id="logout-form" class="kp-admin-user-tools__logout" method="post" action="{% url 'admin:logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="kp-admin-user-tools__link kp-admin-user-tools__link--button">{% translate 'Log out' %}</button>
+        </form>
+        {% endblock %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
 {% block extrastyle %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'admin/css/tokens.css' %}">

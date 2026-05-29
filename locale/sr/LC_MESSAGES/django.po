@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kod Pendule\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-29 01:29+0200\n"
+"POT-Creation-Date: 2026-05-29 08:05+0200\n"
 "Language: sr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
@@ -1296,6 +1296,22 @@ msgstr "Preuzmi trenutne podatke kao CSV"
 msgid "Cancel"
 msgstr "Otkaži"
 
+#: .\templates\admin\base_site.html:25
+msgid "Welcome,"
+msgstr "Dobrodošli,"
+
+#: .\templates\admin\base_site.html:32
+msgid "View site"
+msgstr "Pogledaj sajt"
+
+#: .\templates\admin\base_site.html:35
+msgid "Change password"
+msgstr "Promeni lozinku"
+
+#: .\templates\admin\base_site.html:39
+msgid "Log out"
+msgstr "Odjava"
+
 #: .\templates\admin\change_list_results.html:16
 msgid "Remove from sorting"
 msgstr "Ukloni iz sortiranja"
@@ -1327,11 +1343,15 @@ msgid "Store management"
 msgstr "Upravljanje prodavnicom"
 
 #: .\templates\admin\index.html:18
+#| msgid ""
+#| "Overview of sales, orders, and inventory. Use the menu on the left for all "
+#| "sections."
 msgid ""
-"Overview of sales, orders, and inventory. Use the menu on the left for all "
-"sections."
+"Overview of sales, orders, and inventory. Open the menu button above to "
+"reach all sections."
 msgstr ""
-"Pregled prodaje, narudžbina i zaliha. Za sve sekcije koristite meni levo."
+"Pregled prodaje, narudžbina i zaliha. Otvorite dugme menija iznad da biste "
+"pristupili svim sekcijama."
 
 #: .\templates\admin\index.html:33
 msgid "Orders (last 7 days)"
@@ -1385,27 +1405,37 @@ msgstr "Obrisano:"
 msgid "Unknown content"
 msgstr "Nepoznat sadržaj"
 
-#: .\templates\admin\nav_sidebar.html:2
+#: .\templates\admin\nav_sidebar.html:3
 msgid "Toggle navigation"
 msgstr "Prikaži/sakrij meni"
 
-#: .\templates\admin\nav_sidebar.html:3
+#: .\templates\admin\nav_sidebar.html:6 .\templates\admin\nav_sidebar.html:9
+#: .\templates\includes\_header.html:63
+msgid "Open menu"
+msgstr "Otvori meni"
+
+#: .\templates\admin\nav_sidebar.html:7
+#| msgid "Close"
+msgid "Close menu"
+msgstr "Zatvori meni"
+
+#: .\templates\admin\nav_sidebar.html:11
 msgid "Sidebar"
 msgstr "Bočni meni"
 
-#: .\templates\admin\nav_sidebar.html:6
+#: .\templates\admin\nav_sidebar.html:14
 msgid "Admin home"
 msgstr "Početna administracije"
 
-#: .\templates\admin\nav_sidebar.html:7
+#: .\templates\admin\nav_sidebar.html:15
 msgid "Sales and inventory overview"
 msgstr "Pregled prodaje i zaliha"
 
-#: .\templates\admin\nav_sidebar.html:11
+#: .\templates\admin\nav_sidebar.html:19
 msgid "Filter menu…"
 msgstr "Pretraga menija…"
 
-#: .\templates\admin\nav_sidebar.html:12
+#: .\templates\admin\nav_sidebar.html:20
 msgid "Filter navigation items"
 msgstr "Filtriraj stavke menija"
 
@@ -1747,10 +1777,6 @@ msgstr "Pretraži proizvode…"
 #: .\templates\includes\_header.html:53 .\templates\includes\_header.html:116
 msgid "Sign out"
 msgstr "Odjava"
-
-#: .\templates\includes\_header.html:63
-msgid "Open menu"
-msgstr "Otvori meni"
 
 #: .\templates\includes\_header.html:70 .\templates\includes\_header.html:97
 msgid "Main navigation"
@@ -2203,8 +2229,6 @@ msgid "to see all your orders."
 msgstr "da vidite sve svoje narudžbine."
 
 #: .\templates\pages\contact.html:11
-#| msgid ""
-#| "Questions about products, delivery, or your order? Write to us."
 msgid ""
 "Questions about products, delivery, or your order? Reach us using the "
 "details below."
@@ -2564,9 +2588,6 @@ msgstr ""
 msgid "Enter a username and password."
 msgstr "Unesite korisničko ime i lozinku."
 
-msgid "Change password"
-msgstr "Promeni lozinku"
-
 msgid "Set password"
 msgstr "Postavi lozinku"
 
@@ -2595,17 +2616,8 @@ msgstr "Omogući autentifikaciju zasnovanu na lozinci"
 msgid "Skip to main content"
 msgstr "Preskoči na glavni sadržaj"
 
-msgid "Welcome,"
-msgstr "Dobrodošli,"
-
-msgid "View site"
-msgstr "Pogledaj sajt"
-
 msgid "Documentation"
 msgstr "Dokumentacija"
-
-msgid "Log out"
-msgstr "Odjava"
 
 msgid "Add %(name)s"
 msgstr "Dodaj %(name)s"

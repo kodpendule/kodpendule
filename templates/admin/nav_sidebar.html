@@ -1,5 +1,13 @@
 {% load i18n %}
-<button class="sticky toggle-nav-sidebar" id="toggle-nav-sidebar" aria-label="{% translate 'Toggle navigation' %}"></button>
+<button type="button" class="sticky toggle-nav-sidebar" id="toggle-nav-sidebar"
+        aria-label="{% translate 'Toggle navigation' %}"
+        aria-controls="nav-sidebar"
+        aria-expanded="false"
+        data-label-open="{% trans 'Open menu' %}"
+        data-label-close="{% trans 'Close menu' %}">
+    <span class="kp-nav-toggle__icon" aria-hidden="true"></span>
+    <span class="kp-nav-toggle__label">{% trans "Open menu" %}</span>
+</button>
 <nav class="sticky kp-admin-sidebar" id="nav-sidebar" aria-label="{% translate 'Sidebar' %}">
     <div class="kp-admin-sidebar__brand">
         <a href="{% url 'admin:index' %}" class="kp-admin-sidebar__home">
