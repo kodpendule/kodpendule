@@ -336,8 +336,45 @@
     }
 }
 
-/* Shop analytics — keep left nav visible (same as other admin pages) */
+/* —— Desktop: restore Django sidebar strip (mobile overrides must not leak) —— */
 @media (min-width: 768px) {
+    #container > .main {
+        display: flex;
+    }
+
+    #toggle-nav-sidebar {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 23px;
+        width: 23px;
+        min-height: 0;
+        margin: 0;
+        padding: 0;
+        border: none;
+        border-right: 1px solid var(--hairline-color);
+        border-radius: 0;
+        background-color: var(--body-bg);
+        color: var(--link-fg);
+        box-shadow: none;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+    }
+
+    #toggle-nav-sidebar::before {
+        content: "\00BB";
+    }
+
+    #toggle-nav-sidebar .kp-nav-toggle__icon,
+    #toggle-nav-sidebar .kp-nav-toggle__label {
+        display: none !important;
+    }
+
+    .kp-nav-drawer__toolbar {
+        display: none !important;
+    }
+
     body.kp-admin-analytics #main > #nav-sidebar {
         visibility: visible;
         margin-left: 0;
@@ -384,12 +421,28 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 0.35rem;
     min-height: var(--kp-touch-target-min);
     padding: var(--kp-space-2) var(--kp-space-4);
     font-size: var(--kp-font-size-sm);
     font-weight: var(--kp-font-weight-semibold);
     letter-spacing: 0.02em;
     text-transform: none;
+}
+
+/* No Django tooltag arrows / plus glyphs on object-tool buttons. */
+.object-tools a.addlink,
+.object-tools a.viewsitelink,
+.object-tools a.historylink {
+    background-image: none !important;
+    background-repeat: no-repeat;
+    padding-right: var(--kp-space-4) !important;
+}
+
+.object-tools a.addlink::after,
+.object-tools a.viewsitelink::after,
+.object-tools a.historylink::after {
+    content: none !important;
 }
 
 #content-main > .object-tools + #changelist,
@@ -578,37 +631,9 @@
         box-shadow: 0 -0.375rem 0 currentColor, 0 0.375rem 0 currentColor;
     }
 
-    /* Stay visible above backdrop when drawer is open (dimmed area on the right). */
+    /* Drawer open: keep bar behind dim overlay; label stays "Otvori meni" (see kp-nav.js). */
     body.kp-admin-nav-open #toggle-nav-sidebar {
         z-index: 45;
-    }
-
-    .main.shifted .kp-nav-toggle__icon {
-        width: 1.125rem;
-        height: 1.125rem;
-        background: transparent;
-        box-shadow: none;
-        position: relative;
-    }
-
-    .main.shifted .kp-nav-toggle__icon::before,
-    .main.shifted .kp-nav-toggle__icon::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 50%;
-        width: 100%;
-        height: 2px;
-        background: currentColor;
-        border-radius: 1px;
-    }
-
-    .main.shifted .kp-nav-toggle__icon::before {
-        transform: translateY(-50%) rotate(45deg);
-    }
-
-    .main.shifted .kp-nav-toggle__icon::after {
-        transform: translateY(-50%) rotate(-45deg);
     }
 
     .kp-nav-drawer__toolbar {

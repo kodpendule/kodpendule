@@ -4,20 +4,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kod Pendule\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-29 08:05+0200\n"
+"POT-Creation-Date: 2026-05-29 13:39+0200\n"
 "Language: sr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: .\apps\accounts\admin.py:23
+#: .\apps\accounts\admin.py:24
 msgid "Customer profile"
 msgstr "Profil kupca"
 
-#: .\apps\accounts\admin.py:24
+#: .\apps\accounts\admin.py:25
 msgid "Customer profiles"
 msgstr "Profili kupaca"
 
-#: .\apps\accounts\admin.py:112
+#: .\apps\accounts\admin.py:114
 #, python-format
 msgid ""
 "Import finished: %(created)s created, %(updated)s updated, %(skipped)s "
@@ -26,19 +26,19 @@ msgstr ""
 "Uvoz završen: %(created)s novo, %(updated)s ažurirano, %(skipped)s "
 "preskočeno."
 
-#: .\apps\accounts\admin.py:124
+#: .\apps\accounts\admin.py:126
 #: .\templates\admin\accounts\customercontact\import_csv.html:15
 msgid "Import customer contacts"
 msgstr "Uvoz kontakata kupaca"
 
-#: .\apps\accounts\admin.py:131 .\apps\categories\models.py:22
-#: .\apps\products\models.py:49 .\apps\shipping\models.py:10
-#: .\apps\shipping\models.py:31
+#: .\apps\accounts\admin.py:133 .\apps\categories\models.py:22
+#: .\apps\products\models.py:49 .\apps\shipping\models.py:11
+#: .\templates\admin\products\product\promo_sales.html:46
 #: .\templates\admin\products\product\recommended_products.html:32
 msgid "Name"
 msgstr "Naziv"
 
-#: .\apps\accounts\admin.py:135
+#: .\apps\accounts\admin.py:137
 msgid "Account"
 msgstr "Nalog"
 
@@ -90,11 +90,11 @@ msgstr "UTF-8 CSV sa zaglavljem. Obavezna kolona: email."
 msgid "email address"
 msgstr "email adresa"
 
-#: .\apps\accounts\models.py:13
+#: .\apps\accounts\models.py:13 .\apps\core\admin_ui.py:45
 msgid "user"
 msgstr "Korisnik"
 
-#: .\apps\accounts\models.py:14
+#: .\apps\accounts\models.py:14 .\apps\core\admin_ui.py:45
 msgid "users"
 msgstr "Korisnici"
 
@@ -118,11 +118,11 @@ msgstr "Prvi kontakt"
 msgid "Last activity"
 msgstr "Poslednja aktivnost"
 
-#: .\apps\accounts\models.py:49
+#: .\apps\accounts\models.py:49 .\apps\core\admin_ui.py:43
 msgid "customer contact"
 msgstr "Kontakt kupca"
 
-#: .\apps\accounts\models.py:50
+#: .\apps\accounts\models.py:50 .\apps\core\admin_ui.py:43
 msgid "customer contacts"
 msgstr "Kontakti kupaca"
 
@@ -135,13 +135,13 @@ msgid "customer profiles"
 msgstr "Profili kupaca"
 
 #: .\apps\accounts\models.py:78 .\apps\core\admin_navigation.py:39
-#: .\apps\orders\admin.py:83 .\apps\shipping\apps.py:8
+#: .\apps\orders\admin.py:84 .\apps\shipping\apps.py:8
 #: .\templates\includes\_order_summary_card.html:26
 #: .\templates\orders\includes\_order_totals.html:5
 msgid "Shipping"
 msgstr "Dostava"
 
-#: .\apps\accounts\models.py:79 .\apps\orders\admin.py:100
+#: .\apps\accounts\models.py:79 .\apps\orders\admin.py:101
 msgid "Billing"
 msgstr "Naplata"
 
@@ -225,13 +225,13 @@ msgstr "Korpa je ažurirana."
 msgid "Item removed from cart."
 msgstr "Stavka je uklonjena iz korpe."
 
-#: .\apps\categories\admin.py:16
+#: .\apps\categories\admin.py:23
 msgid "Name & URL"
 msgstr "Naziv i URL"
 
-#: .\apps\categories\admin.py:32 .\apps\categories\models.py:23
-#: .\apps\products\admin.py:276 .\apps\products\models.py:50
-#: .\apps\shipping\models.py:11
+#: .\apps\categories\admin.py:40 .\apps\categories\models.py:23
+#: .\apps\products\admin.py:339 .\apps\products\models.py:50
+#: .\apps\shipping\models.py:12
 msgid "Slug"
 msgstr "Slug"
 
@@ -254,13 +254,13 @@ msgstr "Roditelj"
 msgid "Image"
 msgstr "Slika"
 
-#: .\apps\categories\models.py:16 .\apps\shipping\models.py:13
-#: .\apps\shipping\models.py:33
+#: .\apps\categories\models.py:16 .\apps\shipping\models.py:14
+#: .\apps\shipping\models.py:36
 msgid "Active"
 msgstr "Aktivno"
 
-#: .\apps\categories\models.py:17 .\apps\products\models.py:105
-#: .\apps\shipping\models.py:14
+#: .\apps\categories\models.py:17 .\apps\products\models.py:114
+#: .\apps\shipping\models.py:15
 msgid "Sort order"
 msgstr "Redosled"
 
@@ -275,7 +275,7 @@ msgid "Updated at"
 msgstr "Ažurirano"
 
 #: .\apps\categories\models.py:24 .\apps\products\models.py:52
-#: .\apps\shipping\models.py:32 .\templates\products\detail.html:140
+#: .\templates\products\detail.html:140
 msgid "Description"
 msgstr "Opis"
 
@@ -287,11 +287,11 @@ msgstr "Meta naslov"
 msgid "Meta description"
 msgstr "Meta opis"
 
-#: .\apps\categories\models.py:30
+#: .\apps\categories\models.py:30 .\apps\core\admin_ui.py:40
 msgid "category"
 msgstr "Kategorija"
 
-#: .\apps\categories\models.py:31
+#: .\apps\categories\models.py:31 .\apps\core\admin_ui.py:40
 msgid "categories"
 msgstr "Kategorije"
 
@@ -303,7 +303,7 @@ msgstr "Pregledajte kategorije proizvoda."
 msgid "Category not found."
 msgstr "Kategorija nije pronađena."
 
-#: .\apps\checkout\apps.py:8 .\apps\checkout\views.py:66
+#: .\apps\checkout\apps.py:8 .\apps\checkout\views.py:68
 #: .\templates\checkout\checkout.html:12
 #: .\templates\includes\_home_how_it_works.html:23
 msgid "Checkout"
@@ -377,12 +377,12 @@ msgstr "Vaša korpa je prazna."
 msgid "Delivery is not available yet. Please contact us."
 msgstr "Dostava još nije dostupna. Kontaktirajte nas."
 
-#: .\apps\checkout\views.py:101
+#: .\apps\checkout\views.py:103
 #, python-format
 msgid "Thank you! Your order %(number)s has been placed."
 msgstr "Hvala! Vaša narudžbina %(number)s je primljena."
 
-#: .\apps\checkout\views.py:121
+#: .\apps\checkout\views.py:123
 msgid "Order confirmed"
 msgstr "Narudžbina potvrđena"
 
@@ -410,8 +410,7 @@ msgid "Orders"
 msgstr "Narudžbine"
 
 #: .\apps\core\admin_navigation.py:37 .\apps\core\breadcrumbs.py:14
-#: .\apps\products\admin.py:27 .\apps\products\apps.py:8
-#: .\apps\products\views.py:58
+#: .\apps\products\apps.py:8 .\apps\products\views.py:58
 #: .\templates\admin\products\product\promo_sales.html:7
 #: .\templates\admin\products\product\recommended_products.html:7
 #: .\templates\categories\detail.html:31 .\templates\includes\_footer.html:30
@@ -428,54 +427,175 @@ msgstr "Kupci"
 msgid "Analytics"
 msgstr "Analitika"
 
-#: .\apps\core\admin_navigation.py:99 .\apps\products\admin.py:260
+#: .\apps\core\admin_navigation.py:109 .\apps\products\admin.py:313
 #: .\templates\admin\products\product\change_list.html:7
 #: .\templates\admin\products\product\promo_sales.html:8
 #: .\templates\admin\products\product\promo_sales.html:17
 msgid "Promo sales"
 msgstr "Promo akcije"
 
-#: .\apps\core\admin_navigation.py:102
+#: .\apps\core\admin_navigation.py:112
 msgid "Apply discounts to multiple products"
 msgstr "Primeni popuste na više proizvoda"
 
-#: .\apps\core\admin_navigation.py:109 .\apps\products\admin.py:209
+#: .\apps\core\admin_navigation.py:119 .\apps\products\admin.py:215
 #: .\templates\admin\products\product\recommended_products.html:8
 #: .\templates\admin\products\product\recommended_products.html:17
 #: .\templates\includes\_home_recommended_products.html:13
 msgid "Recommended products"
 msgstr "Preporučeni proizvodi"
 
-#: .\apps\core\admin_navigation.py:112
+#: .\apps\core\admin_navigation.py:122
 msgid "Choose products for the homepage carousel"
 msgstr "Izaberite proizvode za početnu stranicu"
 
 # --- Dashboard / analytics ---
-#: .\apps\core\admin_navigation.py:120
+#: .\apps\core\admin_navigation.py:130
 #: .\apps\dashboard\templates\admin\dashboard\index.html:9
 #: .\apps\dashboard\templates\admin\dashboard\index.html:14
 #: .\apps\dashboard\views.py:30
 msgid "Shop analytics"
 msgstr "Analitika prodavnice"
 
-#: .\apps\core\admin_navigation.py:124
+#: .\apps\core\admin_navigation.py:134
 msgid "Sales overview, charts, and reports"
 msgstr "Pregled prodaje, grafikoni i izveštaji"
 
-#: .\apps\core\admin_navigation.py:127
+#: .\apps\core\admin_navigation.py:137
 #: .\apps\dashboard\templates\admin\dashboard\index.html:96
 #: .\templates\admin\index.html:85
 msgid "Low stock alerts"
 msgstr "Upozorenja na nisku zalihu"
 
-#: .\apps\core\admin_navigation.py:131
+#: .\apps\core\admin_navigation.py:141
 msgid "Products that need restocking"
 msgstr "Proizvodi kojima je potrebna dopuna zaliha"
 
 # --- Choices ---
-#: .\apps\core\admin_navigation.py:187
+#: .\apps\core\admin_navigation.py:197
 msgid "Other"
 msgstr "Ostalo"
+
+#: .\apps\core\admin_translatable.py:21
+msgid "Serbian"
+msgstr "Srpski"
+
+#: .\apps\core\admin_translatable.py:23
+msgid "English"
+msgstr "Engleski"
+
+#: .\apps\core\admin_translatable.py:73
+#, python-format
+msgid "%(field)s (%(language)s)"
+msgstr "%(field)s (%(language)s)"
+
+#: .\apps\core\admin_ui.py:15
+#: .\templates\admin\orders\order\change_list.html:4
+#: .\templates\admin\orders\order\change_list.html:5
+msgid "Select order to change"
+msgstr "Izaberite narudžbinu za izmenu"
+
+#: .\apps\core\admin_ui.py:16
+msgid "Select product to change"
+msgstr "Izaberite proizvod za izmenu"
+
+#: .\apps\core\admin_ui.py:17
+msgid "Select category to change"
+msgstr "Izaberite kategoriju za izmenu"
+
+#: .\apps\core\admin_ui.py:18
+msgid "Select city to change"
+msgstr "Izaberite grad za izmenu"
+
+#: .\apps\core\admin_ui.py:19
+msgid "Select shipping method to change"
+msgstr "Izaberite način dostave za izmenu"
+
+#: .\apps\core\admin_ui.py:20
+msgid "Select customer contact to change"
+msgstr "Izaberite kontakt kupca za izmenu"
+
+#: .\apps\core\admin_ui.py:21
+msgid "Select group to change"
+msgstr "Izaberite grupu za izmenu"
+
+#: .\apps\core\admin_ui.py:22
+msgid "Select user to change"
+msgstr "Izaberite korisnika za izmenu"
+
+#: .\apps\core\admin_ui.py:26
+#: .\templates\admin\orders\order\change_form.html:16
+#: .\templates\admin\orders\order\change_list_object_tools.html:8
+msgid "Add order"
+msgstr "Dodaj narudžbinu"
+
+#: .\apps\core\admin_ui.py:27
+msgid "Add product"
+msgstr "Dodaj proizvod"
+
+#: .\apps\core\admin_ui.py:28
+msgid "Add category"
+msgstr "Dodaj kategoriju"
+
+#: .\apps\core\admin_ui.py:29
+msgid "Add city"
+msgstr "Dodaj grad"
+
+#: .\apps\core\admin_ui.py:30
+msgid "Add shipping method"
+msgstr "Dodaj način dostave"
+
+#: .\apps\core\admin_ui.py:31
+msgid "Add customer contact"
+msgstr "Dodaj kontakt kupca"
+
+#: .\apps\core\admin_ui.py:32
+msgid "Add group"
+msgstr "Dodaj grupu"
+
+#: .\apps\core\admin_ui.py:33
+msgid "Add user"
+msgstr "Dodaj korisnika"
+
+#: .\apps\core\admin_ui.py:38 .\apps\orders\models.py:105
+msgid "order"
+msgstr "Narudžbina"
+
+#: .\apps\core\admin_ui.py:38 .\apps\orders\models.py:106
+msgid "orders"
+msgstr "Narudžbine"
+
+#: .\apps\core\admin_ui.py:39 .\apps\products\models.py:58
+msgid "product"
+msgstr "Proizvod"
+
+#: .\apps\core\admin_ui.py:39 .\apps\products\models.py:59
+msgid "products"
+msgstr "Proizvodi"
+
+#: .\apps\core\admin_ui.py:41 .\apps\shipping\models.py:18
+msgid "city"
+msgstr "Grad"
+
+#: .\apps\core\admin_ui.py:41 .\apps\shipping\models.py:19
+msgid "cities"
+msgstr "Gradovi"
+
+#: .\apps\core\admin_ui.py:42 .\apps\shipping\models.py:40
+msgid "shipping method"
+msgstr "Način dostave"
+
+#: .\apps\core\admin_ui.py:42 .\apps\shipping\models.py:41
+msgid "shipping methods"
+msgstr "Načini dostave"
+
+#: .\apps\core\admin_ui.py:44
+msgid "group"
+msgstr "grupa"
+
+#: .\apps\core\admin_ui.py:44
+msgid "groups"
+msgstr "grupe"
 
 # --- App labels ---
 #: .\apps\core\apps.py:8
@@ -485,6 +605,7 @@ msgstr "Osnovno"
 #: .\apps\core\breadcrumbs.py:6
 #: .\apps\dashboard\templates\admin\dashboard\index.html:8
 #: .\templates\admin\accounts\customercontact\import_csv.html:6
+#: .\templates\admin\change_list.html:16
 #: .\templates\admin\orders\order\change_form.html:6
 #: .\templates\admin\products\product\promo_sales.html:6
 #: .\templates\admin\products\product\recommended_products.html:6
@@ -733,7 +854,7 @@ msgid "Period revenue"
 msgstr "Prihod u periodu"
 
 #: .\apps\dashboard\templates\admin\dashboard\index.html:101
-#: .\apps\products\admin.py:288 .\apps\products\models.py:31
+#: .\apps\products\admin.py:351 .\apps\products\models.py:31
 #: .\templates\admin\index.html:92
 #: .\templates\admin\products\product\recommended_products.html:34
 msgid "Stock"
@@ -779,6 +900,7 @@ msgstr "Proizvod"
 
 #: .\apps\dashboard\templates\admin\dashboard\index.html:141
 #: .\apps\orders\models.py:148 .\apps\products\models.py:19
+#: .\templates\admin\products\product\promo_sales.html:45
 #: .\templates\admin\products\product\recommended_products.html:31
 #: .\templates\cart\detail.html:41 .\templates\products\detail.html:72
 msgid "SKU"
@@ -820,72 +942,72 @@ msgstr "Nema kupaca u ovom periodu."
 msgid "Newsletter"
 msgstr "Bilten"
 
-#: .\apps\orders\admin.py:13
+#: .\apps\orders\admin.py:14
 msgid "Order item"
 msgstr "Stavka narudžbine"
 
-#: .\apps\orders\admin.py:14
+#: .\apps\orders\admin.py:15
 msgid "Order items"
 msgstr "Stavke narudžbine"
 
-#: .\apps\orders\admin.py:26 .\templates\cart\detail.html:69
+#: .\apps\orders\admin.py:27 .\templates\cart\detail.html:69
 #: .\templates\orders\detail.html:46 .\templates\orders\detail.html:58
 msgid "Line total"
 msgstr "Ukupno za stavku"
 
-#: .\apps\orders\admin.py:60 .\apps\orders\models.py:137
+#: .\apps\orders\admin.py:61 .\apps\orders\models.py:137
 #: .\templates\orders\detail.html:20 .\templates\orders\history.html:14
 #: .\templates\orders\history.html:24
 msgid "Order"
 msgstr "Narudžbina"
 
-#: .\apps\orders\admin.py:64
+#: .\apps\orders\admin.py:65
 msgid "Update order status when you confirm, ship, or complete the order."
 msgstr "Ažurirajte status kada potvrdite, pošaljete ili završite narudžbinu."
 
-#: .\apps\orders\admin.py:76 .\apps\orders\admin.py:166
+#: .\apps\orders\admin.py:77 .\apps\orders\admin.py:167
 #: .\templates\admin\index.html:61
 msgid "Customer"
 msgstr "Kupac"
 
-#: .\apps\orders\admin.py:111 .\templates\orders\detail.html:71
+#: .\apps\orders\admin.py:112 .\templates\orders\detail.html:71
 msgid "Totals"
 msgstr "Ukupno"
 
-#: .\apps\orders\admin.py:114
+#: .\apps\orders\admin.py:115
 msgid "Amounts charged to the customer."
 msgstr "Iznosi naplaćeni kupcu."
 
-#: .\apps\orders\admin.py:119 .\apps\products\admin.py:108
+#: .\apps\orders\admin.py:120 .\apps\products\admin.py:112
 msgid "Timestamps"
 msgstr "Vremenske oznake"
 
-#: .\apps\orders\admin.py:144
+#: .\apps\orders\admin.py:145
 msgid "Mark as confirmed"
 msgstr "Označi kao potvrđeno"
 
-#: .\apps\orders\admin.py:148
+#: .\apps\orders\admin.py:149
 msgid "Mark as shipped"
 msgstr "Označi kao poslato"
 
-#: .\apps\orders\admin.py:152
+#: .\apps\orders\admin.py:153
 msgid "Mark as delivered"
 msgstr "Označi kao isporučeno"
 
-#: .\apps\orders\admin.py:158 .\apps\orders\models.py:91
+#: .\apps\orders\admin.py:159 .\apps\orders\models.py:91
 #: .\templates\admin\index.html:62 .\templates\orders\detail.html:29
 #: .\templates\orders\history.html:16 .\templates\orders\history.html:26
 msgid "Status"
 msgstr "Status"
 
-#: .\apps\orders\admin.py:162 .\apps\orders\models.py:99
+#: .\apps\orders\admin.py:163 .\apps\orders\models.py:99
 #: .\templates\admin\index.html:63 .\templates\orders\history.html:17
 #: .\templates\orders\history.html:27
 #: .\templates\orders\includes\_order_totals.html:12
 msgid "Total"
 msgstr "Ukupno"
 
-#: .\apps\orders\admin.py:173
+#: .\apps\orders\admin.py:174
 msgid "guest"
 msgstr "gost"
 
@@ -965,7 +1087,8 @@ msgstr "Datum dostave"
 msgid "Flexible delivery"
 msgstr "Fleksibilna dostava"
 
-#: .\apps\orders\models.py:80
+#: .\apps\orders\models.py:80 .\apps\shipping\models.py:45
+#: .\templates\checkout\checkout.html:84 .\templates\orders\detail.html:89
 msgid "Shipping method"
 msgstr "Način dostave"
 
@@ -982,14 +1105,6 @@ msgstr "Način plaćanja"
 #: .\templates\orders\includes\_order_totals.html:3
 msgid "Subtotal"
 msgstr "Međuzbir"
-
-#: .\apps\orders\models.py:105
-msgid "order"
-msgstr "Narudžbina"
-
-#: .\apps\orders\models.py:106
-msgid "orders"
-msgstr "Narudžbine"
 
 #: .\apps\orders\models.py:147
 msgid "Product name"
@@ -1053,20 +1168,20 @@ msgstr "Slika galerije"
 msgid "Gallery images"
 msgstr "Slike galerije"
 
-#: .\apps\products\admin.py:32
+#: .\apps\products\admin.py:27
 msgid "Discount percent"
 msgstr "Procenat popusta"
 
-#: .\apps\products\admin.py:36
+#: .\apps\products\admin.py:32
 msgid "Example: 15 means 15% discount from regular price."
 msgstr "Primer: 15 znači 15% popusta na redovnu cenu."
 
 # --- Admin ---
-#: .\apps\products\admin.py:42
+#: .\apps\products\admin.py:38 .\apps\shipping\admin.py:23
 msgid "Name & description"
 msgstr "Naziv i opis"
 
-#: .\apps\products\admin.py:46
+#: .\apps\products\admin.py:42
 msgid ""
 "Fill in for the active language tab (Serbian / English). Name is shown on "
 "the shop; slug is used in the URL."
@@ -1074,12 +1189,12 @@ msgstr ""
 "Popunite za aktivni jezički tab (srpski / engleski). Naziv se prikazuje u "
 "prodavnici; slug se koristi u URL-u."
 
-#: .\apps\products\admin.py:58
+#: .\apps\products\admin.py:54
 msgid "Pricing & stock"
 msgstr "Cena i zaliha"
 
 # --- Product / order admin copy ---
-#: .\apps\products\admin.py:62
+#: .\apps\products\admin.py:58
 msgid ""
 "Set price and stock here. When stock is at or below the alert level, the "
 "product appears in analytics low-stock warnings."
@@ -1087,39 +1202,58 @@ msgstr ""
 "Ovde podesite cenu i zalihu. Kada je zaliha na ili ispod nivoa upozorenja, "
 "proizvod se pojavljuje u upozorenjima na nisku zalihu."
 
-#: .\apps\products\admin.py:76
+#: .\apps\products\admin.py:72
 msgid "SEO"
 msgstr "SEO"
 
-#: .\apps\products\admin.py:79
+#: .\apps\products\admin.py:75
 msgid "Optional — used by search engines."
 msgstr "Opciono — koriste pretraživači."
 
-#: .\apps\products\admin.py:128
+#: .\apps\products\admin.py:134
 msgid ""
 "Internal code (e.g. S1). Not the product title on the shop — use Name above."
 msgstr ""
 "Interna šifra (npr. S1). Nije naslov na prodavnici — koristite Naziv iznad."
 
-#: .\apps\products\admin.py:130
+#: .\apps\products\admin.py:136
 msgid "Units available to sell."
 msgstr "Količina dostupna za prodaju."
 
-#: .\apps\products\admin.py:132
+#: .\apps\products\admin.py:138
 msgid "Show a low-stock warning at or below this quantity."
 msgstr "Prikaži upozorenje kada je zaliha na ili ispod ove količine."
 
-#: .\apps\products\admin.py:200
+#: .\apps\products\admin.py:206
 #, python-format
 msgid "Recommended products updated (%(count)s selected)."
 msgstr "Preporučeni proizvodi su ažurirani (%(count)s izabrano)."
 
-#: .\apps\products\admin.py:244
+#: .\apps\products\admin.py:233
+#| msgid "No action selected."
+msgid "No products selected."
+msgstr "Nijedan proizvod nije izabran."
+
+#: .\apps\products\admin.py:252
+#, python-format
+#| msgid "Promo sale updated for %(count)s products."
+msgid "Promo removed from %(count)s products."
+msgstr "Promo uklonjen sa %(count)s proizvoda."
+
+#: .\apps\products\admin.py:258
+msgid "None of the selected products had an active promo price."
+msgstr "Nijedan izabrani proizvod nema aktivnu promo cenu."
+
+#: .\apps\products\admin.py:269
+msgid "Enter a discount percent to apply a promo sale."
+msgstr "Unesite procenat popusta da biste primenili promo akciju."
+
+#: .\apps\products\admin.py:292
 #, python-format
 msgid "Promo sale updated for %(count)s products."
 msgstr "Promo akcija je ažurirana za %(count)s proizvoda."
 
-#: .\apps\products\admin.py:251
+#: .\apps\products\admin.py:299
 #, python-format
 msgid ""
 "%(count)s products skipped because promo price was not lower than regular "
@@ -1127,7 +1261,7 @@ msgid ""
 msgstr ""
 "%(count)s proizvoda je preskočeno jer promo cena nije niža od redovne cene."
 
-#: .\apps\products\admin.py:280 .\apps\products\models.py:21
+#: .\apps\products\admin.py:343 .\apps\products\models.py:21
 #: .\templates\orders\detail.html:45 .\templates\orders\detail.html:57
 msgid "Price"
 msgstr "Cena"
@@ -1156,23 +1290,19 @@ msgstr "Redosled preporuke"
 msgid "Short description"
 msgstr "Kratak opis"
 
-#: .\apps\products\models.py:58
-msgid "product"
-msgstr "Proizvod"
+#: .\apps\products\models.py:105
+msgid "Alt text (Serbian)"
+msgstr "Alt tekst (srpski)"
 
-#: .\apps\products\models.py:59
-msgid "products"
-msgstr "Proizvodi"
+#: .\apps\products\models.py:110
+msgid "Alt text (English)"
+msgstr "Alt tekst (engleski)"
 
-#: .\apps\products\models.py:104
-msgid "Alt text"
-msgstr "Alt tekst"
-
-#: .\apps\products\models.py:108
+#: .\apps\products\models.py:117
 msgid "product image"
 msgstr "Slika proizvoda"
 
-#: .\apps\products\models.py:109
+#: .\apps\products\models.py:118
 msgid "product images"
 msgstr "Slike proizvoda"
 
@@ -1192,29 +1322,29 @@ msgstr "Pretraga"
 msgid "Browse our product catalog."
 msgstr "Pregledajte naš katalog proizvoda."
 
-#: .\apps\shipping\models.py:12
+#: .\apps\shipping\models.py:13
 msgid "Shipping price (RSD)"
 msgstr "Cena dostave (RSD)"
 
-#: .\apps\shipping\models.py:17
-msgid "city"
-msgstr "Grad"
+#: .\apps\shipping\models.py:32
+msgid "Name (Serbian)"
+msgstr "Naziv (srpski)"
 
-#: .\apps\shipping\models.py:18
-msgid "cities"
-msgstr "Gradovi"
+#: .\apps\shipping\models.py:33
+msgid "Name (English)"
+msgstr "Naziv (engleski)"
 
 #: .\apps\shipping\models.py:34
-msgid "Default"
-msgstr "Podrazumevano"
+msgid "Description (Serbian)"
+msgstr "Opis (srpski)"
+
+#: .\apps\shipping\models.py:35
+msgid "Description (English)"
+msgstr "Opis (engleski)"
 
 #: .\apps\shipping\models.py:37
-msgid "shipping method"
-msgstr "Način dostave"
-
-#: .\apps\shipping\models.py:38
-msgid "shipping methods"
-msgstr "Načini dostave"
+msgid "Default"
+msgstr "Podrazumevano"
 
 #: .\templates\accounts\login.html:4 .\templates\accounts\login.html:10
 msgid "Prijava"
@@ -1291,7 +1421,7 @@ msgid "Download current data as CSV"
 msgstr "Preuzmi trenutne podatke kao CSV"
 
 #: .\templates\admin\accounts\customercontact\import_csv.html:44
-#: .\templates\admin\products\product\promo_sales.html:34
+#: .\templates\admin\products\product\promo_sales.html:84
 #: .\templates\admin\products\product\recommended_products.html:64
 msgid "Cancel"
 msgstr "Otkaži"
@@ -1312,18 +1442,10 @@ msgstr "Promeni lozinku"
 msgid "Log out"
 msgstr "Odjava"
 
-#: .\templates\admin\change_list_results.html:16
-msgid "Remove from sorting"
-msgstr "Ukloni iz sortiranja"
-
-#: .\templates\admin\change_list_results.html:17
+#: .\templates\admin\change_list_object_tools.html:11
 #, python-format
-msgid "Sorting priority: %(priority_number)s"
-msgstr "Prioritet sortiranja: %(priority_number)s"
-
-#: .\templates\admin\change_list_results.html:18
-msgid "Toggle sorting"
-msgstr "Uključi/isključi sortiranje"
+msgid "Add %(name)s"
+msgstr "Dodaj %(name)s"
 
 #: .\templates\admin\includes\kp_nav_sections.html:19
 msgid "Add"
@@ -1343,9 +1465,6 @@ msgid "Store management"
 msgstr "Upravljanje prodavnicom"
 
 #: .\templates\admin\index.html:18
-#| msgid ""
-#| "Overview of sales, orders, and inventory. Use the menu on the left for all "
-#| "sections."
 msgid ""
 "Overview of sales, orders, and inventory. Open the menu button above to "
 "reach all sections."
@@ -1414,8 +1533,8 @@ msgstr "Prikaži/sakrij meni"
 msgid "Open menu"
 msgstr "Otvori meni"
 
-#: .\templates\admin\nav_sidebar.html:7
-#| msgid "Close"
+#: .\templates\admin\nav_sidebar.html:7 .\templates\admin\nav_sidebar.html:14
+#: .\templates\admin\nav_sidebar.html:16
 msgid "Close menu"
 msgstr "Zatvori meni"
 
@@ -1423,44 +1542,90 @@ msgstr "Zatvori meni"
 msgid "Sidebar"
 msgstr "Bočni meni"
 
-#: .\templates\admin\nav_sidebar.html:14
+#: .\templates\admin\nav_sidebar.html:21
 msgid "Admin home"
 msgstr "Početna administracije"
 
-#: .\templates\admin\nav_sidebar.html:15
+#: .\templates\admin\nav_sidebar.html:22
 msgid "Sales and inventory overview"
 msgstr "Pregled prodaje i zaliha"
 
-#: .\templates\admin\nav_sidebar.html:19
+#: .\templates\admin\nav_sidebar.html:26
 msgid "Filter menu…"
 msgstr "Pretraga menija…"
 
-#: .\templates\admin\nav_sidebar.html:20
+#: .\templates\admin\nav_sidebar.html:27
 msgid "Filter navigation items"
 msgstr "Filtriraj stavke menija"
-
-#: .\templates\admin\orders\order\change_form.html:16
-#: .\templates\admin\orders\order\change_list_object_tools.html:8
-msgid "Add order"
-msgstr "Dodaj narudžbinu"
-
-#: .\templates\admin\orders\order\change_list.html:4
-#: .\templates\admin\orders\order\change_list.html:5
-msgid "Select order to change"
-msgstr "Izaberite narudžbinu za izmenu"
 
 #: .\templates\admin\orders\order\change_list.html:4
 msgid "Django site admin"
 msgstr "Django administracija sajta"
 
-#: .\templates\admin\products\product\promo_sales.html:19
-msgid ""
-"Select products and apply a percentage discount from the regular price."
-msgstr "Izaberite proizvode i primenite procentualni popust od redovne cene."
+#: .\templates\admin\pagination.html:15
+msgid "Show all"
+msgstr "Prikaži sve"
 
-#: .\templates\admin\products\product\promo_sales.html:33
+#: .\templates\admin\pagination.html:16
+msgid "Save"
+msgstr "Sačuvaj"
+
+#: .\templates\admin\popup_response.html:4
+msgid "Popup closing…"
+msgstr "Popup se zatvara…"
+
+#: .\templates\admin\products\product\promo_sales.html:19
+#| msgid ""
+#| "Select products and apply a percentage discount from the regular price."
+msgid ""
+"Select products, then apply a percentage discount or remove the promo price."
+" Products with a promo price appear in the homepage promo section."
+msgstr ""
+"Izaberite proizvode, zatim primenite procenat popusta ili uklonite promo "
+"cenu. Proizvodi sa promo cenom se prikazuju u promo sekciji na početnoj."
+
+#: .\templates\admin\products\product\promo_sales.html:37
+#: .\templates\admin\products\product\recommended_products.html:24
+msgid "Select all"
+msgstr "Izaberi sve"
+
+#: .\templates\admin\products\product\promo_sales.html:38
+#: .\templates\admin\products\product\recommended_products.html:25
+msgid "Clear all"
+msgstr "Poništi izbor"
+
+#: .\templates\admin\products\product\promo_sales.html:39
+#| msgid "Selected period"
+msgid "Select on promo"
+msgstr "Izaberi na akciji"
+
+#: .\templates\admin\products\product\promo_sales.html:44
+#| msgid "Select %s"
+msgid "Select"
+msgstr "Izaberi"
+
+#: .\templates\admin\products\product\promo_sales.html:47
+msgid "Regular price"
+msgstr "Redovna cena"
+
+#: .\templates\admin\products\product\promo_sales.html:48
+#| msgid "Promo sale"
+msgid "Promo price"
+msgstr "Promo cena"
+
+#: .\templates\admin\products\product\promo_sales.html:78
+#| msgid ""
+#| "No products yet. Add products first, then mark them as recommended."
+msgid "No products yet. Add products first, then set promo prices."
+msgstr "Još nema proizvoda. Prvo dodajte proizvode, pa postavite promo cene."
+
+#: .\templates\admin\products\product\promo_sales.html:82
 msgid "Apply promo sale"
 msgstr "Primeni promo akciju"
+
+#: .\templates\admin\products\product\promo_sales.html:83
+msgid "Remove promo from selected"
+msgstr "Ukloni promo sa izabranih"
 
 #: .\templates\admin\products\product\recommended_products.html:19
 msgid ""
@@ -1469,14 +1634,6 @@ msgid ""
 msgstr ""
 "Označite proizvode za sekciju „Preporučeni proizvodi” na početnoj. Redosled "
 "prati listu (odozgo nadole)."
-
-#: .\templates\admin\products\product\recommended_products.html:24
-msgid "Select all"
-msgstr "Izaberi sve"
-
-#: .\templates\admin\products\product\recommended_products.html:25
-msgid "Clear all"
-msgstr "Poništi izbor"
 
 #: .\templates\admin\products\product\recommended_products.html:30
 msgid "Recommended"
@@ -1526,7 +1683,7 @@ msgid "Remove"
 msgstr "Ukloni"
 
 #: .\templates\cart\detail.html:78 .\templates\cart\detail.html:80
-#: .\templates\checkout\checkout.html:119
+#: .\templates\checkout\checkout.html:130
 #: .\templates\includes\_order_summary_card.html:5
 msgid "Order summary"
 msgstr "Pregled narudžbine"
@@ -1607,7 +1764,7 @@ msgstr "Gde želite da dostavimo narudžbinu?"
 msgid "Delivery cost for selected city"
 msgstr "Cena dostave za izabrani grad"
 
-#: .\templates\checkout\checkout.html:65 .\templates\orders\detail.html:101
+#: .\templates\checkout\checkout.html:65 .\templates\orders\detail.html:107
 msgid "Billing address"
 msgstr "Adresa za naplatu"
 
@@ -1624,15 +1781,15 @@ msgstr "Dostava"
 msgid "Tell us when and how you prefer delivery."
 msgstr "Recite nam kada i kako želite dostavu."
 
-#: .\templates\checkout\checkout.html:97 .\templates\products\detail.html:96
+#: .\templates\checkout\checkout.html:108 .\templates\products\detail.html:96
 msgid "Payment"
 msgstr "Plaćanje"
 
-#: .\templates\checkout\checkout.html:99
+#: .\templates\checkout\checkout.html:110
 msgid "Cash on delivery (COD)"
 msgstr "Plaćanje pouzećem (COD)"
 
-#: .\templates\checkout\checkout.html:101
+#: .\templates\checkout\checkout.html:112
 msgid ""
 "Pay the courier in cash when your order arrives. No online payment or card "
 "required."
@@ -1640,12 +1797,12 @@ msgstr ""
 "Platite kuriru gotovinom kada paket stigne. Nije potrebno online plaćanje ni"
 " kartica."
 
-#: .\templates\checkout\checkout.html:108
-#: .\templates\checkout\checkout.html:128
+#: .\templates\checkout\checkout.html:119
+#: .\templates\checkout\checkout.html:139
 msgid "Place order"
 msgstr "Poruči"
 
-#: .\templates\checkout\checkout.html:110
+#: .\templates\checkout\checkout.html:121
 msgid "By placing the order you confirm your details are correct."
 msgstr "Poručivanjem potvrđujete da su podaci tačni."
 
@@ -2168,16 +2325,16 @@ msgstr "Poručeno %(date)s"
 msgid "Items"
 msgstr "Stavke"
 
-#: .\templates\orders\detail.html:89
+#: .\templates\orders\detail.html:95
 #, python-format
 msgid "Preferred delivery: %(date)s"
 msgstr "Željena dostava: %(date)s"
 
-#: .\templates\orders\detail.html:90
+#: .\templates\orders\detail.html:96
 msgid "Flexible"
 msgstr "Fleksibilno"
 
-#: .\templates\orders\detail.html:94
+#: .\templates\orders\detail.html:100
 msgid "Notes:"
 msgstr "Napomene:"
 
@@ -2619,9 +2776,6 @@ msgstr "Preskoči na glavni sadržaj"
 msgid "Documentation"
 msgstr "Dokumentacija"
 
-msgid "Add %(name)s"
-msgstr "Dodaj %(name)s"
-
 msgid "History"
 msgstr "Istorija"
 
@@ -2762,15 +2916,6 @@ msgid ""
 msgstr ""
 "Ovaj objekat nema istoriju izmena. Verovatno nije dodat preko ove "
 "administracije."
-
-msgid "Show all"
-msgstr "Prikaži sve"
-
-msgid "Save"
-msgstr "Sačuvaj"
-
-msgid "Popup closing…"
-msgstr "Popup se zatvara…"
 
 msgid "%(counter)s result"
 msgid_plural "%(counter)s results"
@@ -2931,20 +3076,11 @@ msgstr "Trenutno:"
 msgid "Change:"
 msgstr "Izmena:"
 
-msgid "group"
-msgstr "grupa"
-
-msgid "groups"
-msgstr "grupe"
-
 msgid "Group"
 msgstr "Grupa"
 
 msgid "Groups"
 msgstr "Grupe"
-
-msgid "Add group"
-msgstr "Dodaj grupu"
 
 msgid "permission"
 msgstr "dozvola"

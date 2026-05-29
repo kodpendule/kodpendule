@@ -4,16 +4,24 @@
 (function () {
     "use strict";
 
+    var MOBILE_MQ = "(max-width: 767px)";
+    var DESKTOP_MQ = "(min-width: 1024px)";
+
     /* Django's nav_sidebar.js also binds the toggle; replace node to avoid double-toggle on mobile. */
     (function resetToggleButton() {
         var toggle = document.getElementById("toggle-nav-sidebar");
         if (toggle && toggle.parentNode) {
             toggle.parentNode.replaceChild(toggle.cloneNode(true), toggle);
         }
+        if (window.matchMedia(MOBILE_MQ).matches) {
+            var mobileToggle = document.getElementById("toggle-nav-sidebar");
+            var label = mobileToggle && mobileToggle.querySelector(".kp-nav-toggle__label");
+            if (label && mobileToggle) {
+                label.textContent =
+                    mobileToggle.getAttribute("data-label-open") || "Open menu";
+            }
+        }
     })();
-
-    var MOBILE_MQ = "(max-width: 767px)";
-    var DESKTOP_MQ = "(min-width: 1024px)";
 
     function getMain() {
         return document.getElementById("main");
@@ -31,19 +39,24 @@
         return window.matchMedia(MOBILE_MQ).matches;
     }
 
-    function setToggleLabel(open) {
+    function setStickyToggleLabel(open) {
         var toggle = getToggle();
         if (!toggle) {
             return;
         }
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
         var label = toggle.querySelector(".kp-nav-toggle__label");
         if (!label) {
+            return;
+        }
+        if (isMobile()) {
+            /* Sticky bar always says "Open menu"; close only in the drawer. */
+            label.textContent = toggle.getAttribute("data-label-open") || "Open menu";
             return;
         }
         var openText = toggle.getAttribute("data-label-open") || "Open menu";
         var closeText = toggle.getAttribute("data-label-close") || "Close menu";
         label.textContent = open ? closeText : openText;
-        toggle.setAttribute("aria-expanded", open ? "true" : "false");
     }
 
     function setSidebarOpen(open) {
@@ -55,7 +68,7 @@
         main.classList.toggle("shifted", open);
         sidebar.setAttribute("aria-expanded", open ? "true" : "false");
         document.body.classList.toggle("kp-admin-nav-open", open);
-        setToggleLabel(open);
+        setStickyToggleLabel(open);
         try {
             localStorage.setItem("django.admin.navSidebarIsOpen", open ? "true" : "false");
         } catch (e) {
@@ -179,8 +192,8 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        openSidebarOnDesktop();
         initMobileNav();
+        openSidebarOnDesktop();
         enhanceNavFilter();
     });
 })();

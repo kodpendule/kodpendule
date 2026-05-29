@@ -1,0 +1,74 @@
+/**
+ * Changelist table layout — loaded after Django changelists.css / base.css.
+ * Centers all columns; hides legacy sort UI; fixes first-column <th> cells.
+ */
+
+#changelist #result_list {
+    width: 100%;
+    max-width: 100%;
+    table-layout: auto;
+}
+
+#changelist #result_list thead th,
+#changelist #result_list tbody td,
+#changelist #result_list tbody th {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+/* Django uses <th> for the linked first column in each row */
+#changelist #result_list tbody th a,
+#changelist #result_list tbody td a {
+    display: inline !important;
+    text-align: center !important;
+}
+
+#changelist #result_list thead th .text {
+    display: block !important;
+    width: 100% !important;
+    padding: var(--kp-space-1) var(--kp-space-2) !important;
+    text-align: center !important;
+    box-sizing: border-box;
+}
+
+#changelist #result_list thead th .text a,
+#changelist #result_list thead th .text span {
+    display: inline !important;
+    padding: 0 !important;
+    text-align: center !important;
+}
+
+/* No sort controls or sorted-column offsets */
+#changelist #result_list .sortoptions,
+#changelist #result_list .sortpriority,
+#changelist #result_list a.sortremove {
+    display: none !important;
+}
+
+#changelist #result_list thead th.sorted,
+#changelist #result_list thead th.sortable {
+    background: var(--kp-color-surface-subtle) !important;
+}
+
+#changelist #result_list thead th.sorted .text {
+    padding-right: var(--kp-space-2) !important;
+    padding-left: var(--kp-space-2) !important;
+}
+
+#changelist #result_list tbody td .kp-money,
+#changelist #result_list tbody td .kp-slug,
+#changelist #result_list tbody td .kp-stock,
+#changelist #result_list tbody td .kp-badge,
+#changelist #result_list tbody th .kp-money,
+#changelist #result_list tbody th .kp-slug {
+    display: inline-flex;
+    justify-content: center;
+    text-align: center;
+}
+
+#changelist #result_list tbody td img,
+#changelist #result_list tbody th img {
+    display: inline-block;
+    margin: 0 auto;
+    vertical-align: middle;
+}

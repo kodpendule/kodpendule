@@ -1,0 +1,17 @@
+{% load admin_list %}
+{% load i18n %}
+<p class="paginator">
+{% if pagination_required %}
+{% for i in page_range %}
+    {% paginator_number cl i %}
+{% endfor %}
+{% endif %}
+{{ cl.result_count }}
+{% if cl.result_count == 1 %}
+  {% if kp_admin_count_singular %}{{ kp_admin_count_singular }}{% else %}{{ cl.opts.verbose_name }}{% endif %}
+{% else %}
+  {% if kp_admin_count_plural %}{{ kp_admin_count_plural }}{% else %}{{ cl.opts.verbose_name_plural }}{% endif %}
+{% endif %}
+{% if show_all_url %}<a href="{{ show_all_url }}" class="showall">{% translate 'Show all' %}</a>{% endif %}
+{% if cl.formset and cl.result_count %}<input type="submit" name="_save" class="default" value="{% translate 'Save' %}">{% endif %}
+</p>

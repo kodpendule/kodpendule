@@ -84,6 +84,12 @@
                         {{ order.shipping_street }}<br>
                         {{ order.shipping_postal_code }} {{ order.shipping_city_name }}
                     </p>
+                    {% if order.shipping_method %}
+                    <p class="small text-muted mt-2 mb-0">
+                        <span class="fw-medium">{% trans "Shipping method" %}:</span>
+                        {{ order.shipping_method.localized_name }}
+                    </p>
+                    {% endif %}
                     {% if order.delivery_date %}
                     <p class="small text-muted mt-2 mb-0">
                         {% blocktrans with date=order.delivery_date|date:"SHORT_DATE_FORMAT" %}Preferred delivery: {{ date }}{% endblocktrans %}

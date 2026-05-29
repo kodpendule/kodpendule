@@ -23,7 +23,7 @@
                     {% for image in gallery_images %}
                     <div class="carousel-item{% if not product.main_image and forloop.first %} active{% endif %}">
                         <img src="{{ image.image.url }}" class="d-block w-100 shop-gallery__img"
-                             alt="{{ image.alt_text|default:product.name }}">
+                             alt="{% if LANGUAGE_CODE == 'en' %}{{ image.alt_text_en|default:image.alt_text_sr|default:product.name }}{% else %}{{ image.alt_text_sr|default:image.alt_text_en|default:product.name }}{% endif %}">
                     </div>
                     {% endfor %}
                     {% if not product.main_image and not gallery_images %}

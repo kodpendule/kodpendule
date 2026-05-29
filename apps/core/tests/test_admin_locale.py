@@ -57,6 +57,36 @@ class AdminBrandingTests(TestCase):
         self.assertContains(response, "Izaberite narudžbinu za izmenu")
         self.assertNotContains(response, "Izaberite Narudžbina za izmenu")
 
+    def test_product_changelist_grammar_and_breadcrumb(self) -> None:
+        User = get_user_model()
+        User.objects.create_superuser("admin", "admin@test.com", "pass")
+        self.client.login(username="admin", password="pass")
+        response = self.client.get(reverse("admin:products_product_changelist"))
+        self.assertEqual(response.status_code, 200)
+        html = response.content.decode()
+        self.assertIn("Izaberite proizvod za izmenu", html)
+        self.assertIn("Dodaj proizvod", html)
+        self.assertNotIn("Izaberite Proizvod", html)
+        self.assertNotRegex(html, r"Proizvodi\s*›\s*Proizvodi")
+
+    def test_category_changelist_grammar(self) -> None:
+        User = get_user_model()
+        User.objects.create_superuser("admin", "admin@test.com", "pass")
+        self.client.login(username="admin", password="pass")
+        response = self.client.get(reverse("admin:categories_category_changelist"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Izaberite kategoriju za izmenu")
+        self.assertContains(response, "Dodaj kategoriju")
+
+    def test_group_changelist_grammar(self) -> None:
+        User = get_user_model()
+        User.objects.create_superuser("admin", "admin@test.com", "pass")
+        self.client.login(username="admin", password="pass")
+        response = self.client.get(reverse("admin:auth_group_changelist"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Izaberite grupu za izmenu")
+        self.assertContains(response, "Dodaj grupu")
+
     def test_admin_changelist_uses_latin_not_cyrillic(self) -> None:
         User = get_user_model()
         User.objects.create_superuser("admin", "admin@test.com", "pass")

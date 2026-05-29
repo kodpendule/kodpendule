@@ -58,7 +58,8 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
-    # After LocaleMiddleware: admin always Serbian; storefront keeps session/cookie language.
+    # After LocaleMiddleware: default storefront to sr (ignore Accept-Language until /jezik/).
+    "apps.core.middleware.StorefrontDefaultSerbianMiddleware",
     "apps.core.middleware.AdminSerbianLocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -101,8 +102,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # --- i18n ---------------------------------------------------------------------
-# Default project language (admin + fallback). Storefront also uses LANGUAGES via
-# LocaleMiddleware and /jezik/; AdminSerbianLocaleMiddleware forces sr on /admin/*.
+# Default project language (admin + fallback). Storefront uses sr for new visitors;
+# English only after the user picks it via /jezik/ (django_language cookie).
+# AdminSerbianLocaleMiddleware forces sr on /admin/*.
 
 LANGUAGE_CODE = "sr"
 LANGUAGES = [

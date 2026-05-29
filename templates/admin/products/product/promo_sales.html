@@ -10,29 +10,105 @@
 {% endblock %}
 
 {% block content %}
-<div id="content-main" class="change-form">
+<div id="content-main" class="change-form kp-recommended-admin kp-promo-admin">
     <form method="post" novalidate>
         {% csrf_token %}
         <fieldset class="module aligned">
             <h2 class="fieldset-heading">{% trans "Promo sales" %}</h2>
-            <div class="description">
-                {% trans "Select products and apply a percentage discount from the regular price." %}
-            </div>
-            {% for field in form %}
+            <p class="description">
+                {% trans "Select products, then apply a percentage discount or remove the promo price. Products with a promo price appear in the homepage promo section." %}
+            </p>
+
             <div class="form-row">
                 <div>
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.help_text %}<div class="help">{{ field.help_text }}</div>{% endif %}
-                    {% for error in field.errors %}<div class="errornote">{{ error }}</div>{% endfor %}
+                    <label for="{{ form.discount_percent.id_for_label }}">{{ form.discount_percent.label }}</label>
+                    {{ form.discount_percent }}
+                    {% if form.discount_percent.help_text %}
+                    <div class="help">{{ form.discount_percent.help_text }}</div>
+                    {% endif %}
+                    {% for error in form.discount_percent.errors %}
+                    <div class="errornote">{{ error }}</div>
+                    {% endfor %}
                 </div>
             </div>
-            {% endfor %}
+
+            {% if products %}
+            <div class="kp-recommended-admin__toolbar">
+                <button type="button" class="button" id="kp-promo-select-all">{% trans "Select all" %}</button>
+                <button type="button" class="button" id="kp-promo-select-none">{% trans "Clear all" %}</button>
+                <button type="button" class="button" id="kp-promo-select-on-promo">{% trans "Select on promo" %}</button>
+            </div>
+            <table class="kp-recommended-admin__table">
+                <thead>
+                    <tr>
+                        <th scope="col" class="kp-recommended-admin__check-col">{% trans "Select" %}</th>
+                        <th scope="col">{% trans "SKU" %}</th>
+                        <th scope="col">{% trans "Name" %}</th>
+                        <th scope="col">{% trans "Regular price" %}</th>
+                        <th scope="col">{% trans "Promo price" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr{% if product.pk in promo_product_ids %} class="kp-promo-admin__row--active"{% endif %}>
+                        <td class="kp-recommended-admin__check-col">
+                            <input
+                                type="checkbox"
+                                name="products"
+                                value="{{ product.pk }}"
+                                id="promo-product-{{ product.pk }}"
+                                class="kp-promo-checkbox"
+                            >
+                        </td>
+                        <td><label for="promo-product-{{ product.pk }}">{{ product.sku }}</label></td>
+                        <td>{{ product }}</td>
+                        <td>{{ product.price }}</td>
+                        <td>
+                            {% if product.pk in promo_product_ids %}
+                                {{ product.discount_price }}
+                            {% else %}
+                                <span class="quiet">—</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>{% trans "No products yet. Add products first, then set promo prices." %}</p>
+            {% endif %}
         </fieldset>
         <div class="submit-row">
-            <input type="submit" value="{% trans 'Apply promo sale' %}" class="default">
+            <button type="submit" name="action" value="apply" class="default">{% trans "Apply promo sale" %}</button>
+            <button type="submit" name="action" value="remove" class="button">{% trans "Remove promo from selected" %}</button>
             <a href="{% url 'admin:products_product_changelist' %}" class="button cancel-link">{% trans "Cancel" %}</a>
         </div>
     </form>
 </div>
+<script>
+(function () {
+    var selectAll = document.getElementById("kp-promo-select-all");
+    var selectNone = document.getElementById("kp-promo-select-none");
+    var selectOnPromo = document.getElementById("kp-promo-select-on-promo");
+    var boxes = document.querySelectorAll(".kp-promo-checkbox");
+    if (selectAll) {
+        selectAll.addEventListener("click", function () {
+            boxes.forEach(function (cb) { cb.checked = true; });
+        });
+    }
+    if (selectNone) {
+        selectNone.addEventListener("click", function () {
+            boxes.forEach(function (cb) { cb.checked = false; });
+        });
+    }
+    if (selectOnPromo) {
+        selectOnPromo.addEventListener("click", function () {
+            boxes.forEach(function (cb) {
+                var row = cb.closest("tr");
+                cb.checked = row && row.classList.contains("kp-promo-admin__row--active");
+            });
+        });
+    }
+})();
+</script>
 {% endblock %}

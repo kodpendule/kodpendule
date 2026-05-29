@@ -4,6 +4,7 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.admin_display import money_cell, order_status_badge
+from apps.core.kp_admin import KPModelAdmin
 from apps.orders.models import Order, OrderItem, OrderStatus
 
 
@@ -31,7 +32,7 @@ class OrderItemInline(admin.TabularInline):
 
 
 @admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
+class OrderAdmin(KPModelAdmin):
     list_display = (
         "order_number",
         "customer_display",
@@ -155,11 +156,11 @@ class OrderAdmin(admin.ModelAdmin):
 
     actions = ["mark_confirmed", "mark_shipped", "mark_delivered"]
 
-    @admin.display(description=_("Status"), ordering="status")
+    @admin.display(description=_("Status"))
     def status_badge(self, obj: Order) -> str:
         return order_status_badge(obj.status)
 
-    @admin.display(description=_("Total"), ordering="total")
+    @admin.display(description=_("Total"))
     def total_display(self, obj: Order) -> str:
         return money_cell(obj.total, emphasize=True)
 

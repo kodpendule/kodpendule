@@ -5,10 +5,10 @@ from django.contrib import admin, messages
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import path, reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from parler.admin import TranslatableAdmin
-
 from apps.core.admin_display import price_cell, slug_warning_cell, stock_cell
+from apps.core.kp_admin import KPTranslatableAdmin
 from apps.core.slugs import localized_slug, unique_slug_for_translation
 from apps.products.models import Product, ProductImage
 
@@ -18,21 +18,17 @@ class ProductImageInline(admin.TabularInline):
     extra = 1
     verbose_name = _("Gallery image")
     verbose_name_plural = _("Gallery images")
-    fields = ("image", "alt_text", "sort_order")
+    fields = ("image", "alt_text_sr", "alt_text_en", "sort_order")
     classes = ("kp-inline-gallery",)
 
 
 class PromoSaleForm(forms.Form):
-    products = forms.ModelMultipleChoiceField(
-        label=_("Products"),
-        queryset=Product.objects.order_by("-updated_at"),
-        widget=forms.SelectMultiple(attrs={"size": "14"}),
-    )
     discount_percent = forms.DecimalField(
         label=_("Discount percent"),
         min_value=Decimal("0.01"),
         max_value=Decimal("95"),
         decimal_places=2,
+        required=False,
         help_text=_("Example: 15 means 15% discount from regular price."),
     )
 
@@ -84,7 +80,15 @@ _PRODUCT_FIELDSETS = (
 
 
 @admin.register(Product)
-class ProductAdmin(TranslatableAdmin):
+class ProductAdmin(KPTranslatableAdmin):
+    translatable_fields = (
+        "name",
+        "slug",
+        "short_description",
+        "description",
+        "meta_title",
+        "meta_description",
+    )
     change_list_template = "admin/products/product/change_list.html"
     list_display = (
         "sku",
@@ -112,7 +116,9 @@ class ProductAdmin(TranslatableAdmin):
                     },
                 ),
             )
-        return fieldsets
+        from apps.core.admin_translatable import expand_fieldsets
+
+        return expand_fieldsets(fieldsets, self.translatable_fields)
 
     def get_readonly_fields(self, request, obj=None):
         if obj is not None:
@@ -216,68 +222,125 @@ class ProductAdmin(TranslatableAdmin):
         if not self.has_change_permission(request):
             return redirect("admin:index")
 
-        form = PromoSaleForm(request.POST or None)
-        if request.method == "POST" and form.is_valid():
-            selected_products = form.cleaned_data["products"]
-            percent = form.cleaned_data["discount_percent"]
-            multiplier = (Decimal("100") - percent) / Decimal("100")
+        product_qs = self._product_admin_queryset(request)
+        promo_url = reverse("admin:products_product_promo_sales")
 
-            updated = 0
-            skipped = 0
-            for product in selected_products:
-                new_price = (product.price * multiplier).quantize(
-                    Decimal("0.01"),
-                    rounding=ROUND_HALF_UP,
-                )
+        if request.method == "POST":
+            action = request.POST.get("action")
+            selected_ids = self._parse_product_ids(request.POST.getlist("products"))
 
-                if new_price >= product.price:
-                    skipped += 1
-                    continue
+            if not selected_ids:
+                messages.warning(request, _("No products selected."))
+                return redirect(promo_url)
 
-                product.discount_price = new_price
-                product.save(update_fields=["discount_price", "updated_at"])
-                updated += 1
+            selected_products = list(product_qs.filter(pk__in=selected_ids))
 
-            if updated:
-                messages.success(
-                    request,
-                    _("Promo sale updated for %(count)s products.")
-                    % {"count": updated},
-                )
-            if skipped:
-                messages.warning(
-                    request,
-                    _(
-                        "%(count)s products skipped because promo price was not lower than regular price."
+            if action == "remove":
+                removed = 0
+                now = timezone.now()
+                for product in selected_products:
+                    if not product.has_discount:
+                        continue
+                    product.discount_price = None
+                    product.updated_at = now
+                    product.save(update_fields=["discount_price", "updated_at"])
+                    removed += 1
+
+                if removed:
+                    messages.success(
+                        request,
+                        _("Promo removed from %(count)s products.")
+                        % {"count": removed},
                     )
-                    % {"count": skipped},
-                )
-            return redirect(reverse("admin:products_product_changelist"))
+                else:
+                    messages.info(
+                        request,
+                        _("None of the selected products had an active promo price."),
+                    )
+                return redirect(promo_url)
 
+            if action == "apply":
+                form = PromoSaleForm(request.POST)
+                if form.is_valid():
+                    percent = form.cleaned_data.get("discount_percent")
+                    if percent is None:
+                        form.add_error(
+                            "discount_percent",
+                            _("Enter a discount percent to apply a promo sale."),
+                        )
+                    else:
+                        multiplier = (Decimal("100") - percent) / Decimal("100")
+                        updated = 0
+                        skipped = 0
+                        for product in selected_products:
+                            new_price = (product.price * multiplier).quantize(
+                                Decimal("0.01"),
+                                rounding=ROUND_HALF_UP,
+                            )
+                            if new_price >= product.price:
+                                skipped += 1
+                                continue
+                            product.discount_price = new_price
+                            product.save(
+                                update_fields=["discount_price", "updated_at"]
+                            )
+                            updated += 1
+
+                        if updated:
+                            messages.success(
+                                request,
+                                _("Promo sale updated for %(count)s products.")
+                                % {"count": updated},
+                            )
+                        if skipped:
+                            messages.warning(
+                                request,
+                                _(
+                                    "%(count)s products skipped because promo price was not lower than regular price."
+                                )
+                                % {"count": skipped},
+                            )
+                        if updated or skipped:
+                            return redirect(promo_url)
+
+        else:
+            form = PromoSaleForm()
+
+        products = list(product_qs)
         context = {
             **self.admin_site.each_context(request),
             "opts": self.model._meta,
             "title": _("Promo sales"),
             "form": form,
+            "products": products,
+            "promo_product_ids": {p.pk for p in products if p.has_discount},
         }
         return render(request, "admin/products/product/promo_sales.html", context)
 
-    def save_translation(self, request, obj, form, change):
-        translation = form.instance
-        if not (translation.slug or "").strip():
-            name = (translation.name or "").strip()
-            if name:
-                translation.slug = unique_slug_for_translation(
-                    translation,
-                    fallback=obj.sku,
-                )
-        super().save_translation(request, obj, form, change)
+    @staticmethod
+    def _parse_product_ids(raw_ids: list[str]) -> list[int]:
+        parsed: list[int] = []
+        for raw in raw_ids:
+            try:
+                parsed.append(int(raw))
+            except (TypeError, ValueError):
+                continue
+        return parsed
+
+    def get_form(self, request, obj=None, **kwargs):
+        form_class = super().get_form(request, obj, **kwargs)
+
+        def autofill_slug_for_translation(trans, master):
+            return unique_slug_for_translation(trans, fallback=master.sku)
+
+        form_class.autofill_slug_for_translation = autofill_slug_for_translation
+        return form_class
 
     @admin.display(description=_("Slug"))
     def slug_display(self, obj: Product) -> str:
         return slug_warning_cell(localized_slug(obj))
 
-    @admin.display(description=_("Price"), ordering="price")
+    @admin.display(description=_("Price"))
     def price_display(self, obj: Product) -> str:
         return price_cell(
             obj.effective_price,
@@ -285,7 +348,7 @@ class ProductAdmin(TranslatableAdmin):
             has_discount=obj.has_discount,
         )
 
-    @admin.display(description=_("Stock"), ordering="stock")
+    @admin.display(description=_("Stock"))
     def stock_display(self, obj: Product) -> str:
         return stock_cell(
             obj.stock,

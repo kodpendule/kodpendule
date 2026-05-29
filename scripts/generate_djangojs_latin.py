@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "scripts" / "djangojs_latin.json"
 
 L: dict[str, str] = {
-    "Available %s": "Dostupni %s",
+    "Available %s": "Dostupne %s",
     "This is the list of available %s. You may choose some by selecting them in the box below and then clicking the \"Choose\" arrow between the two boxes.": (
         "Ovo je lista dostupnih „%s“. Izaberite stavke u polju ispod i kliknite strelicu „Izaberi“."
     ),
@@ -18,7 +18,7 @@ L: dict[str, str] = {
     "Click to choose all %s at once.": "Kliknite da izaberete sve „%s“ odjednom.",
     "Choose": "Izaberi",
     "Remove": "Ukloni",
-    "Chosen %s": "Izabrano „%s“",
+    "Chosen %s": "Izabrane %s",
     "This is the list of chosen %s. You may remove some by selecting them in the box below and then clicking the \"Remove\" arrow between the two boxes.": (
         "Ovo je lista izabranih „%s“. Uklonite stavke u polju ispod i kliknite strelicu „Ukloni“."
     ),

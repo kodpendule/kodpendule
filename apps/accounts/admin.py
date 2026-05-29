@@ -8,6 +8,7 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from apps.accounts.forms import CustomerContactImportForm
+from apps.core.kp_admin import KPModelAdmin
 from apps.accounts.models import CustomerContact, CustomerProfile, User
 from apps.accounts.services.customer_contact_csv import (
     EXPORT_FIELDNAMES,
@@ -26,13 +27,14 @@ class CustomerProfileInline(admin.StackedInline):
 
 @admin.register(User)
 class UserAdmin(DjangoUserAdmin):
+    sortable_by = ()
     list_display = ("username", "email", "first_name", "last_name", "is_staff", "is_active")
     search_fields = ("username", "email", "first_name", "last_name")
     inlines = [CustomerProfileInline]
 
 
 @admin.register(CustomerContact)
-class CustomerContactAdmin(admin.ModelAdmin):
+class CustomerContactAdmin(KPModelAdmin):
     change_list_template = "admin/accounts/customercontact/change_list.html"
     list_display = (
         "email",

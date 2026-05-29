@@ -96,7 +96,7 @@ class OrderTrackingTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(
             response,
-            "We could not find an order with these details",
+            "Nismo pronašli narudžbinu",
         )
 
     def test_guest_track_unknown_number_same_error(self) -> None:
@@ -110,7 +110,7 @@ class OrderTrackingTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(
             response,
-            "We could not find an order with these details",
+            "Nismo pronašli narudžbinu",
         )
 
     def test_guest_detail_without_access_returns_404(self) -> None:

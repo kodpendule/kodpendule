@@ -51,6 +51,10 @@ Full steps (dedupe, admin merge): **[docs/ADMIN_LOCALE.md](docs/ADMIN_LOCALE.md)
 
 Copy `.env.local.example` → `.env.local` for local development.
 
+### Render (production)
+
+Use **Python 3.12** (not 3.14). New Render services default to 3.14, which breaks Django admin changelist pages. The repo pins `3.12.11` via `.python-version` and `PYTHON_VERSION` in `render.yaml`. After deploy, confirm build logs show Python 3.12.x. If not, set **Environment → `PYTHON_VERSION` = `3.12.11`** in the Render dashboard and redeploy.
+
 ## Status
 
 | Step | Description | Status |

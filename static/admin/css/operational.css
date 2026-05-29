@@ -164,14 +164,12 @@
 
 #changelist-form .results,
 .change-list .results {
-    overflow-x: visible;
+    overflow-x: auto;
     max-width: 100%;
+    -webkit-overflow-scrolling: touch;
 }
 
 #changelist #result_list {
-    width: 100%;
-    max-width: 100%;
-    table-layout: fixed;
     border-collapse: separate;
     border-spacing: 0;
 }
@@ -188,7 +186,6 @@
     line-height: 1.25;
     white-space: normal;
     word-break: break-word;
-    vertical-align: bottom;
 }
 
 #changelist #result_list thead th.action-checkbox-column {
@@ -196,11 +193,11 @@
     white-space: nowrap;
 }
 
-#changelist #result_list tbody td {
+#changelist #result_list tbody td,
+#changelist #result_list tbody th {
     padding: var(--kp-space-2) var(--kp-space-3);
     font-size: var(--kp-font-size-sm);
     line-height: var(--kp-line-height-normal);
-    vertical-align: middle;
     word-break: break-word;
     overflow-wrap: anywhere;
 }
@@ -245,9 +242,11 @@
     min-height: 2.75rem;
     font-weight: var(--kp-font-weight-semibold);
     font-size: var(--kp-font-size-sm);
-    width: 100%;
+    width: auto;
     max-width: 100%;
     min-width: 0;
+    margin-left: auto;
+    margin-right: auto;
     border: 2px solid var(--kp-color-border);
     background: var(--kp-color-surface);
     box-sizing: border-box;
@@ -281,8 +280,15 @@
 .kp-badge {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     flex-wrap: wrap;
     max-width: 100%;
+}
+
+#changelist #result_list tbody td .kp-badge,
+#changelist #result_list tbody td img {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .kp-money {
@@ -485,10 +491,65 @@
         padding: var(--kp-space-3);
     }
 
-    #changelist #result_list tbody td,
-    #changelist #result_list thead th {
+    .change-list #changelist {
+        overflow: visible;
+    }
+
+    #changelist-form .results,
+    .change-list .results {
+        overflow-x: auto;
+        max-width: 100%;
+    }
+
+    #changelist #result_list {
+        width: max-content;
+        min-width: 100%;
+        table-layout: auto;
+    }
+
+    #changelist #result_list thead th,
+    #changelist #result_list tbody td {
         padding: var(--kp-space-2) var(--kp-space-3);
         font-size: var(--kp-font-size-xs);
+        white-space: nowrap;
+        word-break: normal;
+        overflow-wrap: normal;
+    }
+
+    #changelist #result_list thead th .text {
+        white-space: nowrap;
+        text-align: center !important;
+    }
+
+    #changelist #toolbar {
+        overflow-x: visible;
+    }
+
+    #toolbar form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #changelist-search > div {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--kp-space-2);
+        width: 100%;
+    }
+
+    #toolbar #searchbar {
+        flex: 1 1 100%;
+        width: 100%;
+        min-width: 0;
+        min-height: 2.75rem;
+        box-sizing: border-box;
+        font-size: var(--kp-font-size-base);
+        padding: var(--kp-space-2) var(--kp-space-3);
+    }
+
+    #toolbar form input[type="submit"] {
+        flex: 0 0 auto;
     }
 
     .change-list.model-order #result_list td.field-status select {
@@ -501,6 +562,25 @@
 
     .dashboard-kpi-grid {
         grid-template-columns: 1fr;
+    }
+
+    .inline-group .tabular {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        max-width: 100%;
+    }
+
+    .inline-group .tabular table {
+        width: max-content;
+        min-width: 100%;
+        table-layout: auto;
+    }
+
+    .inline-group .tabular thead th,
+    .inline-group .tabular tbody td {
+        white-space: nowrap;
+        word-break: normal;
+        overflow-wrap: normal;
     }
 }
 
@@ -540,4 +620,12 @@
 
 .kp-recommended-admin__table tbody tr:hover {
     background: var(--kp-color-primary-soft);
+}
+
+.kp-promo-admin__row--active {
+    background: var(--kp-color-success-bg, #ecfdf5);
+}
+
+.kp-promo-admin__row--active:hover {
+    background: var(--kp-color-success-bg, #ecfdf5);
 }

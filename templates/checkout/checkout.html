@@ -79,6 +79,17 @@
                 <section class="shop-checkout-section" aria-labelledby="checkout-delivery-heading">
                     <h2 id="checkout-delivery-heading" class="shop-checkout-section__title">{% trans "Delivery" %}</h2>
                     <p class="shop-checkout-section__lead">{% trans "Tell us when and how you prefer delivery." %}</p>
+                    {% if shipping_method %}
+                    <p class="shop-checkout-method mb-3">
+                        <span class="shop-checkout-method__label">{% trans "Shipping method" %}:</span>
+                        <span class="shop-checkout-method__value fw-medium">
+                            {{ shipping_method.localized_name }}
+                        </span>
+                        {% if shipping_method.localized_description %}
+                        <span class="d-block small text-muted mt-1">{{ shipping_method.localized_description }}</span>
+                        {% endif %}
+                    </p>
+                    {% endif %}
                     <div class="mb-0">{% include "includes/_shop_form_field.html" with field=form.order_notes %}</div>
                     <div class="row g-3 align-items-end">
                         <div class="col-md-6">{% include "includes/_shop_form_field.html" with field=form.delivery_date %}</div>

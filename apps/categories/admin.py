@@ -1,13 +1,20 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from parler.admin import TranslatableAdmin
 
 from apps.categories.models import Category
+from apps.core.kp_admin import KPTranslatableAdmin
 from apps.core.slugs import localized_slug, unique_slug_for_translation
 
 
 @admin.register(Category)
-class CategoryAdmin(TranslatableAdmin):
+class CategoryAdmin(KPTranslatableAdmin):
+    translatable_fields = (
+        "name",
+        "slug",
+        "description",
+        "meta_title",
+        "meta_description",
+    )
     list_display = ("name", "slug_display", "parent", "is_active", "sort_order")
     search_fields = ("translations__name", "translations__slug")
     list_select_related = ("parent",)
@@ -21,13 +28,14 @@ class CategoryAdmin(TranslatableAdmin):
         (None, {"fields": ("parent", "image", "is_active", "sort_order")}),
     )
 
-    def save_translation(self, request, obj, form, change):
-        translation = form.instance
-        if not (translation.slug or "").strip():
-            name = (translation.name or "").strip()
-            if name:
-                translation.slug = unique_slug_for_translation(translation)
-        super().save_translation(request, obj, form, change)
+    def get_form(self, request, obj=None, **kwargs):
+        form_class = super().get_form(request, obj, **kwargs)
+
+        def autofill_slug_for_translation(trans, master):
+            return unique_slug_for_translation(trans)
+
+        form_class.autofill_slug_for_translation = autofill_slug_for_translation
+        return form_class
 
     @admin.display(description=_("Slug"))
     def slug_display(self, obj: Category) -> str:

@@ -101,7 +101,16 @@ class ProductImage(models.Model):
         verbose_name=_("Product"),
     )
     image = models.ImageField(_("Image"), upload_to="products/gallery/")
-    alt_text = models.CharField(_("Alt text"), max_length=255, blank=True)
+    alt_text_sr = models.CharField(
+        _("Alt text (Serbian)"),
+        max_length=255,
+        blank=True,
+    )
+    alt_text_en = models.CharField(
+        _("Alt text (English)"),
+        max_length=255,
+        blank=True,
+    )
     sort_order = models.PositiveIntegerField(_("Sort order"), default=0)
 
     class Meta:
@@ -114,3 +123,8 @@ class ProductImage(models.Model):
 
     def __str__(self) -> str:
         return f"Image for {self.product_id} (#{self.pk})"
+
+    def alt_text_for_language(self, language_code: str) -> str:
+        if language_code == "en":
+            return self.alt_text_en or self.alt_text_sr
+        return self.alt_text_sr or self.alt_text_en

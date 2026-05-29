@@ -1,0 +1,78 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+  <head><title>{% translate "Popup closing…" %}</title></head>
+  <body>
+    {# JSON in a script tag avoids HTML-attribute encoding breaking JSON.parse on dataset. #}
+    <script id="django-admin-popup-response-data" type="application/json">{{ popup_response_data|safe }}</script>
+    <script>
+    (function () {
+      "use strict";
+
+      function closePopup() {
+        window.close();
+      }
+
+      try {
+        var dataNode = document.getElementById("django-admin-popup-response-data");
+        var initData = JSON.parse(dataNode.textContent);
+        var openerWin = window.opener;
+
+        if (openerWin && !openerWin.closed) {
+          switch (initData.action) {
+            case "change":
+              if (typeof openerWin.dismissChangeRelatedObjectPopup === "function") {
+                openerWin.dismissChangeRelatedObjectPopup(
+                  window,
+                  initData.value,
+                  initData.obj,
+                  initData.new_value
+                );
+                return;
+              }
+              break;
+            case "delete":
+              if (typeof openerWin.dismissDeleteRelatedObjectPopup === "function") {
+                openerWin.dismissDeleteRelatedObjectPopup(window, initData.value);
+                return;
+              }
+              break;
+            default:
+              if (typeof openerWin.dismissAddRelatedObjectPopup === "function") {
+                openerWin.dismissAddRelatedObjectPopup(
+                  window,
+                  initData.value,
+                  initData.obj
+                );
+                return;
+              }
+          }
+
+          /* Fallback when parent admin JS did not load (or opener helpers missing). */
+          var fieldId = window.name.replace(/__\d+$/, "");
+          var elem = openerWin.document.getElementById(fieldId);
+          if (elem) {
+            if (elem.nodeName === "SELECT") {
+              elem.options[elem.options.length] = new openerWin.Option(
+                initData.obj,
+                initData.value,
+                true,
+                true
+              );
+            } else if (elem.nodeName === "INPUT") {
+              elem.value = initData.value;
+            }
+            if (openerWin.django && openerWin.django.jQuery) {
+              openerWin.django.jQuery(elem).trigger("change");
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Admin popup close failed:", err);
+      } finally {
+        closePopup();
+      }
+    })();
+    </script>
+  </body>
+</html>

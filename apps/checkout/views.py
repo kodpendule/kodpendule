@@ -11,7 +11,7 @@ from apps.core.utils import activate_parler_language
 from apps.orders.selectors import order_detail_qs
 from apps.orders.services import CheckoutError, create_order_from_checkout
 from apps.orders.services.order_access import grant_order_access
-from apps.shipping.selectors import active_cities
+from apps.shipping.selectors import active_cities, get_default_shipping_method
 
 
 class CheckoutView(ShopLanguageMixin, FormView):
@@ -56,12 +56,14 @@ class CheckoutView(ShopLanguageMixin, FormView):
         for line in lines:
             activate_parler_language(line.product, self.shop_language)
         cities = list(active_cities())
+        shipping_method = get_default_shipping_method()
         context.update(
             {
                 "cart_lines": lines,
                 "cart_subtotal": cart.subtotal,
                 "cities": cities,
                 "city_prices": {str(c.pk): str(c.shipping_price) for c in cities},
+                "shipping_method": shipping_method,
                 "is_guest": not self.request.user.is_authenticated,
                 "meta_title": _("Checkout"),
                 "canonical_url": self.request.build_absolute_uri(),

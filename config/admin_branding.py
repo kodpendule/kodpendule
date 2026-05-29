@@ -1,11 +1,22 @@
 """Serbian admin site titles and grouped navigation context."""
 
 from django.contrib import admin
+from django.contrib.auth.admin import GroupAdmin as DjangoGroupAdmin
+from django.contrib.auth.models import Group
 
 from apps.core.admin_navigation import get_admin_nav_sections
 from apps.core.admin_site import patch_admin_site_urls
+from apps.core.kp_admin import KPModelAdmin
 
 patch_admin_site_urls()
+
+
+class KPGroupAdmin(KPModelAdmin, DjangoGroupAdmin):
+    """Auth groups with Kod Pendule changelist labels and grammar."""
+
+
+admin.site.unregister(Group)
+admin.site.register(Group, KPGroupAdmin)
 
 admin.site.site_header = "Kod Pendule — administracija"
 admin.site.site_title = "Kod Pendule admin"

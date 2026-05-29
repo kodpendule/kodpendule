@@ -1,0 +1,20 @@
+/* Stacked bilingual fields — hide django-parler language tabs if present */
+.parler-language-tabs,
+.parler-language-switcher,
+.language_tabs,
+div[class*="parler-language"] {
+    display: none !important;
+}
+
+.kp-fieldset--product-copy .form-row {
+    margin-bottom: var(--kp-space-3);
+}
+
+.kp-fieldset--product-copy textarea {
+    min-height: 8rem;
+}
+
+.kp-inline-gallery .field-alt_text_sr,
+.kp-inline-gallery .field-alt_text_en {
+    min-width: 10rem;
+}

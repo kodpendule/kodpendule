@@ -14,8 +14,9 @@ services:
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: config.settings.production
+      # Must be a full patch version on Render; 3.14 breaks Django admin changelists.
       - key: PYTHON_VERSION
-        value: "3.12.0"
+        value: "3.12.11"
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
