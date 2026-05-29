@@ -90,13 +90,8 @@
             document.body.classList.remove("kp-admin-nav-open");
             return;
         }
-        var shouldOpen = false;
-        try {
-            shouldOpen = localStorage.getItem("django.admin.navSidebarIsOpen") === "true";
-        } catch (e) {
-            shouldOpen = false;
-        }
-        setSidebarOpen(shouldOpen);
+        /* Drawer always starts closed on mobile (desktop localStorage would break layout). */
+        setSidebarOpen(false);
     }
 
     function initMobileNav() {
@@ -119,13 +114,22 @@
         });
 
         if (toggle) {
-            toggle.addEventListener("click", function () {
+            toggle.addEventListener("click", function (event) {
+                event.stopPropagation();
                 setSidebarOpen(!main.classList.contains("shifted"));
             });
         }
 
-        main.addEventListener("click", function (event) {
-            if (!isMobile() || !main.classList.contains("shifted")) {
+        var drawerClose = document.getElementById("kp-nav-drawer-close");
+        if (drawerClose) {
+            drawerClose.addEventListener("click", function (event) {
+                event.stopPropagation();
+                setSidebarOpen(false);
+            });
+        }
+
+        document.addEventListener("click", function (event) {
+            if (!isMobile() || !document.body.classList.contains("kp-admin-nav-open")) {
                 return;
             }
             if (event.target.closest("#nav-sidebar, #toggle-nav-sidebar")) {

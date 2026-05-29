@@ -9,6 +9,13 @@
     <span class="kp-nav-toggle__label">{% trans "Open menu" %}</span>
 </button>
 <nav class="sticky kp-admin-sidebar" id="nav-sidebar" aria-label="{% translate 'Sidebar' %}">
+    <div class="kp-nav-drawer__toolbar">
+        <button type="button" class="kp-nav-drawer__close" id="kp-nav-drawer-close"
+                aria-label="{% trans 'Close menu' %}">
+            <span class="kp-nav-drawer__close-icon" aria-hidden="true"></span>
+            <span>{% trans "Close menu" %}</span>
+        </button>
+    </div>
     <div class="kp-admin-sidebar__brand">
         <a href="{% url 'admin:index' %}" class="kp-admin-sidebar__home">
             <span class="kp-admin-sidebar__home-title">{% trans "Admin home" %}</span>
