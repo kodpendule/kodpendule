@@ -15,7 +15,7 @@
 }
 
 .shop-body main.flex-grow-1 {
-    scroll-padding-top: 5rem;
+    scroll-padding-top: var(--shop-space-4);
 }
 
 @media (max-width: 991.98px) {

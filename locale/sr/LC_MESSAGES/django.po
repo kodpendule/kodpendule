@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kod Pendule\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-30 22:25+0200\n"
+"POT-Creation-Date: 2026-05-30 23:11+0200\n"
 "Language: sr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
@@ -205,6 +205,7 @@ msgstr[2] "%(count)s proizvoda u korpi"
 #: .\apps\cart\apps.py:8 .\apps\cart\views.py:36
 #: .\templates\cart\detail.html:12 .\templates\includes\_footer.html:32
 #: .\templates\includes\_header.html:29 .\templates\includes\_header.html:35
+#: .\templates\includes\_header_panel_body.html:29
 msgid "Cart"
 msgstr "Korpa"
 
@@ -1137,7 +1138,6 @@ msgstr "Stavke narudžbine"
 
 #: .\apps\orders\services\order_notifications.py:40
 #, python-format
-#| msgid "Order %(number)s"
 msgid "New order %(number)s"
 msgstr "Nova narudžbina %(number)s"
 
@@ -1147,13 +1147,11 @@ msgstr "Nova narudžbina je poslata preko prodavnice."
 
 #: .\apps\orders\services\order_notifications.py:44
 #, python-format
-#| msgid "Order %(number)s"
 msgid "Order number: %(number)s"
 msgstr "Broj narudžbine: %(number)s"
 
 #: .\apps\orders\services\order_notifications.py:45
 #, python-format
-#| msgid "Customer contacts"
 msgid "Customer: %(name)s"
 msgstr "Kupac: %(name)s"
 
@@ -1179,18 +1177,15 @@ msgstr "Grad dostave: %(city)s"
 
 #: .\apps\orders\services\order_notifications.py:50
 #, python-format
-#| msgid "Delivery address"
 msgid "Delivery street: %(street)s"
 msgstr "Ulica dostave: %(street)s"
 
 #: .\apps\orders\services\order_notifications.py:54
 #, python-format
-#| msgid "Preferred delivery: %(date)s"
 msgid "Preferred delivery date: %(date)s"
 msgstr "Željeni datum dostave: %(date)s"
 
 #: .\apps\orders\services\order_notifications.py:58
-#| msgid "Order notes"
 msgid "Order notes:"
 msgstr "Napomene uz narudžbinu:"
 
@@ -1222,8 +1217,8 @@ msgstr "Narudžbina %(number)s"
 
 #: .\apps\orders\views.py:110 .\templates\checkout\success.html:41
 #: .\templates\includes\_footer.html:42 .\templates\includes\_header.html:45
-#: .\templates\includes\_header.html:111 .\templates\orders\detail.html:11
-#: .\templates\orders\history.html:7
+#: .\templates\includes\_header_panel_body.html:43
+#: .\templates\orders\detail.html:11 .\templates\orders\history.html:7
 msgid "My orders"
 msgstr "Moje narudžbine"
 
@@ -1377,9 +1372,10 @@ msgid "Search results for “%(query)s”"
 msgstr "Rezultati pretrage za „%(query)s”"
 
 #: .\apps\products\views.py:64 .\templates\includes\_header.html:13
-#: .\templates\includes\_header.html:23 .\templates\includes\_header.html:86
-#: .\templates\includes\_header.html:91 .\templates\products\list.html:37
-#: .\templates\products\list.html:38
+#: .\templates\includes\_header.html:23
+#: .\templates\includes\_header_panel_body.html:8
+#: .\templates\includes\_header_panel_body.html:13
+#: .\templates\products\list.html:37 .\templates\products\list.html:38
 msgid "Search"
 msgstr "Pretraga"
 
@@ -1425,7 +1421,8 @@ msgstr "Kupovina kao gost ne zahteva nalog."
 
 #: .\templates\accounts\login.html:23 .\templates\accounts\register.html:40
 #: .\templates\checkout\checkout.html:20 .\templates\includes\_footer.html:44
-#: .\templates\includes\_header.html:54 .\templates\includes\_header.html:118
+#: .\templates\includes\_header.html:54
+#: .\templates\includes\_header_panel_body.html:50
 #: .\templates\orders\track.html:42
 msgid "Sign in"
 msgstr "Prijava"
@@ -1435,7 +1432,7 @@ msgid "No account?"
 msgstr "Nemate nalog?"
 
 #: .\templates\accounts\login.html:28 .\templates\includes\_header.html:55
-#: .\templates\includes\_header.html:117
+#: .\templates\includes\_header_panel_body.html:49
 msgid "Register"
 msgstr "Registracija"
 
@@ -1708,6 +1705,7 @@ msgstr "Sačuvaj preporučene proizvode"
 
 #: .\templates\base.html:9 .\templates\includes\_footer.html:12
 #: .\templates\includes\_footer.html:77 .\templates\includes\_header.html:5
+#: .\templates\includes\_header_panel_body.html:3
 #: .\templates\includes\_hero.html:13
 msgid "Kod Pendule"
 msgstr "Kod Pendule"
@@ -1759,8 +1757,7 @@ msgstr ""
 "Pregledajte katalog i dodajte proizvode — plaćanje je jednostavno i "
 "bezbedno."
 
-#: .\templates\cart\detail.html:105 .\templates\includes\_header.html:123
-#: .\templates\orders\history.html:62
+#: .\templates\cart\detail.html:105 .\templates\orders\history.html:62
 msgid "Browse products"
 msgstr "Pregledaj proizvode"
 
@@ -1967,33 +1964,41 @@ msgstr "Sva prava zadržana."
 msgid "Cash on delivery (COD) — pay when your order arrives."
 msgstr "Plaćanje pouzećem (COD) — platite kada narudžbina stigne."
 
-#: .\templates\includes\_header.html:21 .\templates\includes\_header.html:89
+#: .\templates\includes\_header.html:21
+#: .\templates\includes\_header_panel_body.html:11
 #: .\templates\products\list.html:37
 msgid "Search products…"
 msgstr "Pretraži proizvode…"
 
-#: .\templates\includes\_header.html:51 .\templates\includes\_header.html:114
+#: .\templates\includes\_header.html:51
+#: .\templates\includes\_header_panel_body.html:46
 msgid "Sign out"
 msgstr "Odjava"
 
-#: .\templates\includes\_header.html:68 .\templates\includes\_header.html:95
+#: .\templates\includes\_header.html:68
+#: .\templates\includes\_header_panel_body.html:17
 msgid "Main navigation"
 msgstr "Glavna navigacija"
 
-#: .\templates\includes\_header.html:80
+#: .\templates\includes\_header.html:79
+#| msgid "Open menu"
+msgid "Open site menu"
+msgstr "Otvori meni sajta"
+
+#: .\templates\includes\_header.html:88
 msgid "Menu"
 msgstr "Meni"
 
-#: .\templates\includes\_header.html:81
+#: .\templates\includes\_header.html:89
 msgid "Close"
 msgstr "Zatvori"
 
-#: .\templates\includes\_header.html:102
+#: .\templates\includes\_header_panel_body.html:34
 #: .\templates\includes\_language_switcher.html:5
 msgid "Language"
 msgstr "Jezik"
 
-#: .\templates\includes\_header.html:109
+#: .\templates\includes\_header_panel_body.html:41
 #, python-format
 msgid "Hello, %(name)s"
 msgstr "Zdravo, %(name)s"

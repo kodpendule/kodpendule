@@ -58,13 +58,13 @@
 /* —— Hero —— */
 .shop-hero {
     background: linear-gradient(165deg, var(--shop-color-primary-soft) 0%, var(--shop-color-bg) 55%);
-    border-bottom: 1px solid var(--shop-color-border-subtle);
-    padding-block: var(--shop-space-6);
+    border-bottom: 1px solid var(--shop-color-primary-muted);
+    padding-block: var(--shop-space-5);
 }
 
 @media (min-width: 992px) {
     .shop-hero {
-        padding-block: var(--shop-space-10);
+        padding-block: var(--shop-space-6);
     }
 }
 
@@ -587,14 +587,14 @@
 .shop-hero--rich {
     position: relative;
     overflow: hidden;
-    padding-block: var(--shop-space-8);
+    padding-block: var(--shop-space-5);
     background: linear-gradient(
         155deg,
-        rgba(11, 53, 40, 0.14) 0%,
-        var(--shop-color-primary-soft) 24%,
-        #eef4f1 52%,
-        var(--shop-color-bg) 78%,
-        var(--shop-color-accent-soft) 100%
+        var(--shop-color-primary-muted) 0%,
+        var(--shop-color-primary-soft) 22%,
+        #dce8e3 48%,
+        var(--shop-color-primary-soft) 72%,
+        var(--shop-color-bg) 100%
     );
 }
 
@@ -603,19 +603,17 @@
     position: absolute;
     inset: 0;
     background: radial-gradient(
-        ellipse 70% 55% at 12% 35%,
-        rgba(11, 53, 40, 0.16),
-        transparent 68%
+        ellipse 80% 70% at 8% 20%,
+        rgba(11, 53, 40, 0.22),
+        transparent 62%
     );
     pointer-events: none;
 }
 
 @media (min-width: 992px) {
     .shop-hero--rich {
-        padding-block: var(--shop-space-10);
-        min-height: min(88vh, 44rem);
-        display: flex;
-        align-items: center;
+        padding-block: var(--shop-space-6);
+        min-height: unset;
     }
 }
 
@@ -635,11 +633,12 @@
 }
 
 .shop-hero__orb--1 {
-    width: 22rem;
-    height: 22rem;
-    background: var(--shop-color-primary-muted);
-    top: -6rem;
-    right: 10%;
+    width: 18rem;
+    height: 18rem;
+    background: var(--shop-color-primary);
+    opacity: 0.28;
+    top: -5rem;
+    right: 8%;
 }
 
 .shop-hero__orb--2 {
@@ -655,8 +654,8 @@
 .shop-hero__orb--3 {
     width: 10rem;
     height: 10rem;
-    background: var(--shop-color-primary);
-    opacity: 0.22;
+    background: var(--shop-color-primary-active);
+    opacity: 0.24;
     top: 40%;
     left: 35%;
     animation-delay: -7s;
@@ -667,7 +666,7 @@
 }
 
 #home-categories {
-    scroll-margin-top: calc(var(--shop-header-height, 4.5rem) + var(--shop-space-3));
+    scroll-margin-top: var(--shop-space-4);
 }
 
 @keyframes shop-hero-float {
@@ -713,14 +712,14 @@
 
 .shop-hero__visual {
     position: relative;
-    min-height: 18rem;
-    max-width: 26rem;
+    min-height: 14rem;
+    max-width: 22rem;
     margin-inline: auto;
 }
 
 @media (min-width: 992px) {
     .shop-hero__visual {
-        min-height: 22rem;
+        min-height: 16rem;
         max-width: none;
         margin-inline: 0;
     }
@@ -728,7 +727,7 @@
 
 .shop-hero__card {
     border-radius: var(--shop-radius-lg);
-    border: 1px solid var(--shop-color-border-subtle);
+    border: 1px solid rgba(11, 53, 40, 0.12);
     background: var(--shop-color-surface);
     box-shadow: var(--shop-shadow-md);
 }
@@ -736,6 +735,11 @@
 .shop-hero__card--back {
     overflow: hidden;
     aspect-ratio: 4 / 5;
+    background: linear-gradient(
+        165deg,
+        var(--shop-color-primary-soft) 0%,
+        var(--shop-color-surface) 100%
+    );
 }
 
 .shop-hero__card-img {
@@ -747,9 +751,9 @@
 
 .shop-hero__card-logo {
     display: block;
-    width: 55%;
+    width: 52%;
     margin: auto;
-    padding-block: 25%;
+    padding-block: 22%;
     object-fit: contain;
 }
 

@@ -1,5 +1,5 @@
 {% load shop_urls i18n static %}
-<header class="shop-header sticky-top" role="banner">
+<header class="shop-header" role="banner">
     <div class="shop-header__bar">
         <div class="container shop-container shop-header__bar-inner">
             <a class="shop-header__brand" href="{% shop_url 'core:home' %}" aria-label="{% if site_settings %}{{ site_settings.site_name }}{% else %}{% trans 'Kod Pendule' %}{% endif %}">
@@ -56,9 +56,9 @@
                     {% endif %}
                 </div>
 
-                <button class="shop-header__menu-btn d-lg-none" type="button"
-                        data-bs-toggle="offcanvas" data-bs-target="#shopMobileNav"
-                        aria-controls="shopMobileNav" aria-label="{% trans 'Open menu' %}">
+                <button class="shop-header__menu-btn d-lg-none shop-header__menu-btn--top" type="button"
+                        data-bs-toggle="offcanvas" data-bs-target="#shopHeaderPanel"
+                        aria-controls="shopHeaderPanel" aria-label="{% trans 'Open menu' %}">
                     <span class="shop-header__menu-icon" aria-hidden="true"></span>
                 </button>
             </div>
@@ -74,52 +74,19 @@
     </nav>
 </header>
 
-<div class="offcanvas offcanvas-end shop-offcanvas" tabindex="-1" id="shopMobileNav"
-     aria-labelledby="shopMobileNavLabel">
-    <div class="offcanvas-header shop-offcanvas__header">
-        <p class="offcanvas-title shop-offcanvas__title" id="shopMobileNavLabel">{% trans "Menu" %}</p>
+<button type="button" class="shop-header-fab shop-header-fab--desktop" id="shopHeaderFab"
+        data-bs-toggle="offcanvas" data-bs-target="#shopHeaderPanel"
+        aria-controls="shopHeaderPanel" aria-label="{% trans 'Open site menu' %}" hidden>
+    <span class="shop-header-fab__label">{% trans "Menu" %}</span>
+</button>
+
+<div class="offcanvas offcanvas-start shop-header-panel" tabindex="-1" id="shopHeaderPanel"
+     aria-labelledby="shopHeaderPanelLabel" data-bs-scroll="true" data-bs-backdrop="true">
+    <div class="offcanvas-header shop-header-panel__header">
+        <p class="offcanvas-title shop-header-panel__title" id="shopHeaderPanelLabel">{% trans "Menu" %}</p>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="{% trans 'Close' %}"></button>
     </div>
-    <div class="offcanvas-body shop-offcanvas__body">
-        <form class="shop-header__search shop-search shop-header__search--mobile mb-4" method="get"
-              action="{% shop_url 'products:list' %}" role="search">
-            <label class="visually-hidden" for="shop-mobile-search">{% trans "Search" %}</label>
-            <input id="shop-mobile-search" class="form-control shop-header__search-input" type="search"
-                   name="q" value="{{ request.GET.q|default:'' }}"
-                   placeholder="{% trans 'Search products…' %}" autocomplete="off">
-            <button type="submit" class="shop-btn shop-btn--primary shop-btn--block mt-2">
-                {% trans "Search" %}
-            </button>
-        </form>
-
-        <nav aria-label="{% trans 'Main navigation' %}">
-            <ul class="nav flex-column shop-offcanvas__nav">
-                {% include "includes/_header_nav_links.html" with link_class="shop-offcanvas__link" %}
-            </ul>
-        </nav>
-
-        <div class="shop-offcanvas__section">
-            <p class="shop-offcanvas__section-title">{% trans "Language" %}</p>
-            {% include "includes/_language_switcher.html" %}
-        </div>
-
-        <div class="shop-offcanvas__section shop-offcanvas__account">
-            {% if user.is_authenticated %}
-            <p class="shop-offcanvas__greeting text-muted small mb-2">
-                {% blocktrans with name=user.get_short_name|default:user.username %}Hello, {{ name }}{% endblocktrans %}
-            </p>
-            <a class="shop-btn shop-btn--secondary shop-btn--block mb-2" href="{% shop_url 'orders:history' %}">{% trans "My orders" %}</a>
-            <form method="post" action="{% shop_url 'accounts:logout' %}">
-                {% csrf_token %}
-                <button type="submit" class="shop-btn shop-btn--ghost shop-btn--block">{% trans "Sign out" %}</button>
-            </form>
-            {% else %}
-            <a class="shop-btn shop-btn--primary shop-btn--block mb-2" href="{% shop_url 'accounts:register' %}">{% trans "Register" %}</a>
-            <a class="shop-btn shop-btn--secondary shop-btn--block" href="{% shop_url 'accounts:login' %}">{% trans "Sign in" %}</a>
-            {% endif %}
-        </div>
-
-        <a class="shop-btn shop-btn--primary shop-btn--block shop-offcanvas__cta mt-4"
-           href="{% shop_url 'products:list' %}">{% trans "Browse products" %}</a>
+    <div class="offcanvas-body shop-header-panel__body">
+        {% include "includes/_header_panel_body.html" %}
     </div>
 </div>
