@@ -1,5 +1,5 @@
-{% load i18n %}
-<form action="{% url 'set_language' %}" method="post" class="shop-lang">
+{% load shop_urls i18n %}
+<form action="{% shop_url 'set_language' %}" method="post" class="shop-lang">
     {% csrf_token %}
     <input type="hidden" name="next" value="{{ request.get_full_path }}">
     <span class="visually-hidden" id="shop-lang-label">{% trans "Language" %}</span>

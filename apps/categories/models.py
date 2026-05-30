@@ -1,5 +1,4 @@
 from django.db import models
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from parler.models import TranslatableModel, TranslatedFields
 
@@ -39,9 +38,10 @@ class Category(TranslatableModel):
         return self.safe_translation_getter("name", any_language=True) or f"Category #{self.pk}"
 
     def get_absolute_url(self) -> str:
+        from apps.core.storefront_urls import shop_reverse
         from apps.core.slugs import localized_slug
 
         slug = localized_slug(self)
         if not slug:
-            return reverse("categories:list")
-        return reverse("categories:detail", kwargs={"slug": slug})
+            return shop_reverse("categories:list")
+        return shop_reverse("categories:detail", slug=slug)

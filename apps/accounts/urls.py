@@ -1,11 +1,15 @@
-from django.urls import path
-
 from apps.accounts.views import UserLoginView, UserLogoutView, UserRegisterView
+from apps.core.storefront_urls import localized_path
 
 app_name = "accounts"
 
 urlpatterns = [
-    path("prijava/", UserLoginView.as_view(), name="login"),
-    path("registracija/", UserRegisterView.as_view(), name="register"),
-    path("odjava/", UserLogoutView.as_view(), name="logout"),
+    *localized_path("accounts:login", UserLoginView.as_view(), sr="prijava/", en="login/"),
+    *localized_path(
+        "accounts:register",
+        UserRegisterView.as_view(),
+        sr="registracija/",
+        en="register/",
+    ),
+    *localized_path("accounts:logout", UserLogoutView.as_view(), sr="odjava/", en="logout/"),
 ]

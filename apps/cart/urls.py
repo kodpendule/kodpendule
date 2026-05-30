@@ -1,13 +1,27 @@
-from django.urls import path
-
 from apps.cart.views import CartAddView, CartDetailView, CartRemoveView, CartUpdateView
+from apps.core.storefront_urls import localized_path
 
 app_name = "cart"
 
 urlpatterns = [
-    path("korpa/", CartDetailView.as_view(), name="detail"),
-    path("korpa/dodaj/", CartAddView.as_view(), name="add"),
-    path("korpa/dodaj/<slug:slug>/", CartAddView.as_view(), name="add_by_slug"),
-    path("korpa/azuriraj/<int:product_id>/", CartUpdateView.as_view(), name="update"),
-    path("korpa/ukloni/<int:product_id>/", CartRemoveView.as_view(), name="remove"),
+    *localized_path("cart:detail", CartDetailView.as_view(), sr="korpa/", en="cart/"),
+    *localized_path("cart:add", CartAddView.as_view(), sr="korpa/dodaj/", en="cart/add/"),
+    *localized_path(
+        "cart:add_by_slug",
+        CartAddView.as_view(),
+        sr="korpa/dodaj/<slug:slug>/",
+        en="cart/add/<slug:slug>/",
+    ),
+    *localized_path(
+        "cart:update",
+        CartUpdateView.as_view(),
+        sr="korpa/azuriraj/<int:product_id>/",
+        en="cart/update/<int:product_id>/",
+    ),
+    *localized_path(
+        "cart:remove",
+        CartRemoveView.as_view(),
+        sr="korpa/ukloni/<int:product_id>/",
+        en="cart/remove/<int:product_id>/",
+    ),
 ]

@@ -29,6 +29,15 @@ CSV_FIELD_KEYS = [
     "username",
 ]
 
+# Subset exported to admin CSV download (date/order columns stay import-only).
+EXPORT_FIELD_KEYS = [
+    "email",
+    "first_name",
+    "last_name",
+    "phone",
+    "username",
+]
+
 # Serbian CSV column headers (Latin script).
 CSV_HEADERS_SR: dict[str, str] = {
     "email": "Email",
@@ -42,7 +51,7 @@ CSV_HEADERS_SR: dict[str, str] = {
     "username": "Korisničko ime",
 }
 
-EXPORT_FIELDNAMES = [CSV_HEADERS_SR[key] for key in CSV_FIELD_KEYS]
+EXPORT_FIELDNAMES = [CSV_HEADERS_SR[key] for key in EXPORT_FIELD_KEYS]
 
 # English headers accepted on import for files exported before localization.
 _CSV_HEADERS_EN: dict[str, str] = {
@@ -99,16 +108,29 @@ def export_contacts_csv() -> bytes:
             "email": contact.email,
             "first_name": contact.first_name,
             "last_name": contact.last_name,
-            "phone": contact.phone,
-            "order_count": contact.order_count,
-            "registered_at": _format_dt(contact.registered_at),
-            "first_seen_at": _format_dt(contact.first_seen_at),
-            "last_seen_at": _format_dt(contact.last_seen_at),
+            "phone": _format_phone_for_excel(contact.phone),
             "username": contact.user.username if contact.user_id else "",
         }
-        writer.writerow({CSV_HEADERS_SR[key]: row[key] for key in CSV_FIELD_KEYS})
+        writer.writerow({CSV_HEADERS_SR[key]: row[key] for key in EXPORT_FIELD_KEYS})
 
     return buffer.getvalue().encode("utf-8-sig")
+
+
+def _normalize_phone_import(raw: str) -> str:
+    """Strip Excel text formula wrapper from exported phone cells."""
+    phone = (raw or "").strip()
+    if phone.startswith('="') and phone.endswith('"'):
+        phone = phone[2:-1].replace('""', '"')
+    return phone
+
+
+def _format_phone_for_excel(phone: str) -> str:
+    """Force Excel to treat phone values as text (avoids 6.44E+08 scientific notation)."""
+    phone = (phone or "").strip()
+    if not phone:
+        return ""
+    escaped = phone.replace('"', '""')
+    return f'="{escaped}"'
 
 
 def _format_dt(value: datetime | None) -> str:
@@ -205,7 +227,7 @@ def import_contacts_csv(file_obj) -> ImportResult:
 
         first_name = (row.get("first_name") or "").strip()
         last_name = (row.get("last_name") or "").strip()
-        phone = (row.get("phone") or "").strip()
+        phone = _normalize_phone_import(row.get("phone", ""))
         username = (row.get("username") or "").strip()
 
         user = None

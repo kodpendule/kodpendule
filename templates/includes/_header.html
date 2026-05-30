@@ -1,15 +1,15 @@
-{% load i18n static %}
+{% load shop_urls i18n static %}
 <header class="shop-header sticky-top" role="banner">
     <div class="shop-header__bar">
         <div class="container shop-container shop-header__bar-inner">
-            <a class="shop-header__brand" href="{% url 'core:home' %}" aria-label="{% if site_settings %}{{ site_settings.site_name }}{% else %}{% trans 'Kod Pendule' %}{% endif %}">
+            <a class="shop-header__brand" href="{% shop_url 'core:home' %}" aria-label="{% if site_settings %}{{ site_settings.site_name }}{% else %}{% trans 'Kod Pendule' %}{% endif %}">
                 <span class="shop-header__mark" aria-hidden="true">
                     <img src="{% static 'images/logo.webp' %}" class="shop-header__logo" alt="">
                 </span>
             </a>
 
             <form class="shop-header__search shop-search d-none d-lg-flex align-items-center" method="get"
-                  action="{% url 'products:list' %}" role="search">
+                  action="{% shop_url 'products:list' %}" role="search">
                 <label class="visually-hidden" for="shop-header-search">{% trans "Search" %}</label>
                 <span class="shop-header__search-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -25,7 +25,7 @@
             </form>
 
             <div class="shop-header__actions">
-                <a class="shop-header__action shop-header__cart" href="{% url 'cart:detail' %}"
+                <a class="shop-header__action shop-header__cart" href="{% shop_url 'cart:detail' %}"
                    aria-label="{% trans 'Cart' %}{% if cart_item_count %} ({{ cart_item_count }}){% endif %}">
                     <span class="shop-header__action-icon" aria-hidden="true">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
@@ -33,9 +33,7 @@
                         </svg>
                     </span>
                     <span class="d-none d-md-inline">{% trans "Cart" %}</span>
-                    {% if cart_item_count %}
-                    <span class="shop-header__badge">{{ cart_item_count }}</span>
-                    {% endif %}
+                    <span class="shop-header__badge" data-cart-header-count{% if not cart_item_count %} hidden{% endif %}>{% if cart_item_count %}{{ cart_item_count }}{% else %}0{% endif %}</span>
                 </a>
 
                 <div class="shop-header__action shop-header__lang-wrap d-none d-md-block">
@@ -44,17 +42,17 @@
 
                 <div class="shop-header__account d-none d-lg-flex align-items-center gap-2">
                     {% if user.is_authenticated %}
-                    <a class="shop-header__account-link" href="{% url 'orders:history' %}">{% trans "My orders" %}</a>
+                    <a class="shop-header__account-link" href="{% shop_url 'orders:history' %}">{% trans "My orders" %}</a>
                     <span class="shop-header__account-name text-muted small">
                         {{ user.get_short_name|default:user.username }}
                     </span>
-                    <form method="post" action="{% url 'accounts:logout' %}" class="m-0">
+                    <form method="post" action="{% shop_url 'accounts:logout' %}" class="m-0">
                         {% csrf_token %}
                         <button type="submit" class="shop-btn shop-btn--secondary shop-btn--sm">{% trans "Sign out" %}</button>
                     </form>
                     {% else %}
-                    <a class="shop-header__account-link" href="{% url 'accounts:login' %}">{% trans "Sign in" %}</a>
-                    <a class="shop-btn shop-btn--primary shop-btn--sm" href="{% url 'accounts:register' %}">{% trans "Register" %}</a>
+                    <a class="shop-header__account-link" href="{% shop_url 'accounts:login' %}">{% trans "Sign in" %}</a>
+                    <a class="shop-btn shop-btn--primary shop-btn--sm" href="{% shop_url 'accounts:register' %}">{% trans "Register" %}</a>
                     {% endif %}
                 </div>
 
@@ -84,7 +82,7 @@
     </div>
     <div class="offcanvas-body shop-offcanvas__body">
         <form class="shop-header__search shop-search shop-header__search--mobile mb-4" method="get"
-              action="{% url 'products:list' %}" role="search">
+              action="{% shop_url 'products:list' %}" role="search">
             <label class="visually-hidden" for="shop-mobile-search">{% trans "Search" %}</label>
             <input id="shop-mobile-search" class="form-control shop-header__search-input" type="search"
                    name="q" value="{{ request.GET.q|default:'' }}"
@@ -110,18 +108,18 @@
             <p class="shop-offcanvas__greeting text-muted small mb-2">
                 {% blocktrans with name=user.get_short_name|default:user.username %}Hello, {{ name }}{% endblocktrans %}
             </p>
-            <a class="shop-btn shop-btn--secondary shop-btn--block mb-2" href="{% url 'orders:history' %}">{% trans "My orders" %}</a>
-            <form method="post" action="{% url 'accounts:logout' %}">
+            <a class="shop-btn shop-btn--secondary shop-btn--block mb-2" href="{% shop_url 'orders:history' %}">{% trans "My orders" %}</a>
+            <form method="post" action="{% shop_url 'accounts:logout' %}">
                 {% csrf_token %}
                 <button type="submit" class="shop-btn shop-btn--ghost shop-btn--block">{% trans "Sign out" %}</button>
             </form>
             {% else %}
-            <a class="shop-btn shop-btn--primary shop-btn--block mb-2" href="{% url 'accounts:register' %}">{% trans "Register" %}</a>
-            <a class="shop-btn shop-btn--secondary shop-btn--block" href="{% url 'accounts:login' %}">{% trans "Sign in" %}</a>
+            <a class="shop-btn shop-btn--primary shop-btn--block mb-2" href="{% shop_url 'accounts:register' %}">{% trans "Register" %}</a>
+            <a class="shop-btn shop-btn--secondary shop-btn--block" href="{% shop_url 'accounts:login' %}">{% trans "Sign in" %}</a>
             {% endif %}
         </div>
 
         <a class="shop-btn shop-btn--primary shop-btn--block shop-offcanvas__cta mt-4"
-           href="{% url 'products:list' %}">{% trans "Browse products" %}</a>
+           href="{% shop_url 'products:list' %}">{% trans "Browse products" %}</a>
     </div>
 </div>

@@ -149,6 +149,18 @@
     color: var(--shop-color-primary-active);
 }
 
+[data-cart-page].is-cart-updating .shop-summary-card__totals dd,
+[data-cart-page].is-cart-updating [data-cart-line-total] {
+    opacity: 0.55;
+}
+
+.shop-cart-line__error {
+    flex: 1 1 100%;
+    margin: var(--shop-space-2) 0 0;
+    font-size: var(--shop-font-size-sm);
+    color: var(--shop-color-danger);
+}
+
 /* —— Summary card —— */
 .shop-summary-card {
     padding: var(--shop-space-5);

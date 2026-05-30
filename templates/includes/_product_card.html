@@ -1,4 +1,4 @@
-{% load i18n shop_tags %}
+{% load shop_urls i18n shop_tags %}
 <article class="shop-product-card" aria-label="{{ product.name }}">
     <div class="shop-product-card__media">
         <a href="{{ product.get_absolute_url }}" class="shop-product-card__media-link" aria-label="{{ product.name }}">
@@ -47,7 +47,7 @@
 
             <div class="shop-product-card__actions">
                 {% if product.stock > 0 %}
-                <form method="post" action="{% url 'cart:add' %}" class="shop-product-card__cart-form">
+                <form method="post" action="{% shop_url 'cart:add' %}" class="shop-product-card__cart-form">
                     {% csrf_token %}
                     <input type="hidden" name="product_id" value="{{ product.pk }}">
                     <input type="hidden" name="quantity" value="1">

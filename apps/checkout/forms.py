@@ -49,31 +49,6 @@ class CheckoutForm(forms.Form):
         widget=forms.TextInput(attrs={"class": "form-control", "autocomplete": "postal-code"}),
     )
 
-    billing_same_as_shipping = forms.BooleanField(
-        label=_("Billing address is the same as shipping"),
-        required=False,
-        initial=True,
-        widget=forms.CheckboxInput(attrs={"class": "form-check-input", "id": "id_billing_same"}),
-    )
-    billing_street = forms.CharField(
-        label=_("Billing street"),
-        max_length=255,
-        required=False,
-        widget=forms.TextInput(attrs={"class": "form-control"}),
-    )
-    billing_city_name = forms.CharField(
-        label=_("Billing city"),
-        max_length=120,
-        required=False,
-        widget=forms.TextInput(attrs={"class": "form-control"}),
-    )
-    billing_postal_code = forms.CharField(
-        label=_("Billing postal code"),
-        max_length=20,
-        required=False,
-        widget=forms.TextInput(attrs={"class": "form-control"}),
-    )
-
     order_notes = forms.CharField(
         label=_("Order notes (required)"),
         widget=forms.Textarea(
@@ -137,13 +112,8 @@ class CheckoutForm(forms.Form):
 
     def clean(self):
         cleaned = super().clean()
-        if cleaned.get("billing_same_as_shipping"):
-            city = cleaned.get("shipping_city")
-            cleaned["billing_street"] = cleaned.get("shipping_street", "")
-            cleaned["billing_city_name"] = city.name if city else ""
-            cleaned["billing_postal_code"] = cleaned.get("shipping_postal_code", "")
-        else:
-            for field in ("billing_street", "billing_city_name", "billing_postal_code"):
-                if not cleaned.get(field):
-                    self.add_error(field, _("This field is required."))
+        city = cleaned.get("shipping_city")
+        cleaned["billing_street"] = cleaned.get("shipping_street", "")
+        cleaned["billing_city_name"] = city.name if city else ""
+        cleaned["billing_postal_code"] = cleaned.get("shipping_postal_code", "")
         return cleaned

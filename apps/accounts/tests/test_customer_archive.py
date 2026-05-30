@@ -2,7 +2,6 @@ from datetime import timedelta
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from django.urls import reverse
 from django.utils import timezone
 
 from apps.accounts.models import CustomerContact, CustomerProfile
@@ -10,6 +9,7 @@ from apps.accounts.services import archive_customer_from_checkout, archive_custo
 from apps.accounts.services.customer_archive import normalize_customer_email
 from apps.cart.cart import get_cart
 from apps.checkout.tests.test_checkout import CheckoutServiceTests
+from apps.core.storefront_urls import shop_reverse
 from apps.orders.services import create_order_from_checkout
 
 User = get_user_model()
@@ -105,7 +105,7 @@ class CustomerArchiveRegistrationTests(TestCase):
 
     def test_register_creates_customer_contact(self) -> None:
         response = self.client.post(
-            reverse("accounts:register"),
+            shop_reverse("accounts:register"),
             {
                 "username": "archived",
                 "email": "archived@example.com",

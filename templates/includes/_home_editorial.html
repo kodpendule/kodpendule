@@ -1,4 +1,4 @@
-{% load i18n shop_tags static %}
+{% load shop_urls i18n shop_tags static %}
 <section class="shop-section shop-home-editorial" aria-labelledby="home-editorial-title">
     <div class="container shop-container">
         <div class="shop-home-editorial__grid shop-reveal" data-reveal>
@@ -13,7 +13,7 @@
                     <li>{% trans "Clear product information" %}</li>
                     <li>{% trans "Support in Serbian" %}</li>
                 </ul>
-                <a href="{% url 'core:contact' %}" class="shop-btn shop-btn--primary">{% trans "Talk to us" %}</a>
+                <a href="{% shop_url 'core:contact' %}" class="shop-btn shop-btn--primary">{% trans "Talk to us" %}</a>
             </div>
             <div class="shop-home-editorial__visual">
                 {% if featured_product and featured_product.main_image %}

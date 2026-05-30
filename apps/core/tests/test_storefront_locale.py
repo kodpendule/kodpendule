@@ -1,14 +1,14 @@
 from django.conf import settings
 from django.test import TestCase
-from django.urls import reverse
 
 from apps.core.middleware import StorefrontDefaultSerbianMiddleware
+from apps.core.storefront_urls import shop_reverse
 
 
 class StorefrontDefaultSerbianMiddlewareTests(TestCase):
     def test_first_visit_ignores_accept_language(self) -> None:
         response = self.client.get(
-            reverse("core:home"),
+            shop_reverse("core:home"),
             HTTP_ACCEPT_LANGUAGE="en-US,en;q=0.9",
         )
         self.assertEqual(response.status_code, 200)
@@ -18,7 +18,7 @@ class StorefrontDefaultSerbianMiddlewareTests(TestCase):
     def test_language_cookie_is_respected(self) -> None:
         self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = "en"
         response = self.client.get(
-            reverse("core:home"),
+            shop_reverse("core:home"),
             HTTP_ACCEPT_LANGUAGE="en-US,en;q=0.9",
         )
         self.assertEqual(response.status_code, 200)

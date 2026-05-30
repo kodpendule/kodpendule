@@ -1,10 +1,9 @@
-from django.urls import path
-
+from apps.core.storefront_urls import localized_path
 from apps.core.views import ContactView, HomeView
 
 app_name = "core"
 
 urlpatterns = [
-    path("", HomeView.as_view(), name="home"),
-    path("kontakt/", ContactView.as_view(), name="contact"),
+    *localized_path("core:home", HomeView.as_view(), sr="", en=""),
+    *localized_path("core:contact", ContactView.as_view(), sr="kontakt/", en="contact/"),
 ]

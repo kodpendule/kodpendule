@@ -7,13 +7,13 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
-from django.views.i18n import set_language
 
 import config.admin_branding  # noqa: F401 — Serbian admin site headers
 from apps.core.admin_site import legacy_admin_redirect_patterns
 from apps.core.admin_slugs import DASHBOARD_ADMIN_SLUG
 from apps.core.sitemaps import sitemaps
-from apps.core.views import robots_txt
+from apps.core.storefront_urls import localized_path
+from apps.core.views import robots_txt, set_shop_language
 
 urlpatterns = [
     path("robots.txt", robots_txt, name="robots_txt"),
@@ -26,7 +26,7 @@ urlpatterns = [
     *legacy_admin_redirect_patterns(),
     path(f"admin/{DASHBOARD_ADMIN_SLUG}/", include("apps.dashboard.urls")),
     path("admin/", admin.site.urls),
-    path("jezik/", set_language, name="set_language"),
+    *localized_path("set_language", set_shop_language, sr="jezik/", en="language/"),
     path("", include("apps.core.urls")),
     path("", include("apps.categories.urls")),
     path("", include("apps.products.urls")),

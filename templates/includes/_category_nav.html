@@ -1,8 +1,8 @@
-{% load i18n %}
+{% load shop_urls i18n %}
 {% if nav_categories %}
 <nav class="category-nav mb-4" aria-label="{% trans 'Categories' %}">
     <div class="shop-category-chips" role="list">
-        <a class="shop-chip{% if not active_category %} is-active{% endif %}" href="{% url 'products:list' %}" role="listitem">
+        <a class="shop-chip{% if not active_category %} is-active{% endif %}" href="{% shop_url 'products:list' %}" role="listitem">
             {% trans "All products" %}
         </a>
         {% for category in nav_categories %}

@@ -1,7 +1,8 @@
 from django.conf import settings
 from django.db.models import F
-from django.http import HttpRequest, HttpResponse
-from django.utils.translation import gettext_lazy as _
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.utils.translation import check_for_language, gettext_lazy as _
+from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 
 from apps.core.contact_details import resolve_contact_details
@@ -12,8 +13,6 @@ from apps.categories.models import Category
 from apps.categories.selectors import get_nav_categories
 from apps.products.models import Product
 from apps.products.selectors import active_products_qs, recommended_products_qs
-
-RECOMMENDED_PRODUCTS_PER_PAGE = 5
 
 
 class HomeView(ShopLanguageMixin, TemplateView):
@@ -52,23 +51,19 @@ class HomeView(ShopLanguageMixin, TemplateView):
         for product in promo_sale_products:
             activate_parler_language(product, lang)
 
-        featured_product = next(
-            (p for p in new_arrivals if p.main_image),
-            new_arrivals[0] if new_arrivals else None,
-        )
+        recommended_products = list(recommended_products_qs(lang))
+        for product in recommended_products:
+            activate_parler_language(product, lang)
 
         nav_categories = list(get_nav_categories(lang))
         for category in nav_categories:
             activate_parler_language(category, lang)
 
-        recommended_products = list(recommended_products_qs(lang))
-        for product in recommended_products:
-            activate_parler_language(product, lang)
-
-        recommended_product_pages = [
-            recommended_products[i : i + RECOMMENDED_PRODUCTS_PER_PAGE]
-            for i in range(0, len(recommended_products), RECOMMENDED_PRODUCTS_PER_PAGE)
-        ]
+        # Editorial spotlight only — admin-picked recommended product with an image.
+        featured_product = next(
+            (p for p in recommended_products if p.main_image),
+            None,
+        )
 
         context.update(
             {
@@ -76,8 +71,7 @@ class HomeView(ShopLanguageMixin, TemplateView):
                 "promo_sale_products": promo_sale_products,
                 "featured_product": featured_product,
                 "home_nav_categories": nav_categories,
-                "recommended_product_pages": recommended_product_pages,
-                "recommended_products_total": len(recommended_products),
+                "recommended_products": recommended_products,
                 "home_stats": {
                     "product_count": product_qs.count(),
                     "category_count": Category.objects.filter(is_active=True).count(),
@@ -106,22 +100,57 @@ class ContactView(ShopLanguageMixin, TemplateView):
 
 def robots_txt(request: HttpRequest) -> HttpResponse:
     """Crawler rules for the storefront; sitemap URL follows the current host."""
+    from apps.core.storefront_urls import storefront_paths_for_robots
+
     sitemap_url = request.build_absolute_uri("/sitemap.xml")
     lines = [
         "User-agent: *",
         "Disallow: /admin/",
-        "Disallow: /korpa/",
-        "Disallow: /placanje/",
-        "Disallow: /prijava/",
-        "Disallow: /registracija/",
-        "Disallow: /odjava/",
-        "Disallow: /nalog/",
-        "Disallow: /narudzba/",
-        "Disallow: /jezik/",
-        "",
-        f"Sitemap: {sitemap_url}",
     ]
+    for path_prefix in storefront_paths_for_robots():
+        if path_prefix not in ("/",):
+            lines.append(f"Disallow: {path_prefix}")
+    lines.extend(
+        [
+            "",
+            f"Sitemap: {sitemap_url}",
+        ]
+    )
     if settings.DEBUG:
         lines.insert(2, "Disallow: /")
     body = "\n".join(lines) + "\n"
     return HttpResponse(body, content_type="text/plain; charset=utf-8")
+
+
+@require_POST
+def set_shop_language(request: HttpRequest) -> HttpResponse:
+    """Set storefront language cookie and redirect to the localized equivalent URL."""
+    from django.utils import translation
+    from urllib.parse import urlsplit, urlunsplit
+
+    from apps.core.storefront_urls import translate_storefront_url
+
+    language = request.POST.get("language")
+    next_url = request.POST.get("next") or "/"
+    if not language or not check_for_language(language):
+        return HttpResponseRedirect(next_url)
+
+    parts = urlsplit(next_url)
+    localized_path = translate_storefront_url(parts.path, language)
+    redirect_to = urlunsplit(
+        (parts.scheme, parts.netloc, localized_path, parts.query, parts.fragment)
+    )
+
+    translation.activate(language)
+    response = HttpResponseRedirect(redirect_to)
+    response.set_cookie(
+        settings.LANGUAGE_COOKIE_NAME,
+        language,
+        max_age=settings.LANGUAGE_COOKIE_AGE,
+        path=settings.LANGUAGE_COOKIE_PATH,
+        domain=settings.LANGUAGE_COOKIE_DOMAIN,
+        secure=settings.LANGUAGE_COOKIE_SECURE,
+        httponly=settings.LANGUAGE_COOKIE_HTTPONLY,
+        samesite=settings.LANGUAGE_COOKIE_SAMESITE,
+    )
+    return response

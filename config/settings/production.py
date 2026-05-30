@@ -77,6 +77,20 @@ if _csrf_origins:
 else:
     CSRF_TRUSTED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS if host]
 
+# --- Email (new order notifications) ------------------------------------------
+
+SHOP_ORDER_NOTIFICATION_EMAILS = config(
+    "SHOP_ORDER_NOTIFICATION_EMAILS",
+    default="",
+    cast=Csv(),
+)
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@kodpendule.rs")
+EMAIL_HOST = config("EMAIL_HOST", default="")
+EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
+
 # --- Logging ------------------------------------------------------------------
 
 LOGGING = {

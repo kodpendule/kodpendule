@@ -1,13 +1,12 @@
-{% load i18n %}
+{% load shop_urls i18n %}
 <section class="shop-cta-band shop-reveal" data-reveal aria-label="{% trans 'Start shopping' %}">
     <div class="container shop-container shop-cta-band__inner">
         <div class="shop-cta-band__copy">
             <h2 class="shop-cta-band__title">{% trans "Ready to order?" %}</h2>
-            <p class="shop-cta-band__text mb-0">{% trans "Browse the catalog, add items to your cart, and complete checkout in a few steps." %}</p>
+            <p class="shop-cta-band__text mb-0">{% trans "Pick a category, add items to your cart, and complete checkout in a few steps." %}</p>
         </div>
         <div class="shop-cta-band__actions">
-            <a class="shop-btn shop-btn--primary shop-btn--lg" href="{% url 'products:list' %}">{% trans "Browse products" %}</a>
-            <a class="shop-btn shop-btn--secondary shop-btn--lg" href="{% url 'cart:detail' %}">{% trans "View cart" %}</a>
+            <a class="shop-btn shop-btn--primary shop-btn--lg" href="{% shop_url 'categories:list' %}">{% trans "Order now" %}</a>
         </div>
     </div>
 </section>

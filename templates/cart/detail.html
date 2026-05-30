@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n shop_tags static %}
+{% load shop_urls i18n shop_tags static %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
@@ -11,19 +11,19 @@
     <header class="shop-page-header mb-4">
         <h1 class="shop-page-header__title">{% trans "Cart" %}</h1>
         {% if cart_lines %}
-        <p class="shop-page-header__meta mb-0">
+        <p class="shop-page-header__meta mb-0" data-cart-header-summary>
             {% blocktrans count count=cart_item_count %}{{ count }} item in your cart{% plural %}{{ count }} items in your cart{% endblocktrans %}
         </p>
         {% endif %}
     </header>
 
     {% if cart_lines %}
-    <div class="shop-cart">
+    <div class="shop-cart" data-cart-page>
         <div class="shop-cart__layout">
             <section class="shop-cart__items" aria-label="{% trans 'Cart items' %}">
                 <ul class="shop-cart-lines list-unstyled mb-0">
                     {% for line in cart_lines %}
-                    <li class="shop-cart-line">
+                    <li class="shop-cart-line" data-cart-line data-product-id="{{ line.product.pk }}">
                         <a href="{{ line.product.get_absolute_url }}" class="shop-cart-line__media">
                             {% if line.product.main_image %}
                             <img src="{{ line.product.main_image.url }}" alt="" loading="lazy">
@@ -44,7 +44,7 @@
                             </div>
 
                             <div class="shop-cart-line__actions">
-                                <form method="post" action="{% url 'cart:update' line.product.pk %}" class="shop-cart-line__qty-form" data-shop-cart-qty>
+                                <form method="post" action="{% shop_url 'cart:update' product_id=line.product.pk %}" class="shop-cart-line__qty-form" data-shop-cart-qty>
                                     {% csrf_token %}
                                     <div class="shop-qty shop-qty--compact" data-shop-qty>
                                         <button class="shop-qty__btn" type="button" data-shop-qty-dec aria-label="{% trans 'Decrease quantity' %}">−</button>
@@ -52,12 +52,9 @@
                                                class="shop-qty__input" inputmode="numeric" aria-label="{% trans 'Quantity' %}">
                                         <button class="shop-qty__btn" type="button" data-shop-qty-inc aria-label="{% trans 'Increase quantity' %}">+</button>
                                     </div>
-                                    <button type="submit" class="shop-btn shop-btn--secondary shop-btn--sm shop-cart-line__update">
-                                        {% trans "Update" %}
-                                    </button>
                                 </form>
 
-                                <form method="post" action="{% url 'cart:remove' line.product.pk %}" class="shop-cart-line__remove-form">
+                                <form method="post" action="{% shop_url 'cart:remove' product_id=line.product.pk %}" class="shop-cart-line__remove-form">
                                     {% csrf_token %}
                                     <button type="submit" class="shop-btn shop-btn--ghost shop-btn--sm">
                                         {% trans "Remove" %}
@@ -67,7 +64,7 @@
 
                             <p class="shop-cart-line__total">
                                 <span class="shop-cart-line__total-label">{% trans "Line total" %}</span>
-                                <span class="shop-cart-line__total-value">{{ line.line_total|money }}</span>
+                                <span class="shop-cart-line__total-value" data-cart-line-total>{{ line.line_total|money }}</span>
                             </p>
                         </div>
                     </li>
@@ -82,16 +79,16 @@
                     <dl class="shop-summary-card__totals">
                         <div class="shop-summary-card__row">
                             <dt>{% trans "Subtotal" %}</dt>
-                            <dd>{{ cart_subtotal|money }}</dd>
+                            <dd data-cart-subtotal>{{ cart_subtotal|money }}</dd>
                         </div>
                     </dl>
 
                     <p class="shop-summary-card__hint">{% trans "Shipping is calculated at checkout." %}</p>
 
-                    <a href="{% url 'checkout:checkout' %}" class="shop-btn shop-btn--primary shop-btn--lg shop-btn--block">
+                    <a href="{% shop_url 'checkout:checkout' %}" class="shop-btn shop-btn--primary shop-btn--lg shop-btn--block">
                         {% trans "Proceed to checkout" %}
                     </a>
-                    <a href="{% url 'products:list' %}" class="shop-btn shop-btn--secondary shop-btn--block mt-2">
+                    <a href="{% shop_url 'products:list' %}" class="shop-btn shop-btn--secondary shop-btn--block mt-2">
                         {% trans "Continue shopping" %}
                     </a>
                 </div>
@@ -104,7 +101,7 @@
     <div class="shop-empty-cart">
         <h2 class="shop-empty-cart__title">{% trans "Your cart is empty" %}</h2>
         <p class="shop-empty-cart__text">{% trans "Browse our catalog and add products you like — checkout is simple and secure." %}</p>
-        <a href="{% url 'products:list' %}" class="shop-btn shop-btn--primary shop-btn--lg">
+        <a href="{% shop_url 'products:list' %}" class="shop-btn shop-btn--primary shop-btn--lg">
             {% trans "Browse products" %}
         </a>
     </div>
@@ -115,4 +112,5 @@
 
 {% block extra_js %}
 <script src="{% static 'js/product.js' %}"></script>
+<script src="{% static 'js/cart.js' %}"></script>
 {% endblock %}

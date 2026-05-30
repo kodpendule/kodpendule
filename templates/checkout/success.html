@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n static %}
+{% load shop_urls i18n static %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
@@ -34,17 +34,17 @@
         </div>
 
         <div class="shop-order-success__actions">
-            <a href="{% url 'orders:detail' order_number=order.order_number %}" class="shop-btn shop-btn--primary">
+            <a href="{% shop_url 'orders:detail' order_number=order.order_number %}" class="shop-btn shop-btn--primary">
                 {% trans "View order details" %}
             </a>
             {% if user.is_authenticated %}
-            <a href="{% url 'orders:history' %}" class="shop-btn shop-btn--secondary">{% trans "My orders" %}</a>
+            <a href="{% shop_url 'orders:history' %}" class="shop-btn shop-btn--secondary">{% trans "My orders" %}</a>
             {% else %}
-            <a href="{% url 'orders:track' %}?order_number={{ order.order_number|urlencode }}" class="shop-btn shop-btn--secondary">
+            <a href="{% shop_url 'orders:track' %}?order_number={{ order.order_number|urlencode }}" class="shop-btn shop-btn--secondary">
                 {% trans "Track this order later" %}
             </a>
             {% endif %}
-            <a href="{% url 'products:list' %}" class="shop-btn shop-btn--secondary">{% trans "Continue shopping" %}</a>
+            <a href="{% shop_url 'products:list' %}" class="shop-btn shop-btn--secondary">{% trans "Continue shopping" %}</a>
         </div>
 
         {% if not user.is_authenticated %}
@@ -59,13 +59,13 @@
         </p>
         <p class="shop-order-success__text">{% trans "We will contact you to confirm delivery. Payment on delivery (cash)." %}</p>
         <div class="shop-order-success__actions">
-            <a href="{% url 'orders:track' %}?order_number={{ order_number|urlencode }}" class="shop-btn shop-btn--primary">{% trans "Track order" %}</a>
-            <a href="{% url 'products:list' %}" class="shop-btn shop-btn--secondary">{% trans "Continue shopping" %}</a>
+            <a href="{% shop_url 'orders:track' %}?order_number={{ order_number|urlencode }}" class="shop-btn shop-btn--primary">{% trans "Track order" %}</a>
+            <a href="{% shop_url 'products:list' %}" class="shop-btn shop-btn--secondary">{% trans "Continue shopping" %}</a>
         </div>
 
         {% else %}
         <p class="shop-order-success__text">{% trans "Your order has been received." %}</p>
-        <a href="{% url 'products:list' %}" class="shop-btn shop-btn--primary">{% trans "Continue shopping" %}</a>
+        <a href="{% shop_url 'products:list' %}" class="shop-btn shop-btn--primary">{% trans "Continue shopping" %}</a>
         {% endif %}
     </div>
 </div>

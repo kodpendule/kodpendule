@@ -1,4 +1,4 @@
-{% load i18n static %}
+{% load shop_urls i18n static %}
 <section class="shop-hero shop-hero--rich" aria-label="{% trans 'Welcome' %}">
     <div class="shop-hero__bg" aria-hidden="true">
         <span class="shop-hero__orb shop-hero__orb--1"></span>
@@ -13,15 +13,12 @@
                 {% if site_settings %}{{ site_settings.site_name }}{% else %}{% trans "Kod Pendule" %}{% endif %}
             </h1>
             <p class="shop-hero__lead">
-                {% trans "Discover clocks, décor, and gifts with a calm checkout — order online and pay when your package arrives." %}
+                {% trans "Order drinks and everyday essentials online — browse categories, checkout in minutes, and pay when your order arrives." %}
             </p>
 
             <div class="shop-hero__actions">
-                <a href="{% url 'products:list' %}" class="shop-btn shop-btn--primary shop-btn--lg">
-                    {% trans "Shop collection" %}
-                </a>
-                <a href="{% url 'categories:list' %}" class="shop-btn shop-btn--secondary shop-btn--lg">
-                    {% trans "Browse categories" %}
+                <a href="#home-categories" class="shop-btn shop-btn--primary shop-btn--lg shop-hero__cta">
+                    {% trans "Order now" %}
                 </a>
             </div>
 
@@ -46,19 +43,15 @@
         <div class="shop-hero__media shop-reveal shop-reveal--delay-2" data-reveal aria-hidden="true">
             <div class="shop-hero__visual">
                 <div class="shop-hero__card shop-hero__card--back">
-                    {% if featured_product and featured_product.main_image %}
-                    <img src="{{ featured_product.main_image.url }}" alt="" class="shop-hero__card-img" width="400" height="400" loading="eager">
-                    {% else %}
                     <img src="{% static 'images/logo.webp' %}" alt="" class="shop-hero__card-logo" width="280" height="280" loading="eager">
-                    {% endif %}
                 </div>
                 <div class="shop-hero__card shop-hero__card--float shop-hero__card--accent">
-                    <span class="shop-hero__chip">{% trans "New season" %}</span>
-                    <p class="shop-hero__chip-text mb-0">{% trans "Curated pieces for every room" %}</p>
+                    <span class="shop-hero__chip">{% trans "Fast delivery" %}</span>
+                    <p class="shop-hero__chip-text mb-0">{% trans "Reliable delivery across Serbia" %}</p>
                 </div>
                 <div class="shop-hero__card shop-hero__card--float shop-hero__card--trust">
                     <span class="shop-hero__mini-icon" aria-hidden="true">✓</span>
-                    <p class="mb-0"><strong>{% trans "Free guidance" %}</strong><br><span>{% trans "We help before & after purchase" %}</span></p>
+                    <p class="mb-0"><strong>{% trans "Pay on delivery" %}</strong><br><span>{% trans "No card required at checkout" %}</span></p>
                 </div>
             </div>
         </div>

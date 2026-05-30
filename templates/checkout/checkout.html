@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n shop_tags static %}
+{% load shop_urls i18n shop_tags static %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
@@ -17,17 +17,22 @@
     <div class="shop-checkout-guest shop-notice mb-4" role="note">
         <p class="mb-0">
             {% trans "You can checkout as a guest — no account required." %}
-            <a href="{% url 'accounts:login' %}?next={{ request.path }}">{% trans "Sign in" %}</a>
+            <a href="{% shop_url 'accounts:login' %}?next={{ request.path }}">{% trans "Sign in" %}</a>
             {% trans "or" %}
-            <a href="{% url 'accounts:register' %}?next={{ request.path }}">{% trans "register" %}</a>.
+            <a href="{% shop_url 'accounts:register' %}?next={{ request.path }}">{% trans "register" %}</a>.
         </p>
     </div>
     {% endif %}
 
     <div class="shop-checkout__layout">
         <div class="shop-checkout__form-col">
-            <form method="post" novalidate class="shop-checkout-form" id="shop-checkout-form">
+            <form method="post" action="{% shop_url 'checkout:checkout' %}" novalidate class="shop-checkout-form" id="shop-checkout-form">
                 {% csrf_token %}
+                {% if form.errors %}
+                <div class="alert alert-danger shop-checkout-alert" role="alert">
+                    {% trans "Some fields need your attention before we can place the order." %}
+                </div>
+                {% endif %}
                 {% if form.non_field_errors %}
                 <div class="alert alert-danger shop-checkout-alert" role="alert">{{ form.non_field_errors }}</div>
                 {% endif %}
@@ -46,7 +51,7 @@
                 </section>
 
                 <section class="shop-checkout-section" aria-labelledby="checkout-shipping-heading">
-                    <h2 id="checkout-shipping-heading" class="shop-checkout-section__title">{% trans "Shipping address" %}</h2>
+                    <h2 id="checkout-shipping-heading" class="shop-checkout-section__title">{% trans "Delivery address" %}</h2>
                     <p class="shop-checkout-section__lead">{% trans "Where should we deliver your order?" %}</p>
                     <div class="row g-3">
                         <div class="col-12">{% include "includes/_shop_form_field.html" with field=form.shipping_city %}</div>
@@ -59,21 +64,6 @@
                             <span class="js-shipping-price">—</span> {{ shop_currency_symbol }}
                         </span>
                     </p>
-                </section>
-
-                <section class="shop-checkout-section" aria-labelledby="checkout-billing-heading">
-                    <h2 id="checkout-billing-heading" class="shop-checkout-section__title">{% trans "Billing address" %}</h2>
-                    <div class="shop-field mb-3">
-                        <div class="form-check shop-field__check">
-                            {{ form.billing_same_as_shipping }}
-                            <label class="form-check-label" for="id_billing_same">{% trans "Same as shipping" %}</label>
-                        </div>
-                    </div>
-                    <div id="billing-fields" class="row g-3">
-                        <div class="col-12">{% include "includes/_shop_form_field.html" with field=form.billing_street %}</div>
-                        <div class="col-md-6">{% include "includes/_shop_form_field.html" with field=form.billing_city_name %}</div>
-                        <div class="col-md-6">{% include "includes/_shop_form_field.html" with field=form.billing_postal_code %}</div>
-                    </div>
                 </section>
 
                 <section class="shop-checkout-section" aria-labelledby="checkout-delivery-heading">
@@ -143,9 +133,9 @@
     </div>
 </div>
 </div>
+{{ city_prices|json_script:"city-prices-data" }}
 {% endblock %}
 
-{{ city_prices|json_script:"city-prices-data" }}
 {% block extra_js %}
 <script src="{% static 'js/checkout.js' %}"></script>
 {% endblock %}

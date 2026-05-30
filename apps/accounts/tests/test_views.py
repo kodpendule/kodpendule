@@ -3,11 +3,11 @@ from django.contrib.auth.middleware import AuthenticationMiddleware
 from django.contrib.messages.middleware import MessageMiddleware
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import Client, RequestFactory, TestCase
-from django.urls import reverse
 
 from apps.accounts.forms import LoginForm
 from apps.accounts.models import CustomerProfile
 from apps.accounts.views import UserLoginView, UserRegisterView
+from apps.core.storefront_urls import shop_reverse
 
 User = get_user_model()
 
@@ -43,7 +43,7 @@ class AuthViewTests(TestCase):
 
     def test_register_creates_user_and_profile(self) -> None:
         response = self.client.post(
-            reverse("accounts:register"),
+            shop_reverse("accounts:register"),
             {
                 "username": "novi_korisnik",
                 "email": "novi@example.com",
@@ -55,7 +55,7 @@ class AuthViewTests(TestCase):
             },
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response["Location"], reverse("core:home"))
+        self.assertEqual(response["Location"], shop_reverse("core:home"))
         user = User.objects.get(username="novi_korisnik")
         self.assertEqual(user.email, "novi@example.com")
         profile = CustomerProfile.objects.get(user=user)
@@ -63,7 +63,7 @@ class AuthViewTests(TestCase):
 
     def test_register_logs_user_in(self) -> None:
         self.client.post(
-            reverse("accounts:register"),
+            shop_reverse("accounts:register"),
             {
                 "username": "logged_in",
                 "email": "logged_in@example.com",
@@ -83,11 +83,11 @@ class AuthViewTests(TestCase):
     def test_login_success(self) -> None:
         User.objects.create_user(username="pera", password="SecurePass123!")
         response = self.client.post(
-            reverse("accounts:login"),
+            shop_reverse("accounts:login"),
             {"username": "pera", "password": "SecurePass123!"},
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response["Location"], reverse("core:home"))
+        self.assertEqual(response["Location"], shop_reverse("core:home"))
 
     def test_login_invalid(self) -> None:
         User.objects.create_user(username="pera", password="SecurePass123!")
@@ -97,13 +97,13 @@ class AuthViewTests(TestCase):
     def test_logout(self) -> None:
         User.objects.create_user(username="pera", password="SecurePass123!")
         self.client.login(username="pera", password="SecurePass123!")
-        response = self.client.post(reverse("accounts:logout"))
+        response = self.client.post(shop_reverse("accounts:logout"))
         self.assertEqual(response.status_code, 302)
         self.assertNotIn("_auth_user_id", self.client.session)
 
     def test_register_requires_profile_fields(self) -> None:
         response = self.client.post(
-            reverse("accounts:register"),
+            shop_reverse("accounts:register"),
             {
                 "username": "incomplete",
                 "password1": "SecurePass123!",
@@ -116,6 +116,6 @@ class AuthViewTests(TestCase):
     def test_authenticated_user_redirected_from_register(self) -> None:
         User.objects.create_user(username="pera", password="SecurePass123!")
         self.client.login(username="pera", password="SecurePass123!")
-        response = self.client.get(reverse("accounts:register"))
+        response = self.client.get(shop_reverse("accounts:register"))
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response["Location"], reverse("core:home"))
+        self.assertEqual(response["Location"], shop_reverse("core:home"))

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load shop_urls i18n %}
 
 {% block title %}{% trans "Prijava" %} — {{ block.super }}{% endblock %}
 
@@ -11,7 +11,7 @@
         <p class="text-muted">{% trans "Sign in to track orders and save addresses." %}</p>
         <p class="text-muted small mb-4">{% trans "Guest checkout does not require an account." %}</p>
 
-        <form method="post" action="{% url 'accounts:login' %}" novalidate>
+        <form method="post" action="{% shop_url 'accounts:login' %}" novalidate>
             {% csrf_token %}
             {% if form.non_field_errors %}
                 <div class="alert alert-danger">{{ form.non_field_errors }}</div>
@@ -25,7 +25,7 @@
 
         <p class="mt-4 mb-0 text-center">
             {% trans "No account?" %}
-            <a href="{% url 'accounts:register' %}">{% trans "Register" %}</a>
+            <a href="{% shop_url 'accounts:register' %}">{% trans "Register" %}</a>
         </p>
     </div>
 </div>

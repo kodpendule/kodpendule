@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 from django.shortcuts import redirect
-from django.urls import reverse, reverse_lazy
+from apps.core.storefront_urls import shop_reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, FormView, ListView
 
@@ -56,7 +56,9 @@ class GuestOrderTrackView(ShopLanguageMixin, FormView):
             )
             return self.form_invalid(form)
         grant_order_access(self.request, order)
-        return redirect("orders:detail", order_number=order.order_number)
+        return redirect(
+            shop_reverse("orders:detail", order_number=order.order_number)
+        )
 
 
 class OrderDetailView(ShopLanguageMixin, DetailView):

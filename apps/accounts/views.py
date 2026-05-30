@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView, LogoutView
-from django.urls import reverse_lazy
+from apps.core.storefront_urls import shop_reverse, shop_reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
 
@@ -17,7 +17,7 @@ class UserLoginView(LoginView):
 class UserRegisterView(FormView):
     template_name = "accounts/register.html"
     form_class = RegistrationForm
-    success_url = reverse_lazy("core:home")
+    success_url = shop_reverse_lazy("core:home")
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -41,7 +41,7 @@ class UserRegisterView(FormView):
 
 
 class UserLogoutView(LogoutView):
-    next_page = reverse_lazy("core:home")
+    next_page = shop_reverse_lazy("core:home")
 
     def dispatch(self, request, *args, **kwargs):
         response = super().dispatch(request, *args, **kwargs)

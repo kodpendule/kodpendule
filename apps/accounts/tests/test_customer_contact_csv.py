@@ -10,6 +10,7 @@ from apps.accounts.models import CustomerContact
 from apps.accounts.services.customer_contact_csv import (
     CSV_FIELD_KEYS,
     CSV_HEADERS_SR,
+    EXPORT_FIELD_KEYS,
     export_contacts_csv,
     import_contacts_csv,
 )
@@ -29,10 +30,16 @@ class CustomerContactCsvTests(TestCase):
         csv_bytes = export_contacts_csv()
         self.assertTrue(csv_bytes.startswith(b"\xef\xbb\xbf"))
         csv_text = csv_bytes.decode("utf-8-sig")
+        header = csv_text.splitlines()[0]
+        self.assertIn("Korisničko ime", header)
+        self.assertNotIn("Datum registracije", header)
+        self.assertNotIn("Prvi kontakt", header)
+        self.assertNotIn("Poslednji kontakt", header)
+        self.assertNotIn("Broj narudžbina", header)
         rows = list(csv.DictReader(io.StringIO(csv_text)))
         self.assertEqual(rows[0]["Email"], "existing@example.com")
         self.assertEqual(rows[0]["Ime"], "Existing")
-        self.assertIn("Korisničko ime", csv_text.splitlines()[0])
+        self.assertEqual(rows[0]["Telefon"], '="+381601112233"')
 
     def test_import_creates_and_updates_with_serbian_headers(self) -> None:
         fieldnames = [CSV_HEADERS_SR[key] for key in CSV_FIELD_KEYS]
@@ -76,6 +83,27 @@ class CustomerContactCsvTests(TestCase):
         self.assertEqual(self.contact.order_count, 5)
         self.assertTrue(CustomerContact.objects.filter(email="new@example.com").exists())
 
+    def test_import_strips_excel_phone_formula(self) -> None:
+        fieldnames = [CSV_HEADERS_SR[key] for key in EXPORT_FIELD_KEYS]
+        buffer = io.StringIO()
+        writer = csv.DictWriter(buffer, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerow(
+            {
+                CSV_HEADERS_SR["email"]: "excel-phone@example.com",
+                CSV_HEADERS_SR["first_name"]: "Excel",
+                CSV_HEADERS_SR["last_name"]: "Phone",
+                CSV_HEADERS_SR["phone"]: '="+381640000000"',
+                CSV_HEADERS_SR["username"]: "",
+            }
+        )
+        buffer.seek(0)
+
+        result = import_contacts_csv(buffer)
+        self.assertEqual(result.created, 1)
+        contact = CustomerContact.objects.get(email="excel-phone@example.com")
+        self.assertEqual(contact.phone, "+381640000000")
+
     def test_import_accepts_legacy_english_headers(self) -> None:
         csv_body = (
             "email,first_name,last_name,phone,order_count,registered_at,"
@@ -102,7 +130,10 @@ class CustomerContactCsvTests(TestCase):
         self.assertEqual(response["Content-Type"], "text/csv; charset=utf-8")
         self.assertIn("attachment", response["Content-Disposition"])
         body = response.content.decode("utf-8-sig")
-        self.assertIn("Korisničko ime", body.splitlines()[0])
+        header = body.splitlines()[0]
+        self.assertIn("Korisničko ime", header)
+        self.assertNotIn("Datum registracije", header)
+        self.assertNotIn("Broj narudžbina", header)
         self.assertIn("existing@example.com", body)
 
     def test_admin_import_view(self) -> None:

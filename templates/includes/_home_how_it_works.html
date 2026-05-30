@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load shop_urls i18n %}
 <section class="shop-section shop-home-steps" aria-labelledby="home-steps-title">
     <div class="container shop-container">
         <header class="shop-section__header shop-section__header--center shop-reveal" data-reveal>
@@ -31,8 +31,7 @@
         </ol>
 
         <div class="shop-home-steps__cta shop-reveal" data-reveal>
-            <a href="{% url 'products:list' %}" class="shop-btn shop-btn--primary shop-btn--lg">{% trans "Start shopping" %}</a>
-            <a href="{% url 'orders:track' %}" class="shop-btn shop-btn--ghost shop-btn--lg">{% trans "Track your order" %}</a>
+            <a href="{% shop_url 'orders:track' %}" class="shop-btn shop-btn--ghost shop-btn--lg">{% trans "Track your order" %}</a>
         </div>
     </div>
 </section>

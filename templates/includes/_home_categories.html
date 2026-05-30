@@ -1,6 +1,6 @@
-{% load i18n %}
+{% load shop_urls i18n %}
 {% if home_nav_categories %}
-<section class="shop-section shop-categories-home" aria-labelledby="home-categories-title">
+<section class="shop-section shop-categories-home" id="home-categories" aria-labelledby="home-categories-title">
     <div class="container shop-container">
         <header class="shop-section__header shop-reveal" data-reveal>
             <div>
@@ -8,7 +8,7 @@
                 <h2 class="shop-section__title" id="home-categories-title">{% trans "Shop by category" %}</h2>
                 <p class="shop-section__subtitle mb-0">{% trans "Find what you need faster — browse our main categories." %}</p>
             </div>
-            <a class="shop-btn shop-btn--secondary shop-btn--sm" href="{% url 'categories:list' %}">{% trans "All categories" %}</a>
+            <a class="shop-btn shop-btn--secondary shop-btn--sm" href="{% shop_url 'categories:list' %}">{% trans "All categories" %}</a>
         </header>
 
         {% language shop_language %}

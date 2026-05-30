@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from django.conf import settings
 from django.contrib.sitemaps import Sitemap
-from django.urls import reverse
 
 from apps.categories.models import Category
 from apps.categories.selectors.category_selectors import active_categories_qs
 from apps.core.slugs import localized_slug
+from apps.core.storefront_urls import shop_reverse
 from apps.products.models import Product
 from apps.products.selectors.product_selectors import active_products_qs
 
@@ -30,7 +30,7 @@ class StaticViewSitemap(Sitemap):
         ]
 
     def location(self, item: str) -> str:
-        return reverse(item)
+        return shop_reverse(item, language=_DEFAULT_LANG)
 
 
 class CategorySitemap(Sitemap):
@@ -50,7 +50,7 @@ class CategorySitemap(Sitemap):
 
     def location(self, obj: Category) -> str:
         slug = localized_slug(obj, language=_DEFAULT_LANG)
-        return reverse("categories:detail", kwargs={"slug": slug})
+        return shop_reverse("categories:detail", language=_DEFAULT_LANG, slug=slug)
 
 
 class ProductSitemap(Sitemap):
@@ -66,8 +66,8 @@ class ProductSitemap(Sitemap):
     def location(self, obj: Product) -> str:
         slug = localized_slug(obj, language=_DEFAULT_LANG)
         if not slug:
-            return reverse("products:list")
-        return reverse("products:detail", kwargs={"slug": slug})
+            return shop_reverse("products:list", language=_DEFAULT_LANG)
+        return shop_reverse("products:detail", language=_DEFAULT_LANG, slug=slug)
 
 
 sitemaps = {

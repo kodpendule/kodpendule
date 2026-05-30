@@ -61,6 +61,7 @@ MIDDLEWARE = [
     # After LocaleMiddleware: default storefront to sr (ignore Accept-Language until /jezik/).
     "apps.core.middleware.StorefrontDefaultSerbianMiddleware",
     "apps.core.middleware.AdminSerbianLocaleMiddleware",
+    "apps.core.middleware.StorefrontLocalizedUrlMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -164,4 +165,6 @@ REST_FRAMEWORK = {
 SHOP_CURRENCY = "RSD"
 SHOP_CURRENCY_SYMBOL = "din"
 SHOP_PRODUCTS_PER_PAGE = 12
+SHOP_ORDER_NOTIFICATION_EMAILS: list[str] = []
+DEFAULT_FROM_EMAIL = "noreply@kodpendule.rs"
 

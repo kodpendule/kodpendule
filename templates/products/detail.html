@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n shop_tags %}
+{% load shop_urls i18n shop_tags %}
 
 {% block extra_css %}
 {% load static %}
@@ -103,7 +103,7 @@
 
             <section class="shop-pdp__buy" aria-label="{% trans 'Add to cart' %}">
                 {% if product.stock > 0 %}
-                <form method="post" action="{% url 'cart:add' %}" class="shop-buybox" data-shop-buybox>
+                <form method="post" action="{% shop_url 'cart:add' %}" class="shop-buybox" data-shop-buybox>
                     {% csrf_token %}
                     <input type="hidden" name="product_id" value="{{ product.pk }}">
                     <input type="hidden" name="next" value="{{ request.get_full_path }}">

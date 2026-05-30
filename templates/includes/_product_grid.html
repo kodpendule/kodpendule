@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load shop_urls i18n %}
 {% language shop_language %}
 {% if products %}
     <div class="shop-product-grid" role="list">
@@ -12,7 +12,7 @@
     <div class="shop-empty-state" role="status">
         <p class="shop-empty-state__title">{% trans "No products found." %}</p>
         <p class="shop-empty-state__text">{% trans "Try another category or adjust your search." %}</p>
-        <a href="{% url 'products:list' %}" class="shop-btn shop-btn--primary">{% trans "Browse all products" %}</a>
+        <a href="{% shop_url 'products:list' %}" class="shop-btn shop-btn--primary">{% trans "Browse all products" %}</a>
     </div>
 {% endif %}
 {% endlanguage %}

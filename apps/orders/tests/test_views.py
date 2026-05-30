@@ -3,8 +3,8 @@ from decimal import Decimal
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from django.urls import reverse
 
+from apps.core.storefront_urls import shop_reverse
 from apps.orders.models import Order, OrderStatus
 from apps.orders.services.order_access import SESSION_KEY
 from apps.shipping.models import City
@@ -71,23 +71,23 @@ class OrderTrackingTests(TestCase):
 
     def test_guest_track_success(self) -> None:
         response = self.client.post(
-            reverse("orders:track"),
+            shop_reverse("orders:track"),
             {"order_number": self.order_number, "email": self.guest_email},
         )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(
             response["Location"],
-            reverse("orders:detail", kwargs={"order_number": self.order_number}),
+            shop_reverse("orders:detail", order_number=self.order_number),
         )
         detail = self.client.get(
-            reverse("orders:detail", kwargs={"order_number": self.order_number})
+            shop_reverse("orders:detail", order_number=self.order_number)
         )
         self.assertEqual(detail.status_code, 200)
         self.assertContains(detail, self.order_number)
 
     def test_guest_track_wrong_email_same_error(self) -> None:
         response = self.client.post(
-            reverse("orders:track"),
+            shop_reverse("orders:track"),
             {
                 "order_number": self.order_number,
                 "email": "wrong@example.com",
@@ -101,7 +101,7 @@ class OrderTrackingTests(TestCase):
 
     def test_guest_track_unknown_number_same_error(self) -> None:
         response = self.client.post(
-            reverse("orders:track"),
+            shop_reverse("orders:track"),
             {
                 "order_number": "KP-NO-SUCH-ORDER",
                 "email": self.guest_email,
@@ -115,7 +115,7 @@ class OrderTrackingTests(TestCase):
 
     def test_guest_detail_without_access_returns_404(self) -> None:
         response = self.client.get(
-            reverse("orders:detail", kwargs={"order_number": self.order_number})
+            shop_reverse("orders:detail", order_number=self.order_number)
         )
         self.assertEqual(response.status_code, 404)
 
@@ -124,21 +124,21 @@ class OrderTrackingTests(TestCase):
         session[SESSION_KEY] = [self.order.pk]
         session.save()
         response = self.client.get(
-            reverse("orders:detail", kwargs={"order_number": "KP-UNKNOWN-999"})
+            shop_reverse("orders:detail", order_number="KP-UNKNOWN-999")
         )
         self.assertEqual(response.status_code, 404)
 
     def test_logged_in_history_and_detail(self) -> None:
         self.client.login(username=self.user.username, password="test-pass-123")
-        history = self.client.get(reverse("orders:history"))
+        history = self.client.get(shop_reverse("orders:history"))
         self.assertEqual(history.status_code, 200)
         self.assertContains(history, self.user_order_number)
         self.assertNotContains(history, self.order_number)
 
         detail = self.client.get(
-            reverse(
+            shop_reverse(
                 "orders:detail",
-                kwargs={"order_number": self.user_order_number},
+                order_number=self.user_order_number,
             )
         )
         self.assertEqual(detail.status_code, 200)
@@ -147,11 +147,11 @@ class OrderTrackingTests(TestCase):
     def test_logged_in_cannot_view_other_guest_order(self) -> None:
         self.client.login(username=self.user.username, password="test-pass-123")
         response = self.client.get(
-            reverse("orders:detail", kwargs={"order_number": self.order_number})
+            shop_reverse("orders:detail", order_number=self.order_number)
         )
         self.assertEqual(response.status_code, 404)
 
     def test_history_requires_login(self) -> None:
-        response = self.client.get(reverse("orders:history"))
+        response = self.client.get(shop_reverse("orders:history"))
         self.assertEqual(response.status_code, 302)
-        self.assertIn(reverse("accounts:login"), response["Location"])
+        self.assertIn(shop_reverse("accounts:login"), response["Location"])

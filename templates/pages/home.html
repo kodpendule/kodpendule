@@ -10,8 +10,8 @@
 {% block content %}
 <div class="shop-home">
     {% include "includes/_hero.html" %}
-    {% include "includes/_home_trust_strip.html" %}
     {% include "includes/_home_categories.html" %}
+    {% include "includes/_home_trust_strip.html" %}
     {% include "includes/_home_recommended_products.html" %}
     {% include "includes/_home_new_arrivals.html" %}
     {% include "includes/_home_editorial.html" %}
@@ -24,5 +24,5 @@
 
 {% block extra_js %}
 <script src="{% static 'js/home.js' %}" defer></script>
-<script src="{% static 'js/home-recommended.js' %}" defer></script>
+<script src="{% static 'js/home-product-carousel.js' %}" defer></script>
 {% endblock %}

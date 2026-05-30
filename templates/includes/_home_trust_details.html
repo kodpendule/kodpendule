@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load shop_urls i18n %}
 <section class="shop-section shop-trust-details">
     <div class="container shop-container">
         <header class="shop-section__header shop-section__header--center shop-reveal" data-reveal>
@@ -30,13 +30,13 @@
                 <article class="shop-trust-card">
                     <h3 class="shop-trust-card__title">{% trans "Support & contact" %}</h3>
                     <p class="shop-trust-card__text mb-3">{% trans "Questions about products or your order? We are here to help." %}</p>
-                    <a class="shop-btn shop-btn--secondary shop-btn--sm" href="{% url 'core:contact' %}">{% trans "Contact us" %}</a>
+                    <a class="shop-btn shop-btn--secondary shop-btn--sm" href="{% shop_url 'core:contact' %}">{% trans "Contact us" %}</a>
                 </article>
             </div>
         </div>
 
         <div class="shop-trust-details__actions shop-reveal" data-reveal>
-            <a class="shop-btn shop-btn--ghost shop-btn--sm" href="{% url 'orders:track' %}">{% trans "Track your order" %}</a>
+            <a class="shop-btn shop-btn--ghost shop-btn--sm" href="{% shop_url 'orders:track' %}">{% trans "Track your order" %}</a>
             {% if footer_settings.phone %}
             <a class="shop-btn shop-btn--ghost shop-btn--sm" href="tel:{{ footer_settings.phone }}">{% trans "Call us" %}</a>
             {% endif %}

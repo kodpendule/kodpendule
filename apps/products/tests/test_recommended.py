@@ -5,8 +5,10 @@ from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
 
+from apps.core.storefront_urls import shop_reverse
+
 from apps.categories.models import Category
-from apps.core.views import RECOMMENDED_PRODUCTS_PER_PAGE
+from apps.core.storefront_urls import shop_reverse
 from apps.products.models import Product
 from apps.products.selectors import recommended_products_qs
 
@@ -66,21 +68,18 @@ class RecommendedProductsTests(TestCase):
         self.assertTrue(self.product_c.is_recommended)
         self.assertEqual(self.product_c.recommended_order, 0)
 
-    def test_home_shows_recommended_section(self) -> None:
-        response = self.client.get(reverse("core:home"))
+    def test_home_shows_recommended_carousel(self) -> None:
+        response = self.client.get(shop_reverse("core:home"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "home-section-recommended")
-        self.assertContains(response, "data-recommended-carousel")
+        self.assertContains(response, "data-product-carousel")
         self.assertContains(response, self.product_a.name)
 
-    def test_home_paginates_five_per_page(self) -> None:
-        suffix = uuid.uuid4().hex[:8]
-        for index in range(6):
-            self._create_product(f"X{index}-{suffix}", recommended=True, order=index + 2)
-
-        response = self.client.get(reverse("core:home"))
+    def test_home_shows_promo_carousel_when_discounted(self) -> None:
+        self.product_a.discount_price = Decimal("800.00")
+        self.product_a.save()
+        response = self.client.get(shop_reverse("core:home"))
         self.assertEqual(response.status_code, 200)
-        pages = response.context["recommended_product_pages"]
-        self.assertEqual(len(pages), 2)
-        self.assertEqual(len(pages[0]), RECOMMENDED_PRODUCTS_PER_PAGE)
-        self.assertEqual(len(pages[1]), 3)
+        self.assertContains(response, "home-section-promo-sale")
+        content = response.content.decode()
+        self.assertGreaterEqual(content.count("data-product-carousel"), 2)

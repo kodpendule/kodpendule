@@ -1,8 +1,8 @@
 from django.test import TestCase
-from django.urls import reverse
 
 from apps.core.contact_details import resolve_contact_details
 from apps.core.models import FooterSettings
+from apps.core.storefront_urls import shop_reverse
 
 
 class ContactDetailsTests(TestCase):
@@ -28,7 +28,7 @@ class ContactDetailsTests(TestCase):
 
 class ContactViewTests(TestCase):
     def test_contact_page_shows_dummy_details(self) -> None:
-        response = self.client.get(reverse("core:contact"))
+        response = self.client.get(shop_reverse("core:contact"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "+381 11 123 4567")
         self.assertContains(response, "info@kodpendule.rs")

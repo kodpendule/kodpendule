@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load shop_urls i18n %}
 
 {% block title %}{% trans "Registracija" %} — {{ block.super }}{% endblock %}
 
@@ -37,7 +37,7 @@
 
         <p class="mt-4 mb-0 text-center">
             {% trans "Already have an account?" %}
-            <a href="{% url 'accounts:login' %}">{% trans "Sign in" %}</a>
+            <a href="{% shop_url 'accounts:login' %}">{% trans "Sign in" %}</a>
         </p>
     </div>
 </div>

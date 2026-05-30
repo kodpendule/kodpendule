@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load shop_urls i18n %}
 
 {% block extra_css %}
 {% load static %}
@@ -28,7 +28,7 @@
       </p>
       {% endif %}
     </div>
-    <form class="shop-catalog-search" method="get" action="{% url 'products:list' %}" role="search">
+    <form class="shop-catalog-search" method="get" action="{% shop_url 'products:list' %}" role="search">
       {% if active_category %}
       <input type="hidden" name="kategorija" value="{{ active_category.slug }}">
       {% endif %}

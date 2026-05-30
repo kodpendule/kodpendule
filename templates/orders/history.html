@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n order_tags shop_tags %}
+{% load shop_urls i18n order_tags shop_tags %}
 
 {% block content %}
 <div class="shop-page shop-order-page">
@@ -26,7 +26,7 @@
                     <td data-label="{% trans 'Status' %}">{% order_status_badge order.status %}</td>
                     <td class="text-end" data-label="{% trans 'Total' %}">{{ order.total|money }}</td>
                     <td class="text-end shop-order-table__action" data-label="">
-                        <a href="{% url 'orders:detail' order_number=order.order_number %}" class="shop-btn shop-btn--secondary shop-btn--sm shop-btn--block">
+                        <a href="{% shop_url 'orders:detail' order_number=order.order_number %}" class="shop-btn shop-btn--secondary shop-btn--sm shop-btn--block">
                             {% trans "Details" %}
                         </a>
                     </td>
@@ -59,10 +59,10 @@
     {% else %}
     <div class="shop-empty-state">
         <p class="shop-empty-state__title">{% trans "You have not placed any orders yet while signed in." %}</p>
-        <a href="{% url 'products:list' %}" class="shop-btn shop-btn--primary">{% trans "Browse products" %}</a>
+        <a href="{% shop_url 'products:list' %}" class="shop-btn shop-btn--primary">{% trans "Browse products" %}</a>
         <p class="shop-empty-state__text mt-3 mb-0">
             {% trans "Guest order?" %}
-            <a href="{% url 'orders:track' %}">{% trans "Track by order number" %}</a>
+            <a href="{% shop_url 'orders:track' %}">{% trans "Track by order number" %}</a>
         </p>
     </div>
     {% endif %}

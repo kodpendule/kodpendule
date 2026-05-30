@@ -1,0 +1,35 @@
+{% load i18n %}
+{% if products %}
+<div class="shop-product-carousel" data-product-carousel>
+    <button
+        type="button"
+        class="shop-product-carousel__arrow shop-product-carousel__arrow--prev"
+        aria-label="{% trans 'Previous products' %}"
+        data-carousel-prev
+        disabled
+    >
+        <span aria-hidden="true">‹</span>
+    </button>
+
+    <div class="shop-product-carousel__viewport" data-carousel-viewport tabindex="0">
+        <div class="shop-product-carousel__track" data-carousel-track>
+            {% language shop_language %}
+            {% for product in products %}
+            <div class="shop-product-carousel__slide" data-carousel-slide role="listitem">
+                {% include "includes/_product_card.html" with product=product %}
+            </div>
+            {% endfor %}
+            {% endlanguage %}
+        </div>
+    </div>
+
+    <button
+        type="button"
+        class="shop-product-carousel__arrow shop-product-carousel__arrow--next"
+        aria-label="{% trans 'Next products' %}"
+        data-carousel-next
+    >
+        <span aria-hidden="true">›</span>
+    </button>
+</div>
+{% endif %}

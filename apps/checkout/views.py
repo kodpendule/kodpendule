@@ -1,6 +1,10 @@
+from __future__ import annotations
+
+import logging
+
 from django.contrib import messages
 from django.shortcuts import redirect
-from django.urls import reverse, reverse_lazy
+from apps.core.storefront_urls import shop_reverse, shop_reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, TemplateView
 
@@ -9,27 +13,29 @@ from apps.checkout.forms import CheckoutForm
 from apps.core.mixins import ShopLanguageMixin
 from apps.core.utils import activate_parler_language
 from apps.orders.selectors import order_detail_qs
-from apps.orders.services import CheckoutError, create_order_from_checkout
+from apps.orders.services import CheckoutError, create_order_from_checkout, notify_staff_new_order
 from apps.orders.services.order_access import grant_order_access
 from apps.shipping.selectors import active_cities, get_default_shipping_method
+
+logger = logging.getLogger(__name__)
 
 
 class CheckoutView(ShopLanguageMixin, FormView):
     template_name = "checkout/checkout.html"
     form_class = CheckoutForm
-    success_url = reverse_lazy("checkout:success")
+    success_url = shop_reverse_lazy("checkout:success")
 
     def dispatch(self, request, *args, **kwargs):
         cart = get_cart(request)
         if cart.is_empty:
             messages.warning(request, _("Your cart is empty."))
-            return redirect("products:list")
+            return redirect(shop_reverse("products:list"))
         if not active_cities().exists():
             messages.error(
                 request,
                 _("Delivery is not available yet. Please contact us."),
             )
-            return redirect("core:contact")
+            return redirect(shop_reverse("core:contact"))
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
@@ -71,6 +77,16 @@ class CheckoutView(ShopLanguageMixin, FormView):
         )
         return context
 
+    def get_success_url(self):
+        return shop_reverse("checkout:success", language=self.shop_language)
+
+    def form_invalid(self, form):
+        messages.error(
+            self.request,
+            _("Please correct the highlighted fields and try again."),
+        )
+        return super().form_invalid(form)
+
     def form_valid(self, form):
         cart = get_cart(self.request)
         try:
@@ -94,10 +110,19 @@ class CheckoutView(ShopLanguageMixin, FormView):
         except CheckoutError as exc:
             messages.error(self.request, exc.message)
             return self.form_invalid(form)
+        except Exception:
+            logger.exception("Unexpected checkout failure")
+            messages.error(
+                self.request,
+                _("We could not place your order. Please try again or contact us."),
+            )
+            return self.form_invalid(form)
 
         self.request.session["last_order_number"] = order.order_number
         self.request.session["last_order_id"] = order.pk
         grant_order_access(self.request, order)
+        notify_staff_new_order(order)
+        logger.info("Order placed: %s", order.order_number)
         messages.success(
             self.request,
             _("Thank you! Your order %(number)s has been placed.")

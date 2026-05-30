@@ -1,10 +1,19 @@
-from django.urls import path
-
 from apps.categories.views import CategoryDetailView, CategoryListView
+from apps.core.storefront_urls import localized_path
 
 app_name = "categories"
 
 urlpatterns = [
-    path("kategorije/", CategoryListView.as_view(), name="list"),
-    path("kategorije/<slug:slug>/", CategoryDetailView.as_view(), name="detail"),
+    *localized_path(
+        "categories:list",
+        CategoryListView.as_view(),
+        sr="kategorije/",
+        en="categories/",
+    ),
+    *localized_path(
+        "categories:detail",
+        CategoryDetailView.as_view(),
+        sr="kategorije/<slug:slug>/",
+        en="categories/<slug:slug>/",
+    ),
 ]

@@ -1,10 +1,19 @@
-from django.urls import path
-
 from apps.checkout.views import CheckoutSuccessView, CheckoutView
+from apps.core.storefront_urls import localized_path
 
 app_name = "checkout"
 
 urlpatterns = [
-    path("placanje/", CheckoutView.as_view(), name="checkout"),
-    path("placanje/uspeh/", CheckoutSuccessView.as_view(), name="success"),
+    *localized_path(
+        "checkout:checkout",
+        CheckoutView.as_view(),
+        sr="placanje/",
+        en="checkout/",
+    ),
+    *localized_path(
+        "checkout:success",
+        CheckoutSuccessView.as_view(),
+        sr="placanje/uspeh/",
+        en="checkout/success/",
+    ),
 ]
