@@ -4,6 +4,7 @@ from decimal import Decimal
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
+from django.utils import timezone
 
 from apps.orders.models import Order
 from apps.orders.selectors.order_admin_selectors import unread_order_count
@@ -27,6 +28,7 @@ class OrderAdminUnreadTests(TestCase):
             shipping_street="Ulica 1",
             shipping_city_name="Beograd",
             shipping_city=self.city,
+            requested_delivery_date=timezone.localdate(),
             shipping_price=Decimal("300"),
             subtotal=Decimal("1000"),
             total=Decimal("1300"),
@@ -62,3 +64,17 @@ class OrderAdminUnreadTests(TestCase):
         self.assertIn("Broj narudžbine", body.splitlines()[0])
         self.assertIn(self.order.order_number, body)
         self.assertIn("Ulica 1", body)
+
+    def test_new_order_row_is_marked_unread_on_changelist(self) -> None:
+        response = self.client.get(reverse("admin:orders_order_changelist"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "kp-order-row--new")
+        self.assertContains(response, "kp-money--emphasis")
+
+    def test_read_order_row_is_not_bold_on_changelist(self) -> None:
+        self.order.is_new = False
+        self.order.save(update_fields=["is_new"])
+        response = self.client.get(reverse("admin:orders_order_changelist"))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "kp-order-row--new")
+        self.assertNotContains(response, "kp-money--emphasis")

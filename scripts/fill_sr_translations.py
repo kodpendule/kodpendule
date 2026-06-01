@@ -88,13 +88,26 @@ TRANSLATIONS: dict[str, str] = {
     "Promotional delivery price applied to your order.": "Primenjena je promotivna cena dostave.",
     "Reduced delivery price applied to your order.": "Primenjena je snižena cena dostave.",
     "Add __AMOUNT__ RSD more to qualify for promotional delivery.": "Dodajte još __AMOUNT__ RSD za promotivnu dostavu.",
-    "Free shipping threshold": "Prag za besplatnu dostavu",
+    "Free shipping threshold": "Prag vrednosti korpe",
+    "Cart total threshold": "Prag vrednosti korpe",
     "When threshold is reached": "Kada je prag dostignut",
     "Discounted shipping price": "Snižena cena dostave",
     "Free shipping": "Besplatna dostava",
-    "Discounted shipping price": "Snižena cena dostave",
     "Promotional delivery": "Promotivna dostava",
-    "checkout settings": "Podešavanja plaćanja",
+    "Payment settings": "Podešavanja plaćanja",
+    "Delivery city": "Grad za dostavu",
+    "Configure promotional delivery rules separately for each city where you deliver.": (
+        "Podesite promotivna pravila dostave posebno za svaki grad u kome vršite dostavu."
+    ),
+    "Promotional delivery rules per city": "Promotivna pravila dostave po gradu",
+    "Payment settings saved for %(city)s.": "Podešavanja plaćanja su sačuvana za %(city)s.",
+    "Add at least one active delivery city before configuring payment rules.": (
+        "Dodajte bar jedan aktivan grad za dostavu pre podešavanja pravila plaćanja."
+    ),
+    "Enter a discounted delivery price for this mode.": (
+        "Unesite sniženu cenu dostave za ovaj režim."
+    ),
+    "Back to top": "Nazad na vrh",
     "When the cart subtotal reaches the threshold, delivery cost is calculated automatically at checkout.": (
         "Kada ukupna vrednost korpe dostigne prag, cena dostave se automatski obračunava pri plaćanju."
     ),
@@ -104,6 +117,10 @@ TRANSLATIONS: dict[str, str] = {
     "When the cart subtotal is at or above this amount (RSD), the threshold shipping rule below applies. Leave empty to disable.": (
         "Kada je ukupna vrednost korpe jednaka ili veća od ovog iznosa (RSD), primenjuje se pravilo ispod. Ostavite prazno da isključite."
     ),
+    "When the cart subtotal is at or above this amount (RSD), the promotional delivery rule below applies. Leave empty to disable.": (
+        "Kada je ukupna vrednost korpe jednaka ili veća od ovog iznosa (RSD), primenjuje se pravilo ispod. Ostavite prazno da isključite."
+    ),
+    "Cities": "Gradovi",
     "Choose free delivery or the discounted shipping price configured below.": (
         "Izaberite besplatnu dostavu ili sniženu cenu dostave ispod."
     ),
@@ -117,9 +134,28 @@ TRANSLATIONS: dict[str, str] = {
     "Optional note from checkout.": "Opciona napomena sa plaćanja.",
     "Note": "Napomena",
     "Preferred delivery date": "Željeni datum dostave",
+    "When should we deliver?": "Kada želite dostavu?",
+    "Choose any date after today — delivery is free for scheduled orders.": "Izaberite bilo koji datum posle danas — dostava je besplatna za zakazane narudžbine.",
+    "Choose a delivery date.": "Izaberite datum dostave.",
+    "Choose a date after today for free scheduled delivery.": "Izaberite datum posle danas za besplatnu zakazanu dostavu.",
+    "Deliver today (as soon as possible)": "Dostava danas ( što pre moguće )",
+    "Schedule for a later date": "Zakaži za kasniji datum",
+    "Requested delivery date": "Traženi datum dostave",
+    "Customer's preferred delivery date from checkout.": "Traženi datum dostave koji je kupac izabrao pri plaćanju.",
+    "Requested delivery date: %(date)s": "Traženi datum dostave: %(date)s",
+    "Requested delivery date:": "Traženi datum dostave:",
+    "Free delivery for your selected date.": "Besplatna dostava za izabrani datum.",
+    "Delivery date": "Datum dostave",
+    "Same-day delivery has a fee. Scheduling for a later date is free.": "Dostava istog dana se naplaćuje. Zakazivanje za kasniji datum je besplatno.",
+    "Standard delivery fee applies.": "Primeni se standardna cena dostave.",
+    "Free delivery — pick a future date below.": "Besplatna dostava — izaberite budući datum ispod.",
     "I am flexible with the delivery date": "Fleksibilan/sam sam oko datuma dostave",
     "Email is required for guest checkout.": "Email je obavezan za kupovinu kao gost.",
     "Email is required for checkout.": "Email je obavezan za završetak kupovine.",
+    "Email is required.": "Email je obavezan.",
+    "Required for order confirmations and signing in.": "Obavezan za potvrde narudžbina i prijavu.",
+    "A user with that email already exists.": "Korisnik sa tim emailom već postoji.",
+    "This email is already linked to another account.": "Ovaj email je već povezan sa drugim nalogom.",
     "Delivery date must be at least tomorrow.": "Datum dostave mora biti najkasnije od sutra.",
     "Order notes are required.": "Napomene uz narudžbinu su obavezne.",
     "This field is required.": "Ovo polje je obavezno.",

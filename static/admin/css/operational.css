@@ -216,9 +216,23 @@
     background: var(--kp-color-primary-soft);
 }
 
-/* Order rows — unread (new) orders */
-.change-list.model-order #result_list tbody tr.kp-order-row--new td {
+/* Order rows — unread (new) orders: entire row bold */
+.change-list.model-order #result_list tbody tr.kp-order-row--new td,
+.change-list.model-order #result_list tbody tr.kp-order-row--new td a,
+.change-list.model-order #result_list tbody tr.kp-order-row--new td .kp-badge,
+.change-list.model-order #result_list tbody tr.kp-order-row--new td .kp-guest-tag,
+.change-list.model-order #result_list tbody tr.kp-order-row--new td .kp-money,
+.change-list.model-order #result_list tbody tr.kp-order-row--new td select {
     font-weight: var(--kp-font-weight-bold);
+}
+
+.change-list.model-order #result_list tbody tr.kp-order-row:not(.kp-order-row--new) .kp-money {
+    font-weight: var(--kp-font-weight-normal);
+    color: inherit;
+}
+
+.change-list.model-order #result_list tbody tr.kp-order-row:not(.kp-order-row--new) .kp-money--emphasis {
+    font-size: inherit;
 }
 
 /* Order rows — status accent */
@@ -262,6 +276,10 @@
     font-weight: var(--kp-font-weight-semibold);
     font-family: var(--kp-font-family-mono);
     font-size: var(--kp-font-size-sm);
+}
+
+.change-list.model-order #result_list tbody tr.kp-order-row:not(.kp-order-row--new) td.field-order_number {
+    font-weight: var(--kp-font-weight-normal);
 }
 
 /* Product rows — low stock */
@@ -700,4 +718,44 @@
 
 .kp-promo-admin__row--active:hover {
     background: var(--kp-color-success-bg, #ecfdf5);
+}
+
+.kp-payment-settings .description {
+    margin-bottom: var(--kp-space-4);
+}
+
+.kp-payment-settings__city-form {
+    margin-bottom: var(--kp-space-5);
+}
+
+.kp-payment-settings__discounted-row[hidden] {
+    display: none;
+}
+
+/* Back to top (admin + shared class) */
+.shop-back-to-top {
+    position: fixed;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    z-index: 1200;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: var(--kp-color-primary);
+    color: #fff;
+    box-shadow: var(--kp-shadow-md);
+    cursor: pointer;
+}
+
+.shop-back-to-top:hover {
+    background: var(--kp-color-primary-active);
+}
+
+.shop-back-to-top[hidden] {
+    display: none;
 }

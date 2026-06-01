@@ -30,14 +30,14 @@
                 {% csrf_token %}
                 {% if form.errors %}
                 <div class="alert alert-danger shop-checkout-alert" role="alert">
-                    {% if form.accept_legal.errors and form.errors|length == 1 %}
-                    <p class="mb-0"><strong>{% trans "Legal consent" %}:</strong> {{ form.accept_legal.errors|join:" " }}</p>
-                    {% else %}
-                    <p class="mb-0">{% trans "Some fields need your attention before we can place the order." %}</p>
-                    {% if form.accept_legal.errors %}
-                    <p class="mb-0 mt-2"><strong>{% trans "Legal consent" %}:</strong> {{ form.accept_legal.errors|join:" " }}</p>
-                    {% endif %}
-                    {% endif %}
+                    <p class="mb-2">{% trans "Some fields need your attention before we can place the order." %}</p>
+                    <ul class="shop-checkout-alert__errors mb-0">
+                        {% for field in form %}
+                        {% for error in field.errors %}
+                        <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                        {% endfor %}
+                        {% endfor %}
+                    </ul>
                 </div>
                 {% endif %}
                 {% if form.non_field_errors %}
@@ -47,8 +47,10 @@
                 <section class="shop-checkout-section" aria-labelledby="checkout-contact-heading">
                     <h2 id="checkout-contact-heading" class="shop-checkout-section__title">{% trans "Contact" %}</h2>
                     <p class="shop-checkout-section__lead">{% trans "We will use these details to confirm your order." %}</p>
-                    {% if not is_guest %}{{ form.guest_email }}{% else %}
+                    {% if form.show_email_field %}
                     {% include "includes/_shop_form_field.html" with field=form.guest_email %}
+                    {% else %}
+                    {{ form.guest_email }}
                     {% endif %}
                     <div class="row g-3">
                         <div class="col-md-6">{% include "includes/_shop_form_field.html" with field=form.first_name %}</div>
@@ -70,13 +72,24 @@
                             <span class="js-shipping-price">—</span> {{ shop_currency_symbol }}
                         </span>
                     </p>
-                    {% if checkout_shipping.free_shipping_threshold %}
+                    {% if has_promo_delivery_threshold %}
                     <p class="shop-checkout-shipping-hint small text-muted mb-0 mt-2" id="checkout-shipping-hint"
                        data-msg-free="{% trans 'Promotional delivery price applied to your order.' %}"
                        data-msg-discounted="{% trans 'Reduced delivery price applied to your order.' %}"
                        data-msg-remaining="{% trans 'Add __AMOUNT__ RSD more to qualify for promotional delivery.' %}"
+                       data-msg-scheduled-free="{% trans 'Free delivery for your selected date.' %}"
+                       hidden></p>
+                    {% else %}
+                    <p class="shop-checkout-shipping-hint small text-muted mb-0 mt-2" id="checkout-shipping-hint"
+                       data-msg-scheduled-free="{% trans 'Free delivery for your selected date.' %}"
                        hidden></p>
                     {% endif %}
+                </section>
+
+                <section class="shop-checkout-section" aria-labelledby="checkout-timing-heading">
+                    <h2 id="checkout-timing-heading" class="shop-checkout-section__title">{% trans "Delivery date" %}</h2>
+                    <p class="shop-checkout-section__lead">{% trans "Same-day delivery has a fee. Scheduling for a later date is free." %}</p>
+                    {% include "includes/_checkout_delivery_timing.html" %}
                 </section>
 
                 <section class="shop-checkout-section" aria-labelledby="checkout-notes-heading">
@@ -134,8 +147,8 @@
     </div>
 </div>
 </div>
-{{ city_prices|json_script:"city-prices-data" }}
-{{ checkout_shipping|json_script:"checkout-shipping-rules" }}
+{{ city_delivery|json_script:"city-delivery-data" }}
+{{ checkout_today|json_script:"checkout-today-data" }}
 {% endblock %}
 
 {% block extra_js %}

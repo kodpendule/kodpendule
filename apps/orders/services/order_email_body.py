@@ -28,6 +28,8 @@ def build_order_details_text(order: Order) -> str:
         _("Delivery"),
         _("Address: %(street)s") % {"street": order.shipping_street},
         _("City: %(city)s") % {"city": order.shipping_city_name},
+        _("Requested delivery date: %(date)s")
+        % {"date": order.requested_delivery_date.strftime("%d/%m/%Y")},
     ]
     if order.order_notes:
         lines.extend(["", _("Notes: %(notes)s") % {"notes": order.order_notes}])

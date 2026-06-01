@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.test import TestCase
+from django.utils import timezone
 
 from apps.orders.models import Order, OrderItem, OrderStatus, PaymentMethod
 from apps.orders.services.order_service import generate_order_number
@@ -30,6 +31,7 @@ class OrderModelTests(TestCase):
             shipping_street="Ulica 1",
             shipping_city_name="Novi Sad",
             shipping_city=self.city,
+            requested_delivery_date=timezone.localdate(),
             order_notes="Pozvati pre dostave.",
             shipping_price=Decimal("300.00"),
             payment_method=PaymentMethod.COD,

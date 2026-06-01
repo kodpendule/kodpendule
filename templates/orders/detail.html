@@ -84,6 +84,10 @@
                         {{ order.shipping_street }}<br>
                         {{ order.shipping_city_name }}
                     </p>
+                    <p class="small mt-2 mb-0">
+                        <strong>{% trans "Requested delivery date:" %}</strong>
+                        {{ order.requested_delivery_date|date:"DATE_FORMAT" }}
+                    </p>
                     {% if order.order_notes %}
                     <p class="small mt-2 mb-0"><strong>{% trans "Notes:" %}</strong> {{ order.order_notes }}</p>
                     {% endif %}

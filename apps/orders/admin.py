@@ -97,6 +97,7 @@ class OrderAdmin(KPModelAdmin):
                     "shipping_street",
                     "shipping_city_name",
                     "shipping_city",
+                    "requested_delivery_date",
                     "shipping_price",
                     "order_notes",
                 ),
@@ -182,7 +183,7 @@ class OrderAdmin(KPModelAdmin):
 
     @admin.display(description=_("Total"))
     def total_display(self, obj: Order) -> str:
-        return money_cell(obj.total, emphasize=True)
+        return money_cell(obj.total, emphasize=obj.is_new)
 
     @admin.display(description=_("Delivery"))
     def delivery_display(self, obj: Order) -> str:
@@ -196,14 +197,10 @@ class OrderAdmin(KPModelAdmin):
     @admin.display(description=_("Customer"))
     def customer_display(self, obj: Order) -> str:
         name = obj.customer_full_name
-        weight = "font-weight:bold;" if obj.is_new else ""
         if obj.is_guest_order:
             return format_html(
-                '<span style="{}">{}</span> <span class="kp-guest-tag">({})</span>',
-                weight,
+                '{} <span class="kp-guest-tag">({})</span>',
                 name,
                 _("guest"),
             )
-        if weight:
-            return format_html('<span style="{}">{}</span>', weight, name)
         return name

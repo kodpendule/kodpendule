@@ -9,7 +9,6 @@ from django.views.generic import FormView, TemplateView
 
 from apps.cart.cart import get_cart
 from apps.checkout.forms import CheckoutForm
-from apps.core.checkout_settings import CheckoutSettings
 from apps.core.mixins import ShopLanguageMixin
 from apps.core.storefront_urls import shop_reverse, shop_reverse_lazy
 from apps.core.utils import activate_parler_language
@@ -21,6 +20,7 @@ from apps.orders.services import (
     notify_staff_new_order,
 )
 from apps.orders.services.order_access import grant_order_access
+from apps.core.checkout_settings import checkout_today, min_scheduled_delivery_date
 from apps.shipping.selectors import active_cities
 
 logger = logging.getLogger(__name__)
@@ -61,14 +61,19 @@ class CheckoutView(ShopLanguageMixin, FormView):
                 initial.setdefault("phone", profile.phone)
         return initial
 
-    def _checkout_shipping_context(self) -> dict:
-        settings = CheckoutSettings.load()
-        threshold = settings.free_shipping_threshold
-        discounted = settings.discounted_shipping_price
+    def _city_delivery_context(self, cities) -> dict:
         return {
-            "free_shipping_threshold": str(threshold) if threshold else "",
-            "discounted_shipping_price": str(discounted) if discounted is not None else "",
-            "threshold_shipping_mode": settings.threshold_shipping_mode,
+            str(city.pk): {
+                "base": str(city.shipping_price),
+                "threshold": str(city.promo_cart_threshold)
+                if city.promo_cart_threshold
+                else "",
+                "discounted_shipping_price": str(city.promo_discounted_shipping_price)
+                if city.promo_discounted_shipping_price is not None
+                else "",
+                "threshold_shipping_mode": city.promo_shipping_mode,
+            }
+            for city in cities
         }
 
     def get_context_data(self, **kwargs):
@@ -78,13 +83,18 @@ class CheckoutView(ShopLanguageMixin, FormView):
         for line in lines:
             activate_parler_language(line.product, self.shop_language)
         cities = list(active_cities())
+        city_delivery = self._city_delivery_context(cities)
         context.update(
             {
                 "cart_lines": lines,
                 "cart_subtotal": cart.subtotal,
                 "cities": cities,
-                "city_prices": {str(c.pk): str(c.shipping_price) for c in cities},
-                "checkout_shipping": self._checkout_shipping_context(),
+                "city_delivery": city_delivery,
+                "has_promo_delivery_threshold": any(
+                    city.promo_cart_threshold for city in cities
+                ),
+                "checkout_today": checkout_today().isoformat(),
+                "min_scheduled_delivery_date": min_scheduled_delivery_date().isoformat(),
                 "is_guest": not self.request.user.is_authenticated,
                 "meta_title": _("Checkout"),
                 "canonical_url": self.request.build_absolute_uri(),
@@ -118,6 +128,7 @@ class CheckoutView(ShopLanguageMixin, FormView):
                 shipping_city=form.cleaned_data["shipping_city"],
                 shipping_street=form.cleaned_data["shipping_street"],
                 order_notes=form.cleaned_data["order_notes"],
+                requested_delivery_date=form.cleaned_data["requested_delivery_date"],
             )
         except CheckoutError as exc:
             messages.error(self.request, exc.message)
@@ -129,6 +140,13 @@ class CheckoutView(ShopLanguageMixin, FormView):
                 _("We could not place your order. Please try again or contact us."),
             )
             return self.render_to_response(self.get_context_data(form=form))
+
+        user = self.request.user
+        if user.is_authenticated and not (user.email or "").strip():
+            submitted_email = form.cleaned_data["guest_email"].strip()
+            if submitted_email:
+                user.email = submitted_email
+                user.save(update_fields=["email"])
 
         self.request.session["last_order_number"] = order.order_number
         self.request.session["last_order_id"] = order.pk

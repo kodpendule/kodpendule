@@ -5,9 +5,9 @@ from django.utils.translation import gettext_lazy as _
 
 
 class User(AbstractUser):
-    """Shop customer / staff user. Email optional but unique when set."""
+    """Shop customer / staff user. Email is required at registration."""
 
-    email = models.EmailField(_("email address"), blank=True, null=True, unique=True)
+    email = models.EmailField(_("email address"), blank=False, null=True, unique=True)
 
     class Meta:
         verbose_name = _("user")

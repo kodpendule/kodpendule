@@ -31,6 +31,7 @@
     {% endblock %}
     {% include "includes/_footer.html" %}
     {% include "includes/_cookie_banner.html" %}
+    {% include "includes/_back_to_top.html" %}
     <script>
         window.SHOP_COOKIE_CONSENT = {
             cookieName: "{{ cookie_consent_cookie_name|escapejs }}",
@@ -43,6 +44,7 @@
     <script src="{% static 'js/header.js' %}"></script>
     <script src="{% static 'js/product.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/back-to-top.js' %}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

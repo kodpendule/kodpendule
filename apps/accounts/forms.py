@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.accounts.models import CustomerProfile, User
 from apps.accounts.services import archive_customer_from_registration
+from apps.accounts.services.customer_archive import normalize_customer_email
 
 
 class LoginForm(AuthenticationForm):
@@ -36,8 +37,12 @@ class RegistrationForm(UserCreationForm):
     email = forms.EmailField(
         label=_("Email"),
         required=True,
+        help_text=_("Required for order confirmations and signing in."),
         widget=forms.EmailInput(
-            attrs={"class": "form-control", "autocomplete": "email"},
+            attrs={
+                "class": "form-control",
+                "autocomplete": "email",
+            },
         ),
     )
     first_name = forms.CharField(
@@ -81,9 +86,17 @@ class RegistrationForm(UserCreationForm):
             {"class": "form-control", "autocomplete": "new-password"},
         )
 
+    def clean_email(self) -> str:
+        email = normalize_customer_email(self.cleaned_data.get("email", ""))
+        if not email:
+            raise forms.ValidationError(_("Email is required."))
+        if User.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError(_("A user with that email already exists."))
+        return email
+
     def save(self, commit: bool = True) -> User:
         user = super().save(commit=False)
-        user.email = self.cleaned_data.get("email") or ""
+        user.email = self.cleaned_data["email"]
         user.first_name = self.cleaned_data.get("first_name", "")
         user.last_name = self.cleaned_data.get("last_name", "")
         if commit:

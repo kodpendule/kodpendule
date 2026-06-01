@@ -39,7 +39,7 @@ _NAV_SECTION_SPECS: list[tuple[str, str, list[str]]] = [
     ("orders", _("Orders"), ["orders.order"]),
     ("products", _("Products"), ["products.product"]),
     ("categories", _("Categories"), ["categories.category"]),
-    ("shipping", _("Shipping"), ["shipping.city", "core.checkoutsettings"]),
+    ("shipping", _("Shipping"), ["shipping.city"]),
     ("customers", _("Customers"), ["accounts.customercontact"]),
     ("analytics", _("Analytics"), []),
 ]
@@ -125,6 +125,16 @@ def _recommended_products_item(request: HttpRequest) -> AdminNavItem:
     )
 
 
+def _payment_settings_item(request: HttpRequest) -> AdminNavItem:
+    url = reverse("admin:shipping_city_payment_settings")
+    return AdminNavItem(
+        name=_("Payment settings"),
+        url=url,
+        active=_is_active(url, request),
+        description=_("Promotional delivery rules per city"),
+    )
+
+
 def _analytics_items(request: HttpRequest) -> list[AdminNavItem]:
     dashboard_url = reverse("dashboard:index")
     items = [
@@ -179,6 +189,8 @@ def get_admin_nav_sections(
             if section_id == "products" and request.user.has_perm("products.change_product"):
                 items.append(_promo_sales_item(request))
                 items.append(_recommended_products_item(request))
+            if section_id == "shipping" and request.user.has_perm("shipping.change_city"):
+                items.append(_payment_settings_item(request))
 
         if items:
             sections.append(AdminNavSection(id=section_id, title=title, items=items))

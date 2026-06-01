@@ -1,0 +1,89 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrahead %}
+{{ block.super }}
+<script src="{% static 'admin/js/payment-settings.js' %}" defer></script>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans "Home" %}</a>
+    &rsaquo; <a href="{% url 'admin:shipping_city_changelist' %}">{% trans "Cities" %}</a>
+    &rsaquo; {% trans "Payment settings" %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main" class="change-form kp-payment-settings">
+    <p class="description">
+        {% trans "Configure promotional delivery rules separately for each city where you deliver." %}
+    </p>
+
+    <form method="get" class="kp-payment-settings__city-form" id="kp-payment-city-form">
+        <fieldset class="module aligned">
+            <div class="form-row">
+                <div>
+                    <label for="{{ city_selector.city.id_for_label }}">{{ city_selector.city.label }}</label>
+                    {{ city_selector.city }}
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="city" value="{{ selected_city.pk }}">
+
+        <fieldset class="module aligned">
+            <h2 class="fieldset-heading">{% trans "Promotional delivery" %}</h2>
+            <p class="description">
+                {% trans "When the cart subtotal reaches the threshold, delivery cost is calculated automatically at checkout." %}
+            </p>
+
+            <div class="form-row">
+                <div>
+                    <label for="{{ form.promo_cart_threshold.id_for_label }}">{{ form.promo_cart_threshold.label }}</label>
+                    {{ form.promo_cart_threshold }}
+                    {% if form.promo_cart_threshold.help_text %}
+                    <div class="help">{{ form.promo_cart_threshold.help_text }}</div>
+                    {% endif %}
+                    {% for error in form.promo_cart_threshold.errors %}
+                    <div class="errornote">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label for="{{ form.promo_shipping_mode.id_for_label }}">{{ form.promo_shipping_mode.label }}</label>
+                    {{ form.promo_shipping_mode }}
+                    {% if form.promo_shipping_mode.help_text %}
+                    <div class="help">{{ form.promo_shipping_mode.help_text }}</div>
+                    {% endif %}
+                    {% for error in form.promo_shipping_mode.errors %}
+                    <div class="errornote">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-row kp-payment-settings__discounted-row" id="kp-promo-discounted-row">
+                <div>
+                    <label for="{{ form.promo_discounted_shipping_price.id_for_label }}">{{ form.promo_discounted_shipping_price.label }}</label>
+                    {{ form.promo_discounted_shipping_price }}
+                    {% if form.promo_discounted_shipping_price.help_text %}
+                    <div class="help">{{ form.promo_discounted_shipping_price.help_text }}</div>
+                    {% endif %}
+                    {% for error in form.promo_discounted_shipping_price.errors %}
+                    <div class="errornote">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="submit-row">
+            <input type="submit" value="{% trans 'Save' %}" class="default" name="_save">
+        </div>
+    </form>
+</div>
+{% endblock %}

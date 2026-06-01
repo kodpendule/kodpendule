@@ -113,6 +113,23 @@ class AuthViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertFalse(User.objects.filter(username="incomplete").exists())
 
+    def test_register_requires_email(self) -> None:
+        response = self.client.post(
+            shop_reverse("accounts:register"),
+            {
+                "username": "no_email",
+                "email": "",
+                "first_name": "Test",
+                "last_name": "User",
+                "phone": "+381601112233",
+                "password1": "SecurePass123!",
+                "password2": "SecurePass123!",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(User.objects.filter(username="no_email").exists())
+        self.assertContains(response, "id_email")
+
     def test_authenticated_user_redirected_from_register(self) -> None:
         User.objects.create_user(username="pera", password="SecurePass123!")
         self.client.login(username="pera", password="SecurePass123!")

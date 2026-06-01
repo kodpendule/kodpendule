@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.accounts.services import archive_customer_from_checkout
 from apps.cart.cart import Cart, CartLine
-from apps.core.checkout_settings import resolve_checkout_shipping_price
+from apps.core.checkout_settings import checkout_today, resolve_checkout_shipping_price
 from apps.orders.models import Order, OrderItem, OrderStatus, PaymentMethod
 from apps.orders.payments.cod import CashOnDeliveryProvider
 from apps.products.models import Product
@@ -44,6 +44,7 @@ def create_order_from_checkout(
     shipping_city: City,
     shipping_street: str,
     order_notes: str,
+    requested_delivery_date=None,
 ) -> Order:
     lines = cart.get_lines()
     if not lines:
@@ -51,10 +52,12 @@ def create_order_from_checkout(
 
     _validate_stock(lines)
 
+    delivery_date = requested_delivery_date or checkout_today()
     subtotal = cart.subtotal
     shipping_price = resolve_checkout_shipping_price(
         subtotal=subtotal,
-        city_shipping_price=shipping_city.shipping_price,
+        city=shipping_city,
+        requested_delivery_date=delivery_date,
     )
     total = subtotal + shipping_price
 
@@ -73,6 +76,7 @@ def create_order_from_checkout(
         shipping_city_name=shipping_city.name,
         shipping_city=shipping_city,
         order_notes=order_notes,
+        requested_delivery_date=delivery_date,
         shipping_price=shipping_price,
         payment_method=PaymentMethod.COD,
         status=OrderStatus.PENDING,

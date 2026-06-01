@@ -7,6 +7,7 @@ from unittest.mock import patch
 
 from django.core import mail
 from django.test import TestCase, override_settings
+from django.utils import timezone
 
 from apps.core.mail import send_shop_email
 from apps.core.services.contact_email import send_contact_form_email
@@ -97,6 +98,7 @@ class OrderEmailTests(TestCase):
             shipping_street="Ulica 1",
             shipping_city=city,
             shipping_city_name="Beograd",
+            requested_delivery_date=timezone.localdate(),
             shipping_price=Decimal("350.00"),
             payment_method=PaymentMethod.COD,
             status=OrderStatus.PENDING,

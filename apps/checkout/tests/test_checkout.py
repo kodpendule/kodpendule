@@ -8,8 +8,13 @@ from django.test import Client, RequestFactory, TestCase, override_settings
 from apps.cart.cart import SESSION_KEY, get_cart
 from apps.categories.models import Category
 from apps.checkout.forms import CheckoutForm
-from apps.core.checkout_settings import CheckoutSettings, ThresholdShippingMode
-from apps.core.checkout_settings import resolve_checkout_shipping_price
+from apps.core.checkout_settings import (
+    DeliveryTiming,
+    ThresholdShippingMode,
+    checkout_today,
+    min_scheduled_delivery_date,
+    resolve_checkout_shipping_price,
+)
 from apps.core.storefront_urls import shop_reverse
 from apps.orders.models import Order
 from apps.orders.services import create_order_from_checkout
@@ -25,6 +30,7 @@ def _checkout_post_data(city_pk: int, **overrides) -> dict[str, str]:
         "phone": "+381601112233",
         "shipping_city": str(city_pk),
         "shipping_street": "Ulica 1",
+        "delivery_timing": DeliveryTiming.SAME_DAY,
         "order_notes": "",
         "accept_legal": "on",
     }
@@ -88,27 +94,36 @@ class CheckoutServiceTests(TestCase):
         self.assertTrue(get_cart(self.request).is_empty)
 
     def test_free_shipping_when_threshold_met(self) -> None:
-        settings_obj = CheckoutSettings.load()
-        settings_obj.free_shipping_threshold = Decimal("1000.00")
-        settings_obj.threshold_shipping_mode = ThresholdShippingMode.FREE
-        settings_obj.save()
+        self.city.promo_cart_threshold = Decimal("1000.00")
+        self.city.promo_shipping_mode = ThresholdShippingMode.FREE
+        self.city.save()
 
         price = resolve_checkout_shipping_price(
             subtotal=Decimal("2000.00"),
-            city_shipping_price=Decimal("350.00"),
+            city=self.city,
+            requested_delivery_date=checkout_today(),
+        )
+        self.assertEqual(price, Decimal("0"))
+
+    def test_scheduled_delivery_is_free_even_below_promo_threshold(self) -> None:
+        future_date = min_scheduled_delivery_date()
+        price = resolve_checkout_shipping_price(
+            subtotal=Decimal("100.00"),
+            city=self.city,
+            requested_delivery_date=future_date,
         )
         self.assertEqual(price, Decimal("0"))
 
     def test_discounted_shipping_when_threshold_met(self) -> None:
-        settings_obj = CheckoutSettings.load()
-        settings_obj.free_shipping_threshold = Decimal("1000.00")
-        settings_obj.threshold_shipping_mode = ThresholdShippingMode.DISCOUNTED
-        settings_obj.discounted_shipping_price = Decimal("199.00")
-        settings_obj.save()
+        self.city.promo_cart_threshold = Decimal("1000.00")
+        self.city.promo_shipping_mode = ThresholdShippingMode.DISCOUNTED
+        self.city.promo_discounted_shipping_price = Decimal("199.00")
+        self.city.save()
 
         price = resolve_checkout_shipping_price(
             subtotal=Decimal("2000.00"),
-            city_shipping_price=Decimal("350.00"),
+            city=self.city,
+            requested_delivery_date=checkout_today(),
         )
         self.assertEqual(price, Decimal("199.00"))
 
@@ -121,12 +136,50 @@ class CheckoutServiceTests(TestCase):
                 "phone": "123",
                 "shipping_city": self.city.pk,
                 "shipping_street": "St",
+                "delivery_timing": DeliveryTiming.SAME_DAY,
                 "order_notes": "",
                 "accept_legal": True,
             },
             user=None,
         )
         self.assertTrue(form.is_valid())
+
+    def test_checkout_form_requires_date_for_scheduled_delivery(self) -> None:
+        form = CheckoutForm(
+            data={
+                "guest_email": "a@b.rs",
+                "first_name": "A",
+                "last_name": "B",
+                "phone": "123",
+                "shipping_city": self.city.pk,
+                "shipping_street": "St",
+                "delivery_timing": DeliveryTiming.SCHEDULED,
+                "order_notes": "",
+                "accept_legal": True,
+            },
+            user=None,
+        )
+        self.assertFalse(form.is_valid())
+        self.assertIn("requested_delivery_date", form.errors)
+
+    def test_checkout_form_rejects_today_for_scheduled_delivery(self) -> None:
+        form = CheckoutForm(
+            data={
+                "guest_email": "a@b.rs",
+                "first_name": "A",
+                "last_name": "B",
+                "phone": "123",
+                "shipping_city": self.city.pk,
+                "shipping_street": "St",
+                "delivery_timing": DeliveryTiming.SCHEDULED,
+                "requested_delivery_date": checkout_today().isoformat(),
+                "order_notes": "",
+                "accept_legal": True,
+            },
+            user=None,
+        )
+        self.assertFalse(form.is_valid())
+        self.assertIn("requested_delivery_date", form.errors)
 
     def test_checkout_page_omits_removed_fields(self) -> None:
         suffix = uuid.uuid4().hex[:8]
@@ -151,6 +204,7 @@ class CheckoutServiceTests(TestCase):
         self.assertNotContains(response, "id_delivery_date")
         self.assertNotContains(response, "id_flexible_delivery")
         self.assertNotContains(response, "Shipping method")
+        self.assertContains(response, "id_requested_delivery_date")
 
 
 class CheckoutViewTests(TestCase):
@@ -186,8 +240,10 @@ class CheckoutViewTests(TestCase):
     def test_checkout_page_includes_shipping_scripts(self) -> None:
         response = self.client.get(shop_reverse("checkout:checkout"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'id="city-prices-data"')
-        self.assertContains(response, 'id="checkout-shipping-rules"')
+        self.assertContains(response, 'id="city-delivery-data"')
+        self.assertContains(response, 'id="checkout-today-data"')
+        self.assertContains(response, "delivery_timing")
+        self.assertNotContains(response, 'id="checkout-shipping-rules"')
         self.assertContains(response, f'"{self.vrdnik.pk}"')
 
     @override_settings(
@@ -253,7 +309,26 @@ class CheckoutViewTests(TestCase):
         self.assertEqual(Order.objects.count(), 1)
         order = Order.objects.get()
         self.assertEqual(order.total, Decimal("1450.00"))
+        self.assertEqual(order.requested_delivery_date, checkout_today())
         self.assertEqual(self.client.session.get(SESSION_KEY), {})
+
+    def test_scheduled_delivery_checkout_has_free_shipping(self) -> None:
+        future_date = min_scheduled_delivery_date()
+        with self.settings(SHOP_NOTIFICATION_EMAIL="shop@example.com"):
+            response = self.client.post(
+                shop_reverse("checkout:checkout"),
+                _checkout_post_data(
+                    self.vrdnik.pk,
+                    delivery_timing=DeliveryTiming.SCHEDULED,
+                    requested_delivery_date=future_date.isoformat(),
+                ),
+            )
+
+        self.assertEqual(response.status_code, 302)
+        order = Order.objects.get()
+        self.assertEqual(order.shipping_price, Decimal("0"))
+        self.assertEqual(order.total, Decimal("1000.00"))
+        self.assertEqual(order.requested_delivery_date, future_date)
 
     def test_two_consecutive_orders_succeed(self) -> None:
         with self.settings(SHOP_NOTIFICATION_EMAIL="shop@example.com"):
@@ -295,3 +370,47 @@ class CheckoutViewTests(TestCase):
             "Some fields need your attention",
         )
         self.assertContains(response, "Nema dovoljno")
+
+    def test_logged_in_user_without_email_sees_email_field(self) -> None:
+        from django.contrib.auth import get_user_model
+
+        User = get_user_model()
+        user = User.objects.create_user(
+            username="noemail",
+            password="secret123",
+        )
+        user.email = None
+        user.save(update_fields=["email"])
+        self.client.login(username="noemail", password="secret123")
+
+        response = self.client.get(shop_reverse("checkout:checkout"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'id="id_guest_email"')
+        self.assertContains(response, 'type="email"')
+
+    def test_logged_in_user_without_email_can_checkout(self) -> None:
+        from django.contrib.auth import get_user_model
+
+        User = get_user_model()
+        user = User.objects.create_user(
+            username="noemail2",
+            password="secret123",
+        )
+        user.email = None
+        user.save(update_fields=["email"])
+        self.client.login(username="noemail2", password="secret123")
+
+        with self.settings(SHOP_NOTIFICATION_EMAIL="shop@example.com"):
+            response = self.client.post(
+                shop_reverse("checkout:checkout"),
+                _checkout_post_data(
+                    self.vrdnik.pk,
+                    guest_email="buyer@example.com",
+                ),
+            )
+
+        self.assertEqual(response.status_code, 302)
+        user.refresh_from_db()
+        self.assertEqual(user.email, "buyer@example.com")
+        order = Order.objects.get()
+        self.assertEqual(order.guest_email, "buyer@example.com")

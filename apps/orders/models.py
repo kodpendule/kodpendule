@@ -64,6 +64,10 @@ class Order(models.Model):
         blank=True,
         help_text=_("Optional note from checkout."),
     )
+    requested_delivery_date = models.DateField(
+        _("Requested delivery date"),
+        help_text=_("Customer's preferred delivery date from checkout."),
+    )
     shipping_price = MoneyField(verbose_name=_("Shipping price"), default=0)
 
     payment_method = models.CharField(

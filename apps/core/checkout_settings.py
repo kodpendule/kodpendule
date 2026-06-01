@@ -1,13 +1,13 @@
-"""Singleton checkout / shipping promotion settings (pk=1)."""
+"""Checkout delivery promotion helpers."""
 
 from __future__ import annotations
 
+from datetime import date, timedelta
 from decimal import Decimal
 
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-
-from apps.core.fields import MoneyField
 
 
 class ThresholdShippingMode(models.TextChoices):
@@ -15,68 +15,47 @@ class ThresholdShippingMode(models.TextChoices):
     DISCOUNTED = "discounted", _("Discounted shipping price")
 
 
-class CheckoutSettings(models.Model):
+class DeliveryTiming(models.TextChoices):
+    SAME_DAY = "same_day", _("Deliver today (as soon as possible)")
+    SCHEDULED = "scheduled", _("Schedule for a later date")
+
+
+def checkout_today() -> date:
+    return timezone.localdate()
+
+
+def min_scheduled_delivery_date(*, from_date: date | None = None) -> date:
+    """Earliest selectable date for free scheduled delivery (day after order day)."""
+    base = from_date or checkout_today()
+    return base + timedelta(days=1)
+
+
+def resolve_checkout_shipping_price(
+    *,
+    subtotal: Decimal,
+    city,
+    requested_delivery_date: date | None = None,
+    order_date: date | None = None,
+) -> Decimal:
     """
-    Store-wide checkout rules editable in admin (no code deploy needed).
+    Future scheduled delivery is free.
+    Same-day delivery uses the city's base price and cart-threshold promos.
     """
-
-    free_shipping_threshold = MoneyField(
-        verbose_name=_("Free shipping threshold"),
-        null=True,
-        blank=True,
-        help_text=_(
-            "When the cart subtotal is at or above this amount (RSD), "
-            "the threshold shipping rule below applies. Leave empty to disable."
-        ),
-    )
-    threshold_shipping_mode = models.CharField(
-        verbose_name=_("When threshold is reached"),
-        max_length=20,
-        choices=ThresholdShippingMode.choices,
-        default=ThresholdShippingMode.FREE,
-        help_text=_(
-            "Choose free delivery or the discounted shipping price configured below."
-        ),
-    )
-    discounted_shipping_price = MoneyField(
-        verbose_name=_("Discounted shipping price"),
-        null=True,
-        blank=True,
-        help_text=_(
-            "Used when threshold is reached and mode is “Discounted shipping price”. "
-            "Leave empty if you only use free shipping."
-        ),
-    )
-
-    class Meta:
-        verbose_name = _("checkout settings")
-        verbose_name_plural = _("checkout settings")
-
-    def save(self, *args, **kwargs) -> None:
-        self.pk = 1
-        super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs) -> None:
-        pass
-
-    @classmethod
-    def load(cls) -> "CheckoutSettings":
-        obj, _ = cls.objects.get_or_create(pk=1)
-        return obj
-
-
-def resolve_checkout_shipping_price(*, subtotal: Decimal, city_shipping_price: Decimal) -> Decimal:
-    """Apply admin threshold rules to the city's base delivery price."""
-    settings = CheckoutSettings.load()
-    threshold = settings.free_shipping_threshold
-
-    if threshold is None or threshold <= 0 or subtotal < threshold:
-        return city_shipping_price
-
-    if settings.threshold_shipping_mode == ThresholdShippingMode.FREE:
+    today = order_date or checkout_today()
+    delivery_date = requested_delivery_date or today
+    if delivery_date > today:
         return Decimal("0")
 
-    if settings.discounted_shipping_price is not None:
-        return settings.discounted_shipping_price
+    threshold = city.promo_cart_threshold
+    base_price = city.shipping_price
 
-    return city_shipping_price
+    if threshold is None or threshold <= 0 or subtotal < threshold:
+        return base_price
+
+    if city.promo_shipping_mode == ThresholdShippingMode.FREE:
+        return Decimal("0")
+
+    if city.promo_discounted_shipping_price is not None:
+        return city.promo_discounted_shipping_price
+
+    return base_price

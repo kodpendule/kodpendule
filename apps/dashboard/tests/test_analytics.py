@@ -55,6 +55,7 @@ class AnalyticsSelectorTests(TestCase):
             shipping_street="St",
             shipping_city_name="Beograd",
             shipping_city=self.city,
+            requested_delivery_date=today,
             order_notes="Note",
             shipping_price=Decimal("300"),
             subtotal=Decimal("1000"),

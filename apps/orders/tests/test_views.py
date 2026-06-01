@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.utils import timezone
 
 from apps.core.storefront_urls import shop_reverse
 from apps.orders.models import Order, OrderStatus
@@ -32,6 +33,7 @@ class OrderTrackingTests(TestCase):
             shipping_street="Ulica 1",
             shipping_city_name="Beograd",
             shipping_city=self.city,
+            requested_delivery_date=timezone.localdate(),
             order_notes="Notes",
             shipping_price=Decimal("350.00"),
             subtotal=Decimal("1000.00"),
@@ -54,6 +56,7 @@ class OrderTrackingTests(TestCase):
             shipping_street="Ulica 2",
             shipping_city_name="Beograd",
             shipping_city=self.city,
+            requested_delivery_date=timezone.localdate(),
             order_notes="User order",
             shipping_price=Decimal("350.00"),
             subtotal=Decimal("500.00"),

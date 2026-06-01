@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n admin_order_tags %}
 {% if result_hidden_fields %}
 <div class="hiddenfields">{# DIV for HTML validation #}
 {% for item in result_hidden_fields %}{{ item }}{% endfor %}
@@ -20,7 +20,7 @@
 {% if result.form and result.form.non_field_errors %}
     <tr><td colspan="{{ result|length }}">{{ result.form.non_field_errors }}</td></tr>
 {% endif %}
-<tr{% if cl.opts.model_name == "order" and result.form and result.form.instance.pk %} class="kp-row kp-order-row kp-order-row--{{ result.form.instance.status }}{% if result.form.instance.is_new %} kp-order-row--new{% endif %}"{% elif cl.opts.model_name == "product" %} class="kp-row kp-product-row"{% endif %}>{% for item in result %}{{ item }}{% endfor %}</tr>
+<tr{% if cl.opts.model_name == "order" %}{% with row=order_row_list|at_index:forloop.counter0 %} class="kp-row kp-order-row kp-order-row--{{ row.status }}{% if row.is_new %} kp-order-row--new{% endif %}"{% endwith %}{% elif cl.opts.model_name == "product" %} class="kp-row kp-product-row"{% endif %}>{% for item in result %}{{ item }}{% endfor %}</tr>
 {% endfor %}
 </tbody>
 </table>

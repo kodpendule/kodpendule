@@ -60,4 +60,10 @@
 <link rel="icon" type="image/webp" href="{% static 'images/logo.webp' %}">
 <link rel="apple-touch-icon" href="{% static 'images/logo.webp' %}">
 <script src="{% static 'admin/js/kp-nav.js' %}" defer></script>
+<script src="{% static 'js/back-to-top.js' %}" defer></script>
+{% endblock %}
+
+{% block footer %}
+{{ block.super }}
+{% include "includes/_back_to_top.html" %}
 {% endblock %}
