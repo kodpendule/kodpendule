@@ -280,6 +280,19 @@
     font-weight: var(--shop-font-weight-medium);
 }
 
+.shop-trust-panel__support {
+    display: block;
+}
+
+.shop-trust-panel__support-label {
+    display: block;
+}
+
+.shop-trust-panel__support-link {
+    display: block;
+    margin-top: 0.125rem;
+}
+
 @media (max-width: 575.98px) {
     .shop-footer__main {
         padding-block: var(--shop-space-6);

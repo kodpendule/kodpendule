@@ -5,11 +5,11 @@
         <li>{% trans "Fast delivery — we prepare orders quickly." %}</li>
         <li>{% trans "Pay on delivery (COD) — pay when your package arrives." %}</li>
         {% if footer_contact.phone %}
-        <li>
-            {% trans "Support" %}:
-            <a href="tel:{{ footer_contact.phone|cut:' ' }}">{{ footer_contact.phone }}</a>
+        <li class="shop-trust-panel__support">
+            <span class="shop-trust-panel__support-label">{% trans "Support" %}:</span>
+            <a class="shop-trust-panel__support-link" href="tel:{{ footer_contact.phone|cut:' ' }}">{{ footer_contact.phone }}</a>
             {% if footer_contact.email %}
-            · <a href="mailto:{{ footer_contact.email }}">{{ footer_contact.email }}</a>
+            <a class="shop-trust-panel__support-link" href="mailto:{{ footer_contact.email }}">{{ footer_contact.email }}</a>
             {% endif %}
         </li>
         {% else %}

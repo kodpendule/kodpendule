@@ -1,14 +1,22 @@
 {% load i18n shop_urls %}
 <div class="shop-checkout-legal{% if field.errors %} shop-field--invalid{% endif %}">
-    <div class="form-check shop-field__check">
-        {{ field }}
-        <label class="form-check-label" for="{{ field.id_for_label }}">
+    <label class="shop-checkout-legal__option" for="{{ field.id_for_label }}">
+        <input
+            type="checkbox"
+            name="{{ field.html_name }}"
+            id="{{ field.id_for_label }}"
+            class="shop-checkout-legal__checkbox"
+            value="on"
+            {% if field.value %}checked{% endif %}
+            {% if field.field.required %}required{% endif %}
+        >
+        <span class="shop-checkout-legal__text">
             {% trans "I have read and accept the" %}
             <a href="{% shop_url 'core:terms' %}" target="_blank" rel="noopener noreferrer">{% trans "Terms of Service" %}</a>
             {% trans "and" %}
             <a href="{% shop_url 'core:privacy' %}" target="_blank" rel="noopener noreferrer">{% trans "Privacy Policy" %}</a>.
-        </label>
-    </div>
+        </span>
+    </label>
     {% for error in field.errors %}
     <p class="shop-field__error" role="alert">{{ error }}</p>
     {% endfor %}

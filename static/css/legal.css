@@ -93,52 +93,61 @@
 }
 
 .shop-checkout-legal {
-    padding: var(--shop-space-4) var(--shop-space-5) var(--shop-space-4) var(--shop-space-6);
-    border-radius: var(--shop-radius-md);
-    border: 1px solid var(--shop-color-border, #e5e5e0);
-    background: var(--shop-color-surface-muted, #fafaf8);
-    margin-bottom: var(--shop-space-4);
+    margin-bottom: 0;
 }
 
-.shop-checkout-legal .shop-field__check,
-.shop-checkout-legal .form-check {
+.shop-checkout-section--legal .shop-checkout-legal {
+    border: 0;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+}
+
+.shop-checkout-legal__option {
     display: flex;
     align-items: flex-start;
     gap: var(--shop-space-3);
-    padding-left: var(--shop-space-2);
     margin: 0;
-    min-height: 0;
-}
-
-.shop-checkout-legal .form-check-input {
-    flex-shrink: 0;
-    float: none;
-    width: 1.25rem;
-    height: 1.25rem;
-    margin: 0.125rem 0 0;
-    margin-left: 0;
-    border: 2px solid var(--shop-color-primary-active, #1a4d3e);
+    padding: var(--shop-space-1) var(--shop-space-2);
     cursor: pointer;
 }
 
-.shop-checkout-legal .form-check-input:checked {
+.shop-checkout-legal__checkbox {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0.125rem 0 0;
+    border: 2px solid var(--shop-color-primary-active, #1a4d3e);
+    border-radius: var(--shop-radius-sm, 0.25rem);
+    cursor: pointer;
+    accent-color: var(--shop-color-primary);
+}
+
+.shop-checkout-legal__checkbox:checked {
     background-color: var(--shop-color-primary);
     border-color: var(--shop-color-primary);
 }
 
-.shop-checkout-legal .form-check-input:focus {
+.shop-checkout-legal__checkbox:focus {
+    outline: none;
     border-color: var(--shop-color-primary);
     box-shadow: 0 0 0 3px var(--shop-color-primary-soft, rgba(26, 77, 62, 0.2));
 }
 
-.shop-checkout-legal .form-check-label {
+.shop-checkout-legal__text {
+    flex: 1;
+    min-width: 0;
     font-size: var(--shop-font-size-sm);
     line-height: var(--shop-line-height-relaxed);
-    padding-left: 0;
+    color: var(--shop-color-text);
 }
 
-.shop-checkout-legal .form-check-label a {
+.shop-checkout-legal__text a {
     font-weight: 600;
+}
+
+.shop-field--invalid .shop-checkout-legal__checkbox {
+    border-color: var(--shop-color-danger, #b42318);
 }
 
 @media (min-width: 992px) {
