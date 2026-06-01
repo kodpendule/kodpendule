@@ -30,7 +30,14 @@
                 {% csrf_token %}
                 {% if form.errors %}
                 <div class="alert alert-danger shop-checkout-alert" role="alert">
-                    {% trans "Some fields need your attention before we can place the order." %}
+                    {% if form.accept_legal.errors and form.errors|length == 1 %}
+                    <p class="mb-0"><strong>{% trans "Legal consent" %}:</strong> {{ form.accept_legal.errors|join:" " }}</p>
+                    {% else %}
+                    <p class="mb-0">{% trans "Some fields need your attention before we can place the order." %}</p>
+                    {% if form.accept_legal.errors %}
+                    <p class="mb-0 mt-2"><strong>{% trans "Legal consent" %}:</strong> {{ form.accept_legal.errors|join:" " }}</p>
+                    {% endif %}
+                    {% endif %}
                 </div>
                 {% endif %}
                 {% if form.non_field_errors %}
@@ -81,7 +88,7 @@
                 <section class="shop-checkout-section shop-checkout-section--payment" aria-labelledby="checkout-payment-heading">
                     <h2 id="checkout-payment-heading" class="shop-checkout-section__title">{% trans "Payment" %}</h2>
                     <div class="shop-cod-card">
-                        <p class="shop-cod-card__title">{% trans "Cash on delivery (COD)" %}</p>
+                        <p class="shop-cod-card__title">{% trans "Cash on delivery" %}</p>
                         <p class="shop-cod-card__text mb-0">
                             {% trans "Payment is available in cash or by card when you receive your order." %}
                         </p>

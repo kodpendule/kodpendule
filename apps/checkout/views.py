@@ -96,7 +96,9 @@ class CheckoutView(ShopLanguageMixin, FormView):
         return shop_reverse("checkout:success", language=self.shop_language)
 
     def form_invalid(self, form):
-        if form.errors:
+        error_keys = set(form.errors.keys())
+        only_legal = error_keys == {"accept_legal"}
+        if form.errors and not only_legal:
             messages.error(
                 self.request,
                 _("Please correct the highlighted fields and try again."),

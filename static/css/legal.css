@@ -112,11 +112,14 @@
     cursor: pointer;
 }
 
-.shop-checkout-legal__checkbox {
+.shop-checkout-legal__option .shop-checkout-legal__checkbox,
+.shop-checkout-legal__option input[type="checkbox"] {
     flex-shrink: 0;
+    float: none;
     width: 1.25rem;
     height: 1.25rem;
     margin: 0.125rem 0 0;
+    margin-left: 0;
     border: 2px solid var(--shop-color-primary-active, #1a4d3e);
     border-radius: var(--shop-radius-sm, 0.25rem);
     cursor: pointer;
@@ -146,7 +149,8 @@
     font-weight: 600;
 }
 
-.shop-field--invalid .shop-checkout-legal__checkbox {
+.shop-field--invalid .shop-checkout-legal__checkbox,
+.shop-field--invalid .shop-checkout-legal__option input[type="checkbox"] {
     border-color: var(--shop-color-danger, #b42318);
 }
 

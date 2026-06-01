@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kod Pendule\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-02 00:38+0200\n"
+"POT-Creation-Date: 2026-06-02 01:14+0200\n"
 "Language: sr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
@@ -320,15 +320,15 @@ msgstr ""
 "Morate prihvatiti Uslove korišćenja i Politiku privatnosti da biste "
 "poručili."
 
-#: .\apps\checkout\forms.py:86
+#: .\apps\checkout\forms.py:85
 msgid "Email is required for checkout."
 msgstr "Email je obavezan za završetak kupovine."
 
-#: .\apps\checkout\forms.py:89
+#: .\apps\checkout\forms.py:88
 msgid "Email is required for guest checkout."
 msgstr "Email je obavezan za kupovinu kao gost."
 
-#: .\apps\checkout\views.py:37 .\apps\orders\services\order_service.py:47
+#: .\apps\checkout\views.py:37 .\apps\orders\services\order_service.py:50
 msgid "Your cart is empty."
 msgstr "Vaša korpa je prazna."
 
@@ -769,7 +769,7 @@ msgstr "Telefon: %(phone)s"
 msgid "Message:"
 msgstr "Poruka:"
 
-#: .\apps\core\views.py:101 .\templates\checkout\checkout.html:41
+#: .\apps\core\views.py:101 .\templates\checkout\checkout.html:44
 #: .\templates\includes\_footer.html:37 .\templates\includes\_footer.html:60
 #: .\templates\includes\_header_nav_links.html:17
 #: .\templates\includes\legal\_privacy_content.html:111
@@ -790,7 +790,7 @@ msgstr ""
 "Poruka trenutno nije poslata. Pokušajte ponovo kasnije ili nas pozovite "
 "putem podataka ispod."
 
-#: .\apps\core\views.py:152 .\templates\checkout\checkout.html:102
+#: .\apps\core\views.py:152 .\templates\checkout\checkout.html:105
 #: .\templates\includes\_checkout_legal_consent.html:7
 #: .\templates\includes\_footer.html:49 .\templates\includes\_footer.html:94
 #: .\templates\includes\_header_nav_links.html:25
@@ -799,7 +799,7 @@ msgstr ""
 msgid "Terms of Service"
 msgstr "Uslovi korišćenja"
 
-#: .\apps\core\views.py:166 .\templates\checkout\checkout.html:104
+#: .\apps\core\views.py:166 .\templates\checkout\checkout.html:107
 #: .\templates\includes\_checkout_legal_consent.html:9
 #: .\templates\includes\_cookie_banner.html:20
 #: .\templates\includes\_footer.html:50 .\templates\includes\_footer.html:96
@@ -1142,7 +1142,8 @@ msgstr "U obradi"
 msgid "Cancelled"
 msgstr "Otkazano"
 
-#: .\apps\orders\models.py:21 .\templates\includes\_home_trust_details.html:25
+#: .\apps\orders\models.py:21 .\templates\checkout\checkout.html:87
+#: .\templates\includes\_home_trust_details.html:25
 msgid "Cash on delivery"
 msgstr "Plaćanje pouzećem"
 
@@ -1286,8 +1287,8 @@ msgstr "Nova narudžbina %(number)s"
 msgid "A new order has been placed on the shop."
 msgstr "Nova narudžbina je poslata preko prodavnice."
 
-#: .\apps\orders\services\order_service.py:84
-#: .\apps\orders\services\order_service.py:132
+#: .\apps\orders\services\order_service.py:87
+#: .\apps\orders\services\order_service.py:135
 #, python-format
 msgid "Not enough stock for %(name)s."
 msgstr "Nema dovoljno zaliha za %(name)s."
@@ -1835,7 +1836,7 @@ msgid "Remove"
 msgstr "Ukloni"
 
 #: .\templates\cart\detail.html:76 .\templates\cart\detail.html:78
-#: .\templates\checkout\checkout.html:114
+#: .\templates\checkout\checkout.html:117
 #: .\templates\includes\_order_summary_card.html:5
 msgid "Order summary"
 msgstr "Pregled narudžbine"
@@ -1908,64 +1909,60 @@ msgstr "registracija"
 msgid "Some fields need your attention before we can place the order."
 msgstr "Proverite polja pre slanja narudžbine."
 
-#: .\templates\checkout\checkout.html:42
-msgid "We will use these details to confirm your order."
-msgstr "Koristićemo ove podatke da potvrdimo narudžbinu."
-
-#: .\templates\checkout\checkout.html:54
-msgid "Delivery address"
-msgstr "Adresa za dostavu"
-
-#: .\templates\checkout\checkout.html:55
-msgid "Where should we deliver your order?"
-msgstr "Gde želite da dostavimo narudžbinu?"
-
-#: .\templates\checkout\checkout.html:61
-msgid "Delivery cost for selected city"
-msgstr "Cena dostave za izabrani grad"
-
-#: .\templates\checkout\checkout.html:68
-msgid "Promotional delivery price applied to your order."
-msgstr "Primenjena je promotivna cena dostave."
-
-#: .\templates\checkout\checkout.html:69
-msgid "Reduced delivery price applied to your order."
-msgstr "Primenjena je snižena cena dostave."
-
-#: .\templates\checkout\checkout.html:70
-msgid "Add __AMOUNT__ RSD more to qualify for promotional delivery."
-msgstr "Dodajte još __AMOUNT__ RSD za promotivnu dostavu."
-
-#: .\templates\checkout\checkout.html:76
-msgid "Note"
-msgstr "Napomena"
-
-#: .\templates\checkout\checkout.html:77
-msgid "Optional — tell us anything we should know about delivery."
-msgstr "Opciono — napišite sve što treba da znamo o dostavi."
-
-#: .\templates\checkout\checkout.html:82 .\templates\products\detail.html:96
-msgid "Payment"
-msgstr "Plaćanje"
-
-#: .\templates\checkout\checkout.html:84
-msgid "Cash on delivery (COD)"
-msgstr "Plaćanje pouzećem (COD)"
-
-#: .\templates\checkout\checkout.html:86
-msgid "Payment is available in cash or by card when you receive your order."
-msgstr "Plaćanje je moguće gotovinom ili karticom prilikom preuzimanja robe."
-
-#: .\templates\checkout\checkout.html:92
+#: .\templates\checkout\checkout.html:35 .\templates\checkout\checkout.html:95
 msgid "Legal consent"
 msgstr "Pravna saglasnost"
 
-#: .\templates\checkout\checkout.html:98
-#: .\templates\checkout\checkout.html:123
+#: .\templates\checkout\checkout.html:45
+msgid "We will use these details to confirm your order."
+msgstr "Koristićemo ove podatke da potvrdimo narudžbinu."
+
+#: .\templates\checkout\checkout.html:57
+msgid "Delivery address"
+msgstr "Adresa za dostavu"
+
+#: .\templates\checkout\checkout.html:58
+msgid "Where should we deliver your order?"
+msgstr "Gde želite da dostavimo narudžbinu?"
+
+#: .\templates\checkout\checkout.html:64
+msgid "Delivery cost for selected city"
+msgstr "Cena dostave za izabrani grad"
+
+#: .\templates\checkout\checkout.html:71
+msgid "Promotional delivery price applied to your order."
+msgstr "Primenjena je promotivna cena dostave."
+
+#: .\templates\checkout\checkout.html:72
+msgid "Reduced delivery price applied to your order."
+msgstr "Primenjena je snižena cena dostave."
+
+#: .\templates\checkout\checkout.html:73
+msgid "Add __AMOUNT__ RSD more to qualify for promotional delivery."
+msgstr "Dodajte još __AMOUNT__ RSD za promotivnu dostavu."
+
+#: .\templates\checkout\checkout.html:79
+msgid "Note"
+msgstr "Napomena"
+
+#: .\templates\checkout\checkout.html:80
+msgid "Optional — tell us anything we should know about delivery."
+msgstr "Opciono — napišite sve što treba da znamo o dostavi."
+
+#: .\templates\checkout\checkout.html:85 .\templates\products\detail.html:96
+msgid "Payment"
+msgstr "Plaćanje"
+
+#: .\templates\checkout\checkout.html:89
+msgid "Payment is available in cash or by card when you receive your order."
+msgstr "Plaćanje je moguće gotovinom ili karticom prilikom preuzimanja robe."
+
+#: .\templates\checkout\checkout.html:101
+#: .\templates\checkout\checkout.html:126
 msgid "Place order"
 msgstr "Poruči"
 
-#: .\templates\checkout\checkout.html:101
+#: .\templates\checkout\checkout.html:104
 msgid "By placing the order you confirm your details are correct."
 msgstr "Poručivanjem potvrđujete da su podaci tačni."
 
@@ -2053,8 +2050,9 @@ msgid "Fast delivery — we prepare orders quickly."
 msgstr "Brza dostava — brzo pripremamo narudžbine."
 
 #: .\templates\includes\_checkout_trust.html:6
-msgid "Pay on delivery (COD) — pay when your package arrives."
-msgstr "Plaćanje pouzećem (COD) — platite kada paket stigne."
+#| msgid "Pay on delivery (COD) — pay when your package arrives."
+msgid "Pay on delivery — pay when your package arrives."
+msgstr "Plaćanje pouzećem — platite kada paket stigne."
 
 #: .\templates\includes\_checkout_trust.html:9
 #: .\templates\products\detail.html:100
@@ -2124,8 +2122,9 @@ msgid "All rights reserved."
 msgstr "Sva prava zadržana."
 
 #: .\templates\includes\_footer.html:103
-msgid "Cash on delivery (COD) — pay when your order arrives."
-msgstr "Plaćanje pouzećem (COD) — platite kada narudžbina stigne."
+#| msgid "Cash on delivery (COD) — pay when your order arrives."
+msgid "Cash on delivery — pay when your order arrives."
+msgstr "Plaćanje pouzećem — platite kada narudžbina stigne."
 
 #: .\templates\includes\_google_map.html:3
 #: .\templates\includes\_google_map.html:10
@@ -2194,6 +2193,7 @@ msgstr "Poruči odmah"
 
 #: .\templates\includes\_hero.html:37 .\templates\includes\_hero.html:54
 #: .\templates\includes\_home_how_it_works.html:28
+#: .\templates\includes\_shop_trust_bar.html:21
 msgid "Pay on delivery"
 msgstr "Plaćanje pouzećem"
 
@@ -2429,8 +2429,9 @@ msgid "Estimated total"
 msgstr "Procenjen ukupno"
 
 #: .\templates\includes\_order_summary_card.html:38
-msgid "Payment: cash on delivery (COD) when the order is delivered."
-msgstr "Plaćanje: pouzećem (COD) pri isporuci narudžbine."
+#| msgid "Payment: cash on delivery (COD) when the order is delivered."
+msgid "Payment: cash on delivery when the order is delivered."
+msgstr "Plaćanje: pouzećem pri isporuci narudžbine."
 
 #: .\templates\includes\_order_summary_card.html:41
 msgid "No items in cart."
@@ -2489,10 +2490,6 @@ msgstr "Probajte drugu kategoriju ili prilagodite pretragu."
 msgid "Browse all products"
 msgstr "Pregledaj sve proizvode"
 
-#: .\templates\includes\_shop_trust_bar.html:21
-msgid "Pay on delivery (COD)"
-msgstr "Plaćanje pouzećem (COD)"
-
 #: .\templates\includes\_shop_trust_bar.html:27
 msgid "Order tracking"
 msgstr "Praćenje narudžbine"
@@ -2548,9 +2545,12 @@ msgid "Identity and contact data: name, email, phone, delivery address."
 msgstr "Identitet i kontakt: ime, email, telefon, adresa dostave."
 
 #: .\templates\includes\legal\_privacy_content.html:21
+#| msgid ""
+#| "Order data: products ordered, amounts, payment method (COD), order notes, "
+#| "order number."
 msgid ""
-"Order data: products ordered, amounts, payment method (COD), order notes, "
-"order number."
+"Order data: products ordered, amounts, payment method (cash on delivery), "
+"order notes, order number."
 msgstr ""
 "Podaci o narudžbini: proizvodi, iznosi, način plaćanja (pouzeće), napomene, "
 "broj narudžbine."
@@ -2962,11 +2962,15 @@ msgid "5. Prices and payment"
 msgstr "5. Cene i plaćanje"
 
 #: .\templates\includes\legal\_terms_content.html:34
+#| msgid ""
+#| "All prices include applicable VAT where required by law. Payment is made on "
+#| "delivery (cash on delivery — COD) unless we explicitly offer another method."
+#| " You pay the courier upon receipt of the goods in cash or by card if "
+#| "available."
 msgid ""
 "All prices include applicable VAT where required by law. Payment is made on "
-"delivery (cash on delivery — COD) unless we explicitly offer another method."
-" You pay the courier upon receipt of the goods in cash or by card if "
-"available."
+"delivery (cash on delivery) unless we explicitly offer another method. You "
+"pay the courier upon receipt of the goods in cash or by card if available."
 msgstr ""
 "Sve cene uključuju PDV gde zakon zahteva. Plaćanje je pouzećem osim ako "
 "eksplicitno ponudimo drugi način. Kuriru plaćate pri preuzimanju gotovinom "
@@ -3208,8 +3212,9 @@ msgid "Delivery and payment"
 msgstr "Dostava i plaćanje"
 
 #: .\templates\products\detail.html:96
-msgid "cash on delivery (COD)"
-msgstr "pouzećem (COD)"
+#| msgid "Cash on delivery"
+msgid "cash on delivery"
+msgstr "pouzećem"
 
 #: .\templates\products\detail.html:97
 msgid "calculated at checkout"

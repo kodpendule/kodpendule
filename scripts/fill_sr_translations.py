@@ -184,7 +184,13 @@ TRANSLATIONS: dict[str, str] = {
     "Billing address": "Adresa za naplatu",
     "Same as shipping": "Isto kao za dostavu",
     "Delivery": "Dostava",
-    "Payment: cash on delivery (COD).": "Plaćanje: pouzećem (COD).",
+    "Payment: cash on delivery.": "Plaćanje: pouzećem.",
+    "cash on delivery": "pouzećem",
+    "Cash on delivery": "Plaćanje pouzećem",
+    "Pay on delivery": "Plaćanje pouzećem",
+    "Pay on delivery — pay when your package arrives.": "Plaćanje pouzećem — platite kada paket stigne.",
+    "Payment: cash on delivery when the order is delivered.": "Plaćanje: pouzećem pri isporuci narudžbine.",
+    "Cash on delivery — pay when your order arrives.": "Plaćanje pouzećem — platite kada narudžbina stigne.",
     "Place order": "Poruči",
     "Please correct the highlighted fields and try again.": "Ispravite označena polja i pokušajte ponovo.",
     "We could not place your order. Please try again or contact us.": "Narudžbina nije poslata. Pokušajte ponovo ili nas kontaktirajte.",
@@ -254,7 +260,7 @@ TRANSLATIONS: dict[str, str] = {
     "Pricing": "Cena",
     "Delivery and payment": "Dostava i plaćanje",
     "Payment": "Plaćanje",
-    "cash on delivery (COD)": "pouzećem (COD)",
+    "cash on delivery (COD)": "pouzećem",
     "calculated at checkout": "obračunava se pri plaćanju",
     "Support": "Podrška",
     "Decrease quantity": "Smanji količinu",
@@ -340,7 +346,7 @@ TRANSLATIONS: dict[str, str] = {
     "Contact us": "Kontaktirajte nas",
     "Call us": "Pozovite nas",
     "Why shop with us": "Zašto kupovati kod nas",
-    "Pay on delivery (COD)": "Plaćanje pouzećem (COD)",
+    "Pay on delivery (COD)": "Plaćanje pouzećem",
     "Order tracking": "Praćenje narudžbine",
     "Recommended for you": "Preporučeno za vas",
     "Recommended products": "Preporučeni proizvodi",
@@ -508,16 +514,16 @@ TRANSLATIONS: dict[str, str] = {
     "Where should we deliver your order?": "Gde želite da dostavimo narudžbinu?",
     "Delivery cost for selected city": "Cena dostave za izabrani grad",
     "Tell us when and how you prefer delivery.": "Recite nam kada i kako želite dostavu.",
-    "Cash on delivery (COD)": "Plaćanje pouzećem (COD)",
+    "Cash on delivery (COD)": "Plaćanje pouzećem",
     "Pay the courier in cash when your order arrives. No online payment or card required.": "Platite kuriru gotovinom kada paket stigne. Nije potrebno online plaćanje ni kartica.",
     "Payment is available in cash or by card when you receive your order.": "Plaćanje je moguće gotovinom ili karticom prilikom preuzimanja robe.",
     "By placing the order you confirm your details are correct.": "Poručivanjem potvrđujete da su podaci tačni.",
     "Estimated total": "Procenjen ukupno",
-    "Payment: cash on delivery (COD) when the order is delivered.": "Plaćanje: pouzećem (COD) pri isporuci narudžbine.",
+    "Payment: cash on delivery (COD) when the order is delivered.": "Plaćanje: pouzećem pri isporuci narudžbine.",
     "No items in cart.": "Nema stavki u korpi.",
     "Secure ordering — your details are handled carefully.": "Bezbedna porudžbina — vaši podaci se pažljivo čuvaju.",
     "Fast delivery — we prepare orders quickly.": "Brza dostava — brzo pripremamo narudžbine.",
-    "Pay on delivery (COD) — pay when your package arrives.": "Plaćanje pouzećem (COD) — platite kada paket stigne.",
+    "Pay on delivery (COD) — pay when your package arrives.": "Plaćanje pouzećem — platite kada paket stigne.",
     "Questions? Contact us anytime.": "Pitanja? Kontaktirajte nas u bilo kom trenutku.",
     "What happens next": "Šta sledi",
     "We review your order and prepare it for delivery.": "Pregledamo narudžbinu i pripremamo je za dostavu.",
@@ -535,7 +541,7 @@ TRANSLATIONS: dict[str, str] = {
     "Carefully selected assortment and transparent pricing.": "Pažljivo odabran asortiman i jasne cene.",
     "Nationwide delivery — shipping cost is shown at checkout.": "Dostava širom Srbije — cena dostave se prikazuje pri plaćanju.",
     "All rights reserved.": "Sva prava zadržana.",
-    "Cash on delivery (COD) — pay when your order arrives.": "Plaćanje pouzećem (COD) — platite kada narudžbina stigne.",
+    "Cash on delivery (COD) — pay when your order arrives.": "Plaćanje pouzećem — platite kada narudžbina stigne.",
     "Phone": "Telefon",
     "Email": "Email",
     "Address": "Adresa",
@@ -598,7 +604,7 @@ TRANSLATIONS: dict[str, str] = {
     "Identity and contact data: name, email, phone, delivery address.": (
         "Identitet i kontakt: ime, email, telefon, adresa dostave."
     ),
-    "Order data: products ordered, amounts, payment method (COD), order notes, order number.": (
+    "Order data: products ordered, amounts, payment method (cash on delivery), order notes, order number.": (
         "Podaci o narudžbini: proizvodi, iznosi, način plaćanja (pouzeće), napomene, broj narudžbine."
     ),
     "Account data (if you register): username, email, password (stored hashed), order history link.": (
@@ -743,7 +749,7 @@ TRANSLATIONS: dict[str, str] = {
     "Prices are shown in Serbian dinars (RSD) unless stated otherwise.": "Cene su u dinarima (RSD) osim ako nije drugačije naznačeno.",
     "Delivery cost is calculated at checkout based on the selected city.": "Cena dostave se računa pri plaćanju prema izabranom gradu.",
     "5. Prices and payment": "5. Cene i plaćanje",
-    "All prices include applicable VAT where required by law. Payment is made on delivery (cash on delivery — COD) unless we explicitly offer another method. You pay the courier upon receipt of the goods in cash or by card if available.": (
+    "All prices include applicable VAT where required by law. Payment is made on delivery (cash on delivery) unless we explicitly offer another method. You pay the courier upon receipt of the goods in cash or by card if available.": (
         "Sve cene uključuju PDV gde zakon zahteva. Plaćanje je pouzećem osim ako eksplicitno ponudimo drugi način. "
         "Kuriru plaćate pri preuzimanju gotovinom ili karticom ako je dostupno."
     ),

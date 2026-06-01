@@ -63,8 +63,7 @@ class CheckoutForm(forms.Form):
         },
         widget=forms.CheckboxInput(
             attrs={
-                "class": "form-check-input",
-                "required": "required",
+                "class": "shop-checkout-legal__checkbox",
             }
         ),
     )

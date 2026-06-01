@@ -280,10 +280,6 @@
     font-weight: var(--shop-font-weight-medium);
 }
 
-.shop-trust-panel__support {
-    display: block;
-}
-
 .shop-trust-panel__support-label {
     display: block;
 }
