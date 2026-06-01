@@ -1,5 +1,5 @@
 /**
- * Cookie consent banner — essential vs all (includes Google Maps).
+ * Cookie consent banner — acknowledges essential shop cookies.
  */
 (function () {
     "use strict";
@@ -9,23 +9,48 @@
         return;
     }
 
-    function setConsent(level) {
+    function escapeRegExp(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function hasConsent() {
+        var match = document.cookie.match(
+            new RegExp("(?:^|; )" + escapeRegExp(config.cookieName) + "=([^;]*)")
+        );
+        if (!match) {
+            return false;
+        }
+        var raw = decodeURIComponent(match[1].replace(/\+/g, " "));
+        var parts = raw.split(":", 2);
+        return parts.length === 2 && parts[0] === config.version;
+    }
+
+    function writeConsent(level) {
         var maxAge = config.maxAge || 31536000;
         var value = config.version + ":" + level;
         var secure = window.location.protocol === "https:" ? "; Secure" : "";
         document.cookie =
             config.cookieName +
             "=" +
-            encodeURIComponent(value) +
+            value +
             "; path=/; max-age=" +
             maxAge +
             "; SameSite=Lax" +
             secure;
-        window.location.reload();
     }
 
     function clearConsent() {
-        document.cookie = config.cookieName + "=; path=/; max-age=0";
+        var secure = window.location.protocol === "https:" ? "; Secure" : "";
+        document.cookie =
+            config.cookieName + "=; path=/; max-age=0; SameSite=Lax" + secure;
+    }
+
+    function hideBanner() {
+        var banner = document.getElementById("shop-cookie-banner");
+        if (banner) {
+            banner.hidden = true;
+        }
+        document.body.classList.remove("shop-has-cookie-banner");
     }
 
     function showBanner() {
@@ -37,29 +62,43 @@
         document.body.classList.add("shop-has-cookie-banner");
     }
 
+    function acceptCookies() {
+        writeConsent("all");
+        hideBanner();
+    }
+
+    function declineCookies() {
+        writeConsent("essential");
+        hideBanner();
+    }
+
+    function openCookieSettings() {
+        clearConsent();
+        showBanner();
+    }
+
+    document.addEventListener("click", function (event) {
+        if (event.target.closest(".js-cookie-consent-accept")) {
+            event.preventDefault();
+            acceptCookies();
+            return;
+        }
+        if (event.target.closest(".js-cookie-consent-decline")) {
+            event.preventDefault();
+            declineCookies();
+            return;
+        }
+        if (event.target.closest(".js-cookie-settings")) {
+            event.preventDefault();
+            openCookieSettings();
+        }
+    });
+
     document.addEventListener("DOMContentLoaded", function () {
-        var banner = document.getElementById("shop-cookie-banner");
-        if (banner) {
+        if (hasConsent()) {
+            hideBanner();
+        } else {
             showBanner();
         }
-
-        document.querySelectorAll(".js-cookie-consent-all").forEach(function (btn) {
-            btn.addEventListener("click", function () {
-                setConsent("all");
-            });
-        });
-
-        document.querySelectorAll(".js-cookie-consent-essential").forEach(function (btn) {
-            btn.addEventListener("click", function () {
-                setConsent("essential");
-            });
-        });
-
-        document.querySelectorAll(".js-cookie-settings").forEach(function (btn) {
-            btn.addEventListener("click", function () {
-                clearConsent();
-                showBanner();
-            });
-        });
     });
 })();

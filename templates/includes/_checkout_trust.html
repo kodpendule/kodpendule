@@ -4,8 +4,14 @@
         <li>{% trans "Secure ordering — your details are handled carefully." %}</li>
         <li>{% trans "Fast delivery — we prepare orders quickly." %}</li>
         <li>{% trans "Pay on delivery (COD) — pay when your package arrives." %}</li>
-        {% if footer_settings.phone %}
-        <li>{% trans "Support" %}: <a href="tel:{{ footer_settings.phone }}">{{ footer_settings.phone }}</a></li>
+        {% if footer_contact.phone %}
+        <li>
+            {% trans "Support" %}:
+            <a href="tel:{{ footer_contact.phone|cut:' ' }}">{{ footer_contact.phone }}</a>
+            {% if footer_contact.email %}
+            · <a href="mailto:{{ footer_contact.email }}">{{ footer_contact.email }}</a>
+            {% endif %}
+        </li>
         {% else %}
         <li>{% trans "Questions? Contact us anytime." %}</li>
         {% endif %}

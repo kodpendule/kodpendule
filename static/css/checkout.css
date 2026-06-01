@@ -112,6 +112,17 @@
     margin-bottom: var(--shop-space-3);
 }
 
+.shop-cart-line__bottom {
+    padding-top: var(--shop-space-3);
+    border-top: 1px solid var(--shop-color-border-subtle);
+}
+
+.shop-cart-line__remove-form {
+    display: flex;
+    justify-content: flex-end;
+    margin: var(--shop-space-2) 0 0;
+}
+
 .shop-cart-line__qty-form {
     display: flex;
     flex-wrap: wrap;
@@ -133,8 +144,6 @@
     justify-content: space-between;
     align-items: baseline;
     margin: 0;
-    padding-top: var(--shop-space-3);
-    border-top: 1px solid var(--shop-color-border-subtle);
 }
 
 .shop-cart-line__total-label {

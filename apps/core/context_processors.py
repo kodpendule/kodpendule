@@ -3,7 +3,7 @@ from django.conf import settings
 from apps.cart.cart import get_cart
 from apps.categories.selectors import get_nav_categories
 from apps.core.contact_details import resolve_contact_details
-from apps.core.cookie_consent import consent_given, maps_allowed
+from apps.core.cookie_consent import consent_given
 from apps.core.models import FooterSettings, SiteSettings
 from apps.core.utils import get_shop_language
 
@@ -21,7 +21,6 @@ def shop_globals(request):
             "cart_item_count": 0,
             "google_maps_embed_url": maps_url,
             "cookie_consent_given": True,
-            "cookie_consent_maps": True,
             "cookie_consent_cookie_name": settings.COOKIE_CONSENT_COOKIE_NAME,
             "cookie_consent_version": settings.COOKIE_CONSENT_VERSION,
             "cookie_consent_max_age": settings.COOKIE_CONSENT_MAX_AGE,
@@ -43,7 +42,6 @@ def shop_globals(request):
         "cart_item_count": cart.total_items,
         "google_maps_embed_url": maps_url,
         "cookie_consent_given": consent_given(request),
-        "cookie_consent_maps": maps_allowed(request),
         "cookie_consent_cookie_name": settings.COOKIE_CONSENT_COOKIE_NAME,
         "cookie_consent_version": settings.COOKIE_CONSENT_VERSION,
         "cookie_consent_max_age": settings.COOKIE_CONSENT_MAX_AGE,

@@ -74,7 +74,7 @@
     <li>{% trans "CSRF cookie — protects forms against cross-site request forgery." %}</li>
     <li>{% trans "Language cookie — remembers your Serbian or English language choice." %}</li>
 </ul>
-<p>{% blocktrans %}We do not use third-party marketing or analytics cookies on the public shop. Optional cookies (Google Maps) are loaded only after you choose “Accept all” in the cookie banner. You can change your choice anytime via “Cookie settings” in the footer.{% endblocktrans %}</p>
+<p>{% blocktrans %}We do not use third-party marketing or analytics cookies on the public shop. The cookie notice informs you about essential cookies we use. Google Maps is embedded on the contact page and in the footer to show our location; when the map loads, Google may process data (including cookies) under its own privacy policy — see section 10.{% endblocktrans %}</p>
 
 <h2>{% trans "8. Analytics" %}</h2>
 <p>{% blocktrans %}Sales statistics inside our admin panel are generated from order data in our database and are not shared with external analytics providers. The public website does not use Google Analytics or similar visitor tracking at this time.{% endblocktrans %}</p>
@@ -83,7 +83,8 @@
 <p>{% blocktrans %}We send transactional emails related to your orders (confirmation to you; operational notices to our team). Email is sent via our configured mail provider (SMTP). You cannot opt out of essential order emails while a contract is active. Marketing emails, if introduced later, will be sent only with your consent and with an unsubscribe option.{% endblocktrans %}</p>
 
 <h2>{% trans "10. Google Maps" %}</h2>
-<p>{% blocktrans %}Our contact page and footer can show a Google Maps embed for our location. The map is loaded only if you accept optional cookies in the banner. Google may collect data according to its own privacy policy when you use the map.{% endblocktrans %}</p>
+<p>{% blocktrans %}Our contact page and footer display an embedded Google Maps map of our store location. The map is loaded from Google’s servers when you open those pages. Google may collect and process personal data (such as IP address and interaction with the map) according to Google’s Privacy Policy and Terms of Service. We use the map to help you find us; we do not control Google’s processing. For questions about our use of the embed, contact us using the details in section 1.{% endblocktrans %}</p>
+<p class="shop-legal__notice">{% blocktrans %}This policy is provided for transparency. We recommend that a qualified legal adviser review it for your specific business circumstances.{% endblocktrans %}</p>
 
 <h2>{% trans "11. Retention" %}</h2>
 <p>{% blocktrans %}We keep personal data only as long as needed for the purposes above or as required by law (e.g. accounting archives). Order and invoice data are typically retained for the statutory period applicable in Serbia. Contact form messages are deleted when no longer needed for handling your inquiry.{% endblocktrans %}</p>

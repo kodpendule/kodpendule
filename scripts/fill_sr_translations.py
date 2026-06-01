@@ -800,26 +800,43 @@ TRANSLATIONS: dict[str, str] = {
     # Cookie banner
     "Cookies on this website": "Kolačići na ovom sajtu",
     "We use essential cookies so the shop works (cart, login, security). "
-    "With your permission we also load Google Maps on the contact page and footer.": (
+    "Google Maps on the contact page and footer is provided by Google and may involve "
+    "their cookies — see our Privacy Policy.": (
         "Koristimo neophodne kolačiće da prodavnica radi (korpa, prijava, bezbednost). "
-        "Uz vašu saglasnost učitavamo i Google Maps na kontakt stranici i u podnožju."
+        "Google Maps na kontakt stranici i u podnožju obezbeđuje Google i može uključivati "
+        "njihove kolačiće — pogledajte Politiku privatnosti."
     ),
-    "Essential only": "Samo neophodni",
-    "Accept all": "Prihvati sve",
+    "Accept": "Prihvati",
+    "Decline": "Odbij",
     "Cookie settings": "Podešavanja kolačića",
-    "Google Maps is loaded only if you accept optional cookies.": (
-        "Google Maps se učitava samo ako prihvatite opcione kolačiće."
-    ),
-    "Accept all cookies": "Prihvati sve kolačiće",
-    "We do not use third-party marketing or analytics cookies on the public shop. Optional cookies (Google Maps) are loaded only after you choose “Accept all” in the cookie banner. You can change your choice anytime via “Cookie settings” in the footer.": (
+    "We do not use third-party marketing or analytics cookies on the public shop. "
+    "The cookie notice informs you about essential cookies we use. Google Maps is "
+    "embedded on the contact page and in the footer to show our location; when the "
+    "map loads, Google may process data (including cookies) under its own privacy "
+    "policy — see section 10.": (
         "Ne koristimo marketinške ili analitičke kolačiće trećih strana na javnoj prodavnici. "
-        "Opcioni kolačići (Google Maps) učitavaju se tek kada izaberete „Prihvati sve“ u baneru. "
-        "Izbor možete promeniti u bilo kom trenutku putem „Podešavanja kolačića“ u podnožju."
+        "Obaveštenje o kolačićima vas informiše o neophodnim kolačićima koje koristimo. "
+        "Google Maps je ugrađen na kontakt stranici i u podnožju da prikaže našu lokaciju; "
+        "kada se mapa učita, Google može obrađivati podatke (uključujući kolačiće) prema "
+        "svojoj politici privatnosti — pogledajte tačku 10."
     ),
-    "Our contact page and footer can show a Google Maps embed for our location. The map is loaded only if you accept optional cookies in the banner. Google may collect data according to its own privacy policy when you use the map.": (
-        "Kontakt stranica i podnožje mogu prikazati Google Maps sa našom lokacijom. "
-        "Mapa se učitava samo ako prihvatite opcione kolačiće u baneru. "
-        "Google može prikupljati podatke prema svojoj politici kada koristite mapu."
+    "Our contact page and footer display an embedded Google Maps map of our store location. "
+    "The map is loaded from Google’s servers when you open those pages. Google may collect "
+    "and process personal data (such as IP address and interaction with the map) according "
+    "to Google’s Privacy Policy and Terms of Service. We use the map to help you find us; "
+    "we do not control Google’s processing. For questions about our use of the embed, "
+    "contact us using the details in section 1.": (
+        "Kontakt stranica i podnožje prikazuju ugrađenu Google Maps mapu naše lokacije. "
+        "Mapa se učitava sa Google servera kada otvorite te stranice. Google može prikupljati "
+        "i obrađivati lične podatke (npr. IP adresu i interakciju sa mapom) prema Google "
+        "Politici privatnosti i Uslovima korišćenja. Mapu koristimo da vam pomognemo da nas "
+        "pronađete; ne kontrolišemo Google obradu. Za pitanja o ugrađenoj mapi kontaktirajte "
+        "nas putem podataka iz tačke 1."
+    ),
+    "This policy is provided for transparency. We recommend that a qualified "
+    "legal adviser review it for your specific business circumstances.": (
+        "Ova politika je data radi transparentnosti. Preporučujemo da je kvalifikovani "
+        "pravni savetnik pregleda u skladu sa vašim poslovnim okolnostima."
     ),
 }
 

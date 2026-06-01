@@ -25,10 +25,13 @@ class LegalPageViewTests(TestCase):
         self.assertContains(response, shop_reverse("core:terms"))
         self.assertContains(response, shop_reverse("core:privacy"))
 
-    def test_contact_page_includes_map(self) -> None:
-        from django.conf import settings
+    def test_header_nav_contains_legal_links(self) -> None:
+        response = self.client.get(shop_reverse("core:home"))
+        self.assertContains(response, 'aria-label="Glavna navigacija"')
+        self.assertContains(response, shop_reverse("core:terms"))
+        self.assertContains(response, shop_reverse("core:privacy"))
 
-        self.client.cookies[settings.COOKIE_CONSENT_COOKIE_NAME] = "v1:all"
+    def test_contact_page_includes_map(self) -> None:
         response = self.client.get(shop_reverse("core:contact"))
         self.assertContains(response, 'class="shop-map__iframe"')
         self.assertContains(response, "loading=\"lazy\"")

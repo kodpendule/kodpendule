@@ -95,8 +95,17 @@
                 <ul class="shop-pdp__trust-list">
                     <li><strong>{% trans "Payment" %}:</strong> {% trans "cash on delivery (COD)" %}</li>
                     <li><strong>{% trans "Delivery" %}:</strong> {% trans "calculated at checkout" %}</li>
-                    {% if footer_settings.phone %}
-                    <li><strong>{% trans "Support" %}:</strong> <a href="tel:{{ footer_settings.phone }}">{{ footer_settings.phone }}</a></li>
+                    {% if footer_contact.phone or footer_contact.email %}
+                    <li>
+                        <strong>{% trans "Support" %}:</strong>
+                        {% if footer_contact.phone %}
+                        <a href="tel:{{ footer_contact.phone|cut:' ' }}">{{ footer_contact.phone }}</a>
+                        {% endif %}
+                        {% if footer_contact.phone and footer_contact.email %} · {% endif %}
+                        {% if footer_contact.email %}
+                        <a href="mailto:{{ footer_contact.email }}">{{ footer_contact.email }}</a>
+                        {% endif %}
+                    </li>
                     {% endif %}
                 </ul>
             </section>

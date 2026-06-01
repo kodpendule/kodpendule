@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from urllib.parse import unquote
+
 from django.conf import settings
 from django.http import HttpRequest
 
@@ -23,7 +25,8 @@ def parse_consent_cookie(raw: str | None) -> str | None:
     """
     if not raw:
         return None
-    parts = raw.strip().split(":", 1)
+    raw = unquote(raw.strip())
+    parts = raw.split(":", 1)
     if len(parts) != 2:
         return None
     version, level = parts[0], parts[1]
@@ -36,10 +39,6 @@ def parse_consent_cookie(raw: str | None) -> str | None:
 
 def consent_from_request(request: HttpRequest) -> str | None:
     return parse_consent_cookie(request.COOKIES.get(_cookie_name()))
-
-
-def maps_allowed(request: HttpRequest) -> bool:
-    return consent_from_request(request) == CONSENT_LEVEL_ALL
 
 
 def consent_given(request: HttpRequest) -> bool:

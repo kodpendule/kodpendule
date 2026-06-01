@@ -267,10 +267,22 @@
 .shop-product-card__bottom {
     margin-top: auto;
     display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: stretch;
     gap: var(--shop-space-3);
     padding-top: var(--shop-space-2);
+}
+
+.shop-product-card__price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.125rem;
+}
+
+.shop-product-card__price .shop-price {
+    white-space: nowrap;
+    line-height: 1.25;
 }
 
 .shop-price {
@@ -291,6 +303,10 @@
     text-decoration: line-through;
 }
 
+.shop-product-card__actions {
+    width: 100%;
+}
+
 .shop-product-card__cart-form {
     margin: 0;
     width: 100%;
@@ -298,24 +314,29 @@
 
 .shop-product-card__buy-row {
     display: flex;
+    flex-direction: column;
     align-items: stretch;
     gap: var(--shop-space-2);
     width: 100%;
 }
 
 .shop-product-card__buy-row .shop-qty--compact {
-    flex: 0 0 auto;
-    max-width: 7.25rem;
+    flex: none;
+    max-width: none;
+    width: 100%;
 }
 
 .shop-product-card__buy-row .shop-product-card__add {
-    flex: 1 1 auto;
+    flex: none;
+    width: 100%;
     min-width: 0;
+    min-height: var(--shop-touch-target);
+    white-space: normal;
 }
 
 .shop-product-card__add,
 .shop-product-card__details {
-    white-space: nowrap;
+    width: 100%;
 }
 
 /* —— Quantity stepper (cards, cart, checkout) —— */

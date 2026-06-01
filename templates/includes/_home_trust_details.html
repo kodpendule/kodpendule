@@ -37,8 +37,8 @@
 
         <div class="shop-trust-details__actions shop-reveal" data-reveal>
             <a class="shop-btn shop-btn--ghost shop-btn--sm" href="{% shop_url 'orders:track' %}">{% trans "Track your order" %}</a>
-            {% if footer_settings.phone %}
-            <a class="shop-btn shop-btn--ghost shop-btn--sm" href="tel:{{ footer_settings.phone }}">{% trans "Call us" %}</a>
+            {% if footer_contact.phone %}
+            <a class="shop-btn shop-btn--ghost shop-btn--sm" href="tel:{{ footer_contact.phone|cut:' ' }}">{% trans "Call us" %}</a>
             {% endif %}
         </div>
     </div>

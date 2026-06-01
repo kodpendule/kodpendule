@@ -1,6 +1,5 @@
 {% load i18n %}
 {% if google_maps_embed_url %}
-{% if cookie_consent_maps %}
 <div class="shop-map" aria-label="{% trans 'Store location on map' %}">
     <iframe
         class="shop-map__iframe"
@@ -11,16 +10,4 @@
         title="{% trans 'Store location on map' %}"
     ></iframe>
 </div>
-{% else %}
-<div class="shop-map shop-map--placeholder" aria-label="{% trans 'Store location on map' %}">
-    <div class="shop-map__placeholder-body">
-        <p class="shop-map__placeholder-text mb-3">
-            {% trans "Google Maps is loaded only if you accept optional cookies." %}
-        </p>
-        <button type="button" class="shop-btn shop-btn--primary shop-btn--sm js-cookie-consent-all">
-            {% trans "Accept all cookies" %}
-        </button>
-    </div>
-</div>
-{% endif %}
 {% endif %}

@@ -53,7 +53,13 @@
                                         <button class="shop-qty__btn" type="button" data-shop-qty-inc aria-label="{% trans 'Increase quantity' %}">+</button>
                                     </div>
                                 </form>
+                            </div>
 
+                            <div class="shop-cart-line__bottom">
+                                <p class="shop-cart-line__total">
+                                    <span class="shop-cart-line__total-label">{% trans "Line total" %}</span>
+                                    <span class="shop-cart-line__total-value" data-cart-line-total>{{ line.line_total|money }}</span>
+                                </p>
                                 <form method="post" action="{% shop_url 'cart:remove' product_id=line.product.pk %}" class="shop-cart-line__remove-form">
                                     {% csrf_token %}
                                     <button type="submit" class="shop-btn shop-btn--ghost shop-btn--sm">
@@ -61,11 +67,6 @@
                                     </button>
                                 </form>
                             </div>
-
-                            <p class="shop-cart-line__total">
-                                <span class="shop-cart-line__total-label">{% trans "Line total" %}</span>
-                                <span class="shop-cart-line__total-value" data-cart-line-total>{{ line.line_total|money }}</span>
-                            </p>
                         </div>
                     </li>
                     {% endfor %}

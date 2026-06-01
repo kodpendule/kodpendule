@@ -86,9 +86,7 @@
 
 /* —— Brand column —— */
 .shop-footer__brand-link {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--shop-space-3);
+    display: inline-block;
     text-decoration: none;
     color: var(--shop-color-primary-active);
     margin-bottom: var(--shop-space-3);
@@ -117,12 +115,6 @@
     height: 100%;
     object-fit: contain;
     display: block;
-}
-
-.shop-footer__name {
-    font-size: var(--shop-font-size-lg);
-    font-weight: var(--shop-font-weight-bold);
-    letter-spacing: -0.02em;
 }
 
 .shop-footer__tagline,

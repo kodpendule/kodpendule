@@ -6,10 +6,7 @@
                 <div class="shop-footer__brand">
                     <a href="{% shop_url 'core:home' %}" class="shop-footer__brand-link">
                         <span class="shop-footer__mark" aria-hidden="true">
-                            <img src="{% static 'images/logo.webp' %}" class="shop-footer__logo" alt="">
-                        </span>
-                        <span class="shop-footer__name">
-                            {% if site_settings %}{{ site_settings.site_name }}{% else %}{% trans "Kod Pendule" %}{% endif %}
+                            <img src="{% static 'images/logo.webp' %}" class="shop-footer__logo" alt="{% if site_settings %}{{ site_settings.site_name }}{% else %}{% trans 'Kod Pendule' %}{% endif %}">
                         </span>
                     </a>
                     <p class="shop-footer__tagline">
