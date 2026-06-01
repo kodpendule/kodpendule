@@ -4,7 +4,6 @@ import secrets
 from decimal import Decimal
 
 from django.db import transaction
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from apps.accounts.services import archive_customer_from_checkout
@@ -24,9 +23,13 @@ class CheckoutError(Exception):
 
 
 def generate_order_number() -> str:
-    stamp = timezone.localdate().strftime("%Y%m%d")
-    suffix = secrets.token_hex(3).upper()
-    return f"KP-{stamp}-{suffix}"
+    """Short customer-facing ID, e.g. KP-482917."""
+    for _ in range(20):
+        suffix = f"{secrets.randbelow(900_000) + 100_000:d}"
+        candidate = f"KP-{suffix}"
+        if not Order.objects.filter(order_number=candidate).exists():
+            return candidate
+    return f"KP-{secrets.randbelow(1_000_000):06d}"
 
 
 @transaction.atomic

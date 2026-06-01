@@ -79,7 +79,7 @@ class CheckoutServiceTests(TestCase):
             shipping_street="Ulica 1",
             order_notes="Pozvati pre dostave.",
         )
-        self.assertTrue(order.order_number.startswith("KP-"))
+        self.assertRegex(order.order_number, r"^KP-\d{6}$")
         self.assertTrue(order.is_new)
         self.assertEqual(order.items.count(), 1)
         self.assertEqual(order.total, Decimal("2350.00"))

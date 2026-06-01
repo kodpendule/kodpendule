@@ -3,10 +3,16 @@ from decimal import Decimal
 from django.test import TestCase
 
 from apps.orders.models import Order, OrderItem, OrderStatus, PaymentMethod
+from apps.orders.services.order_service import generate_order_number
 from apps.shipping.models import City
 
 
 class OrderModelTests(TestCase):
+    def test_generate_order_number_is_short(self) -> None:
+        number = generate_order_number()
+        self.assertRegex(number, r"^KP-\d{6}$")
+        self.assertFalse(Order.objects.filter(order_number=number).exists())
+
     def setUp(self) -> None:
         self.city = City.objects.create(
             name="Novi Sad",

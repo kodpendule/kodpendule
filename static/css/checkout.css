@@ -180,8 +180,7 @@
 }
 
 .shop-summary-card--sticky {
-    position: sticky;
-    top: var(--shop-space-4);
+    position: static;
 }
 
 .shop-summary-card__title {
@@ -416,7 +415,12 @@
 }
 
 .shop-checkout .shop-field__check {
-    padding-left: 0.15rem;
+    padding-left: 0;
+}
+
+.shop-checkout .shop-field__check .form-check-input {
+    float: none;
+    margin-left: 0;
 }
 
 .shop-checkout .shop-field__check .form-check-input {

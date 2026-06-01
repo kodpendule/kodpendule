@@ -93,27 +93,30 @@
 }
 
 .shop-checkout-legal {
-    padding: var(--shop-space-4) var(--shop-space-5);
+    padding: var(--shop-space-4) var(--shop-space-5) var(--shop-space-4) var(--shop-space-6);
     border-radius: var(--shop-radius-md);
     border: 1px solid var(--shop-color-border, #e5e5e0);
     background: var(--shop-color-surface-muted, #fafaf8);
     margin-bottom: var(--shop-space-4);
 }
 
-.shop-checkout-legal .shop-field__check {
+.shop-checkout-legal .shop-field__check,
+.shop-checkout-legal .form-check {
     display: flex;
     align-items: flex-start;
     gap: var(--shop-space-3);
-    padding-left: 0;
+    padding-left: var(--shop-space-2);
     margin: 0;
     min-height: 0;
 }
 
 .shop-checkout-legal .form-check-input {
     flex-shrink: 0;
+    float: none;
     width: 1.25rem;
     height: 1.25rem;
     margin: 0.125rem 0 0;
+    margin-left: 0;
     border: 2px solid var(--shop-color-primary-active, #1a4d3e);
     cursor: pointer;
 }
