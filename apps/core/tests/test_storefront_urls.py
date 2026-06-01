@@ -41,6 +41,14 @@ class StorefrontUrlTests(TestCase):
             "/kategorije/",
         )
 
+    def test_shop_reverse_legal_pages(self) -> None:
+        with translation.override("sr"):
+            self.assertEqual(shop_reverse("core:terms"), "/uslovi-koriscenja/")
+            self.assertEqual(shop_reverse("core:privacy"), "/politika-privatnosti/")
+        with translation.override("en"):
+            self.assertEqual(shop_reverse("core:terms"), "/terms-of-service/")
+            self.assertEqual(shop_reverse("core:privacy"), "/privacy-policy/")
+
     def test_middleware_redirects_wrong_language_path(self) -> None:
         client = Client()
         client.cookies[settings.LANGUAGE_COOKIE_NAME] = "en"

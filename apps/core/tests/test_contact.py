@@ -10,7 +10,7 @@ class ContactDetailsTests(TestCase):
         details = resolve_contact_details(None)
         self.assertEqual(details.phone, "+381 11 123 4567")
         self.assertEqual(details.email, "info@kodpendule.rs")
-        self.assertIn("Beograd", details.address)
+        self.assertIn("Vrdnik", details.address)
 
     def test_admin_footer_overrides_dummy(self) -> None:
         footer = FooterSettings(pk=1)
@@ -27,11 +27,11 @@ class ContactDetailsTests(TestCase):
 
 
 class ContactViewTests(TestCase):
-    def test_contact_page_shows_dummy_details(self) -> None:
+    def test_contact_page_shows_dummy_details_and_form(self) -> None:
         response = self.client.get(shop_reverse("core:contact"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "+381 11 123 4567")
         self.assertContains(response, "info@kodpendule.rs")
-        self.assertNotContains(response, "Send us a message")
-        self.assertNotContains(response, 'name="subject"')
-        self.assertNotContains(response, 'name="message"')
+        self.assertContains(response, "Vrdnik")
+        self.assertContains(response, 'name="message"')
+        self.assertContains(response, "shop-map")

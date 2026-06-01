@@ -28,4 +28,14 @@ def latin_month_year(value: date) -> str:
 
 
 def latin_short_date(value: date) -> str:
-    return value.strftime("%d.%m.%Y.")
+    """Admin / analytics date label (dd/MM/yyyy)."""
+    return value.strftime("%d/%m/%Y")
+
+
+def latin_short_datetime(value) -> str:
+    """Admin datetime label (dd/MM/yyyy HH:mm)."""
+    from django.utils import timezone
+
+    if timezone.is_aware(value):
+        value = timezone.localtime(value)
+    return value.strftime("%d/%m/%Y %H:%M")

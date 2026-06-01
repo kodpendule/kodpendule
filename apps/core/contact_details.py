@@ -38,7 +38,7 @@ def resolve_contact_details(footer: FooterSettings | None) -> ContactDetails:
     return ContactDetails(
         phone="+381 11 123 4567",
         email="info@kodpendule.rs",
-        address=str(_("Knez Mihailova 1\n11000 Beograd")),
+        address=str(_("Karađorđeva 11\n21315 Vrdnik")),
         working_hours=str(
             _("Mon–Fri: 9:00–17:00\nSat: 9:00–13:00")
         ),

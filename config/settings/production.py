@@ -77,19 +77,13 @@ if _csrf_origins:
 else:
     CSRF_TRUSTED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS if host]
 
-# --- Email (new order notifications) ------------------------------------------
+# --- Email (SendGrid SMTP) ------------------------------------------------------
 
-SHOP_ORDER_NOTIFICATION_EMAILS = config(
-    "SHOP_ORDER_NOTIFICATION_EMAILS",
-    default="",
-    cast=Csv(),
-)
-DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@kodpendule.rs")
-EMAIL_HOST = config("EMAIL_HOST", default="")
-EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
-EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
-EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
+from config.settings.sendgrid import configure_sendgrid_email  # noqa: E402
+
+configure_sendgrid_email(sys.modules[__name__], config)
+
+GOOGLE_MAPS_EMBED_URL = config("GOOGLE_MAPS_EMBED_URL", default=GOOGLE_MAPS_EMBED_URL)  # noqa: F405
 
 # --- Logging ------------------------------------------------------------------
 
@@ -116,6 +110,21 @@ LOGGING = {
         "django.security": {
             "handlers": ["console"],
             "level": "WARNING",
+            "propagate": False,
+        },
+        "apps.core.mail": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "apps.orders.services.order_notifications": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "apps.products.services.stock_notifications": {
+            "handlers": ["console"],
+            "level": "INFO",
             "propagate": False,
         },
     },

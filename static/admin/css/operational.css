@@ -216,6 +216,11 @@
     background: var(--kp-color-primary-soft);
 }
 
+/* Order rows — unread (new) orders */
+.change-list.model-order #result_list tbody tr.kp-order-row--new td {
+    font-weight: var(--kp-font-weight-bold);
+}
+
 /* Order rows — status accent */
 .change-list.model-order #result_list tbody tr.kp-order-row--pending {
     box-shadow: inset 4px 0 0 #9ca3af;

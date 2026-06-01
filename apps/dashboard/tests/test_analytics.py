@@ -54,11 +54,7 @@ class AnalyticsSelectorTests(TestCase):
             phone="123",
             shipping_street="St",
             shipping_city_name="Beograd",
-            shipping_postal_code="11000",
             shipping_city=self.city,
-            billing_street="St",
-            billing_city_name="Beograd",
-            billing_postal_code="11000",
             order_notes="Note",
             shipping_price=Decimal("300"),
             subtotal=Decimal("1000"),
@@ -105,6 +101,9 @@ class DashboardViewTests(TestCase):
         self.assertContains(response, 'id="nav-sidebar"')
         self.assertContains(response, "kp-admin-nav")
         self.assertContains(response, 'id="id_filter_mode"')
+        self.assertContains(response, 'id="chart-revenue-data"')
+        self.assertContains(response, 'id="chart-orders-data"')
+        self.assertContains(response, "dashboard-charts.js")
         self.assertNotContains(response, "dashboard-quick-links")
         content = response.content.decode()
         self.assertEqual(content.count("<h1>"), 1)

@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import csv
 import io
+from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import datetime
 
 from django.contrib.auth import get_user_model
+from django.db.models import QuerySet
 from django.db import transaction
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
@@ -35,6 +37,8 @@ EXPORT_FIELD_KEYS = [
     "first_name",
     "last_name",
     "phone",
+    "delivery_street",
+    "delivery_city_name",
     "username",
 ]
 
@@ -44,6 +48,8 @@ CSV_HEADERS_SR: dict[str, str] = {
     "first_name": "Ime",
     "last_name": "Prezime",
     "phone": "Telefon",
+    "delivery_street": "Ulica i broj",
+    "delivery_city_name": "Grad dostave",
     "order_count": "Broj narudžbina",
     "registered_at": "Datum registracije",
     "first_seen_at": "Prvi kontakt",
@@ -96,19 +102,25 @@ class ImportResult:
             self.errors = []
 
 
-def export_contacts_csv() -> bytes:
+def export_contacts_csv(contacts: Iterable[CustomerContact] | QuerySet[CustomerContact]) -> bytes:
     """UTF-8 CSV with BOM so Excel on Windows shows č, ž, đ, š correctly."""
     buffer = io.StringIO()
     writer = csv.DictWriter(buffer, fieldnames=EXPORT_FIELDNAMES, extrasaction="ignore")
     writer.writeheader()
 
-    contacts = CustomerContact.objects.select_related("user").order_by("-last_seen_at")
-    for contact in contacts:
+    if isinstance(contacts, QuerySet):
+        contact_rows = contacts.select_related("user").order_by("-last_seen_at")
+    else:
+        contact_rows = list(contacts)
+
+    for contact in contact_rows:
         row = {
             "email": contact.email,
             "first_name": contact.first_name,
             "last_name": contact.last_name,
             "phone": _format_phone_for_excel(contact.phone),
+            "delivery_street": contact.delivery_street,
+            "delivery_city_name": contact.delivery_city_name,
             "username": contact.user.username if contact.user_id else "",
         }
         writer.writerow({CSV_HEADERS_SR[key]: row[key] for key in EXPORT_FIELD_KEYS})

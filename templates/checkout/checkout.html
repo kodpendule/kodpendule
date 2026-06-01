@@ -56,7 +56,6 @@
                     <div class="row g-3">
                         <div class="col-12">{% include "includes/_shop_form_field.html" with field=form.shipping_city %}</div>
                         <div class="col-12">{% include "includes/_shop_form_field.html" with field=form.shipping_street %}</div>
-                        <div class="col-md-6">{% include "includes/_shop_form_field.html" with field=form.shipping_postal_code %}</div>
                     </div>
                     <p class="shop-checkout-shipping-note mb-0" aria-live="polite">
                         <span class="shop-checkout-shipping-note__label">{% trans "Delivery cost for selected city" %}</span>
@@ -64,34 +63,19 @@
                             <span class="js-shipping-price">—</span> {{ shop_currency_symbol }}
                         </span>
                     </p>
+                    {% if checkout_shipping.free_shipping_threshold %}
+                    <p class="shop-checkout-shipping-hint small text-muted mb-0 mt-2" id="checkout-shipping-hint"
+                       data-msg-free="{% trans 'Promotional delivery price applied to your order.' %}"
+                       data-msg-discounted="{% trans 'Reduced delivery price applied to your order.' %}"
+                       data-msg-remaining="{% trans 'Add __AMOUNT__ RSD more to qualify for promotional delivery.' %}"
+                       hidden></p>
+                    {% endif %}
                 </section>
 
-                <section class="shop-checkout-section" aria-labelledby="checkout-delivery-heading">
-                    <h2 id="checkout-delivery-heading" class="shop-checkout-section__title">{% trans "Delivery" %}</h2>
-                    <p class="shop-checkout-section__lead">{% trans "Tell us when and how you prefer delivery." %}</p>
-                    {% if shipping_method %}
-                    <p class="shop-checkout-method mb-3">
-                        <span class="shop-checkout-method__label">{% trans "Shipping method" %}:</span>
-                        <span class="shop-checkout-method__value fw-medium">
-                            {{ shipping_method.localized_name }}
-                        </span>
-                        {% if shipping_method.localized_description %}
-                        <span class="d-block small text-muted mt-1">{{ shipping_method.localized_description }}</span>
-                        {% endif %}
-                    </p>
-                    {% endif %}
+                <section class="shop-checkout-section" aria-labelledby="checkout-notes-heading">
+                    <h2 id="checkout-notes-heading" class="shop-checkout-section__title">{% trans "Note" %}</h2>
+                    <p class="shop-checkout-section__lead">{% trans "Optional — tell us anything we should know about delivery." %}</p>
                     <div class="mb-0">{% include "includes/_shop_form_field.html" with field=form.order_notes %}</div>
-                    <div class="row g-3 align-items-end">
-                        <div class="col-md-6">{% include "includes/_shop_form_field.html" with field=form.delivery_date %}</div>
-                        <div class="col-12">
-                            <div class="shop-field mb-3">
-                                <div class="form-check shop-field__check">
-                                    {{ form.flexible_delivery }}
-                                    <label class="form-check-label" for="id_flexible_delivery">{{ form.flexible_delivery.label }}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </section>
 
                 <section class="shop-checkout-section shop-checkout-section--payment" aria-labelledby="checkout-payment-heading">
@@ -99,16 +83,26 @@
                     <div class="shop-cod-card">
                         <p class="shop-cod-card__title">{% trans "Cash on delivery (COD)" %}</p>
                         <p class="shop-cod-card__text mb-0">
-                            {% trans "Pay the courier in cash when your order arrives. No online payment or card required." %}
+                            {% trans "Payment is available in cash or by card when you receive your order." %}
                         </p>
                     </div>
+                </section>
+
+                <section class="shop-checkout-section" aria-labelledby="checkout-legal-heading">
+                    <h2 id="checkout-legal-heading" class="visually-hidden">{% trans "Legal consent" %}</h2>
+                    {% include "includes/_checkout_legal_consent.html" with field=form.accept_legal %}
                 </section>
 
                 <div class="shop-checkout-submit d-none d-lg-block">
                     <button type="submit" class="shop-btn shop-btn--primary shop-btn--lg shop-btn--block">
                         {% trans "Place order" %}
                     </button>
-                    <p class="shop-checkout-submit__note">{% trans "By placing the order you confirm your details are correct." %}</p>
+                    <p class="shop-checkout-submit__note">
+                        {% trans "By placing the order you confirm your details are correct." %}
+                        <a href="{% shop_url 'core:terms' %}">{% trans "Terms of Service" %}</a>
+                        ·
+                        <a href="{% shop_url 'core:privacy' %}">{% trans "Privacy Policy" %}</a>
+                    </p>
                 </div>
             </form>
 
@@ -134,6 +128,7 @@
 </div>
 </div>
 {{ city_prices|json_script:"city-prices-data" }}
+{{ checkout_shipping|json_script:"checkout-shipping-rules" }}
 {% endblock %}
 
 {% block extra_js %}

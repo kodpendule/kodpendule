@@ -13,11 +13,14 @@ class UserLoginView(LoginView):
     authentication_form = LoginForm
     redirect_authenticated_user = True
 
+    def get_success_url(self) -> str:
+        return shop_reverse("orders:history")
+
 
 class UserRegisterView(FormView):
     template_name = "accounts/register.html"
     form_class = RegistrationForm
-    success_url = shop_reverse_lazy("core:home")
+    success_url = shop_reverse_lazy("orders:history")
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:

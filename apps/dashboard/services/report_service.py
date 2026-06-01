@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal
 from typing import Any
 
@@ -21,15 +21,15 @@ def build_dashboard_context(period: ReportPeriod) -> dict[str, Any]:
     days_in_period = (period.end - period.start).days + 1
 
     if days_in_period <= 90:
-        time_series = analytics.sales_by_day(period)
-        time_labels = [_format_day(row["day"]) for row in time_series]
-        time_revenue = [float(row["revenue"]) for row in time_series]
+        raw_series = analytics.sales_by_day(period)
+        time_labels, time_revenue, time_orders = _filled_daily_series(period, raw_series)
         time_chart_title = _("Daily revenue")
+        orders_chart_title = _("Daily orders")
     else:
-        time_series = analytics.sales_by_month(period)
-        time_labels = [_format_month(row["month"]) for row in time_series]
-        time_revenue = [float(row["revenue"]) for row in time_series]
+        raw_series = analytics.sales_by_month(period)
+        time_labels, time_revenue, time_orders = _filled_monthly_series(period, raw_series)
         time_chart_title = _("Monthly revenue")
+        orders_chart_title = _("Monthly orders")
 
     top_products = analytics.top_products(period)
     top_categories = analytics.top_categories(period)
@@ -47,13 +47,19 @@ def build_dashboard_context(period: ReportPeriod) -> dict[str, Any]:
         "top_categories": top_categories,
         "top_customers": top_customers,
         "time_chart_title": time_chart_title,
+        "orders_chart_title": orders_chart_title,
         "chart_legends": {
             "revenue": _("Revenue"),
+            "orders": _("Orders"),
         },
         "charts": {
             "revenue": {
                 "labels": time_labels,
                 "values": time_revenue,
+            },
+            "orders": {
+                "labels": time_labels,
+                "values": time_orders,
             },
             "top_products": {
                 "labels": [p["name"][:40] for p in top_products],
@@ -69,6 +75,53 @@ def build_dashboard_context(period: ReportPeriod) -> dict[str, Any]:
             },
         },
     }
+
+
+def _filled_daily_series(
+    period: ReportPeriod,
+    rows: list[dict[str, Any]],
+) -> tuple[list[str], list[float], list[int]]:
+    by_day = {row["day"]: row for row in rows}
+    labels: list[str] = []
+    revenue_values: list[float] = []
+    order_values: list[int] = []
+    day = period.start
+    while day <= period.end:
+        row = by_day.get(day)
+        labels.append(_format_day(day))
+        revenue_values.append(float(row["revenue"]) if row else 0.0)
+        order_values.append(int(row["orders"]) if row else 0)
+        day += timedelta(days=1)
+    return labels, revenue_values, order_values
+
+
+def _filled_monthly_series(
+    period: ReportPeriod,
+    rows: list[dict[str, Any]],
+) -> tuple[list[str], list[float], list[int]]:
+    by_month: dict[tuple[int, int], dict[str, Any]] = {}
+    for row in rows:
+        month_date = row["month"]
+        if month_date is None:
+            continue
+        by_month[(month_date.year, month_date.month)] = row
+
+    labels: list[str] = []
+    revenue_values: list[float] = []
+    order_values: list[int] = []
+    year, month = period.start.year, period.start.month
+    end_year, end_month = period.end.year, period.end.month
+    while (year, month) <= (end_year, end_month):
+        row = by_month.get((year, month))
+        labels.append(_format_month(date(year, month, 1)))
+        revenue_values.append(float(row["revenue"]) if row else 0.0)
+        order_values.append(int(row["orders"]) if row else 0)
+        if month == 12:
+            year += 1
+            month = 1
+        else:
+            month += 1
+    return labels, revenue_values, order_values
 
 
 def _format_day(value: date) -> str:

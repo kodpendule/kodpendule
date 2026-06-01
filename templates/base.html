@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="{% static 'css/footer.css' %}">
     <link rel="stylesheet" href="{% static 'css/mobile.css' %}">
     <link rel="stylesheet" href="{% static 'css/polish.css' %}">
+    <link rel="stylesheet" href="{% static 'css/cookie-banner.css' %}">
     {% block extra_css %}{% endblock %}
 </head>
 <body class="shop-body d-flex flex-column min-vh-100">
@@ -29,8 +30,18 @@
     {% include "includes/_shop_trust_bar.html" with trust_strip_modifier="prefooter" %}
     {% endblock %}
     {% include "includes/_footer.html" %}
+    {% include "includes/_cookie_banner.html" %}
+    <script>
+        window.SHOP_COOKIE_CONSENT = {
+            cookieName: "{{ cookie_consent_cookie_name|escapejs }}",
+            version: "{{ cookie_consent_version|escapejs }}",
+            maxAge: {{ cookie_consent_max_age }}
+        };
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/cookie-consent.js' %}"></script>
     <script src="{% static 'js/header.js' %}"></script>
+    <script src="{% static 'js/product.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
     {% block extra_js %}{% endblock %}
 </body>

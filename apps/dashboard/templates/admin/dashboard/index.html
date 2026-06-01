@@ -111,22 +111,37 @@
         <div class="dashboard-charts">
             <div class="dashboard-chart-card">
                 <h3>{{ time_chart_title }}</h3>
-                <canvas id="chart-revenue" height="200" aria-label="{{ time_chart_title }}"
-                        data-legend-label="{{ chart_legends.revenue }}"></canvas>
+                <div class="dashboard-chart-card__canvas-wrap">
+                    <canvas id="chart-revenue" aria-label="{{ time_chart_title }}"
+                            data-legend-label="{{ chart_legends.revenue }}"></canvas>
+                </div>
+            </div>
+            <div class="dashboard-chart-card">
+                <h3>{{ orders_chart_title }}</h3>
+                <div class="dashboard-chart-card__canvas-wrap">
+                    <canvas id="chart-orders" aria-label="{{ orders_chart_title }}"
+                            data-legend-label="{{ chart_legends.orders }}"></canvas>
+                </div>
             </div>
             <div class="dashboard-chart-card">
                 <h3>{% trans "Top products (revenue)" %}</h3>
-                <canvas id="chart-products" height="200" aria-label="{% trans 'Top products' %}"
-                        data-legend-label="{{ chart_legends.revenue }}"></canvas>
+                <div class="dashboard-chart-card__canvas-wrap">
+                    <canvas id="chart-products" aria-label="{% trans 'Top products' %}"
+                            data-legend-label="{{ chart_legends.revenue }}"></canvas>
+                </div>
             </div>
             <div class="dashboard-chart-card">
                 <h3>{% trans "Sales by category" %}</h3>
-                <canvas id="chart-categories" height="200" aria-label="{% trans 'Category sales' %}"
-                        data-legend-label="{{ chart_legends.revenue }}"></canvas>
+                <div class="dashboard-chart-card__canvas-wrap">
+                    <canvas id="chart-categories" aria-label="{% trans 'Category sales' %}"
+                            data-legend-label="{{ chart_legends.revenue }}"></canvas>
+                </div>
             </div>
             <div class="dashboard-chart-card">
                 <h3>{% trans "Order status (period)" %}</h3>
-                <canvas id="chart-status" height="200" aria-label="{% trans 'Order status' %}"></canvas>
+                <div class="dashboard-chart-card__canvas-wrap">
+                    <canvas id="chart-status" aria-label="{% trans 'Order status' %}"></canvas>
+                </div>
             </div>
         </div>
     </section>
@@ -207,11 +222,12 @@
 </div>
 
 {{ charts.revenue|json_script:"chart-revenue-data" }}
+{{ charts.orders|json_script:"chart-orders-data" }}
 {{ charts.top_products|json_script:"chart-products-data" }}
 {{ charts.categories|json_script:"chart-categories-data" }}
 {{ charts.order_status|json_script:"chart-status-data" }}
 
 <script src="{% static 'admin/js/dashboard-period-filter.js' %}" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous"></script>
-<script src="{% static 'admin/js/dashboard-charts.js' %}"></script>
+<script src="{% static 'admin/js/dashboard-charts.js' %}" defer></script>
 {% endblock %}

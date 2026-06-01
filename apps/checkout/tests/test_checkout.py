@@ -1,15 +1,15 @@
 import uuid
-from datetime import timedelta
 from decimal import Decimal
 
 from django.conf import settings
 from django.core import mail
-from django.test import Client, RequestFactory, TestCase
-from django.utils import timezone
+from django.test import Client, RequestFactory, TestCase, override_settings
 
 from apps.cart.cart import SESSION_KEY, get_cart
 from apps.categories.models import Category
 from apps.checkout.forms import CheckoutForm
+from apps.core.checkout_settings import CheckoutSettings, ThresholdShippingMode
+from apps.core.checkout_settings import resolve_checkout_shipping_price
 from apps.core.storefront_urls import shop_reverse
 from apps.orders.models import Order
 from apps.orders.services import create_order_from_checkout
@@ -25,16 +25,11 @@ def _checkout_post_data(city_pk: int, **overrides) -> dict[str, str]:
         "phone": "+381601112233",
         "shipping_city": str(city_pk),
         "shipping_street": "Ulica 1",
-        "shipping_postal_code": "11000",
-        "order_notes": "Pozvati pre dostave.",
-        "delivery_date": _tomorrow_iso(),
+        "order_notes": "",
+        "accept_legal": "on",
     }
     data.update(overrides)
     return data
-
-
-def _tomorrow_iso() -> str:
-    return (timezone.localdate() + timedelta(days=1)).isoformat()
 
 
 class CheckoutServiceTests(TestCase):
@@ -82,22 +77,42 @@ class CheckoutServiceTests(TestCase):
             phone="+381601112233",
             shipping_city=self.city,
             shipping_street="Ulica 1",
-            shipping_postal_code="11000",
-            billing_street="Ulica 1",
-            billing_city_name="Beograd",
-            billing_postal_code="11000",
             order_notes="Pozvati pre dostave.",
-            delivery_date=timezone.localdate() + timedelta(days=1),
-            flexible_delivery=True,
         )
         self.assertTrue(order.order_number.startswith("KP-"))
+        self.assertTrue(order.is_new)
         self.assertEqual(order.items.count(), 1)
         self.assertEqual(order.total, Decimal("2350.00"))
         self.product.refresh_from_db()
         self.assertEqual(self.product.stock, 9)
         self.assertTrue(get_cart(self.request).is_empty)
 
-    def test_checkout_form_copies_billing_from_delivery_address(self) -> None:
+    def test_free_shipping_when_threshold_met(self) -> None:
+        settings_obj = CheckoutSettings.load()
+        settings_obj.free_shipping_threshold = Decimal("1000.00")
+        settings_obj.threshold_shipping_mode = ThresholdShippingMode.FREE
+        settings_obj.save()
+
+        price = resolve_checkout_shipping_price(
+            subtotal=Decimal("2000.00"),
+            city_shipping_price=Decimal("350.00"),
+        )
+        self.assertEqual(price, Decimal("0"))
+
+    def test_discounted_shipping_when_threshold_met(self) -> None:
+        settings_obj = CheckoutSettings.load()
+        settings_obj.free_shipping_threshold = Decimal("1000.00")
+        settings_obj.threshold_shipping_mode = ThresholdShippingMode.DISCOUNTED
+        settings_obj.discounted_shipping_price = Decimal("199.00")
+        settings_obj.save()
+
+        price = resolve_checkout_shipping_price(
+            subtotal=Decimal("2000.00"),
+            city_shipping_price=Decimal("350.00"),
+        )
+        self.assertEqual(price, Decimal("199.00"))
+
+    def test_checkout_form_allows_empty_notes(self) -> None:
         form = CheckoutForm(
             data={
                 "guest_email": "a@b.rs",
@@ -105,19 +120,15 @@ class CheckoutServiceTests(TestCase):
                 "last_name": "B",
                 "phone": "123",
                 "shipping_city": self.city.pk,
-                "shipping_street": "Ulica 5",
-                "shipping_postal_code": "22404",
-                "order_notes": "Pozvati pre dostave.",
-                "delivery_date": _tomorrow_iso(),
+                "shipping_street": "St",
+                "order_notes": "",
+                "accept_legal": True,
             },
             user=None,
         )
         self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data["billing_street"], "Ulica 5")
-        self.assertEqual(form.cleaned_data["billing_city_name"], "Beograd")
-        self.assertEqual(form.cleaned_data["billing_postal_code"], "22404")
 
-    def test_checkout_page_omits_billing_section(self) -> None:
+    def test_checkout_page_omits_removed_fields(self) -> None:
         suffix = uuid.uuid4().hex[:8]
         category = Category.objects.create(is_active=True)
         category.set_current_language("sr")
@@ -136,43 +147,10 @@ class CheckoutServiceTests(TestCase):
 
         response = self.client.get(shop_reverse("checkout:checkout"))
         self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, "checkout-billing-heading")
-        self.assertNotContains(response, "id_billing_same")
-        self.assertContains(response, "checkout-shipping-heading")
-
-    def test_checkout_form_requires_notes(self) -> None:
-        form = CheckoutForm(
-            data={
-                "guest_email": "a@b.rs",
-                "first_name": "A",
-                "last_name": "B",
-                "phone": "123",
-                "shipping_city": self.city.pk,
-                "shipping_street": "St",
-                "shipping_postal_code": "11000",
-                "order_notes": "",
-                "delivery_date": _tomorrow_iso(),
-            },
-            user=None,
-        )
-        self.assertFalse(form.is_valid())
-
-    def test_checkout_form_requires_delivery_date(self) -> None:
-        form = CheckoutForm(
-            data={
-                "guest_email": "a@b.rs",
-                "first_name": "A",
-                "last_name": "B",
-                "phone": "123",
-                "shipping_city": self.city.pk,
-                "shipping_street": "St",
-                "shipping_postal_code": "11000",
-                "order_notes": "Notes",
-            },
-            user=None,
-        )
-        self.assertFalse(form.is_valid())
-        self.assertIn("delivery_date", form.errors)
+        self.assertNotContains(response, "id_shipping_postal_code")
+        self.assertNotContains(response, "id_delivery_date")
+        self.assertNotContains(response, "id_flexible_delivery")
+        self.assertNotContains(response, "Shipping method")
 
 
 class CheckoutViewTests(TestCase):
@@ -194,7 +172,7 @@ class CheckoutViewTests(TestCase):
             category=category,
             sku=f"SKU-CHK2-{suffix}",
             price=Decimal("1000.00"),
-            stock=5,
+            stock=10,
         )
         self.product.set_current_language("sr")
         self.product.name = "Product"
@@ -205,40 +183,63 @@ class CheckoutViewTests(TestCase):
         session[SESSION_KEY] = {str(self.product.pk): 1}
         session.save()
 
-    def test_checkout_page_includes_city_price_script(self) -> None:
+    def test_checkout_page_includes_shipping_scripts(self) -> None:
         response = self.client.get(shop_reverse("checkout:checkout"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'id="city-prices-data"')
+        self.assertContains(response, 'id="checkout-shipping-rules"')
         self.assertContains(response, f'"{self.vrdnik.pk}"')
-        self.assertContains(response, "450.00")
 
-    def test_order_records_vrdnik_shipping_fee(self) -> None:
-        request = RequestFactory().get("/")
-        request.session = self.client.session
-        cart = get_cart(request)
-        order = create_order_from_checkout(
-            cart=cart,
-            user=None,
-            guest_email="guest@example.com",
-            first_name="Ana",
-            last_name="Anić",
-            phone="+381601112233",
-            shipping_city=self.vrdnik,
-            shipping_street="Centar 1",
-            shipping_postal_code="22404",
-            billing_street="Centar 1",
-            billing_city_name="Vrdnik",
-            billing_postal_code="22404",
-            order_notes="Pozvati pre dostave.",
-            delivery_date=timezone.localdate() + timedelta(days=1),
-            flexible_delivery=False,
+    @override_settings(
+        EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+        EMAIL_HOST="smtp.sendgrid.net",
+        SENDGRID_API_KEY="test-key",
+        SHOP_NOTIFICATION_EMAIL="shop@example.com",
+    )
+    def test_checkout_triggers_low_stock_email(self) -> None:
+        self.product.minimum_stock_alert = 10
+        self.product.stock = 11
+        self.product.save(update_fields=["minimum_stock_alert", "stock"])
+        mail.outbox.clear()
+
+        response = self.client.post(
+            shop_reverse("checkout:checkout"),
+            _checkout_post_data(self.vrdnik.pk),
         )
-        self.assertEqual(order.shipping_price, Decimal("450.00"))
-        self.assertEqual(order.shipping_city_name, "Vrdnik")
-        self.assertEqual(order.total, Decimal("1450.00"))
+        self.assertEqual(response.status_code, 302)
+        low_stock_msgs = [m for m in mail.outbox if "Malo zaliha" in m.subject or "Low stock" in m.subject]
+        self.assertEqual(len(low_stock_msgs), 1)
+
+    @override_settings(
+        EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+        EMAIL_HOST="smtp.sendgrid.net",
+        SENDGRID_API_KEY="test-key",
+        SHOP_NOTIFICATION_EMAIL="shop@example.com",
+    )
+    def test_post_checkout_sends_customer_and_staff_emails(self) -> None:
+        mail.outbox.clear()
+        response = self.client.post(
+            shop_reverse("checkout:checkout"),
+            _checkout_post_data(self.vrdnik.pk),
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(len(mail.outbox), 2)
+        recipients = {addr for msg in mail.outbox for addr in msg.to}
+        self.assertEqual(recipients, {"guest@example.com", "shop@example.com"})
+
+    def test_checkout_rejects_order_without_legal_consent(self) -> None:
+        post_data = _checkout_post_data(self.vrdnik.pk)
+        post_data.pop("accept_legal")
+        response = self.client.post(
+            shop_reverse("checkout:checkout"),
+            post_data,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Order.objects.count(), 0)
+        self.assertContains(response, "accept_legal")
 
     def test_post_checkout_places_order_clears_cart_and_redirects(self) -> None:
-        with self.settings(SHOP_ORDER_NOTIFICATION_EMAILS=["shop@example.com"]):
+        with self.settings(SHOP_NOTIFICATION_EMAIL="shop@example.com"):
             response = self.client.post(
                 shop_reverse("checkout:checkout"),
                 _checkout_post_data(self.vrdnik.pk),
@@ -253,32 +254,44 @@ class CheckoutViewTests(TestCase):
         order = Order.objects.get()
         self.assertEqual(order.total, Decimal("1450.00"))
         self.assertEqual(self.client.session.get(SESSION_KEY), {})
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertIn(order.order_number, mail.outbox[0].subject)
 
-        success = self.client.get(response["Location"])
-        self.assertEqual(success.status_code, 200)
-        self.assertContains(success, order.order_number)
-
-    def test_post_checkout_wrong_language_path_still_places_order(self) -> None:
-        self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = "en"
-        with self.settings(SHOP_ORDER_NOTIFICATION_EMAILS=["shop@example.com"]):
-            response = self.client.post(
-                "/placanje/",
+    def test_two_consecutive_orders_succeed(self) -> None:
+        with self.settings(SHOP_NOTIFICATION_EMAIL="shop@example.com"):
+            first = self.client.post(
+                shop_reverse("checkout:checkout"),
                 _checkout_post_data(self.vrdnik.pk),
             )
+            self.assertEqual(first.status_code, 302)
 
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(Order.objects.count(), 1)
-        self.assertEqual(self.client.session.get(SESSION_KEY), {})
+            session = self.client.session
+            session[SESSION_KEY] = {str(self.product.pk): 1}
+            session.save()
 
-    def test_post_checkout_invalid_data_shows_errors_without_creating_order(self) -> None:
+            second = self.client.post(
+                shop_reverse("checkout:checkout"),
+                _checkout_post_data(self.vrdnik.pk, first_name="Mika"),
+            )
+
+        self.assertEqual(second.status_code, 302)
+        self.assertEqual(Order.objects.count(), 2)
+        self.assertEqual(
+            Order.objects.order_by("pk").last().first_name,
+            "Mika",
+        )
+
+    def test_checkout_error_does_not_show_validation_banner_for_valid_form(self) -> None:
+        self.product.stock = 0
+        self.product.save(update_fields=["stock"])
+
         response = self.client.post(
             shop_reverse("checkout:checkout"),
-            _checkout_post_data(self.vrdnik.pk, order_notes=""),
+            _checkout_post_data(self.vrdnik.pk),
         )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Order.objects.count(), 0)
-        self.assertContains(response, "shop-field--invalid")
-        self.assertNotEqual(self.client.session.get(SESSION_KEY), {})
+        self.assertNotContains(
+            response,
+            "Some fields need your attention",
+        )
+        self.assertContains(response, "Nema dovoljno")

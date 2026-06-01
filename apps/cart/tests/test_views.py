@@ -70,3 +70,40 @@ class CartUpdateViewTests(TestCase):
         self.assertContains(response, "data-cart-page")
         self.assertContains(response, "cart.js")
         self.assertNotContains(response, "shop-cart-line__update")
+
+
+class CartAddViewTests(TestCase):
+    def setUp(self) -> None:
+        suffix = uuid.uuid4().hex[:8]
+        category = Category.objects.create(is_active=True)
+        category.set_current_language("sr")
+        category.name = "Kat"
+        category.slug = f"kat-add-{suffix}"
+        category.save()
+
+        self.product = Product.objects.create(
+            category=category,
+            sku=f"SKU-ADD-{suffix}",
+            price=Decimal("500.00"),
+            stock=5,
+        )
+        self.product.set_current_language("sr")
+        self.product.name = "Add product"
+        self.product.slug = f"add-{suffix}"
+        self.product.save()
+
+    def test_add_from_list_with_quantity(self) -> None:
+        response = self.client.post(
+            shop_reverse("cart:add"),
+            {
+                "product_id": self.product.pk,
+                "quantity": 3,
+                "next": shop_reverse("products:list"),
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        cart = get_cart(self.client)
+        lines = cart.get_lines()
+        self.assertEqual(len(lines), 1)
+        self.assertEqual(lines[0].quantity, 3)
+        self.assertEqual(lines[0].product.pk, self.product.pk)

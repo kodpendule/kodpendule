@@ -10,7 +10,7 @@
             <li class="kp-admin-nav__item{% if item.active %} is-active{% endif %}">
                 <a href="{{ item.url }}" class="kp-admin-nav__link"
                    {% if item.active %}aria-current="page"{% endif %}>
-                    <span class="kp-admin-nav__link-label">{{ item.name }}</span>
+                    <span class="kp-admin-nav__link-label">{{ item.name }}{% if item.badge is not None %} ({{ item.badge }}){% endif %}</span>
                     {% if item.description and layout == "cards" %}
                     <span class="kp-admin-nav__link-desc">{{ item.description }}</span>
                     {% endif %}

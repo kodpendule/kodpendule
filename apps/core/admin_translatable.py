@@ -92,15 +92,25 @@ def build_stacked_form_class(
         super(TranslatableStackedForm, self).__init__(*args, **kwargs)
         self._load_translation_values()
 
+    def _translation_has_content(self, code: str, translated_names: Sequence[str]) -> bool:
+        for base_name in translated_names:
+            value = self.cleaned_data.get(stacked_field_name(base_name, code), "")
+            if value is not None and str(value).strip():
+                return True
+        return False
+
     def _write_translations(self, obj: models.Model) -> None:
         for code in ADMIN_LANGUAGE_CODES:
+            if not self._translation_has_content(code, translated_names):
+                obj.translations.filter(language_code=code).delete()
+                continue
             trans = obj.translations.filter(language_code=code).first()
             if trans is None:
                 trans = translation_model(master=obj, language_code=code)
             for base_name in translated_names:
                 value = self.cleaned_data.get(stacked_field_name(base_name, code), "")
                 setattr(trans, base_name, value if value is not None else "")
-            _autofill_slug(self, trans, obj)
+            self._autofill_slug(trans, obj)
             trans.save()
 
     def _autofill_slug(self, trans: models.Model, master: models.Model) -> None:
@@ -127,6 +137,7 @@ def build_stacked_form_class(
 
     form_attrs["__init__"] = __init__
     form_attrs["_load_translation_values"] = _load_translation_values
+    form_attrs["_translation_has_content"] = _translation_has_content
     form_attrs["_write_translations"] = _write_translations
     form_attrs["_autofill_slug"] = _autofill_slug
     form_attrs["save"] = save

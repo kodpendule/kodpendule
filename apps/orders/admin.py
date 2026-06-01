@@ -1,11 +1,15 @@
 from django import forms
-from django.contrib import admin
+from django.contrib import admin, messages
+from django.http import HttpResponse
+from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.admin_display import money_cell, order_status_badge
+from apps.core.locale_dates import latin_short_datetime
 from apps.core.kp_admin import KPModelAdmin
 from apps.orders.models import Order, OrderItem, OrderStatus
+from apps.orders.services.order_csv import export_orders_csv
 
 
 class OrderItemInline(admin.TabularInline):
@@ -36,10 +40,11 @@ class OrderAdmin(KPModelAdmin):
     list_display = (
         "order_number",
         "customer_display",
+        "delivery_display",
         "status_badge",
         "total_display",
         "payment_method",
-        "created_at",
+        "created_at_display",
     )
     search_fields = (
         "order_number",
@@ -47,11 +52,14 @@ class OrderAdmin(KPModelAdmin):
         "first_name",
         "last_name",
         "phone",
+        "shipping_street",
+        "shipping_city_name",
         "user__email",
         "user__username",
     )
-    readonly_fields = ("created_at", "updated_at")
+    readonly_fields = ("created_at", "updated_at", "is_new")
     list_select_related = ("user", "shipping_city")
+    list_filter = ("is_new", "status")
     inlines = [OrderItemInline]
     date_hierarchy = "created_at"
     list_per_page = 25
@@ -69,6 +77,7 @@ class OrderAdmin(KPModelAdmin):
                     "user",
                     "guest_email",
                     "status",
+                    "is_new",
                     "payment_method",
                 ),
             },
@@ -87,24 +96,9 @@ class OrderAdmin(KPModelAdmin):
                 "fields": (
                     "shipping_street",
                     "shipping_city_name",
-                    "shipping_postal_code",
                     "shipping_city",
-                    "shipping_method",
                     "shipping_price",
-                    "delivery_date",
-                    "flexible_delivery",
                     "order_notes",
-                ),
-            },
-        ),
-        (
-            _("Billing"),
-            {
-                "classes": ("collapse", "kp-fieldset", "kp-fieldset--billing"),
-                "fields": (
-                    "billing_street",
-                    "billing_city_name",
-                    "billing_postal_code",
                 ),
             },
         ),
@@ -138,9 +132,30 @@ class OrderAdmin(KPModelAdmin):
         return (
             super()
             .get_queryset(request)
-            .select_related("user", "shipping_city", "shipping_method")
+            .select_related("user", "shipping_city")
             .prefetch_related("items")
         )
+
+    def changeform_view(self, request, object_id=None, form_url="", extra_context=None):
+        if object_id and request.method == "GET":
+            Order.objects.filter(pk=object_id, is_new=True).update(is_new=False)
+        return super().changeform_view(request, object_id, form_url, extra_context)
+
+    @admin.action(description=_("Export selected to CSV"))
+    def export_selected_csv(self, request, queryset):
+        if not queryset.exists():
+            self.message_user(request, _("No orders selected."), level=messages.WARNING)
+            return None
+
+        stamp = timezone.localdate().strftime("%Y%m%d")
+        response = HttpResponse(
+            export_orders_csv(queryset.select_related("user", "shipping_city")),
+            content_type="text/csv; charset=utf-8",
+        )
+        response["Content-Disposition"] = (
+            f'attachment; filename="orders-{stamp}.csv"'
+        )
+        return response
 
     @admin.action(description=_("Mark as confirmed"))
     def mark_confirmed(self, request, queryset):
@@ -154,7 +169,12 @@ class OrderAdmin(KPModelAdmin):
     def mark_delivered(self, request, queryset):
         queryset.update(status=OrderStatus.DELIVERED)
 
-    actions = ["mark_confirmed", "mark_shipped", "mark_delivered"]
+    actions = [
+        "export_selected_csv",
+        "mark_confirmed",
+        "mark_shipped",
+        "mark_delivered",
+    ]
 
     @admin.display(description=_("Status"))
     def status_badge(self, obj: Order) -> str:
@@ -164,13 +184,26 @@ class OrderAdmin(KPModelAdmin):
     def total_display(self, obj: Order) -> str:
         return money_cell(obj.total, emphasize=True)
 
+    @admin.display(description=_("Delivery"))
+    def delivery_display(self, obj: Order) -> str:
+        address = obj.delivery_address_display
+        return address or "—"
+
+    @admin.display(description=_("Created at"), ordering="created_at")
+    def created_at_display(self, obj: Order) -> str:
+        return latin_short_datetime(obj.created_at)
+
     @admin.display(description=_("Customer"))
     def customer_display(self, obj: Order) -> str:
         name = obj.customer_full_name
+        weight = "font-weight:bold;" if obj.is_new else ""
         if obj.is_guest_order:
             return format_html(
-                '{} <span class="kp-guest-tag">({})</span>',
+                '<span style="{}">{}</span> <span class="kp-guest-tag">({})</span>',
+                weight,
                 name,
                 _("guest"),
             )
+        if weight:
+            return format_html('<span style="{}">{}</span>', weight, name)
         return name

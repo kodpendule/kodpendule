@@ -25,7 +25,6 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    "rest_framework",
     "parler",
     "django_extensions",
 ]
@@ -113,9 +112,15 @@ LANGUAGES = [
     ("en", "Engleski"),
 ]
 LOCALE_PATHS = [BASE_DIR / "locale"]
+FORMAT_MODULE_PATH = ["config.formats"]
 TIME_ZONE = "Europe/Belgrade"
 USE_I18N = True
+USE_L10N = True
 USE_TZ = True
+DATE_FORMAT = "d/m/Y"
+SHORT_DATE_FORMAT = "d/m/Y"
+DATETIME_FORMAT = "d/m/Y H:i"
+SHORT_DATETIME_FORMAT = "d/m/Y H:i"
 
 PARLER_DEFAULT_LANGUAGE_CODE = "sr"
 PARLER_LANGUAGES = {
@@ -146,25 +151,32 @@ USE_R2 = False
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 14  # 2 weeks
 LOGIN_URL = "/prijava/"
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/nalog/narudzbe/"
 LOGOUT_REDIRECT_URL = "/"
-
-# --- DRF ----------------------------------------------------------------------
-
-REST_FRAMEWORK = {
-    "DEFAULT_RENDERER_CLASSES": [
-        "rest_framework.renderers.JSONRenderer",
-    ],
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
-    ],
-}
 
 # --- Shop ---------------------------------------------------------------------
 
 SHOP_CURRENCY = "RSD"
 SHOP_CURRENCY_SYMBOL = "din"
 SHOP_PRODUCTS_PER_PAGE = 12
-SHOP_ORDER_NOTIFICATION_EMAILS: list[str] = []
-DEFAULT_FROM_EMAIL = "noreply@kodpendule.rs"
+
+# All shop alerts (orders, low stock, contact form) go here unless overridden in env.
+SHOP_NOTIFICATION_EMAIL = "kodpendule@gmail.com"
+
+# Set SENDGRID_API_KEY in .env.local / Render to enable outgoing email.
+SENDGRID_API_KEY = ""
+DEFAULT_FROM_EMAIL = SHOP_NOTIFICATION_EMAIL
+
+# Google Maps embed — Karađorđeva 11, Vrdnik (override via GOOGLE_MAPS_EMBED_URL in env)
+# Cookie consent banner (storefront)
+COOKIE_CONSENT_COOKIE_NAME = "kp_cookie_consent"
+COOKIE_CONSENT_VERSION = "v1"
+COOKIE_CONSENT_MAX_AGE = 60 * 60 * 24 * 365  # 1 year
+
+GOOGLE_MAPS_EMBED_URL = (
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2814.666880361573!"
+    "2d19.78775037612322!3d45.13308577107046!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!"
+    "4f13.1!3m3!1m2!1s0x475b0625ce3ee8d9%3A0x6d1e2f1c22a7e5d1!2zS2FyYcSRb3LEkWV2YSAxMSwgVnJkbmlr!"
+    "5e0!3m2!1sen!2srs!4v1780344704504!5m2!1sen!2srs"
+)
 

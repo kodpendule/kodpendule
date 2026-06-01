@@ -293,11 +293,74 @@
 
 .shop-product-card__cart-form {
     margin: 0;
+    width: 100%;
+}
+
+.shop-product-card__buy-row {
+    display: flex;
+    align-items: stretch;
+    gap: var(--shop-space-2);
+    width: 100%;
+}
+
+.shop-product-card__buy-row .shop-qty--compact {
+    flex: 0 0 auto;
+    max-width: 7.25rem;
+}
+
+.shop-product-card__buy-row .shop-product-card__add {
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 .shop-product-card__add,
 .shop-product-card__details {
     white-space: nowrap;
+}
+
+/* —— Quantity stepper (cards, cart, checkout) —— */
+.shop-qty--compact {
+    display: grid;
+    grid-template-columns: 2.25rem 1fr 2.25rem;
+    border: 1px solid var(--shop-color-border);
+    border-radius: var(--shop-radius-md);
+    background: var(--shop-color-surface);
+    overflow: hidden;
+    box-shadow: var(--shop-shadow-sm);
+    max-width: 9.5rem;
+}
+
+.shop-qty--compact .shop-qty__btn {
+    border: 0;
+    background: var(--shop-color-surface);
+    color: var(--shop-color-primary-active);
+    font-size: 1.0625rem;
+    font-weight: var(--shop-font-weight-bold);
+    cursor: pointer;
+    min-height: 2.5rem;
+    padding: 0;
+}
+
+.shop-qty--compact .shop-qty__btn:hover {
+    background: var(--shop-color-surface-subtle);
+}
+
+.shop-qty--compact .shop-qty__input {
+    border: 0;
+    text-align: center;
+    font-weight: var(--shop-font-weight-semibold);
+    padding: 0;
+    outline: none;
+    min-height: 2.5rem;
+    font-size: var(--shop-font-size-sm);
+    width: 100%;
+    -moz-appearance: textfield;
+}
+
+.shop-qty--compact .shop-qty__input::-webkit-outer-spin-button,
+.shop-qty--compact .shop-qty__input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 .category-card {

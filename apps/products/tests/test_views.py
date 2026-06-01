@@ -43,6 +43,17 @@ class ProductViewTests(TestCase):
         response = self._get(ProductListView, "/proizvodi/")
         self.assertEqual(response.status_code, 200)
 
+    def test_product_list_shows_quantity_on_cards(self) -> None:
+        from django.test import Client
+
+        from apps.core.storefront_urls import shop_reverse
+
+        response = Client().get(shop_reverse("products:list"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, f'id="qty-card-{self.product.pk}"')
+        self.assertContains(response, 'name="quantity"')
+        self.assertContains(response, 'data-shop-qty')
+
     def test_product_detail_by_slug(self) -> None:
         response = self._get(
             ProductDetailView,

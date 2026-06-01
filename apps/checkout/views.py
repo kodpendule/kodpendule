@@ -4,18 +4,24 @@ import logging
 
 from django.contrib import messages
 from django.shortcuts import redirect
-from apps.core.storefront_urls import shop_reverse, shop_reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, TemplateView
 
 from apps.cart.cart import get_cart
 from apps.checkout.forms import CheckoutForm
+from apps.core.checkout_settings import CheckoutSettings
 from apps.core.mixins import ShopLanguageMixin
+from apps.core.storefront_urls import shop_reverse, shop_reverse_lazy
 from apps.core.utils import activate_parler_language
 from apps.orders.selectors import order_detail_qs
-from apps.orders.services import CheckoutError, create_order_from_checkout, notify_staff_new_order
+from apps.orders.services import (
+    CheckoutError,
+    create_order_from_checkout,
+    notify_customer_new_order,
+    notify_staff_new_order,
+)
 from apps.orders.services.order_access import grant_order_access
-from apps.shipping.selectors import active_cities, get_default_shipping_method
+from apps.shipping.selectors import active_cities
 
 logger = logging.getLogger(__name__)
 
@@ -55,6 +61,16 @@ class CheckoutView(ShopLanguageMixin, FormView):
                 initial.setdefault("phone", profile.phone)
         return initial
 
+    def _checkout_shipping_context(self) -> dict:
+        settings = CheckoutSettings.load()
+        threshold = settings.free_shipping_threshold
+        discounted = settings.discounted_shipping_price
+        return {
+            "free_shipping_threshold": str(threshold) if threshold else "",
+            "discounted_shipping_price": str(discounted) if discounted is not None else "",
+            "threshold_shipping_mode": settings.threshold_shipping_mode,
+        }
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         cart = get_cart(self.request)
@@ -62,14 +78,13 @@ class CheckoutView(ShopLanguageMixin, FormView):
         for line in lines:
             activate_parler_language(line.product, self.shop_language)
         cities = list(active_cities())
-        shipping_method = get_default_shipping_method()
         context.update(
             {
                 "cart_lines": lines,
                 "cart_subtotal": cart.subtotal,
                 "cities": cities,
                 "city_prices": {str(c.pk): str(c.shipping_price) for c in cities},
-                "shipping_method": shipping_method,
+                "checkout_shipping": self._checkout_shipping_context(),
                 "is_guest": not self.request.user.is_authenticated,
                 "meta_title": _("Checkout"),
                 "canonical_url": self.request.build_absolute_uri(),
@@ -81,10 +96,11 @@ class CheckoutView(ShopLanguageMixin, FormView):
         return shop_reverse("checkout:success", language=self.shop_language)
 
     def form_invalid(self, form):
-        messages.error(
-            self.request,
-            _("Please correct the highlighted fields and try again."),
-        )
+        if form.errors:
+            messages.error(
+                self.request,
+                _("Please correct the highlighted fields and try again."),
+            )
         return super().form_invalid(form)
 
     def form_valid(self, form):
@@ -99,28 +115,23 @@ class CheckoutView(ShopLanguageMixin, FormView):
                 phone=form.cleaned_data["phone"],
                 shipping_city=form.cleaned_data["shipping_city"],
                 shipping_street=form.cleaned_data["shipping_street"],
-                shipping_postal_code=form.cleaned_data["shipping_postal_code"],
-                billing_street=form.cleaned_data["billing_street"],
-                billing_city_name=form.cleaned_data["billing_city_name"],
-                billing_postal_code=form.cleaned_data["billing_postal_code"],
                 order_notes=form.cleaned_data["order_notes"],
-                delivery_date=form.cleaned_data["delivery_date"],
-                flexible_delivery=form.cleaned_data.get("flexible_delivery", False),
             )
         except CheckoutError as exc:
             messages.error(self.request, exc.message)
-            return self.form_invalid(form)
+            return self.render_to_response(self.get_context_data(form=form))
         except Exception:
             logger.exception("Unexpected checkout failure")
             messages.error(
                 self.request,
                 _("We could not place your order. Please try again or contact us."),
             )
-            return self.form_invalid(form)
+            return self.render_to_response(self.get_context_data(form=form))
 
         self.request.session["last_order_number"] = order.order_number
         self.request.session["last_order_id"] = order.pk
         grant_order_access(self.request, order)
+        notify_customer_new_order(order)
         notify_staff_new_order(order)
         logger.info("Order placed: %s", order.order_number)
         messages.success(

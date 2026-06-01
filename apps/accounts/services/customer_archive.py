@@ -36,6 +36,8 @@ def archive_customer_from_checkout(
     first_name: str,
     last_name: str,
     phone: str,
+    delivery_street: str = "",
+    delivery_city_name: str = "",
     user=None,
 ) -> CustomerContact | None:
     normalized = normalize_customer_email(email)
@@ -47,6 +49,8 @@ def archive_customer_from_checkout(
         first_name=first_name,
         last_name=last_name,
         phone=phone,
+        delivery_street=delivery_street,
+        delivery_city_name=delivery_city_name,
         user=linked_user,
         mark_registered=False,
         increment_orders=True,
@@ -60,16 +64,22 @@ def _upsert_contact(
     first_name: str,
     last_name: str,
     phone: str,
+    delivery_street: str = "",
+    delivery_city_name: str = "",
     user: User | None,
     mark_registered: bool,
     increment_orders: bool,
 ) -> CustomerContact:
+    street = (delivery_street or "").strip()
+    city_name = (delivery_city_name or "").strip()
     contact, created = CustomerContact.objects.select_for_update().get_or_create(
         email=email,
         defaults={
             "first_name": first_name,
             "last_name": last_name,
             "phone": phone,
+            "delivery_street": street,
+            "delivery_city_name": city_name,
             "user": user,
             "registered_at": timezone.now() if mark_registered else None,
             "order_count": 1 if increment_orders else 0,
@@ -82,6 +92,10 @@ def _upsert_contact(
     contact.first_name = first_name or contact.first_name
     contact.last_name = last_name or contact.last_name
     contact.phone = phone or contact.phone
+    if street:
+        contact.delivery_street = street
+    if city_name:
+        contact.delivery_city_name = city_name
 
     if user and not contact.user_id:
         contact.user = user
@@ -96,6 +110,8 @@ def _upsert_contact(
         "first_name",
         "last_name",
         "phone",
+        "delivery_street",
+        "delivery_city_name",
         "user",
         "registered_at",
         "order_count",

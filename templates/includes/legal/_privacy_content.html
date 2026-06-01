@@ -1,0 +1,111 @@
+{% load i18n shop_urls %}
+<p class="shop-legal__notice">
+    {% blocktrans %}This Privacy Policy explains how we collect and use personal data when you use the{% endblocktrans %}
+    {% if site_settings %}{{ site_settings.site_name }}{% else %}{% trans "Kod Pendule" %}{% endif %}
+    {% blocktrans %}webshop. We process data in accordance with the Law on Personal Data Protection of the Republic of Serbia and, where applicable, the EU General Data Protection Regulation (GDPR).{% endblocktrans %}
+</p>
+<p class="shop-legal__updated">{% trans "Last updated: June 2026" %}</p>
+
+<h2>{% trans "1. Data controller" %}</h2>
+<p>
+    <strong>{% trans "Controller:" %}</strong>
+    {% if site_settings %}{{ site_settings.site_name }}{% else %}{% trans "Kod Pendule" %}{% endif %}<br>
+    {% trans "Email:" %} <a href="mailto:{{ footer_contact.email }}">{{ footer_contact.email }}</a><br>
+    {% trans "Phone:" %} <a href="tel:{{ footer_contact.phone|cut:' ' }}">{{ footer_contact.phone }}</a><br>
+    {% trans "Address:" %} {{ footer_contact.address|linebreaksbr }}
+</p>
+
+<h2>{% trans "2. What data we collect" %}</h2>
+<ul>
+    <li>{% trans "Identity and contact data: name, email, phone, delivery address." %}</li>
+    <li>{% trans "Order data: products ordered, amounts, payment method (COD), order notes, order number." %}</li>
+    <li>{% trans "Account data (if you register): username, email, password (stored hashed), order history link." %}</li>
+    <li>{% trans "Contact form: name, email, optional phone, message content." %}</li>
+    <li>{% trans "Technical data: IP address, browser type, and logs needed for security and operation." %}</li>
+</ul>
+
+<h2>{% trans "3. Purposes and legal bases" %}</h2>
+<div class="shop-legal-table-wrap">
+<table class="table table-sm shop-legal-table">
+    <thead>
+        <tr>
+            <th scope="col">{% trans "Purpose" %}</th>
+            <th scope="col">{% trans "Legal basis" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{% trans "Processing and delivering orders" %}</td>
+            <td>{% trans "Performance of a contract; legal obligation (tax/accounting records)" %}</td>
+        </tr>
+        <tr>
+            <td>{% trans "Customer accounts and order history" %}</td>
+            <td>{% trans "Contract; legitimate interest (customer service)" %}</td>
+        </tr>
+        <tr>
+            <td>{% trans "Contact form and customer support" %}</td>
+            <td>{% trans "Legitimate interest; pre-contractual steps at your request" %}</td>
+        </tr>
+        <tr>
+            <td>{% trans "Order and low-stock email notifications" %}</td>
+            <td>{% trans "Contract; legitimate interest (shop operations)" %}</td>
+        </tr>
+        <tr>
+            <td>{% trans "Website security, session, and language preference" %}</td>
+            <td>{% trans "Legitimate interest; consent where required" %}</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<h2>{% trans "4. Customer accounts" %}</h2>
+<p>{% blocktrans %}When you register, we store the data needed to identify you and link your orders. You may update your profile through the account area where available. You can request account deletion by contacting us; we may retain certain order records as required by law.{% endblocktrans %}</p>
+
+<h2>{% trans "5. Orders" %}</h2>
+<p>{% blocktrans %}Order data is used to fulfil the contract, communicate about delivery, prevent fraud, and maintain business records. We share delivery details with our logistics partners only to the extent necessary to deliver your package.{% endblocktrans %}</p>
+
+<h2>{% trans "6. Contact forms" %}</h2>
+<p>{% blocktrans %}Messages you send via the contact form are delivered to our shop email inbox. We use your email to reply. Do not send sensitive health or financial data unless necessary. Spam protection (honeypot) may be used without profiling you.{% endblocktrans %}</p>
+
+<h2>{% trans "7. Cookies and similar technologies" %}</h2>
+<p>{% blocktrans %}Our storefront uses cookies and similar storage that are necessary for the site to function, including:{% endblocktrans %}</p>
+<ul>
+    <li>{% trans "Session cookie — keeps you logged in and maintains your shopping cart." %}</li>
+    <li>{% trans "CSRF cookie — protects forms against cross-site request forgery." %}</li>
+    <li>{% trans "Language cookie — remembers your Serbian or English language choice." %}</li>
+</ul>
+<p>{% blocktrans %}We do not use third-party marketing or analytics cookies on the public shop. Optional cookies (Google Maps) are loaded only after you choose “Accept all” in the cookie banner. You can change your choice anytime via “Cookie settings” in the footer.{% endblocktrans %}</p>
+
+<h2>{% trans "8. Analytics" %}</h2>
+<p>{% blocktrans %}Sales statistics inside our admin panel are generated from order data in our database and are not shared with external analytics providers. The public website does not use Google Analytics or similar visitor tracking at this time.{% endblocktrans %}</p>
+
+<h2>{% trans "9. Email communication" %}</h2>
+<p>{% blocktrans %}We send transactional emails related to your orders (confirmation to you; operational notices to our team). Email is sent via our configured mail provider (SMTP). You cannot opt out of essential order emails while a contract is active. Marketing emails, if introduced later, will be sent only with your consent and with an unsubscribe option.{% endblocktrans %}</p>
+
+<h2>{% trans "10. Google Maps" %}</h2>
+<p>{% blocktrans %}Our contact page and footer can show a Google Maps embed for our location. The map is loaded only if you accept optional cookies in the banner. Google may collect data according to its own privacy policy when you use the map.{% endblocktrans %}</p>
+
+<h2>{% trans "11. Retention" %}</h2>
+<p>{% blocktrans %}We keep personal data only as long as needed for the purposes above or as required by law (e.g. accounting archives). Order and invoice data are typically retained for the statutory period applicable in Serbia. Contact form messages are deleted when no longer needed for handling your inquiry.{% endblocktrans %}</p>
+
+<h2>{% trans "12. Your rights" %}</h2>
+<p>{% blocktrans %}Under applicable law you may request access, correction, deletion, restriction of processing, data portability (where applicable), and object to processing based on legitimate interest. You may withdraw consent at any time without affecting prior lawful processing. You may lodge a complaint with the Commissioner for Information of Public Importance and Personal Data Protection of the Republic of Serbia.{% endblocktrans %}</p>
+<p>{% blocktrans %}To exercise your rights, contact us at the email above. We will respond within the statutory deadline.{% endblocktrans %}</p>
+
+<h2>{% trans "13. Security" %}</h2>
+<p>{% blocktrans %}We apply appropriate technical and organisational measures (HTTPS in production, access controls, hashed passwords, limited staff access). No method of transmission over the Internet is 100% secure; please use a strong password for your account.{% endblocktrans %}</p>
+
+<h2>{% trans "14. International transfers" %}</h2>
+<p>{% blocktrans %}Data is primarily processed in Serbia/EU hosting. If we use processors outside Serbia/EEA (e.g. email or map providers), we ensure appropriate safeguards such as standard contractual clauses or adequacy decisions where required.{% endblocktrans %}</p>
+
+<h2>{% trans "15. Children" %}</h2>
+<p>{% blocktrans %}Our shop is not directed at children under 15. We do not knowingly collect data from children.{% endblocktrans %}</p>
+
+<h2>{% trans "16. Changes" %}</h2>
+<p>{% blocktrans %}We may update this Policy. The current version is always on this page. Significant changes will be communicated where appropriate.{% endblocktrans %}</p>
+
+<p class="mb-0">
+    <a href="{% shop_url 'core:terms' %}">{% trans "Terms of Service" %}</a>
+    ·
+    <a href="{% shop_url 'core:contact' %}">{% trans "Contact" %}</a>
+</p>

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import secrets
-from datetime import date
 from decimal import Decimal
 
 from django.db import transaction
@@ -10,11 +9,12 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.accounts.services import archive_customer_from_checkout
 from apps.cart.cart import Cart, CartLine
+from apps.core.checkout_settings import resolve_checkout_shipping_price
 from apps.orders.models import Order, OrderItem, OrderStatus, PaymentMethod
 from apps.orders.payments.cod import CashOnDeliveryProvider
 from apps.products.models import Product
+from apps.products.services.stock_notifications import notify_low_stock_if_crossed_threshold
 from apps.shipping.models import City
-from apps.shipping.selectors import get_default_shipping_method
 
 
 class CheckoutError(Exception):
@@ -40,13 +40,7 @@ def create_order_from_checkout(
     phone: str,
     shipping_city: City,
     shipping_street: str,
-    shipping_postal_code: str,
-    billing_street: str,
-    billing_city_name: str,
-    billing_postal_code: str,
     order_notes: str,
-    delivery_date: date | None,
-    flexible_delivery: bool,
 ) -> Order:
     lines = cart.get_lines()
     if not lines:
@@ -55,7 +49,10 @@ def create_order_from_checkout(
     _validate_stock(lines)
 
     subtotal = cart.subtotal
-    shipping_price = shipping_city.shipping_price
+    shipping_price = resolve_checkout_shipping_price(
+        subtotal=subtotal,
+        city_shipping_price=shipping_city.shipping_price,
+    )
     total = subtotal + shipping_price
 
     email = guest_email
@@ -71,15 +68,8 @@ def create_order_from_checkout(
         phone=phone,
         shipping_street=shipping_street,
         shipping_city_name=shipping_city.name,
-        shipping_postal_code=shipping_postal_code,
         shipping_city=shipping_city,
-        billing_street=billing_street,
-        billing_city_name=billing_city_name,
-        billing_postal_code=billing_postal_code,
         order_notes=order_notes,
-        delivery_date=delivery_date,
-        flexible_delivery=flexible_delivery,
-        shipping_method=get_default_shipping_method(),
         shipping_price=shipping_price,
         payment_method=PaymentMethod.COD,
         status=OrderStatus.PENDING,
@@ -97,8 +87,14 @@ def create_order_from_checkout(
                     or product.sku
                 }
             )
+        stock_before = product.stock
         product.stock -= line.quantity
         product.save(update_fields=["stock"])
+
+        notify_low_stock_if_crossed_threshold(
+            product=product,
+            stock_before=stock_before,
+        )
 
         OrderItem.objects.create(
             order=order,
@@ -120,6 +116,8 @@ def create_order_from_checkout(
         first_name=first_name,
         last_name=last_name,
         phone=phone,
+        delivery_street=shipping_street,
+        delivery_city_name=shipping_city.name,
         user=user,
     )
 

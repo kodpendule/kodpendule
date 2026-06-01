@@ -68,6 +68,14 @@ from config.settings.r2 import configure_r2  # noqa: E402
 
 configure_r2(sys.modules[__name__], config)
 
+# --- Email (optional SendGrid for local testing) ------------------------------
+
+from config.settings.sendgrid import configure_sendgrid_email  # noqa: E402
+
+configure_sendgrid_email(sys.modules[__name__], config)
+
+GOOGLE_MAPS_EMBED_URL = config("GOOGLE_MAPS_EMBED_URL", default=GOOGLE_MAPS_EMBED_URL)  # noqa: F405
+
 # --- Logging ------------------------------------------------------------------
 
 LOGGING = {

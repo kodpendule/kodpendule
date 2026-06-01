@@ -14,6 +14,8 @@ from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from apps.orders.selectors.order_admin_selectors import unread_order_count
+
 
 @dataclass
 class AdminNavItem:
@@ -22,6 +24,7 @@ class AdminNavItem:
     active: bool = False
     add_url: str | None = None
     description: str = ""
+    badge: int | None = None
 
 
 @dataclass
@@ -36,14 +39,13 @@ _NAV_SECTION_SPECS: list[tuple[str, str, list[str]]] = [
     ("orders", _("Orders"), ["orders.order"]),
     ("products", _("Products"), ["products.product"]),
     ("categories", _("Categories"), ["categories.category"]),
-    ("shipping", _("Shipping"), ["shipping.city", "shipping.shippingmethod"]),
+    ("shipping", _("Shipping"), ["shipping.city", "core.checkoutsettings"]),
     ("customers", _("Customers"), ["accounts.customercontact"]),
     ("analytics", _("Analytics"), []),
 ]
 
 _HIDDEN_MODEL_KEYS: set[str] = {
     "accounts.user",
-    "accounts.address",
     "core.sitesettings",
     "core.footersettings",
 }
@@ -164,12 +166,14 @@ def get_admin_nav_sections(
                 if not model or not model.get("admin_url"):
                     continue
                 used_keys.add(key)
+                badge = unread_order_count() if key == "orders.order" else None
                 items.append(
                     AdminNavItem(
                         name=model["name"],
                         url=model["admin_url"],
                         active=_is_active(model["admin_url"], request),
                         add_url=model.get("add_url"),
+                        badge=badge,
                     )
                 )
             if section_id == "products" and request.user.has_perm("products.change_product"):

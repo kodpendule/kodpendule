@@ -27,11 +27,13 @@ class CustomerContactCsvTests(TestCase):
         )
 
     def test_export_includes_serbian_header_and_row(self) -> None:
-        csv_bytes = export_contacts_csv()
+        csv_bytes = export_contacts_csv(CustomerContact.objects.all())
         self.assertTrue(csv_bytes.startswith(b"\xef\xbb\xbf"))
         csv_text = csv_bytes.decode("utf-8-sig")
         header = csv_text.splitlines()[0]
         self.assertIn("Korisničko ime", header)
+        self.assertIn("Ulica i broj", header)
+        self.assertIn("Grad dostave", header)
         self.assertNotIn("Datum registracije", header)
         self.assertNotIn("Prvi kontakt", header)
         self.assertNotIn("Poslednji kontakt", header)
@@ -114,26 +116,25 @@ class CustomerContactCsvTests(TestCase):
         self.assertEqual(result.created, 1)
         self.assertTrue(CustomerContact.objects.filter(email="legacy@example.com").exists())
 
-    def test_admin_export_requires_login(self) -> None:
-        url = reverse("admin:accounts_customercontact_export_csv")
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 302)
-
-    def test_admin_export_downloads_csv(self) -> None:
+    def test_admin_export_selected_action(self) -> None:
         User = get_user_model()
         admin = User.objects.create_superuser("admin", "a@test.com", "pass")
         client = Client()
         client.force_login(admin)
 
-        response = client.get(reverse("admin:accounts_customercontact_export_csv"))
+        changelist_url = reverse("admin:accounts_customercontact_changelist")
+        response = client.post(
+            changelist_url,
+            {
+                "action": "export_selected_csv",
+                "_selected_action": [str(self.contact.pk)],
+            },
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["Content-Type"], "text/csv; charset=utf-8")
-        self.assertIn("attachment", response["Content-Disposition"])
         body = response.content.decode("utf-8-sig")
         header = body.splitlines()[0]
-        self.assertIn("Korisničko ime", header)
-        self.assertNotIn("Datum registracije", header)
-        self.assertNotIn("Broj narudžbina", header)
+        self.assertIn("Ulica i broj", header)
         self.assertIn("existing@example.com", body)
 
     def test_admin_import_view(self) -> None:

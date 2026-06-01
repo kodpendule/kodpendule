@@ -55,7 +55,7 @@ class AuthViewTests(TestCase):
             },
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response["Location"], shop_reverse("core:home"))
+        self.assertEqual(response["Location"], shop_reverse("orders:history"))
         user = User.objects.get(username="novi_korisnik")
         self.assertEqual(user.email, "novi@example.com")
         profile = CustomerProfile.objects.get(user=user)
@@ -87,7 +87,7 @@ class AuthViewTests(TestCase):
             {"username": "pera", "password": "SecurePass123!"},
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response["Location"], shop_reverse("core:home"))
+        self.assertEqual(response["Location"], shop_reverse("orders:history"))
 
     def test_login_invalid(self) -> None:
         User.objects.create_user(username="pera", password="SecurePass123!")
@@ -118,4 +118,4 @@ class AuthViewTests(TestCase):
         self.client.login(username="pera", password="SecurePass123!")
         response = self.client.get(shop_reverse("accounts:register"))
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response["Location"], shop_reverse("core:home"))
+        self.assertEqual(response["Location"], shop_reverse("orders:history"))

@@ -190,6 +190,16 @@
         width: 100%;
     }
 
+    .shop-product-card__buy-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .shop-product-card__buy-row .shop-qty--compact {
+        max-width: none;
+        width: 100%;
+    }
+
     .shop-product-card__add,
     .shop-product-card__details {
         width: 100%;

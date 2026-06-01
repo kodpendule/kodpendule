@@ -15,11 +15,14 @@ from apps.products.models import Product, ProductImage
 
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
-    extra = 1
+    extra = 0
     verbose_name = _("Gallery image")
     verbose_name_plural = _("Gallery images")
     fields = ("image", "alt_text_sr", "alt_text_en", "sort_order")
     classes = ("kp-inline-gallery",)
+
+    def get_extra(self, request, obj=None, **kwargs):
+        return 0 if obj is None else 1
 
 
 class PromoSaleForm(forms.Form):
@@ -149,6 +152,27 @@ class ProductAdmin(KPTranslatableAdmin):
             .select_related("category")
             .prefetch_related("translations", "category__translations")
         )
+
+    def save_formset(self, request, form, formset, change):
+        if formset.model is not ProductImage:
+            super().save_formset(request, form, formset, change)
+            return
+
+        instances = formset.save(commit=False)
+        for instance in instances:
+            if not instance.image:
+                continue
+            instance.save()
+        for deleted in formset.deleted_objects:
+            deleted.delete()
+
+        product = form.instance
+        if not product.pk or not product.main_image:
+            return
+        main_name = product.main_image.name
+        duplicates = product.gallery_images.exclude(image="").filter(image=main_name)
+        if duplicates.exists():
+            duplicates.delete()
 
     def get_urls(self):
         urls = super().get_urls()

@@ -15,7 +15,6 @@ MODEL_ADMIN_SLUGS: dict[str, str] = {
     "products.product": "proizvodi",
     "categories.category": "kategorije",
     "shipping.city": "gradovi",
-    "shipping.shippingmethod": "nacini-dostave",
     "accounts.customercontact": "kontakti-kupaca",
     "accounts.user": "korisnici",
 }
@@ -26,7 +25,6 @@ LEGACY_ADMIN_PATHS: dict[str, str] = {
     "products/product": "proizvodi",
     "categories/category": "kategorije",
     "shipping/city": "gradovi",
-    "shipping/shippingmethod": "nacini-dostave",
     "accounts/customercontact": "kontakti-kupaca",
     "accounts/user": "korisnici",
 }

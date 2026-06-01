@@ -50,11 +50,18 @@
                 <form method="post" action="{% shop_url 'cart:add' %}" class="shop-product-card__cart-form">
                     {% csrf_token %}
                     <input type="hidden" name="product_id" value="{{ product.pk }}">
-                    <input type="hidden" name="quantity" value="1">
                     <input type="hidden" name="next" value="{{ request.get_full_path }}">
-                    <button type="submit" class="shop-btn shop-btn--primary shop-btn--sm shop-product-card__add">
-                        {% trans "Add to cart" %}
-                    </button>
+                    <div class="shop-product-card__buy-row">
+                        <div class="shop-qty shop-qty--compact" data-shop-qty>
+                            <button class="shop-qty__btn" type="button" data-shop-qty-dec aria-label="{% trans 'Decrease quantity' %}">−</button>
+                            <input type="number" id="qty-card-{{ product.pk }}" name="quantity" value="1" min="1" max="{{ product.stock }}"
+                                   class="shop-qty__input" inputmode="numeric" aria-label="{% trans 'Quantity' %}">
+                            <button class="shop-qty__btn" type="button" data-shop-qty-inc aria-label="{% trans 'Increase quantity' %}">+</button>
+                        </div>
+                        <button type="submit" class="shop-btn shop-btn--primary shop-btn--sm shop-product-card__add">
+                            {% trans "Add to cart" %}
+                        </button>
+                    </div>
                 </form>
                 {% else %}
                 <a href="{{ product.get_absolute_url }}" class="shop-btn shop-btn--secondary shop-btn--sm shop-product-card__details">

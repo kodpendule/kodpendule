@@ -52,7 +52,6 @@ class Order(models.Model):
         max_length=120,
         help_text=_("City name as entered by customer."),
     )
-    shipping_postal_code = models.CharField(_("Shipping postal code"), max_length=20)
     shipping_city = models.ForeignKey(
         "shipping.City",
         on_delete=models.PROTECT,
@@ -60,24 +59,10 @@ class Order(models.Model):
         verbose_name=_("Shipping city"),
     )
 
-    billing_street = models.CharField(_("Billing street"), max_length=255)
-    billing_city_name = models.CharField(_("Billing city name"), max_length=120)
-    billing_postal_code = models.CharField(_("Billing postal code"), max_length=20)
-
     order_notes = models.TextField(
         _("Order notes"),
-        help_text=_("Required at checkout — delivery instructions."),
-    )
-    delivery_date = models.DateField(_("Delivery date"), null=True, blank=True)
-    flexible_delivery = models.BooleanField(_("Flexible delivery"), default=False)
-
-    shipping_method = models.ForeignKey(
-        "shipping.ShippingMethod",
-        on_delete=models.SET_NULL,
-        null=True,
         blank=True,
-        related_name="orders",
-        verbose_name=_("Shipping method"),
+        help_text=_("Optional note from checkout."),
     )
     shipping_price = MoneyField(verbose_name=_("Shipping price"), default=0)
 
@@ -93,6 +78,12 @@ class Order(models.Model):
         choices=OrderStatus.choices,
         default=OrderStatus.PENDING,
         db_index=True,
+    )
+    is_new = models.BooleanField(
+        _("New (unread)"),
+        default=True,
+        db_index=True,
+        help_text=_("Marked as read when opened in admin."),
     )
 
     subtotal = MoneyField(verbose_name=_("Subtotal"), default=0)
@@ -127,6 +118,14 @@ class Order(models.Model):
     @property
     def customer_full_name(self) -> str:
         return f"{self.first_name} {self.last_name}".strip()
+
+    @property
+    def delivery_address_display(self) -> str:
+        street = (self.shipping_street or "").strip()
+        city = (self.shipping_city_name or "").strip()
+        if street and city:
+            return f"{street}, {city}"
+        return street or city
 
 
 class OrderItem(models.Model):

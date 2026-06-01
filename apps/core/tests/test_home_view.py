@@ -97,5 +97,5 @@ class HomeFeaturedProductTests(TestCase):
         self.assertGreater(categories_pos, hero_pos)
         self.assertGreater(trust_pos, categories_pos)
         self.assertContains(response, 'href="#home-categories"')
-        self.assertContains(response, "Order now")
+        self.assertContains(response, "Poruči odmah")
         self.assertContains(response, "Alkoholna pića")

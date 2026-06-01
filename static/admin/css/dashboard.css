@@ -124,8 +124,15 @@
     color: var(--kp-color-text);
 }
 
-.dashboard-chart-card canvas {
-    max-height: 280px;
+.dashboard-chart-card__canvas-wrap {
+    position: relative;
+    min-height: 220px;
+    height: 220px;
+}
+
+.dashboard-chart-card__canvas-wrap canvas {
+    width: 100% !important;
+    height: 100% !important;
 }
 
 .dashboard-tables {

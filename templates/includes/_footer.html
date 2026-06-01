@@ -46,6 +46,19 @@
                     </ul>
                 </nav>
 
+                <nav class="shop-footer__col" aria-labelledby="footer-legal-heading">
+                    <h2 id="footer-legal-heading" class="shop-footer__heading">{% trans "Legal" %}</h2>
+                    <ul class="shop-footer__links list-unstyled mb-0">
+                        <li><a href="{% shop_url 'core:terms' %}">{% trans "Terms of Service" %}</a></li>
+                        <li><a href="{% shop_url 'core:privacy' %}">{% trans "Privacy Policy" %}</a></li>
+                        <li>
+                            <button type="button" class="shop-footer__cookie-settings js-cookie-settings">
+                                {% trans "Cookie settings" %}
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+
                 <div class="shop-footer__col shop-footer__contact" aria-labelledby="footer-info-heading">
                     <h2 id="footer-info-heading" class="shop-footer__heading">{% trans "Contact" %}</h2>
                     <ul class="shop-footer__contact-list list-unstyled mb-0">
@@ -65,6 +78,9 @@
                     <p class="shop-footer__delivery-note">
                         {% trans "Nationwide delivery — shipping cost is shown at checkout." %}
                     </p>
+                    <div class="shop-footer__map">
+                        {% include "includes/_google_map.html" %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -76,6 +92,15 @@
                 &copy; {% now "Y" %}
                 {% if site_settings %}{{ site_settings.site_name }}{% else %}{% trans "Kod Pendule" %}{% endif %}.
                 {% trans "All rights reserved." %}
+            </p>
+            <p class="shop-footer__legal-links mb-0">
+                <a href="{% shop_url 'core:terms' %}">{% trans "Terms of Service" %}</a>
+                <span class="shop-footer__legal-sep" aria-hidden="true">·</span>
+                <a href="{% shop_url 'core:privacy' %}">{% trans "Privacy Policy" %}</a>
+                <span class="shop-footer__legal-sep" aria-hidden="true">·</span>
+                <button type="button" class="shop-footer__cookie-settings js-cookie-settings">
+                    {% trans "Cookie settings" %}
+                </button>
             </p>
             <p class="shop-footer__cod mb-0">
                 {% trans "Cash on delivery (COD) — pay when your order arrives." %}

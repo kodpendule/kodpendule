@@ -25,6 +25,8 @@ class StaticViewSitemap(Sitemap):
         return [
             "core:home",
             "core:contact",
+            "core:terms",
+            "core:privacy",
             "products:list",
             "categories:list",
         ]

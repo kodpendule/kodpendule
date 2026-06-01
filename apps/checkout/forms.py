@@ -1,8 +1,5 @@
-from datetime import timedelta
-
 from django import forms
 from django.contrib.auth import get_user_model
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from apps.shipping.selectors import active_cities
@@ -43,30 +40,33 @@ class CheckoutForm(forms.Form):
         max_length=255,
         widget=forms.TextInput(attrs={"class": "form-control", "autocomplete": "street-address"}),
     )
-    shipping_postal_code = forms.CharField(
-        label=_("Postal code"),
-        max_length=20,
-        widget=forms.TextInput(attrs={"class": "form-control", "autocomplete": "postal-code"}),
-    )
 
     order_notes = forms.CharField(
-        label=_("Order notes (required)"),
+        label=_("Order note"),
+        required=False,
         widget=forms.Textarea(
             attrs={
                 "class": "form-control",
                 "rows": 3,
-                "placeholder": _("Delivery instructions, building entrance, etc."),
+                "placeholder": _("Delivery instructions, building entrance, etc. (optional)"),
             }
         ),
     )
-    delivery_date = forms.DateField(
-        label=_("Preferred delivery date"),
-        widget=forms.DateInput(attrs={"class": "form-control", "type": "date"}),
-    )
-    flexible_delivery = forms.BooleanField(
-        label=_("I am flexible with the delivery date"),
-        required=False,
-        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
+
+    accept_legal = forms.BooleanField(
+        required=True,
+        label=_("I have read and accept the Terms of Service and Privacy Policy."),
+        error_messages={
+            "required": _(
+                "You must accept the Terms of Service and Privacy Policy to place an order."
+            ),
+        },
+        widget=forms.CheckboxInput(
+            attrs={
+                "class": "form-check-input",
+                "required": "required",
+            }
+        ),
     )
 
     def __init__(self, *args, user=None, **kwargs) -> None:
@@ -77,21 +77,6 @@ class CheckoutForm(forms.Form):
             self.fields["guest_email"].widget = forms.HiddenInput()
         else:
             self.fields["guest_email"].required = True
-
-        min_date = timezone.localdate() + timedelta(days=1)
-        self._min_delivery_date = min_date
-        self.fields["delivery_date"].widget.attrs["min"] = min_date.isoformat()
-
-    def clean_delivery_date(self):
-        delivery_date = self.cleaned_data.get("delivery_date")
-        if not delivery_date:
-            raise forms.ValidationError(_("This field is required."))
-        min_date = getattr(self, "_min_delivery_date", timezone.localdate() + timedelta(days=1))
-        if delivery_date < min_date:
-            raise forms.ValidationError(
-                _("Delivery date must be at least tomorrow.")
-            )
-        return delivery_date
 
     def clean_guest_email(self) -> str:
         email = self.cleaned_data.get("guest_email", "").strip()
@@ -105,15 +90,4 @@ class CheckoutForm(forms.Form):
         return email
 
     def clean_order_notes(self) -> str:
-        notes = (self.cleaned_data.get("order_notes") or "").strip()
-        if not notes:
-            raise forms.ValidationError(_("Order notes are required."))
-        return notes
-
-    def clean(self):
-        cleaned = super().clean()
-        city = cleaned.get("shipping_city")
-        cleaned["billing_street"] = cleaned.get("shipping_street", "")
-        cleaned["billing_city_name"] = city.name if city else ""
-        cleaned["billing_postal_code"] = cleaned.get("shipping_postal_code", "")
-        return cleaned
+        return (self.cleaned_data.get("order_notes") or "").strip()

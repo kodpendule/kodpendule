@@ -1,0 +1,68 @@
+{% load i18n shop_urls %}
+<p class="shop-legal__notice">
+    {% blocktrans %}These Terms of Service govern online sales through the {% endblocktrans %}
+    {% if site_settings %}{{ site_settings.site_name }}{% else %}{% trans "Kod Pendule" %}{% endif %}
+    {% blocktrans %}webshop. They are intended for consumers in the Republic of Serbia. This document is for information purposes and does not replace individual legal advice.{% endblocktrans %}
+</p>
+<p class="shop-legal__updated">{% trans "Last updated: June 2026" %}</p>
+
+<h2>{% trans "1. Seller (operator)" %}</h2>
+<p>
+    {% blocktrans %}The seller operating this webshop is:{% endblocktrans %}
+    <strong>{% if site_settings %}{{ site_settings.site_name }}{% else %}{% trans "Kod Pendule" %}{% endif %}</strong>.
+    {% trans "Contact:" %}
+    <a href="mailto:{{ footer_contact.email }}">{{ footer_contact.email }}</a>,
+    <a href="tel:{{ footer_contact.phone|cut:' ' }}">{{ footer_contact.phone }}</a>.
+    {% trans "Registered address:" %} {{ footer_contact.address|linebreaksbr }}
+</p>
+
+<h2>{% trans "2. Scope and products" %}</h2>
+<p>{% blocktrans %}We sell mixed/general merchandise through this website. Product descriptions, photos, and prices shown on product pages form part of the offer. We reserve the right to correct obvious errors and to update the assortment.{% endblocktrans %}</p>
+
+<h2>{% trans "3. Account and guest checkout" %}</h2>
+<p>{% blocktrans %}You may place orders as a guest or after creating a customer account. You are responsible for keeping your login credentials confidential and for activity under your account. Account data is processed according to our Privacy Policy.{% endblocktrans %}</p>
+
+<h2>{% trans "4. Ordering process" %}</h2>
+<p>{% blocktrans %}By submitting an order you make a binding purchase offer. We confirm receipt by email. A sales contract is concluded when we accept the order (confirmation or dispatch). Before placing an order you must accept these Terms and our Privacy Policy.{% endblocktrans %}</p>
+<ul>
+    <li>{% trans "You must provide accurate contact and delivery details." %}</li>
+    <li>{% trans "Prices are shown in Serbian dinars (RSD) unless stated otherwise." %}</li>
+    <li>{% trans "Delivery cost is calculated at checkout based on the selected city." %}</li>
+</ul>
+
+<h2>{% trans "5. Prices and payment" %}</h2>
+<p>{% blocktrans %}All prices include applicable VAT where required by law. Payment is made on delivery (cash on delivery — COD) unless we explicitly offer another method. You pay the courier upon receipt of the goods in cash or by card if available.{% endblocktrans %}</p>
+
+<h2>{% trans "6. Delivery" %}</h2>
+<p>{% blocktrans %}We deliver within the Republic of Serbia to the address you provide. Estimated delivery times are indicative and may depend on the carrier and your location. Risk of accidental loss or damage passes to you when you take physical possession of the goods.{% endblocktrans %}</p>
+
+<h2>{% trans "7. Right of withdrawal (consumers)" %}</h2>
+<p>{% blocktrans %}If you are a consumer under Serbian consumer protection law, you may withdraw from a distance contract within 14 days of receiving the goods, without giving a reason, subject to legal exceptions (e.g. sealed goods that cannot be returned for hygiene reasons, custom-made items, perishable goods). To exercise withdrawal, notify us clearly at our contact email before the deadline expires.{% endblocktrans %}</p>
+<p>{% blocktrans %}You must return the goods without undue delay and in any event within 14 days of sending your withdrawal notice. You bear direct return costs unless we agree otherwise or the law requires us to bear them. We will refund payments using the same means of payment, after we receive the goods or proof of return, in accordance with applicable law.{% endblocktrans %}</p>
+
+<h2>{% trans "8. Complaints and conformity of goods" %}</h2>
+<p>{% blocktrans %}If goods are non-conforming or defective, you may submit a complaint within the statutory period. Contact us with your order number and a description of the issue. We will respond in line with the Law on Consumer Protection and related regulations.{% endblocktrans %}</p>
+
+<h2>{% trans "9. Limitation of liability" %}</h2>
+<p>{% blocktrans %}We are liable for damage caused intentionally or through gross negligence. For consumers, mandatory statutory rights are not limited. For business buyers, liability is limited to the maximum extent permitted by law. We are not responsible for indirect loss or delays caused by force majeure or third-party carriers beyond our reasonable control.{% endblocktrans %}</p>
+
+<h2>{% trans "10. Intellectual property" %}</h2>
+<p>{% blocktrans %}Website content (text, images, logos, software) is protected by copyright and other rights. You may not copy or use it without our prior written consent except for personal browsing and ordering.{% endblocktrans %}</p>
+
+<h2>{% trans "11. Personal data" %}</h2>
+<p>
+    {% blocktrans %}Processing of personal data is described in our{% endblocktrans %}
+    <a href="{% shop_url 'core:privacy' %}">{% trans "Privacy Policy" %}</a>.
+</p>
+
+<h2>{% trans "12. Dispute resolution" %}</h2>
+<p>{% blocktrans %}We aim to resolve complaints amicably. Consumers may also contact the competent market inspection authority or use out-of-court dispute resolution bodies where available under Serbian law. The courts of the Republic of Serbia have jurisdiction unless mandatory consumer rules provide otherwise.{% endblocktrans %}</p>
+
+<h2>{% trans "13. Changes" %}</h2>
+<p>{% blocktrans %}We may update these Terms. The version published on this page applies to orders placed after publication. Material changes will be highlighted on the website where appropriate.{% endblocktrans %}</p>
+
+<p class="mb-0">
+    <a href="{% shop_url 'core:privacy' %}">{% trans "Privacy Policy" %}</a>
+    ·
+    <a href="{% shop_url 'core:contact' %}">{% trans "Contact" %}</a>
+</p>

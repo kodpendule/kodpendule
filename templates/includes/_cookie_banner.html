@@ -1,0 +1,34 @@
+{% load i18n shop_urls static %}
+{% if not cookie_consent_given %}
+<div
+    id="shop-cookie-banner"
+    class="shop-cookie-banner"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="shop-cookie-banner-title"
+    aria-describedby="shop-cookie-banner-desc"
+    hidden
+>
+    <div class="shop-cookie-banner__inner container shop-container">
+        <div class="shop-cookie-banner__content">
+            <h2 id="shop-cookie-banner-title" class="shop-cookie-banner__title">
+                {% trans "Cookies on this website" %}
+            </h2>
+            <p id="shop-cookie-banner-desc" class="shop-cookie-banner__text mb-0">
+                {% blocktrans trimmed %}
+                We use essential cookies so the shop works (cart, login, security). With your permission we also load Google Maps on the contact page and footer.
+                {% endblocktrans %}
+                <a href="{% shop_url 'core:privacy' %}">{% trans "Privacy Policy" %}</a>
+            </p>
+        </div>
+        <div class="shop-cookie-banner__actions">
+            <button type="button" class="shop-btn shop-btn--ghost shop-cookie-banner__btn js-cookie-consent-essential">
+                {% trans "Essential only" %}
+            </button>
+            <button type="button" class="shop-btn shop-btn--primary shop-cookie-banner__btn js-cookie-consent-all">
+                {% trans "Accept all" %}
+            </button>
+        </div>
+    </div>
+</div>
+{% endif %}

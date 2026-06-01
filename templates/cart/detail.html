@@ -78,7 +78,7 @@
 
                     <dl class="shop-summary-card__totals">
                         <div class="shop-summary-card__row">
-                            <dt>{% trans "Subtotal" %}</dt>
+                            <dt>{% trans "Items total" %}</dt>
                             <dd data-cart-subtotal>{{ cart_subtotal|money }}</dd>
                         </div>
                     </dl>
@@ -111,6 +111,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/product.js' %}"></script>
 <script src="{% static 'js/cart.js' %}"></script>
 {% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Privacy Policy" %} | {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/legal.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="shop-page shop-page--legal">
+<div class="container shop-container py-5">
+    <header class="shop-page-header mb-4">
+        <h1 class="shop-page-header__title">{% trans "Privacy Policy" %}</h1>
+    </header>
+    <article class="shop-legal shop-card shop-contact-card">
+        {% include "includes/legal/_privacy_content.html" %}
+    </article>
+</div>
+</div>
+{% endblock %}

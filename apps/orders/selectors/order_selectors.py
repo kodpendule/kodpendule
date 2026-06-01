@@ -10,7 +10,6 @@ def order_detail_qs() -> QuerySet[Order]:
         Order.objects.select_related(
             "user",
             "shipping_city",
-            "shipping_method",
         ).prefetch_related("items", "items__product", "items__product__translations")
     )
 

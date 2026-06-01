@@ -6,9 +6,11 @@ from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
+from django.contrib import messages
 
 from apps.accounts.forms import CustomerContactImportForm
 from apps.core.kp_admin import KPModelAdmin
+from apps.core.locale_dates import latin_short_datetime
 from apps.accounts.models import CustomerContact, CustomerProfile, User
 from apps.accounts.services.customer_contact_csv import (
     EXPORT_FIELDNAMES,
@@ -40,17 +42,28 @@ class CustomerContactAdmin(KPModelAdmin):
         "email",
         "full_name_display",
         "phone",
+        "delivery_display",
         "account_link",
         "order_count",
-        "registered_at",
-        "last_seen_at",
+        "registered_at_display",
+        "last_seen_at_display",
     )
-    search_fields = ("email", "first_name", "last_name", "phone", "user__username")
+    search_fields = (
+        "email",
+        "first_name",
+        "last_name",
+        "phone",
+        "delivery_street",
+        "delivery_city_name",
+        "user__username",
+    )
     readonly_fields = (
         "email",
         "first_name",
         "last_name",
         "phone",
+        "delivery_street",
+        "delivery_city_name",
         "user",
         "order_count",
         "registered_at",
@@ -69,11 +82,6 @@ class CustomerContactAdmin(KPModelAdmin):
     def get_urls(self):
         urls = [
             path(
-                "export-csv/",
-                self.admin_site.admin_view(self.export_csv_view),
-                name="accounts_customercontact_export_csv",
-            ),
-            path(
                 "import-csv/",
                 self.admin_site.admin_view(self.import_csv_view),
                 name="accounts_customercontact_import_csv",
@@ -81,17 +89,23 @@ class CustomerContactAdmin(KPModelAdmin):
         ]
         return urls + super().get_urls()
 
-    def export_csv_view(self, request: HttpRequest) -> HttpResponse:
-        if not self.has_view_permission(request):
-            return redirect("admin:index")
+    @admin.action(description=_("Export selected to CSV"))
+    def export_selected_csv(self, request, queryset):
+        if not queryset.exists():
+            self.message_user(request, _("No customers selected."), level=messages.WARNING)
+            return None
 
-        csv_data = export_contacts_csv()
         stamp = timezone.localdate().strftime("%Y%m%d")
-        response = HttpResponse(csv_data, content_type="text/csv; charset=utf-8")
+        response = HttpResponse(
+            export_contacts_csv(queryset),
+            content_type="text/csv; charset=utf-8",
+        )
         response["Content-Disposition"] = (
             f'attachment; filename="customer-contacts-{stamp}.csv"'
         )
         return response
+
+    actions = ["export_selected_csv"]
 
     def import_csv_view(self, request: HttpRequest) -> HttpResponse:
         if not self.has_change_permission(request):
@@ -107,8 +121,6 @@ class CustomerContactAdmin(KPModelAdmin):
             except ValueError as exc:
                 form.add_error("csv_file", str(exc))
             else:
-                from django.contrib import messages
-
                 messages.success(
                     request,
                     _("Import finished: %(created)s created, %(updated)s updated, %(skipped)s skipped.")
@@ -130,9 +142,27 @@ class CustomerContactAdmin(KPModelAdmin):
         }
         return render(request, "admin/accounts/customercontact/import_csv.html", context)
 
+    @admin.display(description=_("Registered at"), ordering="registered_at")
+    def registered_at_display(self, obj: CustomerContact) -> str:
+        if not obj.registered_at:
+            return "—"
+        return latin_short_datetime(obj.registered_at)
+
+    @admin.display(description=_("Last activity"), ordering="last_seen_at")
+    def last_seen_at_display(self, obj: CustomerContact) -> str:
+        return latin_short_datetime(obj.last_seen_at)
+
     @admin.display(description=_("Name"))
     def full_name_display(self, obj: CustomerContact) -> str:
         return obj.full_name or "—"
+
+    @admin.display(description=_("Delivery"))
+    def delivery_display(self, obj: CustomerContact) -> str:
+        street = (obj.delivery_street or "").strip()
+        city = (obj.delivery_city_name or "").strip()
+        if street and city:
+            return f"{street}, {city}"
+        return street or city or "—"
 
     @admin.display(description=_("Account"))
     def account_link(self, obj: CustomerContact) -> str:

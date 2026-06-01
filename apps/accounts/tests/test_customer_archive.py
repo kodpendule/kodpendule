@@ -82,18 +82,14 @@ class CustomerArchiveCheckoutIntegrationTests(CheckoutServiceTests):
             phone="+381601112233",
             shipping_city=self.city,
             shipping_street="Ulica 1",
-            shipping_postal_code="11000",
-            billing_street="Ulica 1",
-            billing_city_name=self.city.name,
-            billing_postal_code="11000",
             order_notes="Ring the bell",
-            delivery_date=timezone.localdate() + timedelta(days=1),
-            flexible_delivery=False,
         )
         self.assertIsNotNone(order.pk)
         contact = CustomerContact.objects.get(email="guest@example.com")
         self.assertEqual(contact.first_name, "Ana")
         self.assertEqual(contact.order_count, 1)
+        self.assertEqual(contact.delivery_street, "Ulica 1")
+        self.assertEqual(contact.delivery_city_name, self.city.name)
         self.assertIsNone(contact.user_id)
 
 
