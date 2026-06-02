@@ -30,7 +30,8 @@ def shop_sender_address() -> str:
 
 
 def shop_from_email() -> tuple[str, str]:
-    return (shop_sender_address(), SHOP_EMAIL_FROM_NAME)
+    """Django from_email tuple: (display name, email address)."""
+    return (SHOP_EMAIL_FROM_NAME, shop_sender_address())
 
 
 def send_shop_email(
@@ -60,6 +61,7 @@ def send_shop_email(
         return False
 
     from_email = shop_from_email()
+    sender_address = from_email[1]
     try:
         email = EmailMessage(
             subject=subject,
@@ -72,7 +74,7 @@ def send_shop_email(
         logger.info(
             "Email sent: subject=%r from=%s to=%s",
             subject,
-            from_email[0],
+            sender_address,
             recipients,
         )
         return True
@@ -80,7 +82,7 @@ def send_shop_email(
         logger.exception(
             "Failed to send email: subject=%r from=%s to=%s",
             subject,
-            from_email[0],
+            sender_address,
             recipients,
         )
         if not fail_silently:

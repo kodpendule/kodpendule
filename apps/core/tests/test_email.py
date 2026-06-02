@@ -9,7 +9,7 @@ from django.core import mail
 from django.test import TestCase, override_settings
 from django.utils import timezone
 
-from apps.core.mail import send_shop_email
+from apps.core.mail import send_shop_email, shop_from_email
 from apps.core.services.contact_email import send_contact_form_email
 from apps.orders.models import Order, OrderItem, OrderStatus, PaymentMethod
 from apps.shipping.models import City
@@ -40,6 +40,13 @@ class SendShopEmailTests(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].to, ["user@example.com"])
         self.assertIn("Kod Pendule", mail.outbox[0].from_email)
+        self.assertIn("kodpendule@gmail.com", mail.outbox[0].from_email)
+
+    @override_settings(SHOP_FROM_EMAIL="kodpendule@gmail.com")
+    def test_shop_from_email_uses_name_then_address_tuple(self) -> None:
+        name, address = shop_from_email()
+        self.assertEqual(name, "Kod Pendule")
+        self.assertEqual(address, "kodpendule@gmail.com")
 
     @override_settings(SENDGRID_API_KEY="", EMAIL_HOST="")
     def test_skips_when_not_configured(self) -> None:
