@@ -31,10 +31,11 @@ class ReportPeriodTests(TestCase):
         self.assertEqual(period.end.isoformat(), "2026-03-31")
         self.assertEqual(period.label, "01/03/2026 — 31/03/2026")
 
-    def test_single_day_label_uses_short_date(self) -> None:
-        day = timezone.localdate()
-        period = ReportPeriod(start=day, end=day, preset="custom")
-        self.assertEqual(period.label, day.strftime("%d/%m/%Y"))
+    def test_single_day_label_uses_dd_mm_yyyy(self) -> None:
+        from datetime import date
+
+        period = ReportPeriod(start=date(2026, 6, 2), end=date(2026, 6, 2), preset="custom")
+        self.assertEqual(period.label, "02/06/2026")
 
 
 class AnalyticsSelectorTests(TestCase):
@@ -105,6 +106,8 @@ class DashboardViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Analitika prodavnice")
         self.assertContains(response, "Pregled")
+        self.assertNotContains(response, "2026-")
+        self.assertRegex(response.content.decode(), r"\d{2}/\d{2}/\d{4}")
         self.assertContains(response, 'id="nav-sidebar"')
         self.assertContains(response, "kp-admin-nav")
         self.assertContains(response, 'id="id_filter_mode"')

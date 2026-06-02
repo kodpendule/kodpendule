@@ -22,3 +22,4 @@ class ReportServiceChartTests(TestCase):
         self.assertEqual(len(revenue["values"]), 4)
         self.assertEqual(len(orders["values"]), 4)
         self.assertIn("/", revenue["labels"][0])
+        self.assertRegex(revenue["labels"][0], r"^\d{2}/\d{2}/\d{4}$")

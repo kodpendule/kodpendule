@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from email.utils import parseaddr
+from email.utils import formataddr
 from typing import Iterable
 
 from django.conf import settings
@@ -18,20 +18,12 @@ def is_email_configured() -> bool:
     return bool(getattr(settings, "SENDGRID_API_KEY", "") or getattr(settings, "EMAIL_HOST", ""))
 
 
-def shop_sender_address() -> str:
-    """Bare From address — must match a verified SendGrid sender identity."""
-    raw = (
-        getattr(settings, "SHOP_FROM_EMAIL", "")
-        or getattr(settings, "SHOP_NOTIFICATION_EMAIL", "")
+def shop_from_email() -> str:
+    email = (
+        getattr(settings, "SHOP_NOTIFICATION_EMAIL", "")
         or settings.DEFAULT_FROM_EMAIL
     )
-    _, addr = parseaddr(str(raw).strip())
-    return (addr or str(raw).strip()).lower()
-
-
-def shop_from_email() -> tuple[str, str]:
-    """Django from_email tuple: (display name, email address)."""
-    return (SHOP_EMAIL_FROM_NAME, shop_sender_address())
+    return formataddr((SHOP_EMAIL_FROM_NAME, email))
 
 
 def send_shop_email(
@@ -60,29 +52,21 @@ def send_shop_email(
         )
         return False
 
-    from_email = shop_from_email()
-    sender_address = from_email[1]
     try:
         email = EmailMessage(
             subject=subject,
             body=message,
-            from_email=from_email,
+            from_email=shop_from_email(),
             to=recipients,
             reply_to=[reply_to] if reply_to else None,
         )
         email.send(fail_silently=False)
-        logger.info(
-            "Email sent: subject=%r from=%s to=%s",
-            subject,
-            sender_address,
-            recipients,
-        )
+        logger.info("Email sent: subject=%r to=%s", subject, recipients)
         return True
     except Exception:
         logger.exception(
-            "Failed to send email: subject=%r from=%s to=%s",
+            "Failed to send email: subject=%r to=%s",
             subject,
-            sender_address,
             recipients,
         )
         if not fail_silently:

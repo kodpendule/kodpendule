@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from django.utils.translation import gettext as _
 
+from apps.core.locale_dates import latin_short_date
 from apps.core.money import format_shop_money
 from apps.orders.models import Order
 
@@ -29,7 +30,7 @@ def build_order_details_text(order: Order) -> str:
         _("Address: %(street)s") % {"street": order.shipping_street},
         _("City: %(city)s") % {"city": order.shipping_city_name},
         _("Requested delivery date: %(date)s")
-        % {"date": order.requested_delivery_date.strftime("%d/%m/%Y")},
+        % {"date": latin_short_date(order.requested_delivery_date)},
     ]
     if order.order_notes:
         lines.extend(["", _("Notes: %(notes)s") % {"notes": order.order_notes}])
