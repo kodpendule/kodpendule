@@ -160,12 +160,13 @@ SHOP_CURRENCY = "RSD"
 SHOP_CURRENCY_SYMBOL = "din"
 SHOP_PRODUCTS_PER_PAGE = 12
 
-# All shop alerts (orders, low stock, contact form) go here unless overridden in env.
+# Outgoing From + staff alerts (override in env; From must match SendGrid verified sender).
+SHOP_FROM_EMAIL = "kodpendule@gmail.com"
 SHOP_NOTIFICATION_EMAIL = "kodpendule@gmail.com"
 
 # Set SENDGRID_API_KEY in .env.local / Render to enable outgoing email.
 SENDGRID_API_KEY = ""
-DEFAULT_FROM_EMAIL = SHOP_NOTIFICATION_EMAIL
+DEFAULT_FROM_EMAIL = SHOP_FROM_EMAIL
 
 # Google Maps embed — Karađorđeva 11, Vrdnik (override via GOOGLE_MAPS_EMBED_URL in env)
 # Cookie consent banner (storefront)

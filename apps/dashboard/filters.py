@@ -6,7 +6,7 @@ from datetime import date, datetime, timedelta
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
-from apps.core.locale_dates import latin_month_year
+from apps.core.locale_dates import latin_month_year, latin_short_date
 
 
 @dataclass(frozen=True)
@@ -20,8 +20,8 @@ class ReportPeriod:
     @property
     def label(self) -> str:
         if self.start == self.end:
-            return self.start.isoformat()
-        return f"{self.start.isoformat()} — {self.end.isoformat()}"
+            return latin_short_date(self.start)
+        return f"{latin_short_date(self.start)} — {latin_short_date(self.end)}"
 
 
 def _local_today() -> date:

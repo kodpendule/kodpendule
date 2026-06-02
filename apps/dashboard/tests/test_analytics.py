@@ -29,6 +29,12 @@ class ReportPeriodTests(TestCase):
         self.assertEqual(period.preset, "custom")
         self.assertEqual(period.start.isoformat(), "2026-03-01")
         self.assertEqual(period.end.isoformat(), "2026-03-31")
+        self.assertEqual(period.label, "01/03/2026 — 31/03/2026")
+
+    def test_single_day_label_uses_short_date(self) -> None:
+        day = timezone.localdate()
+        period = ReportPeriod(start=day, end=day, preset="custom")
+        self.assertEqual(period.label, day.strftime("%d/%m/%Y"))
 
 
 class AnalyticsSelectorTests(TestCase):
