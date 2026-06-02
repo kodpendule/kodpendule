@@ -20,9 +20,9 @@ def is_email_configured() -> bool:
 
 def shop_from_email() -> str:
     email = (
-        getattr(settings, "SHOP_NOTIFICATION_EMAIL", "")
+        getattr(settings, "SHOP_FROM_EMAIL", "")
         or settings.DEFAULT_FROM_EMAIL
-    )
+    ).strip()
     return formataddr((SHOP_EMAIL_FROM_NAME, email))
 
 

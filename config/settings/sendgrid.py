@@ -14,7 +14,8 @@ def configure_sendgrid_email(settings_module: Any, config) -> None:
     """
     Enable email when SENDGRID_API_KEY is set.
 
-    Optional override: SHOP_NOTIFICATION_EMAIL (default kodpendule@gmail.com).
+    SHOP_FROM_EMAIL — sender (default info@kodpendule.com; verify in SendGrid).
+    SHOP_NOTIFICATION_EMAIL — staff inbox (default kodpendule@gmail.com).
     """
     notification_email = (
         config(
@@ -29,6 +30,19 @@ def configure_sendgrid_email(settings_module: Any, config) -> None:
     ).strip()
     settings_module.SHOP_NOTIFICATION_EMAIL = notification_email
 
+    from_email = (
+        config(
+            "SHOP_FROM_EMAIL",
+            default=getattr(
+                settings_module,
+                "SHOP_FROM_EMAIL",
+                "info@kodpendule.com",
+            ),
+        )
+        or "info@kodpendule.com"
+    ).strip()
+    settings_module.SHOP_FROM_EMAIL = from_email
+
     api_key = (config("SENDGRID_API_KEY", default="") or "").strip()
     settings_module.SENDGRID_API_KEY = api_key
 
@@ -41,5 +55,5 @@ def configure_sendgrid_email(settings_module: Any, config) -> None:
     settings_module.EMAIL_HOST_USER = SENDGRID_SMTP_USERNAME
     settings_module.EMAIL_HOST_PASSWORD = api_key
     settings_module.EMAIL_USE_TLS = True
-    settings_module.DEFAULT_FROM_EMAIL = notification_email
-    settings_module.SERVER_EMAIL = notification_email
+    settings_module.DEFAULT_FROM_EMAIL = from_email
+    settings_module.SERVER_EMAIL = from_email

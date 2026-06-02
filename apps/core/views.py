@@ -2,7 +2,6 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.db.models import F
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.utils.translation import check_for_language, gettext_lazy as _
 from django.views.decorators.http import require_POST
@@ -17,7 +16,7 @@ from apps.core.utils import activate_parler_language
 from apps.categories.models import Category
 from apps.categories.selectors import get_nav_categories
 from apps.products.models import Product
-from apps.products.selectors import active_products_qs, recommended_products_qs
+from apps.products.selectors import active_products_qs, promo_products_qs, recommended_products_qs
 
 logger = logging.getLogger(__name__)
 
@@ -49,12 +48,7 @@ class HomeView(ShopLanguageMixin, TemplateView):
         for product in new_arrivals:
             activate_parler_language(product, lang)
 
-        promo_sale_products = list(
-            product_qs.filter(
-                discount_price__isnull=False,
-                discount_price__lt=F("price"),
-            )[:8]
-        )
+        promo_sale_products = list(promo_products_qs(lang)[:8])
         for product in promo_sale_products:
             activate_parler_language(product, lang)
 

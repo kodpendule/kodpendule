@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.accounts.models import CustomerProfile, User
 from apps.accounts.services import archive_customer_from_registration
 from apps.accounts.services.customer_archive import normalize_customer_email
+from apps.core.form_errors import apply_latin_required_messages
 
 
 class LoginForm(AuthenticationForm):
@@ -29,6 +30,10 @@ class LoginForm(AuthenticationForm):
             }
         ),
     )
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        apply_latin_required_messages(self)
 
 
 class RegistrationForm(UserCreationForm):
@@ -79,6 +84,7 @@ class RegistrationForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+        apply_latin_required_messages(self)
         self.fields["password1"].widget.attrs.update(
             {"class": "form-control", "autocomplete": "new-password"},
         )

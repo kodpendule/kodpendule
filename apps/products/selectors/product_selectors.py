@@ -1,4 +1,4 @@
-from django.db.models import Count, Q, QuerySet
+from django.db.models import Count, F, Q, QuerySet
 
 from apps.categories.models import Category
 from apps.core.slugs import translation_languages_to_try
@@ -93,6 +93,18 @@ def recommended_products_qs(language: str | None = None) -> QuerySet[Product]:
         active_products_qs(language)
         .filter(is_recommended=True)
         .order_by("recommended_order", "-updated_at")
+    )
+
+
+def promo_products_qs(language: str | None = None) -> QuerySet[Product]:
+    """Products with an active discount (promo price lower than regular price)."""
+    return (
+        active_products_qs(language)
+        .filter(
+            discount_price__isnull=False,
+            discount_price__lt=F("price"),
+        )
+        .order_by("-updated_at")
     )
 
 

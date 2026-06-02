@@ -24,7 +24,9 @@ EMAIL_SETTINGS = {
     "EMAIL_BACKEND": "django.core.mail.backends.locmem.EmailBackend",
     "EMAIL_HOST": "smtp.sendgrid.net",
     "SENDGRID_API_KEY": "test-key",
-    "SHOP_NOTIFICATION_EMAIL": "admin@example.com",
+    "SHOP_FROM_EMAIL": "info@kodpendule.com",
+    "SHOP_NOTIFICATION_EMAIL": "kodpendule@gmail.com",
+    "DEFAULT_FROM_EMAIL": "info@kodpendule.com",
 }
 
 
@@ -39,7 +41,18 @@ class SendShopEmailTests(TestCase):
         self.assertTrue(ok)
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].to, ["user@example.com"])
+        self.assertIn("info@kodpendule.com", mail.outbox[0].from_email)
         self.assertIn("Kod Pendule", mail.outbox[0].from_email)
+
+    def test_staff_notifications_go_to_shop_inbox_not_from_address(self) -> None:
+        ok = send_shop_email(
+            subject="Staff alert",
+            message="Body",
+            recipient_list=["kodpendule@gmail.com"],
+        )
+        self.assertTrue(ok)
+        self.assertEqual(mail.outbox[-1].to, ["kodpendule@gmail.com"])
+        self.assertIn("info@kodpendule.com", mail.outbox[-1].from_email)
 
     @override_settings(SENDGRID_API_KEY="", EMAIL_HOST="")
     def test_skips_when_not_configured(self) -> None:
@@ -75,8 +88,9 @@ class ContactEmailTests(TestCase):
         )
         self.assertTrue(ok)
         self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].to, ["admin@example.com"])
+        self.assertEqual(mail.outbox[0].to, ["kodpendule@gmail.com"])
         self.assertEqual(mail.outbox[0].reply_to, ["ana@example.com"])
+        self.assertIn("info@kodpendule.com", mail.outbox[0].from_email)
         self.assertIn("Ana", mail.outbox[0].body)
 
 
@@ -124,7 +138,7 @@ class OrderEmailTests(TestCase):
     def test_staff_order_email(self) -> None:
         notify_staff_new_order(self.order)
         self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].to, ["admin@example.com"])
+        self.assertEqual(mail.outbox[0].to, ["kodpendule@gmail.com"])
         self.assertIn("KP-20260101-ABC123", mail.outbox[0].subject)
 
 

@@ -14,7 +14,9 @@
   <header class="shop-catalog-header mb-4">
     <div>
       <h1 class="h2 mb-1">
-        {% if search_query %}
+        {% if catalog_title %}
+          {{ catalog_title }}
+        {% elif search_query %}
           {% blocktrans with query=search_query %}Search: {{ query }}{% endblocktrans %}
         {% elif active_category %}
           {{ active_category.name }}
@@ -22,7 +24,9 @@
           {% trans "Products" %}
         {% endif %}
       </h1>
-      {% if is_paginated %}
+      {% if catalog_subtitle %}
+      <p class="text-muted mb-0">{{ catalog_subtitle }}</p>
+      {% elif is_paginated %}
       <p class="text-muted small mb-0">
         {% blocktrans with count=page_obj.paginator.count %}Showing {{ count }} products{% endblocktrans %}
       </p>
@@ -40,7 +44,9 @@
     </form>
   </header>
 
+  {% if not hide_category_nav %}
   {% include "includes/_category_nav.html" %}
+  {% endif %}
   {% include "includes/_product_grid.html" with products=products %}
   {% include "includes/_pagination.html" %}
 </div>

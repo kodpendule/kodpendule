@@ -8,7 +8,6 @@ from django.urls import reverse
 from apps.core.storefront_urls import shop_reverse
 
 from apps.categories.models import Category
-from apps.core.storefront_urls import shop_reverse
 from apps.products.models import Product
 from apps.products.selectors import recommended_products_qs
 
@@ -83,3 +82,31 @@ class RecommendedProductsTests(TestCase):
         self.assertContains(response, "home-section-promo-sale")
         content = response.content.decode()
         self.assertGreaterEqual(content.count("data-product-carousel"), 2)
+
+    def test_recommended_list_page(self) -> None:
+        response = self.client.get(shop_reverse("products:recommended"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Preporučeni proizvodi")
+        self.assertContains(response, self.product_a.name)
+        self.assertNotContains(response, self.product_c.name)
+
+    def test_promo_list_page(self) -> None:
+        self.product_c.discount_price = Decimal("700.00")
+        self.product_c.save()
+        response = self.client.get(shop_reverse("products:promo"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Promo akcije")
+        self.assertContains(response, self.product_c.name)
+        self.assertNotContains(response, self.product_b.name)
+
+    def test_header_nav_promo_and_recommended_links(self) -> None:
+        response = self.client.get(shop_reverse("core:home"))
+        self.assertContains(response, shop_reverse("products:promo"))
+        self.assertContains(response, shop_reverse("products:recommended"))
+        html = response.content.decode()
+        nav_start = html.find("shop-header__nav-list")
+        self.assertGreater(nav_start, 0)
+        nav_end = html.find("</ul>", nav_start)
+        nav_html = html[nav_start:nav_end]
+        self.assertNotIn(shop_reverse("core:terms"), nav_html)
+        self.assertNotIn(shop_reverse("core:privacy"), nav_html)

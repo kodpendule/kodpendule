@@ -1,6 +1,8 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
+from apps.core.form_errors import apply_latin_required_messages
+
 
 class ContactForm(forms.Form):
     name = forms.CharField(
@@ -45,6 +47,10 @@ class ContactForm(forms.Form):
 
     def clean_website(self) -> str:
         return (self.cleaned_data.get("website") or "").strip()
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        apply_latin_required_messages(self)
 
     def is_spam_submission(self) -> bool:
         return bool(self.cleaned_data.get("website"))

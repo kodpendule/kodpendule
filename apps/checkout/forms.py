@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.checkout_settings import DeliveryTiming, checkout_today, min_scheduled_delivery_date
+from apps.core.form_errors import apply_latin_required_messages
 from apps.shipping.selectors import active_cities
 
 User = get_user_model()
@@ -90,6 +91,7 @@ class CheckoutForm(forms.Form):
 
     def __init__(self, *args, user=None, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+        apply_latin_required_messages(self)
         self.user = user
         self.show_email_field = True
         if user and user.is_authenticated:

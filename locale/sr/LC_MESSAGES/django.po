@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kod Pendule\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-02 01:53+0200\n"
+"POT-Creation-Date: 2026-06-02 16:23+0200\n"
 "Language: sr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
@@ -55,7 +55,7 @@ msgid "Name"
 msgstr "Naziv"
 
 #: .\apps\accounts\admin.py:159 .\apps\orders\admin.py:188
-#: .\apps\orders\services\order_email_body.py:28
+#: .\apps\orders\services\order_email_body.py:29
 #: .\templates\orders\detail.html:78 .\templates\products\detail.html:97
 msgid "Delivery"
 msgstr "Dostava"
@@ -68,56 +68,56 @@ msgstr "Nalog"
 msgid "Accounts"
 msgstr "Nalozi"
 
-#: .\apps\accounts\forms.py:14
+#: .\apps\accounts\forms.py:15
 msgid "Username"
 msgstr "Korisničko ime"
 
-#: .\apps\accounts\forms.py:24
+#: .\apps\accounts\forms.py:25
 msgid "Password"
 msgstr "Lozinka"
 
-#: .\apps\accounts\forms.py:38 .\apps\accounts\models.py:31
-#: .\apps\checkout\forms.py:13 .\apps\core\forms.py:12
+#: .\apps\accounts\forms.py:43 .\apps\accounts\models.py:31
+#: .\apps\checkout\forms.py:14 .\apps\core\forms.py:14
 #: .\apps\core\models.py:42
 #: .\apps\dashboard\templates\admin\dashboard\index.html:203
 #: .\templates\includes\_footer.html:67 .\templates\pages\contact.html:28
 msgid "Email"
 msgstr "Email"
 
-#: .\apps\accounts\forms.py:40
+#: .\apps\accounts\forms.py:45
 msgid "Required for order confirmations and signing in."
 msgstr "Obavezan za potvrde narudžbina i prijavu."
 
-#: .\apps\accounts\forms.py:49 .\apps\accounts\models.py:40
-#: .\apps\checkout\forms.py:18 .\apps\orders\models.py:45
+#: .\apps\accounts\forms.py:54 .\apps\accounts\models.py:40
+#: .\apps\checkout\forms.py:19 .\apps\orders\models.py:45
 msgid "First name"
 msgstr "Ime"
 
-#: .\apps\accounts\forms.py:56 .\apps\accounts\models.py:41
-#: .\apps\checkout\forms.py:23 .\apps\orders\models.py:46
+#: .\apps\accounts\forms.py:61 .\apps\accounts\models.py:41
+#: .\apps\checkout\forms.py:24 .\apps\orders\models.py:46
 msgid "Last name"
 msgstr "Prezime"
 
-#: .\apps\accounts\forms.py:63 .\apps\accounts\models.py:42
-#: .\apps\accounts\models.py:69 .\apps\checkout\forms.py:28
-#: .\apps\core\forms.py:16 .\apps\core\models.py:41 .\apps\orders\models.py:47
+#: .\apps\accounts\forms.py:68 .\apps\accounts\models.py:42
+#: .\apps\accounts\models.py:69 .\apps\checkout\forms.py:29
+#: .\apps\core\forms.py:18 .\apps\core\models.py:41 .\apps\orders\models.py:47
 #: .\templates\includes\_footer.html:63 .\templates\pages\contact.html:24
 msgid "Phone"
 msgstr "Telefon"
 
-#: .\apps\accounts\forms.py:92
+#: .\apps\accounts\forms.py:98
 msgid "Email is required."
 msgstr "Email je obavezan."
 
-#: .\apps\accounts\forms.py:94
+#: .\apps\accounts\forms.py:100
 msgid "A user with that email already exists."
 msgstr "Korisnik sa tim emailom već postoji."
 
-#: .\apps\accounts\forms.py:114
+#: .\apps\accounts\forms.py:120
 msgid "CSV file"
 msgstr "CSV datoteka"
 
-#: .\apps\accounts\forms.py:115
+#: .\apps\accounts\forms.py:121
 msgid "UTF-8 CSV with a header row. Required column: email."
 msgstr "UTF-8 CSV sa zaglavljem. Obavezna kolona: email."
 
@@ -188,12 +188,12 @@ msgstr[2] "%(count)s proizvoda u korpi"
 
 #: .\apps\cart\apps.py:8 .\apps\cart\views.py:36
 #: .\templates\cart\detail.html:12 .\templates\includes\_footer.html:29
-#: .\templates\includes\_header.html:29 .\templates\includes\_header.html:35
-#: .\templates\includes\_header_panel_body.html:29
+#: .\templates\includes\_header.html:49 .\templates\includes\_header.html:55
+#: .\templates\includes\_header_panel_body.html:50
 msgid "Cart"
 msgstr "Korpa"
 
-#: .\apps\cart\views.py:60 .\apps\products\views.py:88
+#: .\apps\cart\views.py:60 .\apps\products\views.py:154
 msgid "Product not found."
 msgstr "Proizvod nije pronađen."
 
@@ -233,7 +233,7 @@ msgstr "Slug"
 #: .\apps\core\breadcrumbs.py:11 .\templates\categories\list.html:6
 #: .\templates\includes\_category_nav.html:3
 #: .\templates\includes\_footer.html:28
-#: .\templates\includes\_header_nav_links.html:13
+#: .\templates\includes\_header_nav_links.html:29
 #: .\templates\includes\_hero.html:33
 msgid "Categories"
 msgstr "Kategorije"
@@ -301,70 +301,68 @@ msgstr "Kategorija nije pronađena."
 msgid "Checkout"
 msgstr "Plaćanje"
 
-#: .\apps\checkout\forms.py:34
+#: .\apps\checkout\forms.py:35
 msgid "City"
 msgstr "Grad"
 
-#: .\apps\checkout\forms.py:36
+#: .\apps\checkout\forms.py:37
 msgid "Select city"
 msgstr "Izaberite grad"
 
-#: .\apps\checkout\forms.py:40
+#: .\apps\checkout\forms.py:41
 msgid "Street and number"
 msgstr "Ulica i broj"
 
-#: .\apps\checkout\forms.py:46
-#| msgid "Where should we deliver your order?"
+#: .\apps\checkout\forms.py:47
 msgid "When should we deliver?"
 msgstr "Kada želite dostavu?"
 
-#: .\apps\checkout\forms.py:52
+#: .\apps\checkout\forms.py:53
 msgid "Preferred delivery date"
 msgstr "Željeni datum dostave"
 
-#: .\apps\checkout\forms.py:61
+#: .\apps\checkout\forms.py:62
 msgid "Choose any date after today — delivery is free for scheduled orders."
 msgstr ""
 "Izaberite bilo koji datum posle danas — dostava je besplatna za zakazane "
 "narudžbine."
 
-#: .\apps\checkout\forms.py:65
+#: .\apps\checkout\forms.py:66
 msgid "Order note"
 msgstr "Napomena"
 
-#: .\apps\checkout\forms.py:71
+#: .\apps\checkout\forms.py:72
 msgid "Delivery instructions, building entrance, etc. (optional)"
 msgstr "Uputstva za dostavu, ulaz u zgradu itd. (opciono)"
 
-#: .\apps\checkout\forms.py:78
+#: .\apps\checkout\forms.py:79
 msgid "I have read and accept the Terms of Service and Privacy Policy."
 msgstr "Pročitao/la sam i prihvatam Uslove korišćenja i Politiku privatnosti."
 
-#: .\apps\checkout\forms.py:81
+#: .\apps\checkout\forms.py:82
 msgid ""
 "You must accept the Terms of Service and Privacy Policy to place an order."
 msgstr ""
 "Morate prihvatiti Uslove korišćenja i Politiku privatnosti da biste "
 "poručili."
 
-#: .\apps\checkout\forms.py:124
-#| msgid "Cash on delivery"
+#: .\apps\checkout\forms.py:126
 msgid "Choose a delivery date."
 msgstr "Izaberite datum dostave."
 
-#: .\apps\checkout\forms.py:129
+#: .\apps\checkout\forms.py:131
 msgid "Choose a date after today for free scheduled delivery."
 msgstr "Izaberite datum posle danas za besplatnu zakazanu dostavu."
 
-#: .\apps\checkout\forms.py:140
+#: .\apps\checkout\forms.py:142
 msgid "Email is required for checkout."
 msgstr "Email je obavezan za završetak kupovine."
 
-#: .\apps\checkout\forms.py:143
+#: .\apps\checkout\forms.py:145
 msgid "This email is already linked to another account."
 msgstr "Ovaj email je već povezan sa drugim nalogom."
 
-#: .\apps\checkout\forms.py:147
+#: .\apps\checkout\forms.py:149
 msgid "Email is required for guest checkout."
 msgstr "Email je obavezan za kupovinu kao gost."
 
@@ -418,13 +416,13 @@ msgid "Orders"
 msgstr "Narudžbine"
 
 #: .\apps\core\admin_navigation.py:40 .\apps\core\breadcrumbs.py:15
-#: .\apps\orders\services\order_email_body.py:37 .\apps\products\apps.py:8
-#: .\apps\products\views.py:58
+#: .\apps\orders\services\order_email_body.py:38 .\apps\products\apps.py:8
+#: .\apps\products\views.py:60
 #: .\templates\admin\products\product\promo_sales.html:7
 #: .\templates\admin\products\product\recommended_products.html:7
 #: .\templates\categories\detail.html:31 .\templates\includes\_footer.html:27
-#: .\templates\includes\_header_nav_links.html:9
-#: .\templates\includes\_hero.html:29 .\templates\products\list.html:22
+#: .\templates\includes\_header_nav_links.html:17
+#: .\templates\includes\_hero.html:29 .\templates\products\list.html:24
 msgid "Products"
 msgstr "Proizvodi"
 
@@ -443,9 +441,12 @@ msgid "Analytics"
 msgstr "Analitika"
 
 #: .\apps\core\admin_navigation.py:111 .\apps\products\admin.py:337
+#: .\apps\products\views.py:97 .\apps\products\views.py:104
+#: .\apps\products\views.py:106
 #: .\templates\admin\products\product\change_list.html:7
 #: .\templates\admin\products\product\promo_sales.html:8
 #: .\templates\admin\products\product\promo_sales.html:17
+#: .\templates\includes\_header_nav_links.html:21
 msgid "Promo sales"
 msgstr "Promo akcije"
 
@@ -454,8 +455,11 @@ msgid "Apply discounts to multiple products"
 msgstr "Primeni popuste na više proizvoda"
 
 #: .\apps\core\admin_navigation.py:121 .\apps\products\admin.py:239
+#: .\apps\products\views.py:129 .\apps\products\views.py:136
+#: .\apps\products\views.py:138
 #: .\templates\admin\products\product\recommended_products.html:8
 #: .\templates\admin\products\product\recommended_products.html:17
+#: .\templates\includes\_header_nav_links.html:25
 #: .\templates\includes\_home_recommended_products.html:12
 msgid "Recommended products"
 msgstr "Preporučeni proizvodi"
@@ -619,7 +623,7 @@ msgstr "Osnovno"
 #: .\templates\admin\products\product\promo_sales.html:6
 #: .\templates\admin\products\product\recommended_products.html:6
 #: .\templates\admin\shipping\city\payment_settings.html:11
-#: .\templates\includes\_header_nav_links.html:5
+#: .\templates\includes\_header_nav_links.html:13
 #: .\templates\orders\detail.html:9
 msgid "Home"
 msgstr "Početna"
@@ -656,15 +660,19 @@ msgstr ""
 "Pon–Pet: 09:00–17:00\n"
 "Sub: 09:00–13:00"
 
-#: .\apps\core\forms.py:7
+#: .\apps\core\form_errors.py:5
+msgid "This field is required."
+msgstr "Ovo polje je obavezno."
+
+#: .\apps\core\forms.py:9
 msgid "Your name"
 msgstr "Vaše ime"
 
-#: .\apps\core\forms.py:22
+#: .\apps\core\forms.py:24
 msgid "Message"
 msgstr "Poruka"
 
-#: .\apps\core\forms.py:29
+#: .\apps\core\forms.py:31
 msgid "How can we help you?"
 msgstr "Kako vam možemo pomoći?"
 
@@ -757,19 +765,19 @@ msgid "A message was submitted via the shop contact form."
 msgstr "Poruka je poslata putem kontakt forme na sajtu."
 
 #: .\apps\core\services\contact_email.py:31
-#: .\apps\orders\services\order_email_body.py:24
+#: .\apps\orders\services\order_email_body.py:25
 #, python-format
 msgid "Name: %(name)s"
 msgstr "Ime: %(name)s"
 
 #: .\apps\core\services\contact_email.py:32
-#: .\apps\orders\services\order_email_body.py:25
+#: .\apps\orders\services\order_email_body.py:26
 #, python-format
 msgid "Email: %(email)s"
 msgstr "Email: %(email)s"
 
 #: .\apps\core\services\contact_email.py:35
-#: .\apps\orders\services\order_email_body.py:26
+#: .\apps\orders\services\order_email_body.py:27
 #, python-format
 msgid "Phone: %(phone)s"
 msgstr "Telefon: %(phone)s"
@@ -778,20 +786,20 @@ msgstr "Telefon: %(phone)s"
 msgid "Message:"
 msgstr "Poruka:"
 
-#: .\apps\core\views.py:101 .\templates\checkout\checkout.html:48
+#: .\apps\core\views.py:95 .\templates\checkout\checkout.html:48
 #: .\templates\includes\_footer.html:37 .\templates\includes\_footer.html:60
-#: .\templates\includes\_header_nav_links.html:17
+#: .\templates\includes\_header_nav_links.html:33
 #: .\templates\includes\legal\_privacy_content.html:111
 #: .\templates\includes\legal\_terms_content.html:67
 #: .\templates\pages\contact.html:4 .\templates\pages\contact.html:14
 msgid "Contact"
 msgstr "Kontakt"
 
-#: .\apps\core\views.py:113 .\apps\core\views.py:126
+#: .\apps\core\views.py:107 .\apps\core\views.py:120
 msgid "Thank you! Your message has been sent. We will get back to you soon."
 msgstr "Hvala! Vaša poruka je poslata. Javićemo vam se uskoro."
 
-#: .\apps\core\views.py:133
+#: .\apps\core\views.py:127
 msgid ""
 "We could not send your message right now. Please try again later or call us "
 "using the details below."
@@ -799,20 +807,18 @@ msgstr ""
 "Poruka trenutno nije poslata. Pokušajte ponovo kasnije ili nas pozovite "
 "putem podataka ispod."
 
-#: .\apps\core\views.py:152 .\templates\checkout\checkout.html:122
+#: .\apps\core\views.py:146 .\templates\checkout\checkout.html:122
 #: .\templates\includes\_checkout_legal_consent.html:7
 #: .\templates\includes\_footer.html:49 .\templates\includes\_footer.html:94
-#: .\templates\includes\_header_nav_links.html:25
 #: .\templates\includes\legal\_privacy_content.html:109
 #: .\templates\pages\terms.html:4 .\templates\pages\terms.html:14
 msgid "Terms of Service"
 msgstr "Uslovi korišćenja"
 
-#: .\apps\core\views.py:166 .\templates\checkout\checkout.html:124
+#: .\apps\core\views.py:160 .\templates\checkout\checkout.html:124
 #: .\templates\includes\_checkout_legal_consent.html:9
 #: .\templates\includes\_cookie_banner.html:20
 #: .\templates\includes\_footer.html:50 .\templates\includes\_footer.html:96
-#: .\templates\includes\_header_nav_links.html:29
 #: .\templates\includes\legal\_terms_content.html:55
 #: .\templates\includes\legal\_terms_content.html:65
 #: .\templates\pages\privacy.html:4 .\templates\pages\privacy.html:14
@@ -1077,7 +1083,7 @@ msgid "Update order status when you confirm, ship, or complete the order."
 msgstr "Ažurirajte status kada potvrdite, pošaljete ili završite narudžbinu."
 
 #: .\apps\orders\admin.py:86 .\apps\orders\admin.py:197
-#: .\apps\orders\services\order_email_body.py:23
+#: .\apps\orders\services\order_email_body.py:24
 #: .\templates\admin\index.html:61
 msgid "Customer"
 msgstr "Kupac"
@@ -1193,7 +1199,6 @@ msgid "Optional note from checkout."
 msgstr "Opciona napomena sa plaćanja."
 
 #: .\apps\orders\models.py:68
-#| msgid "Fast delivery"
 msgid "Requested delivery date"
 msgstr "Traženi datum dostave"
 
@@ -1243,47 +1248,47 @@ msgstr "Stavka narudžbine"
 msgid "order items"
 msgstr "Stavke narudžbine"
 
-#: .\apps\orders\services\order_email_body.py:21
+#: .\apps\orders\services\order_email_body.py:22
 #, python-format
 msgid "Order number: %(number)s"
 msgstr "Broj narudžbine: %(number)s"
 
-#: .\apps\orders\services\order_email_body.py:29
+#: .\apps\orders\services\order_email_body.py:30
 #, python-format
 msgid "Address: %(street)s"
 msgstr "Adresa: %(street)s"
 
-#: .\apps\orders\services\order_email_body.py:30
+#: .\apps\orders\services\order_email_body.py:31
 #, python-format
 msgid "City: %(city)s"
 msgstr "Grad: %(city)s"
 
-#: .\apps\orders\services\order_email_body.py:31
+#: .\apps\orders\services\order_email_body.py:32
 #, python-format
 msgid "Requested delivery date: %(date)s"
 msgstr "Traženi datum dostave: %(date)s"
 
-#: .\apps\orders\services\order_email_body.py:35
+#: .\apps\orders\services\order_email_body.py:36
 #, python-format
 msgid "Notes: %(notes)s"
 msgstr "Napomene: %(notes)s"
 
-#: .\apps\orders\services\order_email_body.py:41
+#: .\apps\orders\services\order_email_body.py:42
 #, python-format
 msgid "- %(name)s × %(qty)s @ %(unit)s = %(total)s"
 msgstr "- %(name)s × %(qty)s @ %(unit)s = %(total)s"
 
-#: .\apps\orders\services\order_email_body.py:53
+#: .\apps\orders\services\order_email_body.py:54
 #, python-format
 msgid "Subtotal: %(amount)s"
 msgstr "Međuzbir: %(amount)s"
 
-#: .\apps\orders\services\order_email_body.py:54
+#: .\apps\orders\services\order_email_body.py:55
 #, python-format
 msgid "Shipping: %(amount)s"
 msgstr "Dostava: %(amount)s"
 
-#: .\apps\orders\services\order_email_body.py:55
+#: .\apps\orders\services\order_email_body.py:56
 #, python-format
 msgid "Total: %(amount)s"
 msgstr "Ukupno: %(amount)s"
@@ -1337,8 +1342,8 @@ msgid "Order %(number)s"
 msgstr "Narudžbina %(number)s"
 
 #: .\apps\orders\views.py:110 .\templates\checkout\success.html:41
-#: .\templates\includes\_footer.html:39 .\templates\includes\_header.html:45
-#: .\templates\includes\_header_panel_body.html:43
+#: .\templates\includes\_footer.html:39 .\templates\includes\_header.html:34
+#: .\templates\includes\_header_panel_body.html:28
 #: .\templates\orders\detail.html:11 .\templates\orders\history.html:7
 msgid "My orders"
 msgstr "Moje narudžbine"
@@ -1516,22 +1521,42 @@ msgstr "Preostalo na stanju: %(stock)s"
 msgid "Alert threshold: %(threshold)s"
 msgstr "Prag upozorenja: %(threshold)s"
 
-#: .\apps\products\views.py:54
+#: .\apps\products\views.py:56
 #, python-format
 msgid "Search results for “%(query)s”"
 msgstr "Rezultati pretrage za „%(query)s”"
 
-#: .\apps\products\views.py:64 .\templates\includes\_header.html:13
+#: .\apps\products\views.py:66 .\templates\includes\_header.html:13
 #: .\templates\includes\_header.html:23
 #: .\templates\includes\_header_panel_body.html:8
 #: .\templates\includes\_header_panel_body.html:13
-#: .\templates\products\list.html:37 .\templates\products\list.html:38
+#: .\templates\products\list.html:41 .\templates\products\list.html:42
 msgid "Search"
 msgstr "Pretraga"
 
-#: .\apps\products\views.py:72
+#: .\apps\products\views.py:74
 msgid "Browse our product catalog."
 msgstr "Pregledajte naš katalog proizvoda."
+
+#: .\apps\products\views.py:99
+msgid "Products on special offer — prices marked down for a limited time."
+msgstr "Proizvodi na specijalnoj ponudi — snižene cene u ograničenom periodu."
+
+#: .\apps\products\views.py:107
+#| msgid "Browse product categories."
+msgid "Browse products on promo sale."
+msgstr "Pregledajte proizvode na promo akciji."
+
+#: .\apps\products\views.py:131
+#| msgid ""
+#| "Products we highlight for you — swipe or use arrows to browse."
+msgid "Products we highlight for you — hand-picked in the admin."
+msgstr "Proizvodi koje ističemo za vas — ručno izabrani u administraciji."
+
+#: .\apps\products\views.py:139
+#| msgid "Save recommended products"
+msgid "Browse our recommended products."
+msgstr "Pregledajte naše preporučene proizvode."
 
 #: .\apps\shipping\admin.py:36
 msgid ""
@@ -1600,8 +1625,8 @@ msgstr "Kupovina kao gost ne zahteva nalog."
 
 #: .\templates\accounts\login.html:23 .\templates\accounts\register.html:40
 #: .\templates\checkout\checkout.html:20 .\templates\includes\_footer.html:41
-#: .\templates\includes\_header.html:54
-#: .\templates\includes\_header_panel_body.html:50
+#: .\templates\includes\_header.html:43
+#: .\templates\includes\_header_panel_body.html:35
 #: .\templates\orders\track.html:42
 msgid "Sign in"
 msgstr "Prijava"
@@ -1610,8 +1635,8 @@ msgstr "Prijava"
 msgid "No account?"
 msgstr "Nemate nalog?"
 
-#: .\templates\accounts\login.html:28 .\templates\includes\_header.html:55
-#: .\templates\includes\_header_panel_body.html:49
+#: .\templates\accounts\login.html:28 .\templates\includes\_header.html:44
+#: .\templates\includes\_header_panel_body.html:34
 msgid "Register"
 msgstr "Registracija"
 
@@ -2035,12 +2060,10 @@ msgid "Add __AMOUNT__ RSD more to qualify for promotional delivery."
 msgstr "Dodajte još __AMOUNT__ RSD za promotivnu dostavu."
 
 #: .\templates\checkout\checkout.html:80 .\templates\checkout\checkout.html:84
-#| msgid "Delivery cost for selected city"
 msgid "Free delivery for your selected date."
 msgstr "Besplatna dostava za izabrani datum."
 
 #: .\templates\checkout\checkout.html:90
-#| msgid "Delivery street"
 msgid "Delivery date"
 msgstr "Datum dostave"
 
@@ -2126,7 +2149,7 @@ msgid ""
 msgstr "Sačuvajte broj narudžbine i email — oba su potrebna za praćenje."
 
 #: .\templates\checkout\success.html:62
-#: .\templates\includes\_header_nav_links.html:21
+#: .\templates\includes\_header_nav_links.html:37
 #: .\templates\orders\detail.html:13
 msgid "Track order"
 msgstr "Prati narudžbinu"
@@ -2255,12 +2278,12 @@ msgstr "Lokacija prodavnice na mapi"
 
 #: .\templates\includes\_header.html:21
 #: .\templates\includes\_header_panel_body.html:11
-#: .\templates\products\list.html:37
+#: .\templates\products\list.html:41
 msgid "Search products…"
 msgstr "Pretraži proizvode…"
 
-#: .\templates\includes\_header.html:51
-#: .\templates\includes\_header_panel_body.html:46
+#: .\templates\includes\_header.html:40
+#: .\templates\includes\_header_panel_body.html:31
 msgid "Sign out"
 msgstr "Odjava"
 
@@ -2281,15 +2304,15 @@ msgstr "Meni"
 msgid "Close"
 msgstr "Zatvori"
 
-#: .\templates\includes\_header_panel_body.html:34
-#: .\templates\includes\_language_switcher.html:5
-msgid "Language"
-msgstr "Jezik"
-
-#: .\templates\includes\_header_panel_body.html:41
+#: .\templates\includes\_header_panel_body.html:26
 #, python-format
 msgid "Hello, %(name)s"
 msgstr "Zdravo, %(name)s"
+
+#: .\templates\includes\_header_panel_body.html:40
+#: .\templates\includes\_language_switcher.html:5
+msgid "Language"
+msgstr "Jezik"
 
 # --- Django admin core (Serbian Latin — overrides Cyrillic contrib) ---
 #: .\templates\includes\_hero.html:2
@@ -3356,12 +3379,12 @@ msgstr "Više opcija u istoj kategoriji."
 msgid "View category"
 msgstr "Pogledaj kategoriju"
 
-#: .\templates\products\list.html:18
+#: .\templates\products\list.html:20
 #, python-format
 msgid "Search: %(query)s"
 msgstr "Pretraga: %(query)s"
 
-#: .\templates\products\list.html:27
+#: .\templates\products\list.html:31
 #, python-format
 msgid "Showing %(count)s products"
 msgstr "Prikazano %(count)s proizvoda"
@@ -3382,7 +3405,7 @@ msgid "Administration"
 msgstr "Administracija"
 
 msgid "All"
-msgstr "Sve"
+msgstr "Svi"
 
 msgid "Yes"
 msgstr "Da"
@@ -3394,7 +3417,7 @@ msgid "Unknown"
 msgstr "Nepoznato"
 
 msgid "Any date"
-msgstr "Bilo koji datum"
+msgstr "Svi datumi"
 
 msgid "Today"
 msgstr "Danas"
@@ -3409,7 +3432,7 @@ msgid "This year"
 msgstr "Ova godina"
 
 msgid "No date"
-msgstr "Bez datuma"
+msgstr "Nema datuma"
 
 msgid "Has date"
 msgstr "Ima datum"
@@ -3984,53 +4007,737 @@ msgstr "Trenutno:"
 msgid "Change:"
 msgstr "Izmena:"
 
-msgid "Group"
-msgstr "Grupa"
+msgid "Enter a valid email address."
+msgstr "Unesite ispravnu email adresu."
 
-msgid "Groups"
-msgstr "Grupe"
+msgid "Enter a valid URL."
+msgstr "Unesite ispravan URL."
 
-msgid "permission"
-msgstr "dozvola"
+msgid "Enter a whole number."
+msgstr "Unesite ceo broj."
 
-msgid "permissions"
-msgstr "dozvole"
+msgid "Enter a valid date."
+msgstr "Unesite ispravan datum."
 
-msgid "Authentication and Authorization"
-msgstr "Autentifikacija i autorizacija"
+msgid "Enter a valid time."
+msgstr "Unesite ispravno vreme."
 
-msgid "Authentication and authorization"
-msgstr "Autentifikacija i autorizacija"
+msgid "Enter a valid date/time."
+msgstr "Unesite ispravan datum i vreme."
 
-msgid "Personal info"
-msgstr "Lični podaci"
+msgid "Enter a valid UUID."
+msgstr "Unesite ispravan UUID."
 
-msgid "Important dates"
-msgstr "Važni datumi"
+msgid "Enter a valid JSON."
+msgstr "Unesite ispravan JSON."
 
-msgid "username"
-msgstr "korisničko ime"
+msgid "Enter a valid integer."
+msgstr "Unesite ispravan ceo broj."
 
-msgid "password"
-msgstr "lozinka"
+msgid "Enter a valid decimal number."
+msgstr "Unesite ispravan decimalni broj."
 
-msgid "last login"
-msgstr "poslednja prijava"
+msgid "Enter a valid value."
+msgstr "Unesite ispravnu vrednost."
 
-msgid "first name"
-msgstr "ime"
+#~ msgid "Delete selected %(verbose_name_plural)s"
+#~ msgstr "Obriši izabrane %(verbose_name_plural)s"
 
-msgid "last name"
-msgstr "prezime"
+#~ msgid "Successfully deleted %(count)d %(items)s."
+#~ msgstr "Uspešno obrisano: %(count)d %(items)s."
 
-msgid "staff status"
-msgstr "status osoblja"
+#~ msgid "Cannot delete %(name)s"
+#~ msgstr "Nije moguće obrisati %(name)s"
 
-msgid "superuser status"
-msgstr "status superkorisnika"
+#~ msgid "Are you sure?"
+#~ msgstr "Da li ste sigurni?"
 
-msgid "user permissions"
-msgstr "korisničke dozvole"
+#~ msgid "Administration"
+#~ msgstr "Administracija"
 
-msgid "Logged out"
-msgstr "Odjavljen"
+#~ msgid "All"
+#~ msgstr "Sve"
+
+#~ msgid "Yes"
+#~ msgstr "Da"
+
+#~ msgid "No"
+#~ msgstr "Ne"
+
+#~ msgid "Unknown"
+#~ msgstr "Nepoznato"
+
+#~ msgid "Any date"
+#~ msgstr "Bilo koji datum"
+
+#~ msgid "Today"
+#~ msgstr "Danas"
+
+#~ msgid "Past 7 days"
+#~ msgstr "Poslednjih 7 dana"
+
+#~ msgid "This month"
+#~ msgstr "Ovaj mesec"
+
+#~ msgid "This year"
+#~ msgstr "Ova godina"
+
+#~ msgid "No date"
+#~ msgstr "Bez datuma"
+
+#~ msgid "Has date"
+#~ msgstr "Ima datum"
+
+#~ msgid "Empty"
+#~ msgstr "Prazno"
+
+#~ msgid "Not empty"
+#~ msgstr "Nije prazno"
+
+#~ msgid ""
+#~ "Please enter the correct %(username)s and password for a staff account. Note"
+#~ " that both fields may be case-sensitive."
+#~ msgstr ""
+#~ "Unesite ispravno %(username)s i lozinku. Mala i velika slova se razlikuju."
+
+#~ msgid "Action:"
+#~ msgstr "Akcija:"
+
+#~ msgid "Add another %(verbose_name)s"
+#~ msgstr "Dodaj još jedan %(verbose_name)s"
+
+#~ msgid "Addition"
+#~ msgstr "Dodavanje"
+
+#~ msgid "Change"
+#~ msgstr "Izmeni"
+
+#~ msgid "Deletion"
+#~ msgstr "Brisanje"
+
+#~ msgid "action time"
+#~ msgstr "vreme akcije"
+
+#~ msgid "content type"
+#~ msgstr "tip sadržaja"
+
+#~ msgid "object id"
+#~ msgstr "id objekta"
+
+#~ msgid "object repr"
+#~ msgstr "prikaz objekta"
+
+#~ msgid "action flag"
+#~ msgstr "oznaka akcije"
+
+#~ msgid "change message"
+#~ msgstr "poruka izmene"
+
+#~ msgid "log entry"
+#~ msgstr "zapis u logu"
+
+#~ msgid "log entries"
+#~ msgstr "zapisi u logu"
+
+#~ msgid "Added “%(object)s”."
+#~ msgstr "Dodato „%(object)s“."
+
+#~ msgid "Changed “%(object)s” — %(changes)s"
+#~ msgstr "Izmenjeno „%(object)s“ — %(changes)s"
+
+#~ msgid "Deleted “%(object)s.”"
+#~ msgstr "Obrisano „%(object)s“."
+
+#~ msgid "LogEntry Object"
+#~ msgstr "Objekat log zapisa"
+
+#~ msgid "Added {name} “{object}”."
+#~ msgstr "Dodat {name} „{object}“."
+
+#~ msgid "Added."
+#~ msgstr "Dodato."
+
+#~ msgid "Changed {fields} for {name} “{object}”."
+#~ msgstr "Izmenjena polja {fields} za {name} „{object}“."
+
+#~ msgid "Changed {fields}."
+#~ msgstr "Izmenjena polja {fields}."
+
+#~ msgid "Deleted {name} “{object}”."
+#~ msgstr "Obrisan {name} „{object}“."
+
+#~ msgid "No fields changed."
+#~ msgstr "Nema izmena u poljima."
+
+#~ msgid "None"
+#~ msgstr "Ništa"
+
+#~ msgid "Hold down “Control”, or “Command” on a Mac, to select more than one."
+#~ msgstr ""
+#~ "Držite „Control“, ili „Command“ na Mac-u, da biste izabrali više stavki."
+
+#~ msgid "Select this object for an action - {}"
+#~ msgstr "Izaberite ovaj objekat za akciju - {}"
+
+#~ msgid "The {name} “{obj}” was added successfully."
+#~ msgstr "{name} „{obj}“ je uspešno dodat."
+
+#~ msgid "You may edit it again below."
+#~ msgstr "Možete ga ponovo izmeniti ispod."
+
+#~ msgid ""
+#~ "The {name} “{obj}” was added successfully. You may add another {name} below."
+#~ msgstr ""
+#~ "{name} „{obj}“ je uspešno dodat. Možete dodati još jedan {name} ispod."
+
+#~ msgid ""
+#~ "The {name} “{obj}” was changed successfully. You may edit it again below."
+#~ msgstr "{name} „{obj}“ je uspešno izmenjen. Možete ga ponovo izmeniti ispod."
+
+#~ msgid ""
+#~ "The {name} “{obj}” was changed successfully. You may add another {name} "
+#~ "below."
+#~ msgstr ""
+#~ "{name} „{obj}“ je uspešno izmenjen. Možete dodati još jedan {name} ispod."
+
+#~ msgid "The {name} “{obj}” was changed successfully."
+#~ msgstr "{name} „{obj}“ je uspešno izmenjen."
+
+#~ msgid ""
+#~ "Items must be selected in order to perform actions on them. No items have "
+#~ "been changed."
+#~ msgstr ""
+#~ "Morate izabrati stavke da biste izvršili akciju. Nijedna stavka nije "
+#~ "izmenjena."
+
+#~ msgid "No action selected."
+#~ msgstr "Nije izabrana nijedna akcija."
+
+#~ msgid "The %(name)s “%(obj)s” was deleted successfully."
+#~ msgstr "%(name)s „%(obj)s“ je uspešno obrisan."
+
+#~ msgid "%(name)s with ID “%(key)s” doesn’t exist. Perhaps it was deleted?"
+#~ msgstr "%(name)s sa ID „%(key)s“ ne postoji. Možda je obrisan?"
+
+#~ msgid "Add %s"
+#~ msgstr "Dodaj %s"
+
+#~ msgid "Change %s"
+#~ msgstr "Izmeni %s"
+
+#~ msgid "View %s"
+#~ msgstr "Pregled %s"
+
+#~ msgid "Database error"
+#~ msgstr "Greška u bazi podataka"
+
+#~ msgid "%(count)s %(name)s was changed successfully."
+#~ msgid_plural "%(count)s %(name)s were changed successfully."
+#~ msgstr[0] "Uspešno izmenjen %(count)s %(name)s."
+#~ msgstr[1] "Uspešno izmenjena %(count)s %(name)s."
+#~ msgstr[2] "Uspešno izmenjeno %(count)s %(name)s."
+
+#~ msgid "%(total_count)s selected"
+#~ msgid_plural "All %(total_count)s selected"
+#~ msgstr[0] "%(total_count)s izabran"
+#~ msgstr[1] "Sva %(total_count)s izabrana"
+#~ msgstr[2] "Svih %(total_count)s izabranih"
+
+#~ msgid "0 of %(cnt)s selected"
+#~ msgstr "0 od %(cnt)s izabrano"
+
+#~ msgid "Change history: %s"
+#~ msgstr "Istorija izmena: %s"
+
+#~ msgid "%(class_name)s %(instance)s"
+#~ msgstr "%(class_name)s %(instance)s"
+
+#~ msgid ""
+#~ "Deleting %(class_name)s %(instance)s would require deleting the following "
+#~ "protected related objects: %(related_objects)s"
+#~ msgstr ""
+#~ "Brisanje %(class_name)s %(instance)s zahteva brisanje sledećih zaštićenih "
+#~ "povezanih objekata: %(related_objects)s"
+
+#~ msgid "Django administration"
+#~ msgstr "Django administracija"
+
+#~ msgid "Site administration"
+#~ msgstr "Administracija sajta"
+
+#~ msgid "Log in"
+#~ msgstr "Prijava"
+
+#~ msgid "%(app)s administration"
+#~ msgstr "%(app)s administracija"
+
+#~ msgid "Page not found"
+#~ msgstr "Stranica nije pronađena"
+
+#~ msgid "We’re sorry, but the requested page could not be found."
+#~ msgstr "Žao nam je, tražena stranica nije pronađena."
+
+#~ msgid "Server error"
+#~ msgstr "Greška na serveru"
+
+#~ msgid "Server error (500)"
+#~ msgstr "Greška na serveru (500)"
+
+#~ msgid "Server Error <em>(500)</em>"
+#~ msgstr "Greška na serveru <em>(500)</em>"
+
+#~ msgid ""
+#~ "There’s been an error. It’s been reported to the site administrators via "
+#~ "email and should be fixed shortly. Thanks for your patience."
+#~ msgstr ""
+#~ "Došlo je do greške. Prijavljena je administratorima putem emaila i uskoro bi"
+#~ " trebalo da bude ispravljena. Hvala na strpljenju."
+
+#~ msgid "Run the selected action"
+#~ msgstr "Pokreni izabranu akciju"
+
+#~ msgid "Go"
+#~ msgstr "Primeni"
+
+#~ msgid "Click here to select the objects across all pages"
+#~ msgstr "Kliknite da izaberete objekte na svim stranicama"
+
+#~ msgid "Select all %(total_count)s %(module_name)s"
+#~ msgstr "Izaberi svih %(total_count)s — %(module_name)s"
+
+#~ msgid "Clear selection"
+#~ msgstr "Poništi izbor"
+
+#~ msgid "Breadcrumbs"
+#~ msgstr "Putanja"
+
+#~ msgid "Models in the %(name)s application"
+#~ msgstr "Modeli u aplikaciji %(name)s"
+
+#~ msgid "View"
+#~ msgstr "Pregled"
+
+#~ msgid ""
+#~ "First, enter a username and password. Then, you’ll be able to edit more user"
+#~ " options."
+#~ msgstr ""
+#~ "Prvo unesite korisničko ime i lozinku. Zatim možete menjati dodatna "
+#~ "korisnička podešavanja."
+
+#~ msgid "Enter a username and password."
+#~ msgstr "Unesite korisničko ime i lozinku."
+
+#~ msgid "Set password"
+#~ msgstr "Postavi lozinku"
+
+#~ msgid "Please correct the error below."
+#~ msgid_plural "Please correct the errors below."
+#~ msgstr[0] "Ispravite grešku ispod."
+#~ msgstr[1] "Ispravite greške ispod."
+#~ msgstr[2] "Ispravite greške ispod."
+
+#~ msgid "Enter a new password for the user <strong>%(username)s</strong>."
+#~ msgstr "Unesite novu lozinku za korisnika <strong>%(username)s</strong>."
+
+#~ msgid ""
+#~ "This action will <strong>enable</strong> password-based authentication for "
+#~ "this user."
+#~ msgstr ""
+#~ "Ova akcija će <strong>omogućiti</strong> autentifikaciju zasnovanu na "
+#~ "lozinci za ovog korisnika."
+
+#~ msgid "Disable password-based authentication"
+#~ msgstr "Onemogući autentifikaciju zasnovanu na lozinci"
+
+#~ msgid "Enable password-based authentication"
+#~ msgstr "Omogući autentifikaciju zasnovanu na lozinci"
+
+#~ msgid "Skip to main content"
+#~ msgstr "Preskoči na glavni sadržaj"
+
+#~ msgid "Documentation"
+#~ msgstr "Dokumentacija"
+
+#~ msgid "History"
+#~ msgstr "Istorija"
+
+#~ msgid "View on site"
+#~ msgstr "Pregled na sajtu"
+
+#~ msgid "Filter"
+#~ msgstr "Filter"
+
+#~ msgid "Hide counts"
+#~ msgstr "Sakrij brojeve"
+
+#~ msgid "Show counts"
+#~ msgstr "Prikaži brojeve"
+
+#~ msgid "Clear all filters"
+#~ msgstr "Obriši sve filtere"
+
+#~ msgid "Toggle theme (current theme: auto)"
+#~ msgstr "Uključi/isključi temu (trenutna tema: auto)"
+
+#~ msgid "Toggle theme (current theme: light)"
+#~ msgstr "Uključi/isključi temu (trenutna tema: svetla)"
+
+#~ msgid "Toggle theme (current theme: dark)"
+#~ msgstr "Uključi/isključi temu (trenutna tema: tamna)"
+
+#~ msgid "Delete"
+#~ msgstr "Obriši"
+
+#~ msgid ""
+#~ "Deleting the %(object_name)s '%(escaped_object)s' would result in deleting "
+#~ "related objects, but your account doesn't have permission to delete the "
+#~ "following types of objects:"
+#~ msgstr ""
+#~ "Brisanje %(object_name)s „%(escaped_object)s“ povlači brisanje povezanih "
+#~ "objekata, ali nemate dozvolu da brišete sledeće tipove objekata:"
+
+#~ msgid ""
+#~ "Deleting the %(object_name)s '%(escaped_object)s' would require deleting the"
+#~ " following protected related objects:"
+#~ msgstr ""
+#~ "Brisanje %(object_name)s „%(escaped_object)s“ zahteva brisanje sledećih "
+#~ "zaštićenih povezanih objekata:"
+
+#~ msgid ""
+#~ "Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"? "
+#~ "All of the following related items will be deleted:"
+#~ msgstr ""
+#~ "Da li ste sigurni da želite da obrišete %(object_name)s "
+#~ "„%(escaped_object)s“? Sve sledeće povezane stavke biće obrisane:"
+
+#~ msgid "Objects"
+#~ msgstr "Objekti"
+
+#~ msgid "Yes, I’m sure"
+#~ msgstr "Da, siguran sam"
+
+#~ msgid "No, take me back"
+#~ msgstr "Ne, vrati me nazad"
+
+#~ msgid "Delete multiple objects"
+#~ msgstr "Brisanje više objekata"
+
+#~ msgid ""
+#~ "Deleting the selected %(objects_name)s would result in deleting related "
+#~ "objects, but your account doesn't have permission to delete the following "
+#~ "types of objects:"
+#~ msgstr ""
+#~ "Brisanje izabranih %(objects_name)s povlači brisanje povezanih objekata, ali"
+#~ " nemate dozvolu da brišete sledeće tipove objekata:"
+
+#~ msgid ""
+#~ "Deleting the selected %(objects_name)s would require deleting the following "
+#~ "protected related objects:"
+#~ msgstr ""
+#~ "Brisanje izabranih %(objects_name)s zahteva brisanje sledećih zaštićenih "
+#~ "povezanih objekata:"
+
+#~ msgid ""
+#~ "Are you sure you want to delete the selected %(objects_name)s? All of the "
+#~ "following objects and their related items will be deleted:"
+#~ msgstr ""
+#~ "Da li ste sigurni da želite da obrišete izabrane %(objects_name)s? Svi "
+#~ "sledeći objekti i povezane stavke biće obrisani:"
+
+#~ msgid "Delete?"
+#~ msgstr "Obrisati?"
+
+#~ msgid " By %(filter_title)s "
+#~ msgstr " Po %(filter_title)s "
+
+#~ msgid "Summary"
+#~ msgstr "Rezime"
+
+#~ msgid "My actions"
+#~ msgstr "Moje akcije"
+
+#~ msgid "None available"
+#~ msgstr "Nema podataka"
+
+#~ msgid ""
+#~ "Something’s wrong with your database installation. Make sure the appropriate"
+#~ " database tables have been created, and make sure the database is readable "
+#~ "by the appropriate user."
+#~ msgstr ""
+#~ "Nešto nije u redu sa instalacijom baze. Proverite da postoje odgovarajuće "
+#~ "tabele i da korisnik ima pristup bazi."
+
+#~ msgid ""
+#~ "You are authenticated as %(username)s, but are not authorized to access this"
+#~ " page. Would you like to login to a different account?"
+#~ msgstr ""
+#~ "Prijavljeni ste kao %(username)s, ali nemate ovlašćenje za ovu stranicu. "
+#~ "Želite li da se prijavite na drugi nalog?"
+
+#~ msgid "Forgotten your password or username?"
+#~ msgstr "Zaboravili ste lozinku ili korisničko ime?"
+
+#~ msgid "Start typing to filter…"
+#~ msgstr "Kucajte za filtriranje…"
+
+#~ msgid "Date/time"
+#~ msgstr "Datum/vreme"
+
+#~ msgid "Action"
+#~ msgstr "Akcija"
+
+#~ msgid "entry"
+#~ msgid_plural "entries"
+#~ msgstr[0] "unos"
+#~ msgstr[1] "unosa"
+#~ msgstr[2] "unosa"
+
+#~ msgid ""
+#~ "This object doesn’t have a change history. It probably wasn’t added via this"
+#~ " admin site."
+#~ msgstr ""
+#~ "Ovaj objekat nema istoriju izmena. Verovatno nije dodat preko ove "
+#~ "administracije."
+
+#~ msgid "%(counter)s result"
+#~ msgid_plural "%(counter)s results"
+#~ msgstr[0] "%(counter)s rezultat"
+#~ msgstr[1] "%(counter)s rezultata"
+#~ msgstr[2] "%(counter)s rezultata"
+
+#~ msgid "%(full_result_count)s total"
+#~ msgstr "ukupno %(full_result_count)s"
+
+#~ msgid "Save as new"
+#~ msgstr "Sačuvaj kao novi"
+
+#~ msgid "Save and add another"
+#~ msgstr "Sačuvaj i dodaj još jedan"
+
+#~ msgid "Save and continue editing"
+#~ msgstr "Sačuvaj i nastavi izmenu"
+
+#~ msgid "Save and view"
+#~ msgstr "Sačuvaj i pogledaj"
+
+#~ msgid "Change selected %(model)s"
+#~ msgstr "Izmeni izabrani %(model)s"
+
+#~ msgid "Add another %(model)s"
+#~ msgstr "Dodaj još jedan %(model)s"
+
+#~ msgid "Delete selected %(model)s"
+#~ msgstr "Obriši izabrani %(model)s"
+
+#~ msgid "View selected %(model)s"
+#~ msgstr "Pregled izabranog %(model)s"
+
+#~ msgid "Thanks for spending some quality time with the web site today."
+#~ msgstr "Hvala što ste danas posetili sajt."
+
+#~ msgid "Log in again"
+#~ msgstr "Prijavi se ponovo"
+
+#~ msgid "Password change"
+#~ msgstr "Promena lozinke"
+
+#~ msgid "Your password was changed."
+#~ msgstr "Vaša lozinka je promenjena."
+
+#~ msgid ""
+#~ "Please enter your old password, for security’s sake, and then enter your new"
+#~ " password twice so we can verify you typed it in correctly."
+#~ msgstr ""
+#~ "Iz bezbednosnih razloga prvo unesite staru lozinku, zatim novu dva puta da "
+#~ "proverimo unos."
+
+#~ msgid "Change my password"
+#~ msgstr "Promeni moju lozinku"
+
+#~ msgid "Password reset"
+#~ msgstr "Resetovanje lozinke"
+
+#~ msgid "Your password has been set.  You may go ahead and log in now."
+#~ msgstr "Vaša lozinka je postavljena. Možete se prijaviti."
+
+#~ msgid "Password reset confirmation"
+#~ msgstr "Potvrda resetovanja lozinke"
+
+#~ msgid ""
+#~ "Please enter your new password twice so we can verify you typed it in "
+#~ "correctly."
+#~ msgstr ""
+#~ "Unesite novu lozinku dva puta da proverimo da li ste je pravilno uneli."
+
+#~ msgid "New password:"
+#~ msgstr "Nova lozinka:"
+
+#~ msgid "Confirm password:"
+#~ msgstr "Potvrda lozinke:"
+
+#~ msgid ""
+#~ "The password reset link was invalid, possibly because it has already been "
+#~ "used.  Please request a new password reset."
+#~ msgstr ""
+#~ "Link za resetovanje lozinke nije važeći, verovatno je već iskorišćen. "
+#~ "Zatražite novo resetovanje."
+
+#~ msgid ""
+#~ "We’ve emailed you instructions for setting your password, if an account "
+#~ "exists with the email you entered. You should receive them shortly."
+#~ msgstr ""
+#~ "Poslali smo uputstva za postavljanje lozinke, ako nalog sa tim emailom "
+#~ "postoji. Trebalo bi da ih uskoro dobijete."
+
+#~ msgid ""
+#~ "If you don’t receive an email, please make sure you’ve entered the address "
+#~ "you registered with, and check your spam folder."
+#~ msgstr ""
+#~ "Ako ne dobijete email, proverite da li ste uneli adresu sa kojom ste se "
+#~ "registrovali i proverite spam folder."
+
+#~ msgid ""
+#~ "You're receiving this email because you requested a password reset for your "
+#~ "user account at %(site_name)s."
+#~ msgstr ""
+#~ "Primate ovu poruku jer ste zatražili resetovanje lozinke za nalog na "
+#~ "%(site_name)s."
+
+#~ msgid "Please go to the following page and choose a new password:"
+#~ msgstr "Idite na sledeću stranicu i izaberite novu lozinku."
+
+#~ msgid "Your username, in case you’ve forgotten:"
+#~ msgstr "Vaše korisničko ime, ukoliko ste zaboravili:"
+
+#~ msgid "Thanks for using our site!"
+#~ msgstr "Hvala što koristite naš sajt!"
+
+#~ msgid "The %(site_name)s team"
+#~ msgstr "Tim sajta %(site_name)s"
+
+#~ msgid ""
+#~ "Forgotten your password? Enter your email address below, and we’ll email "
+#~ "instructions for setting a new one."
+#~ msgstr ""
+#~ "Zaboravili ste lozinku? Unesite email adresu ispod i poslaćemo uputstva za "
+#~ "novu lozinku."
+
+#~ msgid "Email address:"
+#~ msgstr "Email adresa:"
+
+#~ msgid "Reset my password"
+#~ msgstr "Resetuj moju lozinku"
+
+#~ msgid "Select all objects on this page for an action"
+#~ msgstr "Izaberite sve objekte na ovoj stranici za akciju"
+
+#~ msgid "All dates"
+#~ msgstr "Svi datumi"
+
+#~ msgid "Select %s"
+#~ msgstr "Izaberite %s"
+
+#~ msgid "Select %s to change"
+#~ msgstr "Izaberite %s za izmenu"
+
+#~ msgid "Select %s to view"
+#~ msgstr "Izaberite %s za pregled"
+
+#~ msgid "Date:"
+#~ msgstr "Datum:"
+
+#~ msgid "Time:"
+#~ msgstr "Vreme:"
+
+#~ msgid "Lookup"
+#~ msgstr "Pretraži"
+
+#~ msgid "Currently:"
+#~ msgstr "Trenutno:"
+
+#~ msgid "Change:"
+#~ msgstr "Izmena:"
+
+#~ msgid "Group"
+#~ msgstr "Grupa"
+
+#~ msgid "Groups"
+#~ msgstr "Grupe"
+
+#~ msgid "permission"
+#~ msgstr "dozvola"
+
+#~ msgid "permissions"
+#~ msgstr "dozvole"
+
+#~ msgid "Authentication and Authorization"
+#~ msgstr "Autentifikacija i autorizacija"
+
+#~ msgid "Authentication and authorization"
+#~ msgstr "Autentifikacija i autorizacija"
+
+#~ msgid "Personal info"
+#~ msgstr "Lični podaci"
+
+#~ msgid "Important dates"
+#~ msgstr "Važni datumi"
+
+#~ msgid "username"
+#~ msgstr "korisničko ime"
+
+#~ msgid "password"
+#~ msgstr "lozinka"
+
+#~ msgid "last login"
+#~ msgstr "poslednja prijava"
+
+#~ msgid "first name"
+#~ msgstr "ime"
+
+#~ msgid "last name"
+#~ msgstr "prezime"
+
+#~ msgid "staff status"
+#~ msgstr "status osoblja"
+
+#~ msgid "superuser status"
+#~ msgstr "status superkorisnika"
+
+#~ msgid "user permissions"
+#~ msgstr "korisničke dozvole"
+
+#~ msgid "Logged out"
+#~ msgstr "Odjavljen"
+
+#~ msgid "Enter a valid email address."
+#~ msgstr "Unesite ispravnu email adresu."
+
+#~ msgid "Enter a valid URL."
+#~ msgstr "Unesite ispravan URL."
+
+#~ msgid "Enter a whole number."
+#~ msgstr "Unesite ceo broj."
+
+#~ msgid "Enter a valid date."
+#~ msgstr "Unesite ispravan datum."
+
+#~ msgid "Enter a valid time."
+#~ msgstr "Unesite ispravno vreme."
+
+#~ msgid "Enter a valid date/time."
+#~ msgstr "Unesite ispravan datum i vreme."
+
+#~ msgid "Enter a valid UUID."
+#~ msgstr "Unesite ispravan UUID."
+
+#~ msgid "Enter a valid JSON."
+#~ msgstr "Unesite ispravan JSON."
+
+#~ msgid "Enter a valid integer."
+#~ msgstr "Unesite ispravan ceo broj."
+
+#~ msgid "Enter a valid decimal number."
+#~ msgstr "Unesite ispravan decimalni broj."
+
+#~ msgid "Enter a valid value."
+#~ msgstr "Unesite ispravnu vrednost."

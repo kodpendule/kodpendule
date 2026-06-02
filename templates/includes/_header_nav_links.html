@@ -1,30 +1,38 @@
 {% load shop_urls i18n %}
 {# Shared primary nav links — include with optional link_class #}
+{% shop_url 'core:home' as home_url %}
+{% shop_url 'products:list' as products_url %}
+{% shop_url 'products:promo' as promo_url %}
+{% shop_url 'products:recommended' as recommended_url %}
+{% shop_url 'categories:list' as categories_url %}
+{% shop_url 'core:contact' as contact_url %}
+{% shop_url 'orders:track' as track_url %}
+
 <li class="nav-item">
-    <a class="nav-link {{ link_class }}{% if request.resolver_match.namespace == 'core' and request.resolver_match.view_name == 'home' %} active{% endif %}"
-       href="{% shop_url 'core:home' %}">{% trans "Home" %}</a>
+    <a class="nav-link {{ link_class }}{% if request.path == home_url %} active{% endif %}"
+       href="{{ home_url }}">{% trans "Home" %}</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link {{ link_class }}{% if request.resolver_match.namespace == 'products' %} active{% endif %}"
-       href="{% shop_url 'products:list' %}">{% trans "Products" %}</a>
+    <a class="nav-link {{ link_class }}{% if request.path == products_url %} active{% endif %}"
+       href="{{ products_url }}">{% trans "Products" %}</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link {{ link_class }}{% if request.resolver_match.namespace == 'categories' %} active{% endif %}"
-       href="{% shop_url 'categories:list' %}">{% trans "Categories" %}</a>
+    <a class="nav-link {{ link_class }}{% if request.path == promo_url %} active{% endif %}"
+       href="{{ promo_url }}">{% trans "Promo sales" %}</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link {{ link_class }}{% if request.resolver_match.view_name == 'contact' %} active{% endif %}"
-       href="{% shop_url 'core:contact' %}">{% trans "Contact" %}</a>
+    <a class="nav-link {{ link_class }}{% if request.path == recommended_url %} active{% endif %}"
+       href="{{ recommended_url }}">{% trans "Recommended products" %}</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link {{ link_class }}{% if request.resolver_match.view_name == 'track' %} active{% endif %}"
-       href="{% shop_url 'orders:track' %}">{% trans "Track order" %}</a>
+    <a class="nav-link {{ link_class }}{% if request.path == categories_url %} active{% endif %}"
+       href="{{ categories_url }}">{% trans "Categories" %}</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link {{ link_class }}{% if request.resolver_match.view_name == 'terms' %} active{% endif %}"
-       href="{% shop_url 'core:terms' %}">{% trans "Terms of Service" %}</a>
+    <a class="nav-link {{ link_class }}{% if request.path == contact_url %} active{% endif %}"
+       href="{{ contact_url }}">{% trans "Contact" %}</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link {{ link_class }}{% if request.resolver_match.view_name == 'privacy' %} active{% endif %}"
-       href="{% shop_url 'core:privacy' %}">{% trans "Privacy Policy" %}</a>
+    <a class="nav-link {{ link_class }}{% if request.path == track_url %} active{% endif %}"
+       href="{{ track_url }}">{% trans "Track order" %}</a>
 </li>

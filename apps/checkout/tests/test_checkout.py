@@ -181,6 +181,25 @@ class CheckoutServiceTests(TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn("requested_delivery_date", form.errors)
 
+    def test_required_field_errors_use_latin_not_cyrillic(self) -> None:
+        form = CheckoutForm(
+            data={
+                "guest_email": "",
+                "first_name": "",
+                "last_name": "",
+                "phone": "",
+                "shipping_city": "",
+                "shipping_street": "",
+                "delivery_timing": DeliveryTiming.SAME_DAY,
+                "order_notes": "",
+            },
+            user=None,
+        )
+        self.assertFalse(form.is_valid())
+        errors_text = " ".join(str(error) for errors in form.errors.values() for error in errors)
+        self.assertIn("Ovo polje je obavezno", errors_text)
+        self.assertNotIn("Ово", errors_text)
+
     def test_checkout_page_omits_removed_fields(self) -> None:
         suffix = uuid.uuid4().hex[:8]
         category = Category.objects.create(is_active=True)

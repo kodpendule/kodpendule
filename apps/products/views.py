@@ -13,6 +13,8 @@ from apps.products.selectors import (
     active_products_qs,
     filter_products_by_category,
     get_product_by_slug,
+    promo_products_qs,
+    recommended_products_qs,
     related_products,
     search_products,
 )
@@ -73,6 +75,70 @@ class ProductListView(ShopLanguageMixin, ListView):
                 "canonical_url": self.request.build_absolute_uri(
                     self.request.path
                 ),
+            }
+        )
+        return context
+
+
+class PromoProductListView(ShopLanguageMixin, ListView):
+    template_name = "products/list.html"
+    context_object_name = "products"
+    paginate_by = settings.SHOP_PRODUCTS_PER_PAGE
+
+    def get_queryset(self):
+        return promo_products_qs(self.shop_language)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for product in context.get("products", []):
+            activate_parler_language(product, self.shop_language)
+        context.update(
+            {
+                "catalog_title": _("Promo sales"),
+                "catalog_subtitle": _(
+                    "Products on special offer — prices marked down for a limited time."
+                ),
+                "breadcrumb_items": [
+                    home_crumb(),
+                    products_crumb(),
+                    (_("Promo sales"), None),
+                ],
+                "meta_title": _("Promo sales"),
+                "meta_description": _("Browse products on promo sale."),
+                "canonical_url": self.request.build_absolute_uri(self.request.path),
+                "hide_category_nav": True,
+            }
+        )
+        return context
+
+
+class RecommendedProductListView(ShopLanguageMixin, ListView):
+    template_name = "products/list.html"
+    context_object_name = "products"
+    paginate_by = settings.SHOP_PRODUCTS_PER_PAGE
+
+    def get_queryset(self):
+        return recommended_products_qs(self.shop_language)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for product in context.get("products", []):
+            activate_parler_language(product, self.shop_language)
+        context.update(
+            {
+                "catalog_title": _("Recommended products"),
+                "catalog_subtitle": _(
+                    "Products we highlight for you — hand-picked in the admin."
+                ),
+                "breadcrumb_items": [
+                    home_crumb(),
+                    products_crumb(),
+                    (_("Recommended products"), None),
+                ],
+                "meta_title": _("Recommended products"),
+                "meta_description": _("Browse our recommended products."),
+                "canonical_url": self.request.build_absolute_uri(self.request.path),
+                "hide_category_nav": True,
             }
         )
         return context

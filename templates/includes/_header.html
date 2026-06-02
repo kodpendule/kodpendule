@@ -25,17 +25,6 @@
             </form>
 
             <div class="shop-header__actions">
-                <a class="shop-header__action shop-header__cart" href="{% shop_url 'cart:detail' %}"
-                   aria-label="{% trans 'Cart' %}{% if cart_item_count %} ({{ cart_item_count }}){% endif %}">
-                    <span class="shop-header__action-icon" aria-hidden="true">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
-                            <path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6l-1-3H3"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/>
-                        </svg>
-                    </span>
-                    <span class="d-none d-md-inline">{% trans "Cart" %}</span>
-                    <span class="shop-header__badge" data-cart-header-count{% if not cart_item_count %} hidden{% endif %}>{% if cart_item_count %}{{ cart_item_count }}{% else %}0{% endif %}</span>
-                </a>
-
                 <div class="shop-header__action shop-header__lang-wrap d-none d-md-block">
                     {% include "includes/_language_switcher.html" %}
                 </div>
@@ -55,6 +44,17 @@
                     <a class="shop-btn shop-btn--primary shop-btn--sm" href="{% shop_url 'accounts:register' %}">{% trans "Register" %}</a>
                     {% endif %}
                 </div>
+
+                <a class="shop-header__action shop-header__cart" href="{% shop_url 'cart:detail' %}"
+                   aria-label="{% trans 'Cart' %}{% if cart_item_count %} ({{ cart_item_count }}){% endif %}">
+                    <span class="shop-header__action-icon" aria-hidden="true">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                            <path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6l-1-3H3"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/>
+                        </svg>
+                    </span>
+                    <span class="d-none d-md-inline">{% trans "Cart" %}</span>
+                    <span class="shop-header__badge" data-cart-header-count{% if not cart_item_count %} hidden{% endif %}>{% if cart_item_count %}{{ cart_item_count }}{% else %}0{% endif %}</span>
+                </a>
 
                 <button class="shop-header__menu-btn d-lg-none shop-header__menu-btn--top" type="button"
                         data-bs-toggle="offcanvas" data-bs-target="#shopHeaderPanel"

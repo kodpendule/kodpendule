@@ -11,7 +11,9 @@ EMAIL_SETTINGS = {
     "EMAIL_BACKEND": "django.core.mail.backends.locmem.EmailBackend",
     "EMAIL_HOST": "smtp.sendgrid.net",
     "SENDGRID_API_KEY": "test-key",
+    "SHOP_FROM_EMAIL": "info@kodpendule.com",
     "SHOP_NOTIFICATION_EMAIL": "admin@example.com",
+    "DEFAULT_FROM_EMAIL": "info@kodpendule.com",
 }
 
 
