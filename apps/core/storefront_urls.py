@@ -110,14 +110,20 @@ def resolve_storefront_route(path: str) -> RouteMatch | None:
     return RouteMatch(viewname=viewname, kwargs=dict(match.kwargs), language=language)
 
 
-def _slug_for_target_language(viewname: str, slug: str, target_language: str) -> str:
-    if viewname == "categories:detail":
-        from apps.categories.selectors import get_category_by_slug
-        from apps.core.slugs import localized_slug
+def _category_path_for_target_language(
+    category_path: str,
+    target_language: str,
+    source_language: str | None = None,
+) -> str:
+    from apps.categories.selectors import category_path_for_url, get_category_by_path
 
-        category = get_category_by_slug(slug)
-        if category is not None:
-            return localized_slug(category, target_language) or slug
+    category = get_category_by_path(category_path, source_language)
+    if category is not None:
+        return category_path_for_url(category, target_language) or category_path
+    return category_path
+
+
+def _slug_for_target_language(viewname: str, slug: str, target_language: str) -> str:
     if viewname == "products:detail":
         from apps.core.slugs import localized_slug
         from apps.products.selectors import get_product_by_slug
@@ -146,7 +152,13 @@ def translate_storefront_url(url: str, target_language: str) -> str:
         return url
 
     kwargs = dict(route.kwargs)
-    if "slug" in kwargs:
+    if route.viewname == "categories:detail" and "category_path" in kwargs:
+        kwargs["category_path"] = _category_path_for_target_language(
+            kwargs["category_path"],
+            target_language,
+            route.language,
+        )
+    elif "slug" in kwargs:
         kwargs["slug"] = _slug_for_target_language(
             route.viewname,
             kwargs["slug"],

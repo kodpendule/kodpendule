@@ -1,14 +1,19 @@
 from django.conf import settings
 from django.http import Http404
+from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import ListView
 
+from apps.categories.models import Category
 from apps.categories.selectors import (
+    category_path_for_url,
+    get_category_by_path,
     get_category_by_slug,
-    get_category_subtree,
-    get_category_tree,
+    get_child_categories,
+    get_nav_categories,
 )
-from apps.core.breadcrumbs import categories_crumb, home_crumb
+from apps.core.storefront_urls import shop_reverse
+from apps.core.breadcrumbs import category_breadcrumb_items, home_crumb
 from apps.core.mixins import ShopLanguageMixin
 from apps.core.utils import activate_parler_language
 from apps.core.templatetags.shop_tags import category_meta_title
@@ -23,12 +28,12 @@ class CategoryListView(ShopLanguageMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        category_tree = get_category_tree(self.shop_language)
-        for node in _walk_category_tree(category_tree):
-            activate_parler_language(node.category, self.shop_language)
+        root_categories = list(get_nav_categories(self.shop_language))
+        for category in root_categories:
+            activate_parler_language(category, self.shop_language)
         context.update(
             {
-                "category_tree": category_tree,
+                "root_categories": root_categories,
                 "breadcrumb_items": [home_crumb(), (_("Categories"), None)],
                 "meta_title": _("Categories"),
                 "meta_description": _("Browse product categories."),
@@ -38,48 +43,64 @@ class CategoryListView(ShopLanguageMixin, ListView):
         return context
 
 
-def _walk_category_tree(nodes):
-    for node in nodes:
-        yield node
-        yield from _walk_category_tree(node.children)
-
-
 class CategoryDetailView(ShopLanguageMixin, ListView):
     template_name = "categories/detail.html"
     context_object_name = "products"
     paginate_by = settings.SHOP_PRODUCTS_PER_PAGE
 
     def dispatch(self, request, *args, **kwargs):
-        self.category = get_category_by_slug(kwargs["slug"], self.shop_language)
+        path = (kwargs.get("category_path") or "").strip("/")
+        self.category = get_category_by_path(path, self.shop_language)
+        if self.category is None and path and "/" not in path:
+            legacy = get_category_by_slug(path, self.shop_language)
+            if legacy is not None:
+                canonical = legacy.get_absolute_url()
+                if canonical != request.path:
+                    return redirect(canonical, permanent=True)
         if self.category is None:
             raise Http404(_("Category not found."))
+        canonical_path = category_path_for_url(self.category, self.shop_language)
+        if canonical_path and path != canonical_path:
+            return redirect(
+                shop_reverse(
+                    "categories:detail",
+                    category_path=canonical_path,
+                ),
+                permanent=True,
+            )
+        self.child_categories = list(
+            get_child_categories(self.category, self.shop_language)
+        )
+        for child in self.child_categories:
+            activate_parler_language(child, self.shop_language)
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
+        if self.child_categories:
+            return filter_products_by_category(
+                self.category,
+                self.shop_language,
+                include_children=True,
+            ).none()
         return filter_products_by_category(
             self.category,
             self.shop_language,
-            include_children=True,
+            include_children=False,
         )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        category = self.category
         for product in context.get("products", []):
             activate_parler_language(product, self.shop_language)
-        category = self.category
-        category_subtree = get_category_subtree(category, self.shop_language)
-        for node in _walk_category_tree(category_subtree):
-            activate_parler_language(node.category, self.shop_language)
         context.update(
             {
                 "category": category,
-                "active_category": category,
-                "category_subtree": category_subtree,
-                "breadcrumb_items": [
-                    home_crumb(),
-                    categories_crumb(),
-                    (category.name, None),
-                ],
+                "child_categories": self.child_categories,
+                "show_child_categories": bool(self.child_categories),
+                "breadcrumb_items": category_breadcrumb_items(
+                    category, self.shop_language
+                ),
                 "meta_title": category_meta_title(
                     category, context.get("site_settings")
                 ),

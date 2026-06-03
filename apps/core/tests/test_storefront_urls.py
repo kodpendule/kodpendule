@@ -1,3 +1,5 @@
+import uuid
+
 from django.conf import settings
 from django.test import Client, TestCase
 from django.utils import translation
@@ -12,6 +14,9 @@ from apps.products.models import Product
 
 
 class StorefrontUrlTests(TestCase):
+    def tearDown(self) -> None:
+        translation.deactivate()
+
     def test_shop_reverse_uses_serbian_paths_by_default(self) -> None:
         with translation.override("sr"):
             self.assertEqual(shop_reverse("categories:list"), "/kategorije/")
@@ -73,7 +78,7 @@ class StorefrontUrlTests(TestCase):
         self.assertEqual(response["Location"], "/categories/")
         self.assertEqual(client.cookies[settings.LANGUAGE_COOKIE_NAME].value, "en")
 
-    def test_category_detail_uses_localized_slug_on_switch(self) -> None:
+    def test_category_detail_uses_localized_path_on_switch(self) -> None:
         category = Category.objects.create(is_active=True)
         category.set_current_language("sr")
         category.name = "Alkoholna pica"

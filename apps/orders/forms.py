@@ -11,7 +11,7 @@ class GuestOrderTrackForm(forms.Form):
         widget=forms.TextInput(
             attrs={
                 "class": "form-control",
-                "placeholder": "KP-482917",
+                "placeholder": _("example: KP-123456"),
                 "autocomplete": "off",
             }
         ),

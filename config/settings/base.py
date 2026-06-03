@@ -151,7 +151,7 @@ USE_R2 = False
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 14  # 2 weeks
 LOGIN_URL = "/prijava/"
-LOGIN_REDIRECT_URL = "/nalog/narudzbe/"
+LOGIN_REDIRECT_URL = "/nalog/narudzbine/"
 LOGOUT_REDIRECT_URL = "/"
 
 # --- Shop ---------------------------------------------------------------------

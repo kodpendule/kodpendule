@@ -13,7 +13,7 @@ urlpatterns = [
     *localized_path(
         "categories:detail",
         CategoryDetailView.as_view(),
-        sr="kategorije/<slug:slug>/",
-        en="categories/<slug:slug>/",
+        sr="kategorije/<path:category_path>/",
+        en="categories/<path:category_path>/",
     ),
 ]

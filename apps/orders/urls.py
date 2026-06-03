@@ -7,7 +7,7 @@ urlpatterns = [
     *localized_path(
         "orders:track",
         GuestOrderTrackView.as_view(),
-        sr="narudzba/pracenje/",
+        sr="narudzbina/pracenje/",
         en="order/track/",
     ),
     *localized_path(
@@ -19,7 +19,7 @@ urlpatterns = [
     *localized_path(
         "orders:history",
         OrderHistoryView.as_view(),
-        sr="nalog/narudzbe/",
+        sr="nalog/narudzbine/",
         en="account/orders/",
     ),
 ]

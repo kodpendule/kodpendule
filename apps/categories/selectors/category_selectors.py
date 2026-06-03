@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from django.db.models import Prefetch, QuerySet
 
 from apps.categories.models import Category
-from apps.core.slugs import translation_languages_to_try
+from apps.core.slugs import localized_slug, translation_languages_to_try
 from apps.core.utils import get_shop_language
 
 
@@ -26,16 +26,111 @@ def get_nav_categories(language: str | None = None) -> QuerySet[Category]:
     return active_categories_qs(language).filter(parent__isnull=True)
 
 
-def get_category_by_slug(slug: str, language: str | None = None) -> Category | None:
-    lang = _language(language)
-    base_qs = Category.objects.filter(is_active=True).select_related("parent").prefetch_related(
+def _category_at_slug(
+    slug: str,
+    *,
+    parent: Category | None,
+    language: str,
+) -> Category | None:
+    base_qs = active_categories_qs(language).select_related("parent").prefetch_related(
         "translations"
     )
+    if parent is None:
+        base_qs = base_qs.filter(parent__isnull=True)
+    else:
+        base_qs = base_qs.filter(parent=parent)
+    for try_lang in translation_languages_to_try(language):
+        category = (
+            base_qs.filter(
+                translations__language_code=try_lang,
+                translations__slug=slug,
+            )
+            .distinct()
+            .first()
+        )
+        if category is not None:
+            category.set_current_language(language)
+            return category
+    category = base_qs.filter(translations__slug=slug).distinct().first()
+    if category is not None:
+        category.set_current_language(language)
+    return category
+
+
+def get_category_slug_path(category: Category, language: str | None = None) -> list[str]:
+    """Slugs from root to category for hierarchical storefront URLs."""
+    lang = _language(language)
+    chain_ids: list[int] = []
+    current: Category | None = category
+    seen_ids: set[int] = set()
+    while current is not None:
+        if current.pk in seen_ids:
+            break
+        seen_ids.add(current.pk)
+        if not current.is_active:
+            return []
+        chain_ids.append(current.pk)
+        parent_id = current.parent_id
+        if parent_id is None:
+            break
+        current = (
+            Category.objects.filter(pk=parent_id, is_active=True)
+            .only("pk", "parent_id", "is_active")
+            .first()
+        )
+    chain_ids.reverse()
+    slugs: list[str] = []
+    for category_id in chain_ids:
+        node = (
+            Category.objects.filter(pk=category_id, is_active=True)
+            .prefetch_related("translations")
+            .first()
+        )
+        if node is None:
+            return []
+        slug = localized_slug(node, lang)
+        if not slug:
+            return []
+        slugs.append(slug)
+    return slugs
+
+
+def category_path_for_url(category: Category, language: str | None = None) -> str:
+    return "/".join(get_category_slug_path(category, language))
+
+
+def get_category_by_path(path: str, language: str | None = None) -> Category | None:
+    """Resolve a category from a hierarchical path such as parent/child/grandchild."""
+    normalized = (path or "").strip("/")
+    if not normalized:
+        return None
+    lang = _language(language)
+    parent: Category | None = None
+    category: Category | None = None
+    for segment in normalized.split("/"):
+        category = _category_at_slug(segment, parent=parent, language=lang)
+        if category is None:
+            return None
+        parent = category
+    return category
+
+
+def get_category_by_slug(slug: str, language: str | None = None) -> Category | None:
+    lang = _language(language)
+    base_qs = (
+        Category.objects.filter(is_active=True)
+        .select_related("parent")
+        .prefetch_related("translations")
+    )
     for try_lang in translation_languages_to_try(lang):
-        category = base_qs.filter(
-            translations__language_code=try_lang,
-            translations__slug=slug,
-        ).distinct().first()
+        category = (
+            base_qs.filter(
+                translations__language_code=try_lang,
+                translations__slug=slug,
+            )
+            .distinct()
+            .first()
+        )
         if category is not None:
             category.set_current_language(lang)
             return category

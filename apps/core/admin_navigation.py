@@ -41,11 +41,11 @@ _NAV_SECTION_SPECS: list[tuple[str, str, list[str]]] = [
     ("categories", _("Categories"), ["categories.category"]),
     ("shipping", _("Shipping"), ["shipping.city"]),
     ("customers", _("Customers"), ["accounts.customercontact"]),
+    ("users", _("Users"), ["accounts.user"]),
     ("analytics", _("Analytics"), []),
 ]
 
 _HIDDEN_MODEL_KEYS: set[str] = {
-    "accounts.user",
     "core.sitesettings",
     "core.footersettings",
 }

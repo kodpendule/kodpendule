@@ -6,31 +6,26 @@
 {% endblock %}
 
 {% block content %}
-<div class="container py-4 py-lg-5">
+<div class="container shop-container py-4 py-lg-5 shop-page shop-page--category-detail">
     {% include "includes/_breadcrumb.html" with breadcrumbs=breadcrumb_items %}
 
-    <header class="mb-4">
+    <header class="mb-4 mb-lg-5 text-center">
         <h1 class="h2 mb-2">{{ category.name }}</h1>
         {% if category.description %}
-        <div class="text-muted">{{ category.description|linebreaksbr }}</div>
+        <div class="text-muted shop-category-detail__lead">{{ category.description|linebreaksbr }}</div>
         {% endif %}
     </header>
 
-    {% include "includes/_category_nav.html" %}
-
-    {% if category_subtree %}
-    <section class="shop-category-subtree mb-5" aria-labelledby="category-subtree-heading">
-        <h2 class="h5 mb-3" id="category-subtree-heading">{% trans "Subcategories" %}</h2>
-        <nav class="shop-category-tree" aria-label="{% trans 'Subcategory hierarchy' %}">
-            {% include "includes/_category_tree.html" with nodes=category_subtree level=0 %}
-        </nav>
+    {% if show_child_categories %}
+    <section class="shop-category-section mb-5">
+        {% include "includes/_category_grid.html" with categories=child_categories %}
     </section>
-    {% endif %}
-
-    <section>
-        <h2 class="h5 mb-3">{% trans "Products" %}</h2>
+    {% else %}
+    <section aria-labelledby="category-products-heading">
+        <h2 class="h5 shop-category-section__title" id="category-products-heading">{% trans "Products" %}</h2>
         {% include "includes/_product_grid.html" with products=products %}
         {% include "includes/_pagination.html" %}
     </section>
+    {% endif %}
 </div>
 {% endblock %}

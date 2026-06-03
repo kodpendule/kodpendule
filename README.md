@@ -91,6 +91,6 @@ Filters: last 7/30/90 days, current month/year, specific month+year, or custom d
 
 | URL | Description |
 |-----|-------------|
-| `/narudzba/pracenje/` | Guest track (order number + email) |
+| `/narudzbina/pracenje/` | Guest track (order number + email) |
 | `/narudzba/<order_number>/` | Order detail (after track, checkout, or login) |
-| `/nalog/narudzbe/` | Logged-in order history |
+| `/nalog/narudzbine/` | Logged-in order history |

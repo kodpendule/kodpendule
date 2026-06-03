@@ -134,6 +134,7 @@ class OrderEmailTests(TestCase):
         self.assertIn("KP-20260101-ABC123", mail.outbox[0].subject)
         self.assertIn("Test product", mail.outbox[0].body)
         self.assertIn("2 350,00 din", mail.outbox[0].body)
+        self.assertEqual(mail.outbox[0].reply_to, ["kodpendule@gmail.com"])
 
     def test_staff_order_email(self) -> None:
         notify_staff_new_order(self.order)

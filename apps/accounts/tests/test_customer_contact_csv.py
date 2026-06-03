@@ -137,6 +137,54 @@ class CustomerContactCsvTests(TestCase):
         self.assertIn("Ulica i broj", header)
         self.assertIn("existing@example.com", body)
 
+    def test_admin_delete_selected_contacts(self) -> None:
+        User = get_user_model()
+        user = User.objects.create_user(
+            "buyer",
+            "existing@example.com",
+            "pass",
+        )
+        self.contact.user = user
+        self.contact.save(update_fields=["user"])
+
+        admin = User.objects.create_superuser("admin", "a@test.com", "pass")
+        client = Client()
+        client.force_login(admin)
+
+        changelist_url = reverse("admin:accounts_customercontact_changelist")
+        response = client.post(
+            changelist_url,
+            {
+                "action": "delete_selected",
+                "_selected_action": [str(self.contact.pk)],
+                "post": "yes",
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(CustomerContact.objects.filter(pk=self.contact.pk).exists())
+        self.assertTrue(User.objects.filter(pk=user.pk).exists())
+
+    def test_admin_export_csv_view(self) -> None:
+        User = get_user_model()
+        admin = User.objects.create_superuser("admin", "a@test.com", "pass")
+        client = Client()
+        client.force_login(admin)
+
+        response = client.get(reverse("admin:accounts_customercontact_export_csv"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "text/csv; charset=utf-8")
+        body = response.content.decode("utf-8-sig")
+        self.assertIn("existing@example.com", body)
+
+    def test_admin_import_view_get(self) -> None:
+        User = get_user_model()
+        admin = User.objects.create_superuser("admin", "a@test.com", "pass")
+        client = Client()
+        client.force_login(admin)
+
+        response = client.get(reverse("admin:accounts_customercontact_import_csv"))
+        self.assertEqual(response.status_code, 200)
+
     def test_admin_import_view(self) -> None:
         User = get_user_model()
         admin = User.objects.create_superuser("admin", "a@test.com", "pass")

@@ -1,0 +1,12 @@
+{% load i18n %}
+{% if categories %}
+<div class="shop-category-grid">
+    <div class="shop-category-grid__list" role="list">
+        {% for category in categories %}
+        <div class="shop-category-grid__item" role="listitem">
+            {% include "includes/_category_grid_card.html" with category=category %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

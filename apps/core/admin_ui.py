@@ -17,6 +17,7 @@ CHANGELIST_TITLES: dict[str, str] = {
     "categories.category": _("Select category to change"),
     "shipping.city": _("Select city to change"),
     "accounts.customercontact": _("Select customer contact to change"),
+    "accounts.user": _("Select user to change"),
     "auth.group": _("Select group to change"),
     "auth.user": _("Select user to change"),
 }
@@ -27,6 +28,7 @@ ADD_LABELS: dict[str, str] = {
     "categories.category": _("Add category"),
     "shipping.city": _("Add city"),
     "accounts.customercontact": _("Add customer contact"),
+    "accounts.user": _("Add user"),
     "auth.group": _("Add group"),
     "auth.user": _("Add user"),
 }

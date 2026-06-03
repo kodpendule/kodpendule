@@ -4,7 +4,11 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, ListView
 
 from apps.categories.selectors import get_category_by_slug
-from apps.core.breadcrumbs import categories_crumb, home_crumb, products_crumb
+from apps.core.breadcrumbs import (
+    category_breadcrumb_items,
+    home_crumb,
+    products_crumb,
+)
 from apps.core.mixins import ShopLanguageMixin
 from apps.core.utils import activate_parler_language
 from apps.core.templatetags.shop_tags import product_meta_title
@@ -61,7 +65,10 @@ class ProductListView(ShopLanguageMixin, ListView):
 
         breadcrumbs = [home_crumb(), products_crumb()]
         if active_category:
-            breadcrumbs = [home_crumb(), categories_crumb(), (active_category.name, None)]
+            activate_parler_language(active_category, self.shop_language)
+            breadcrumbs = category_breadcrumb_items(
+                active_category, self.shop_language
+            )
         elif query:
             breadcrumbs = [home_crumb(), products_crumb(), (_("Search"), None)]
 
@@ -160,12 +167,13 @@ class ProductDetailView(ShopLanguageMixin, DetailView):
         gallery = list(product.gallery_images.all())
         context["gallery_images"] = gallery
         context["related_products"] = related_products(product, self.shop_language)
-        context["breadcrumb_items"] = [
-            home_crumb(),
-            products_crumb(),
-            (product.category.name, product.category.get_absolute_url()),
-            (product.name, None),
-        ]
+        activate_parler_language(product.category, self.shop_language)
+        context["breadcrumb_items"] = category_breadcrumb_items(
+            product.category,
+            self.shop_language,
+            link_current_category=True,
+        )
+        context["breadcrumb_items"].append((product.name, None))
         context["meta_title"] = product_meta_title(
             product, context.get("site_settings")
         )

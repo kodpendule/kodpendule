@@ -1,5 +1,7 @@
 """Slug helpers for Parler models (language-aware URLs)."""
 
+from typing import Iterable
+
 from django.conf import settings
 from django.utils.text import slugify
 
@@ -11,17 +13,33 @@ def slug_from_name(name: str, *, max_length: int = 270) -> str:
     return slugify(name, allow_unicode=True)[:max_length]
 
 
-def unique_slug_for_translation(translation, *, fallback: str = "") -> str:
+def unique_slug_for_translation(
+    translation,
+    *,
+    fallback: str = "",
+    reserved: Iterable[str] | None = None,
+    base_override: str | None = None,
+) -> str:
     """Return a slug unique across all rows of the translation model."""
     Translation = translation.__class__
     name = (getattr(translation, "name", None) or "").strip()
-    base = slug_from_name(name) or slug_from_name(fallback) or "item"
+    if base_override:
+        base = (
+            slug_from_name(base_override)
+            or slug_from_name(name)
+            or slug_from_name(fallback)
+            or "item"
+        )
+    else:
+        base = slug_from_name(name) or slug_from_name(fallback) or "item"
+    reserved_set = {slug for slug in (reserved or ()) if slug}
     candidate = base
     suffix = 2
     while (
         Translation.objects.filter(slug=candidate)
         .exclude(pk=translation.pk)
         .exists()
+        or candidate in reserved_set
     ):
         candidate = f"{base}-{suffix}"
         suffix += 1
@@ -30,21 +48,20 @@ def unique_slug_for_translation(translation, *, fallback: str = "") -> str:
 
 def localized_slug(obj, language: str | None = None) -> str:
     """
-    Slug for the active UI language, falling back to any other translation.
-    Reads translation rows directly so partially translated products still work.
+    Slug for the requested UI language, falling back to other translations.
+    Queries translation rows without Parler's active-language filter.
     """
     lang = language or get_shop_language()
 
-    translations = []
-    if hasattr(obj, "translations"):
-        translations = list(obj.translations.all())
-
-    for trans in translations:
-        if trans.language_code == lang and getattr(trans, "slug", None):
-            return trans.slug
-
-    for trans in translations:
-        if getattr(trans, "slug", None):
+    if hasattr(obj, "translations") and obj.pk:
+        Translation = obj.translations.model
+        queryset = Translation.objects.filter(master_id=obj.pk)
+        for try_lang in translation_languages_to_try(lang):
+            trans = queryset.filter(language_code=try_lang).first()
+            if trans and getattr(trans, "slug", None):
+                return trans.slug
+        trans = queryset.exclude(slug="").first()
+        if trans and trans.slug:
             return trans.slug
 
     slug = obj.safe_translation_getter("slug", language_code=lang)

@@ -4,7 +4,7 @@ import logging
 
 from django.utils.translation import gettext as _
 
-from apps.core.email_recipients import shop_admin_recipients
+from apps.core.email_recipients import shop_admin_recipients, shop_reply_to_email
 from apps.core.mail import send_shop_email
 from apps.orders.models import Order
 from apps.orders.services.order_email_body import build_order_details_text
@@ -33,6 +33,7 @@ def notify_customer_new_order(order: Order) -> None:
         subject=subject,
         message=body,
         recipient_list=[email],
+        reply_to=shop_reply_to_email(),
     )
 
 

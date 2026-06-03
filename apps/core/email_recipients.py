@@ -19,3 +19,9 @@ def shop_admin_recipients() -> list[str]:
     if contact.email:
         return [contact.email.strip()]
     return []
+
+
+def shop_reply_to_email() -> str | None:
+    """Reply-To address for customer-facing shop emails."""
+    recipients = shop_admin_recipients()
+    return recipients[0] if recipients else None

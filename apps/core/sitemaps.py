@@ -6,7 +6,10 @@ from django.conf import settings
 from django.contrib.sitemaps import Sitemap
 
 from apps.categories.models import Category
-from apps.categories.selectors.category_selectors import active_categories_qs
+from apps.categories.selectors.category_selectors import (
+    active_categories_qs,
+    category_path_for_url,
+)
 from apps.core.slugs import localized_slug
 from apps.core.storefront_urls import shop_reverse
 from apps.products.models import Product
@@ -51,8 +54,12 @@ class CategorySitemap(Sitemap):
         return obj.updated_at
 
     def location(self, obj: Category) -> str:
-        slug = localized_slug(obj, language=_DEFAULT_LANG)
-        return shop_reverse("categories:detail", language=_DEFAULT_LANG, slug=slug)
+        category_path = category_path_for_url(obj, language=_DEFAULT_LANG)
+        return shop_reverse(
+            "categories:detail",
+            language=_DEFAULT_LANG,
+            category_path=category_path,
+        )
 
 
 class ProductSitemap(Sitemap):

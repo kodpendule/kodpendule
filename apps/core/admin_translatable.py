@@ -100,6 +100,7 @@ def build_stacked_form_class(
         return False
 
     def _write_translations(self, obj: models.Model) -> None:
+        assigned_slugs: set[str] = set()
         for code in ADMIN_LANGUAGE_CODES:
             if not self._translation_has_content(code, translated_names):
                 obj.translations.filter(language_code=code).delete()
@@ -110,24 +111,39 @@ def build_stacked_form_class(
             for base_name in translated_names:
                 value = self.cleaned_data.get(stacked_field_name(base_name, code), "")
                 setattr(trans, base_name, value if value is not None else "")
-            self._autofill_slug(trans, obj)
+            self._ensure_unique_slug(trans, obj, assigned_slugs)
             trans.save()
+            if trans.slug:
+                assigned_slugs.add(trans.slug)
 
-    def _autofill_slug(self, trans: models.Model, master: models.Model) -> None:
+    def _ensure_unique_slug(
+        self,
+        trans: models.Model,
+        master: models.Model,
+        assigned_slugs: set[str],
+    ) -> None:
+        from apps.core.slugs import unique_slug_for_translation
+
         if "slug" not in translated_names:
             return
-        slug = (getattr(trans, "slug", None) or "").strip()
         name = (getattr(trans, "name", None) or "").strip()
-        if slug or not name:
+        slug = (getattr(trans, "slug", None) or "").strip()
+        if not slug and not name:
             return
-        autofill = getattr(self, "autofill_slug_for_translation", None)
-        if callable(autofill):
-            trans.slug = autofill(trans, master)
-        else:
-            from apps.core.slugs import unique_slug_for_translation
-
-            fallback = getattr(master, "sku", "") if hasattr(master, "sku") else ""
-            trans.slug = unique_slug_for_translation(trans, fallback=fallback)
+        fallback = getattr(master, "sku", "") if hasattr(master, "sku") else ""
+        fallback = (fallback or "").strip()
+        if not slug:
+            trans.slug = unique_slug_for_translation(
+                trans,
+                fallback=fallback,
+                reserved=assigned_slugs,
+            )
+        trans.slug = unique_slug_for_translation(
+            trans,
+            fallback=fallback or name,
+            reserved=assigned_slugs,
+            base_override=trans.slug,
+        )
 
     def save(self, commit: bool = True) -> models.Model:
         obj = super(TranslatableStackedForm, self).save(commit=commit)
@@ -139,7 +155,7 @@ def build_stacked_form_class(
     form_attrs["_load_translation_values"] = _load_translation_values
     form_attrs["_translation_has_content"] = _translation_has_content
     form_attrs["_write_translations"] = _write_translations
-    form_attrs["_autofill_slug"] = _autofill_slug
+    form_attrs["_ensure_unique_slug"] = _ensure_unique_slug
     form_attrs["save"] = save
     form_attrs["Meta"] = type(
         "Meta",

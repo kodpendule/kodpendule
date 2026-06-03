@@ -28,11 +28,47 @@ class CustomerProfileInline(admin.StackedInline):
 
 
 @admin.register(User)
-class UserAdmin(DjangoUserAdmin):
+class UserAdmin(KPModelAdmin, DjangoUserAdmin):
     sortable_by = ()
-    list_display = ("username", "email", "first_name", "last_name", "is_staff", "is_active")
+    list_display = (
+        "username",
+        "email",
+        "full_name_display",
+        "date_joined_display",
+        "is_active",
+        "customer_contact_link",
+    )
+    list_filter = ("is_active",)
+    ordering = ("-date_joined",)
     search_fields = ("username", "email", "first_name", "last_name")
     inlines = [CustomerProfileInline]
+
+    def get_queryset(self, request):
+        """Shop registrations only — staff and superuser accounts are excluded."""
+        return (
+            super()
+            .get_queryset(request)
+            .filter(is_staff=False, is_superuser=False)
+            .select_related("profile")
+        )
+
+    @admin.display(description=_("Name"))
+    def full_name_display(self, obj: User) -> str:
+        return obj.get_full_name() or "—"
+
+    @admin.display(description=_("Registered"), ordering="date_joined")
+    def date_joined_display(self, obj: User) -> str:
+        if not obj.date_joined:
+            return "—"
+        return latin_short_datetime(obj.date_joined)
+
+    @admin.display(description=_("Customer contact"))
+    def customer_contact_link(self, obj: User) -> str:
+        contact = CustomerContact.objects.filter(user_id=obj.pk).first()
+        if contact is None:
+            return "—"
+        url = reverse("admin:accounts_customercontact_change", args=[contact.pk])
+        return format_html('<a href="{}">{}</a>', url, contact.email)
 
 
 @admin.register(CustomerContact)
@@ -76,8 +112,6 @@ class CustomerContactAdmin(KPModelAdmin):
     def has_add_permission(self, request):
         return False
 
-    def has_delete_permission(self, request, obj=None):
-        return False
 
     def get_urls(self):
         urls = [
@@ -85,6 +119,11 @@ class CustomerContactAdmin(KPModelAdmin):
                 "import-csv/",
                 self.admin_site.admin_view(self.import_csv_view),
                 name="accounts_customercontact_import_csv",
+            ),
+            path(
+                "export-csv/",
+                self.admin_site.admin_view(self.export_csv_view),
+                name="accounts_customercontact_export_csv",
             ),
         ]
         return urls + super().get_urls()
@@ -105,7 +144,23 @@ class CustomerContactAdmin(KPModelAdmin):
         )
         return response
 
-    actions = ["export_selected_csv"]
+    actions = ["export_selected_csv", "delete_selected"]
+
+    def export_csv_view(self, request: HttpRequest) -> HttpResponse:
+        if not self.has_view_permission(request):
+            return redirect("admin:index")
+
+        changelist = self.get_changelist_instance(request)
+        queryset = changelist.get_queryset(request)
+        stamp = timezone.localdate().strftime("%Y%m%d")
+        response = HttpResponse(
+            export_contacts_csv(queryset),
+            content_type="text/csv; charset=utf-8",
+        )
+        response["Content-Disposition"] = (
+            f'attachment; filename="customer-contacts-{stamp}.csv"'
+        )
+        return response
 
     def import_csv_view(self, request: HttpRequest) -> HttpResponse:
         if not self.has_change_permission(request):

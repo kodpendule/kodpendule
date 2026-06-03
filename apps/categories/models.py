@@ -38,10 +38,10 @@ class Category(TranslatableModel):
         return self.safe_translation_getter("name", any_language=True) or f"Category #{self.pk}"
 
     def get_absolute_url(self) -> str:
+        from apps.categories.selectors import category_path_for_url
         from apps.core.storefront_urls import shop_reverse
-        from apps.core.slugs import localized_slug
 
-        slug = localized_slug(self)
-        if not slug:
+        category_path = category_path_for_url(self)
+        if not category_path:
             return shop_reverse("categories:list")
-        return shop_reverse("categories:detail", slug=slug)
+        return shop_reverse("categories:detail", category_path=category_path)

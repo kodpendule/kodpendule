@@ -13,6 +13,13 @@ class AdminNavigationTests(TestCase):
         self.assertIn("orders", section_ids)
         self.assertIn("analytics", section_ids)
         self.assertIn("products", section_ids)
+        self.assertIn("users", section_ids)
+
+        users = next(s for s in sections if s.id == "users")
+        self.assertTrue(
+            any("korisnici" in item.url for item in users.items),
+            msg="Users section should link to the shop users changelist",
+        )
 
         analytics = next(s for s in sections if s.id == "analytics")
         self.assertGreaterEqual(len(analytics.items), 1)
