@@ -280,13 +280,28 @@
     font-weight: var(--shop-font-weight-medium);
 }
 
+.shop-trust-panel__support {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--shop-space-1);
+}
+
 .shop-trust-panel__support-label {
     display: block;
+    width: 100%;
+}
+
+.shop-trust-panel__support-links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.125rem;
+    width: 100%;
 }
 
 .shop-trust-panel__support-link {
     display: block;
-    margin-top: 0.125rem;
 }
 
 @media (max-width: 575.98px) {

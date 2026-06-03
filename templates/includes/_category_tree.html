@@ -1,0 +1,11 @@
+{% load i18n %}
+<ul class="shop-category-tree__list{% if level %} shop-category-tree__list--nested{% endif %}" role="list">
+    {% for node in nodes %}
+    <li class="shop-category-tree__item" role="listitem" style="--category-depth: {{ level }}">
+        {% include "includes/_category_tree_card.html" with node=node %}
+        {% if node.children %}
+        {% include "includes/_category_tree.html" with nodes=node.children level=level|add:1 %}
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>

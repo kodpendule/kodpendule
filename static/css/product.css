@@ -239,20 +239,6 @@
     padding: var(--shop-space-4);
 }
 
-/* Sticky buy box on mobile */
-@media (max-width: 991.98px) {
-    .shop-pdp__buy {
-        position: sticky;
-        bottom: 0;
-        z-index: 10;
-        padding-top: var(--shop-space-2);
-        background: linear-gradient(transparent, var(--shop-color-bg) 30%);
-    }
-    .shop-buybox {
-        box-shadow: var(--shop-shadow-md);
-    }
-}
-
 /* —— Copy sections —— */
 .shop-pdp__lead {
     margin-top: var(--shop-space-5);

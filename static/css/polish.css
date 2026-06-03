@@ -388,10 +388,7 @@
 
 /* —— Back to top —— */
 .shop-back-to-top {
-    position: fixed;
     right: max(1rem, env(safe-area-inset-right));
-    bottom: max(1rem, env(safe-area-inset-bottom));
-    z-index: 1040;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -404,21 +401,15 @@
     color: #fff;
     box-shadow: var(--shop-shadow-md);
     cursor: pointer;
-    transition: transform var(--shop-transition-ui), opacity var(--shop-transition-ui), background-color var(--shop-transition-ui);
 }
 
 .shop-back-to-top:hover {
     background: var(--shop-color-primary-active);
-    transform: translateY(-2px);
 }
 
 .shop-back-to-top:focus-visible {
     outline: 3px solid var(--shop-color-primary-soft, rgba(26, 77, 62, 0.35));
     outline-offset: 2px;
-}
-
-.shop-back-to-top[hidden] {
-    display: none;
 }
 
 .shop-back-to-top__icon {

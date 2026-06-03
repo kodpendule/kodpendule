@@ -1,0 +1,34 @@
+{% load shop_urls i18n static %}
+<div class="offcanvas offcanvas-end shop-cart-drawer" tabindex="-1" id="shopCartDrawer"
+     aria-labelledby="shopCartDrawerLabel"
+     data-cart-drawer
+     data-cart-state-url="{% shop_url 'cart:state' %}"
+     data-cart-detail-url="{% shop_url 'cart:detail' %}"
+     data-i18n-dec="{% trans 'Decrease quantity' %}"
+     data-i18n-inc="{% trans 'Increase quantity' %}"
+     data-i18n-qty="{% trans 'Quantity' %}"
+     data-i18n-remove="{% trans 'Remove' %}"
+     data-i18n-empty="{% trans 'Your cart is empty' %}"
+     data-i18n-subtotal="{% trans 'Items total' %}"
+     data-i18n-open="{% trans 'Open cart' %}">
+    <div class="offcanvas-header shop-cart-drawer__header">
+        <h2 class="offcanvas-title shop-cart-drawer__title" id="shopCartDrawerLabel">{% trans "Cart" %}</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="{% trans 'Close' %}"></button>
+    </div>
+    <div class="offcanvas-body shop-cart-drawer__body">
+        <div class="shop-cart-drawer__loading" data-cart-drawer-loading hidden>
+            <span class="shop-cart-drawer__spinner" aria-hidden="true"></span>
+        </div>
+        <p class="shop-cart-drawer__empty" data-cart-drawer-empty hidden>{% trans "Your cart is empty" %}</p>
+        <ul class="shop-cart-drawer__lines list-unstyled mb-0" data-cart-drawer-lines></ul>
+    </div>
+    <div class="shop-cart-drawer__footer" data-cart-drawer-footer hidden>
+        <dl class="shop-cart-drawer__subtotal">
+            <dt>{% trans "Items total" %}</dt>
+            <dd data-cart-drawer-subtotal>—</dd>
+        </dl>
+        <a class="shop-btn shop-btn--primary shop-btn--block shop-cart-drawer__open" href="{% shop_url 'cart:detail' %}" data-cart-drawer-open-link>
+            {% trans "Open cart" %}
+        </a>
+    </div>
+</div>

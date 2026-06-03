@@ -47,7 +47,7 @@
 
             <div class="shop-product-card__actions">
                 {% if product.stock > 0 %}
-                <form method="post" action="{% shop_url 'cart:add' %}" class="shop-product-card__cart-form">
+                <form method="post" action="{% shop_url 'cart:add' %}" class="shop-product-card__cart-form" data-shop-add-cart>
                     {% csrf_token %}
                     <input type="hidden" name="product_id" value="{{ product.pk }}">
                     <input type="hidden" name="next" value="{{ request.get_full_path }}">

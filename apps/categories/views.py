@@ -4,9 +4,9 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import ListView
 
 from apps.categories.selectors import (
-    get_all_categories,
     get_category_by_slug,
-    get_child_categories,
+    get_category_subtree,
+    get_category_tree,
 )
 from apps.core.breadcrumbs import categories_crumb, home_crumb
 from apps.core.mixins import ShopLanguageMixin
@@ -17,15 +17,18 @@ from apps.products.selectors import filter_products_by_category
 
 class CategoryListView(ShopLanguageMixin, ListView):
     template_name = "categories/list.html"
-    context_object_name = "categories"
 
     def get_queryset(self):
-        return get_all_categories(self.shop_language)
+        return []
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        category_tree = get_category_tree(self.shop_language)
+        for node in _walk_category_tree(category_tree):
+            activate_parler_language(node.category, self.shop_language)
         context.update(
             {
+                "category_tree": category_tree,
                 "breadcrumb_items": [home_crumb(), (_("Categories"), None)],
                 "meta_title": _("Categories"),
                 "meta_description": _("Browse product categories."),
@@ -33,6 +36,12 @@ class CategoryListView(ShopLanguageMixin, ListView):
             }
         )
         return context
+
+
+def _walk_category_tree(nodes):
+    for node in nodes:
+        yield node
+        yield from _walk_category_tree(node.children)
 
 
 class CategoryDetailView(ShopLanguageMixin, ListView):
@@ -58,11 +67,14 @@ class CategoryDetailView(ShopLanguageMixin, ListView):
         for product in context.get("products", []):
             activate_parler_language(product, self.shop_language)
         category = self.category
+        category_subtree = get_category_subtree(category, self.shop_language)
+        for node in _walk_category_tree(category_subtree):
+            activate_parler_language(node.category, self.shop_language)
         context.update(
             {
                 "category": category,
                 "active_category": category,
-                "child_categories": get_child_categories(category, self.shop_language),
+                "category_subtree": category_subtree,
                 "breadcrumb_items": [
                     home_crumb(),
                     categories_crumb(),

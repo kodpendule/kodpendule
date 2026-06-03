@@ -47,16 +47,18 @@
                 <section class="shop-checkout-section" aria-labelledby="checkout-contact-heading">
                     <h2 id="checkout-contact-heading" class="shop-checkout-section__title">{% trans "Contact" %}</h2>
                     <p class="shop-checkout-section__lead">{% trans "We will use these details to confirm your order." %}</p>
-                    {% if form.show_email_field %}
                     {% include "includes/_shop_form_field.html" with field=form.guest_email %}
-                    {% else %}
-                    {{ form.guest_email }}
-                    {% endif %}
                     <div class="row g-3">
                         <div class="col-md-6">{% include "includes/_shop_form_field.html" with field=form.first_name %}</div>
                         <div class="col-md-6">{% include "includes/_shop_form_field.html" with field=form.last_name %}</div>
                         <div class="col-12">{% include "includes/_shop_form_field.html" with field=form.phone %}</div>
                     </div>
+                </section>
+
+                <section class="shop-checkout-section" aria-labelledby="checkout-timing-heading">
+                    <h2 id="checkout-timing-heading" class="shop-checkout-section__title">{% trans "Delivery date" %}</h2>
+                    <p class="shop-checkout-section__lead">{% trans "Same-day delivery has a fee. Scheduling for a later date is free." %}</p>
+                    {% include "includes/_checkout_delivery_timing.html" %}
                 </section>
 
                 <section class="shop-checkout-section" aria-labelledby="checkout-shipping-heading">
@@ -84,12 +86,6 @@
                        data-msg-scheduled-free="{% trans 'Free delivery for your selected date.' %}"
                        hidden></p>
                     {% endif %}
-                </section>
-
-                <section class="shop-checkout-section" aria-labelledby="checkout-timing-heading">
-                    <h2 id="checkout-timing-heading" class="shop-checkout-section__title">{% trans "Delivery date" %}</h2>
-                    <p class="shop-checkout-section__lead">{% trans "Same-day delivery has a fee. Scheduling for a later date is free." %}</p>
-                    {% include "includes/_checkout_delivery_timing.html" %}
                 </section>
 
                 <section class="shop-checkout-section" aria-labelledby="checkout-notes-heading">
@@ -137,13 +133,19 @@
             <div class="d-none d-lg-block mt-4">
                 {% include "includes/_checkout_trust.html" %}
             </div>
-
-            <div class="shop-checkout-mobile-bar d-lg-none">
-                <button type="submit" form="shop-checkout-form" class="shop-btn shop-btn--primary shop-btn--lg shop-btn--block">
-                    {% trans "Place order" %}
-                </button>
-            </div>
         </aside>
+
+        <div class="shop-checkout-mobile-bar d-lg-none">
+            <button type="submit" form="shop-checkout-form" class="shop-btn shop-btn--primary shop-btn--lg shop-btn--block">
+                {% trans "Place order" %}
+            </button>
+            <p class="shop-checkout-submit__note">
+                {% trans "By placing the order you confirm your details are correct." %}
+                <a href="{% shop_url 'core:terms' %}">{% trans "Terms of Service" %}</a>
+                ·
+                <a href="{% shop_url 'core:privacy' %}">{% trans "Privacy Policy" %}</a>
+            </p>
+        </div>
     </div>
 </div>
 </div>

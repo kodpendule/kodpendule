@@ -453,10 +453,9 @@
     transform: translateY(-50%) translateX(0);
 }
 
-/* Mobile: bottom-left tab, arrow points up */
+/* Mobile: bottom-left tab, arrow points up (bottom offset: floating-actions.css) */
 .shop-header-fab--mobile {
     left: max(var(--shop-space-3), env(safe-area-inset-left, 0px));
-    bottom: max(var(--shop-space-4), env(safe-area-inset-bottom, 0px));
     top: auto;
     min-width: 4.75rem;
     min-height: 2.85rem;

@@ -4,8 +4,6 @@
 (function () {
     "use strict";
 
-    var SCROLL_THRESHOLD = 96;
-    var FAB_HIDE_MS = 420;
     var MOBILE_MQ = window.matchMedia("(max-width: 991.98px)");
 
     function closePanel(panel) {
@@ -60,66 +58,18 @@
         }
     }
 
-    function initScrollFab(fab) {
-        if (!fab) {
-            return;
-        }
-
-        var ticking = false;
-        var hideTimer = null;
-
-        function showFab() {
-            window.clearTimeout(hideTimer);
-            fab.hidden = false;
-            fab.setAttribute("aria-hidden", "false");
-            window.requestAnimationFrame(function () {
-                fab.classList.add("is-visible");
-            });
-        }
-
-        function hideFab() {
-            fab.classList.remove("is-visible");
-            fab.setAttribute("aria-hidden", "true");
-            window.clearTimeout(hideTimer);
-            hideTimer = window.setTimeout(function () {
-                if (!fab.classList.contains("is-visible")) {
-                    fab.hidden = true;
-                }
-            }, FAB_HIDE_MS);
-        }
-
-        function updateFab() {
-            if (window.scrollY > SCROLL_THRESHOLD) {
-                if (!fab.classList.contains("is-visible")) {
-                    showFab();
-                }
-            } else if (fab.classList.contains("is-visible") || !fab.hidden) {
-                hideFab();
-            } else {
-                fab.hidden = true;
-                fab.setAttribute("aria-hidden", "true");
-            }
-            ticking = false;
-        }
-
-        function onScroll() {
-            if (!ticking) {
-                window.requestAnimationFrame(updateFab);
-                ticking = true;
-            }
-        }
-
-        window.addEventListener("scroll", onScroll, { passive: true });
-        updateFab();
-    }
-
     document.addEventListener("DOMContentLoaded", function () {
         var panel = document.getElementById("shopHeaderPanel");
         var fab = document.getElementById("shopHeaderFab");
 
         syncHeaderPanelMode(panel, fab);
         bindPanelClose(panel);
-        initScrollFab(fab);
+        if (typeof window.shopInitScrollFloatControls === "function") {
+            window.shopInitScrollFloatControls([
+                { el: fab, manageAria: true },
+                { el: document.getElementById("shop-back-to-top"), manageAria: false },
+            ]);
+        }
 
         if (typeof MOBILE_MQ.addEventListener === "function") {
             MOBILE_MQ.addEventListener("change", function () {

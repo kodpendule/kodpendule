@@ -1,5 +1,9 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load static i18n %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/categories.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="container py-4 py-lg-5">
@@ -14,16 +18,12 @@
 
     {% include "includes/_category_nav.html" %}
 
-    {% if child_categories %}
-    <section class="mb-5">
-        <h2 class="h5 mb-3">{% trans "Subcategories" %}</h2>
-        <div class="row row-cols-2 row-cols-md-4 g-3">
-            {% for child in child_categories %}
-            <div class="col">
-                <a href="{{ child.get_absolute_url }}" class="btn btn-outline-secondary w-100">{{ child.name }}</a>
-            </div>
-            {% endfor %}
-        </div>
+    {% if category_subtree %}
+    <section class="shop-category-subtree mb-5" aria-labelledby="category-subtree-heading">
+        <h2 class="h5 mb-3" id="category-subtree-heading">{% trans "Subcategories" %}</h2>
+        <nav class="shop-category-tree" aria-label="{% trans 'Subcategory hierarchy' %}">
+            {% include "includes/_category_tree.html" with nodes=category_subtree level=0 %}
+        </nav>
     </section>
     {% endif %}
 

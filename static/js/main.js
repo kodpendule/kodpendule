@@ -7,7 +7,8 @@
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll("form").forEach(function (form) {
             if (
-                form.closest(".shop-header")
+                form.hasAttribute("data-shop-add-cart")
+                || form.closest(".shop-header")
                 || form.closest(".shop-offcanvas")
                 || form.closest(".shop-header-panel")
             ) {

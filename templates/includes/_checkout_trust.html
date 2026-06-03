@@ -7,10 +7,12 @@
         {% if footer_contact.phone %}
         <li class="shop-trust-panel__support">
             <span class="shop-trust-panel__support-label">{% trans "Support" %}:</span>
-            <a class="shop-trust-panel__support-link" href="tel:{{ footer_contact.phone|cut:' ' }}">{{ footer_contact.phone }}</a>
-            {% if footer_contact.email %}
-            <a class="shop-trust-panel__support-link" href="mailto:{{ footer_contact.email }}">{{ footer_contact.email }}</a>
-            {% endif %}
+            <div class="shop-trust-panel__support-links">
+                <a class="shop-trust-panel__support-link" href="tel:{{ footer_contact.phone|cut:' ' }}">{{ footer_contact.phone }}</a>
+                {% if footer_contact.email %}
+                <a class="shop-trust-panel__support-link" href="mailto:{{ footer_contact.email }}">{{ footer_contact.email }}</a>
+                {% endif %}
+            </div>
         </li>
         {% else %}
         <li>{% trans "Questions? Contact us anytime." %}</li>

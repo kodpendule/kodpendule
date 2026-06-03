@@ -1,30 +1,28 @@
 (function () {
-  "use strict";
+    "use strict";
 
-  function initBackToTop() {
-    var button = document.getElementById("shop-back-to-top");
-    if (!button) {
-      return;
+    function initBackToTop() {
+        var button = document.getElementById("shop-back-to-top");
+        if (!button) {
+            return;
+        }
+
+        button.addEventListener("click", function () {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        /* Storefront: scroll reveal is driven together with menu FAB in header.js */
+        if (
+            !document.getElementById("shopHeaderFab") &&
+            typeof window.shopInitScrollFloatControls === "function"
+        ) {
+            window.shopInitScrollFloatControls([{ el: button, manageAria: false }]);
+        }
     }
 
-    var revealOffset = 320;
-
-    function toggleVisibility() {
-      var show = window.scrollY > revealOffset;
-      button.hidden = !show;
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initBackToTop);
+    } else {
+        initBackToTop();
     }
-
-    button.addEventListener("click", function () {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-
-    window.addEventListener("scroll", toggleVisibility, { passive: true });
-    toggleVisibility();
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initBackToTop);
-  } else {
-    initBackToTop();
-  }
 })();

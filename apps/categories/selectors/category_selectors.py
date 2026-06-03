@@ -1,3 +1,6 @@
+from collections import defaultdict
+from dataclasses import dataclass, field
+
 from django.db.models import Prefetch, QuerySet
 
 from apps.categories.models import Category
@@ -57,5 +60,66 @@ def get_child_categories(parent: Category, language: str | None = None) -> Query
 
 
 def get_all_categories(language: str | None = None) -> QuerySet[Category]:
-    """Flat list for category index page."""
+    """All active categories (flat queryset)."""
     return active_categories_qs(language).select_related("parent")
+
+
+@dataclass
+class CategoryTreeNode:
+    category: Category
+    children: list["CategoryTreeNode"] = field(default_factory=list)
+
+
+def _sort_tree_nodes(nodes: list[CategoryTreeNode]) -> None:
+    nodes.sort(key=lambda node: (node.category.sort_order, node.category.pk))
+    for node in nodes:
+        _sort_tree_nodes(node.children)
+
+
+def build_category_tree(
+    categories: list[Category] | QuerySet[Category],
+    *,
+    root_parent_id: int | None = None,
+) -> list[CategoryTreeNode]:
+    """
+    Build a nested tree from a flat category list.
+    root_parent_id=None → top-level roots only (parent is null).
+    root_parent_id=<pk> → direct children of that category as roots.
+    """
+    category_list = list(categories)
+    by_parent: dict[int | None, list[Category]] = defaultdict(list)
+    known_ids = {category.pk for category in category_list}
+
+    for category in category_list:
+        parent_id = category.parent_id
+        if parent_id is not None and parent_id not in known_ids:
+            by_parent[None].append(category)
+        else:
+            by_parent[parent_id].append(category)
+
+    def build_level(parent_id: int | None) -> list[CategoryTreeNode]:
+        nodes: list[CategoryTreeNode] = []
+        for category in by_parent.get(parent_id, []):
+            nodes.append(
+                CategoryTreeNode(
+                    category=category,
+                    children=build_level(category.pk),
+                )
+            )
+        _sort_tree_nodes(nodes)
+        return nodes
+
+    return build_level(root_parent_id)
+
+
+def get_category_tree(language: str | None = None) -> list[CategoryTreeNode]:
+    """Top-level category tree for the categories index page."""
+    return build_category_tree(get_all_categories(language), root_parent_id=None)
+
+
+def get_category_subtree(
+    parent: Category,
+    language: str | None = None,
+) -> list[CategoryTreeNode]:
+    """Nested subcategory tree under a category (direct children as roots)."""
+    return build_category_tree(get_all_categories(language), root_parent_id=parent.pk)

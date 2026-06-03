@@ -1,18 +1,15 @@
 from django import forms
-from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.checkout_settings import DeliveryTiming, checkout_today, min_scheduled_delivery_date
 from apps.core.form_errors import apply_latin_required_messages
 from apps.shipping.selectors import active_cities
 
-User = get_user_model()
-
 
 class CheckoutForm(forms.Form):
     guest_email = forms.EmailField(
         label=_("Email"),
-        required=False,
+        required=True,
         widget=forms.EmailInput(attrs={"class": "form-control", "autocomplete": "email"}),
     )
     first_name = forms.CharField(
@@ -94,19 +91,9 @@ class CheckoutForm(forms.Form):
         apply_latin_required_messages(self)
         self.user = user
         self.show_email_field = True
+
         if user and user.is_authenticated:
-            account_email = (user.email or "").strip()
-            if account_email:
-                self.show_email_field = False
-                self.fields["guest_email"].required = False
-                self.fields["guest_email"].widget = forms.HiddenInput()
-            else:
-                self.fields["guest_email"].required = True
-                self.fields["guest_email"].widget = forms.EmailInput(
-                    attrs={"class": "form-control", "autocomplete": "email"}
-                )
-        else:
-            self.fields["guest_email"].required = True
+            self.fields["guest_email"].widget.attrs["autocomplete"] = "off"
 
         min_date = min_scheduled_delivery_date()
         self.fields["requested_delivery_date"].widget.attrs["min"] = min_date.isoformat()
@@ -134,19 +121,8 @@ class CheckoutForm(forms.Form):
 
     def clean_guest_email(self) -> str:
         email = (self.cleaned_data.get("guest_email") or "").strip()
-        if self.user and self.user.is_authenticated:
-            account_email = (self.user.email or "").strip()
-            if account_email:
-                return account_email
-            if not email:
-                raise forms.ValidationError(_("Email is required for checkout."))
-            if User.objects.filter(email__iexact=email).exclude(pk=self.user.pk).exists():
-                raise forms.ValidationError(
-                    _("This email is already linked to another account.")
-                )
-            return email
         if not email:
-            raise forms.ValidationError(_("Email is required for guest checkout."))
+            raise forms.ValidationError(_("Email is required for checkout."))
         return email
 
     def clean_order_notes(self) -> str:

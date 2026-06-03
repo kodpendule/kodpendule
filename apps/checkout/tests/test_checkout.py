@@ -430,6 +430,50 @@ class CheckoutViewTests(TestCase):
 
         self.assertEqual(response.status_code, 302)
         user.refresh_from_db()
-        self.assertEqual(user.email, "buyer@example.com")
+        self.assertIsNone(user.email)
         order = Order.objects.get()
         self.assertEqual(order.guest_email, "buyer@example.com")
+
+    def test_logged_in_user_with_email_sees_email_field(self) -> None:
+        from django.contrib.auth import get_user_model
+
+        User = get_user_model()
+        user = User.objects.create_user(
+            username="hasemail",
+            email="member@example.com",
+            password="secret123",
+        )
+        self.client.login(username="hasemail", password="secret123")
+
+        response = self.client.get(shop_reverse("checkout:checkout"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'id="id_guest_email"')
+        self.assertContains(response, 'type="email"')
+        self.assertNotContains(response, "member@example.com")
+
+    def test_logged_in_user_can_order_with_recipient_email(self) -> None:
+        from django.contrib.auth import get_user_model
+
+        User = get_user_model()
+        user = User.objects.create_user(
+            username="giftbuyer",
+            email="member@example.com",
+            password="secret123",
+        )
+        self.client.login(username="giftbuyer", password="secret123")
+
+        with self.settings(SHOP_NOTIFICATION_EMAIL="shop@example.com"):
+            response = self.client.post(
+                shop_reverse("checkout:checkout"),
+                _checkout_post_data(
+                    self.vrdnik.pk,
+                    guest_email="recipient@example.com",
+                ),
+            )
+
+        self.assertEqual(response.status_code, 302)
+        user.refresh_from_db()
+        self.assertEqual(user.email, "member@example.com")
+        order = Order.objects.get()
+        self.assertEqual(order.guest_email, "recipient@example.com")
+        self.assertEqual(order.customer_email, "recipient@example.com")

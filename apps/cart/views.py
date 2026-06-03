@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import TemplateView
 
-from apps.cart.api import cart_state_json
+from apps.cart.api import cart_add_json, cart_state_json
 from apps.cart.cart import get_cart
 from apps.core.mixins import ShopLanguageMixin
 from apps.core.storefront_urls import shop_reverse
@@ -17,6 +17,14 @@ from apps.products.selectors import get_product_by_slug
 def _wants_json(request) -> bool:
     accept = request.headers.get("Accept", "")
     return "application/json" in accept or request.headers.get("X-Requested-With") == "XMLHttpRequest"
+
+
+class CartStateView(View):
+    """GET: current cart JSON for mini-cart drawer and live updates."""
+
+    def get(self, request, *args, **kwargs):
+        cart = get_cart(request)
+        return JsonResponse(cart_state_json(request, cart))
 
 
 class CartDetailView(ShopLanguageMixin, TemplateView):
@@ -57,10 +65,20 @@ class CartAddView(View):
                 raise Http404
 
         if product is None:
+            if _wants_json(request):
+                return JsonResponse(
+                    {"ok": False, "error": str(_("Product not found."))},
+                    status=404,
+                )
             messages.error(request, _("Product not found."))
             return redirect(shop_reverse("products:list"))
 
         if product.stock < 1:
+            if _wants_json(request):
+                return JsonResponse(
+                    {"ok": False, "error": str(_("This product is out of stock."))},
+                    status=400,
+                )
             messages.error(request, _("This product is out of stock."))
             return redirect(product.get_absolute_url())
 
@@ -73,8 +91,16 @@ class CartAddView(View):
         try:
             cart.add(product, qty)
         except ValueError:
+            if _wants_json(request):
+                return JsonResponse(
+                    {"ok": False, "error": str(_("Not enough items in stock."))},
+                    status=400,
+                )
             messages.error(request, _("Not enough items in stock."))
             return redirect(product.get_absolute_url())
+
+        if _wants_json(request):
+            return JsonResponse(cart_add_json(request, cart, product))
 
         product.set_current_language(get_shop_language(request))
         messages.success(
@@ -120,5 +146,7 @@ class CartRemoveView(View):
         cart = get_cart(request)
         product = get_object_or_404(Product, pk=kwargs["product_id"])
         cart.remove(product)
+        if _wants_json(request):
+            return JsonResponse(cart_state_json(request, cart))
         messages.info(request, _("Item removed from cart."))
         return redirect(shop_reverse("cart:detail"))

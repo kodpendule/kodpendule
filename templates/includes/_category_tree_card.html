@@ -1,0 +1,14 @@
+{% load i18n %}
+<a href="{{ node.category.get_absolute_url }}" class="shop-category-tree-card">
+    {% if node.category.image %}
+    <img src="{{ node.category.image.url }}" class="shop-category-tree-card__img" alt="{{ node.category.name }}" loading="lazy">
+    {% else %}
+    <span class="shop-category-tree-card__img shop-category-tree-card__img--placeholder" aria-hidden="true"></span>
+    {% endif %}
+    <span class="shop-category-tree-card__body">
+        <span class="shop-category-tree-card__title">{{ node.category.name }}</span>
+        {% if node.category.description %}
+        <span class="shop-category-tree-card__desc">{{ node.category.description|truncatewords:16 }}</span>
+        {% endif %}
+    </span>
+</a>

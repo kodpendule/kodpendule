@@ -44,6 +44,23 @@ class CategoryViewTests(TestCase):
         response = self._get(CategoryListView, "/kategorije/")
         self.assertEqual(response.status_code, 200)
 
+    def test_category_list_renders_hierarchy_not_flat_duplicates(self) -> None:
+        suffix = uuid.uuid4().hex[:8]
+        child = Category.objects.create(is_active=True, parent=self.category)
+        child.set_current_language("sr")
+        child.name = "Podkategorija"
+        child.slug = f"pod-{suffix}"
+        child.save()
+
+        response = self._get(CategoryListView, "/kategorije/")
+        self.assertEqual(response.status_code, 200)
+        response.render()
+        content = response.content.decode()
+        self.assertIn("shop-category-tree", content)
+        self.assertIn("Satovi", content)
+        self.assertIn("Podkategorija", content)
+        self.assertEqual(content.count('class="shop-category-tree-card"'), 2)
+
     def test_category_detail_returns_200(self) -> None:
         response = self._get(
             CategoryDetailView,

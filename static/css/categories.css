@@ -1,0 +1,98 @@
+/**
+ * Category hierarchy (list + detail subcategories).
+ */
+
+.shop-category-tree__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--shop-space-4);
+}
+
+.shop-category-tree__list--nested {
+    margin-top: var(--shop-space-3);
+    margin-left: clamp(var(--shop-space-3), calc(var(--category-depth, 0) * 1.25rem), 4rem);
+    padding-left: var(--shop-space-4);
+    border-left: 2px solid var(--shop-color-border-subtle);
+    gap: var(--shop-space-3);
+}
+
+.shop-category-tree__item {
+    margin: 0;
+}
+
+.shop-category-tree-card {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    gap: var(--shop-space-4);
+    align-items: center;
+    padding: var(--shop-space-4);
+    border: 1px solid var(--shop-color-border-subtle);
+    border-radius: var(--shop-radius-lg);
+    background: var(--shop-color-surface);
+    box-shadow: var(--shop-shadow-sm);
+    text-decoration: none;
+    color: inherit;
+    transition:
+        box-shadow var(--shop-transition-ui, 0.15s ease),
+        border-color var(--shop-transition-ui, 0.15s ease),
+        transform var(--shop-transition-ui, 0.15s ease);
+}
+
+.shop-category-tree-card:hover {
+    border-color: var(--shop-color-primary-muted);
+    box-shadow: var(--shop-shadow-md);
+    transform: translateY(-1px);
+    color: inherit;
+}
+
+.shop-category-tree-card__img {
+    width: 5.5rem;
+    height: 5.5rem;
+    border-radius: var(--shop-radius-md);
+    object-fit: cover;
+    display: block;
+}
+
+.shop-category-tree-card__img--placeholder {
+    background: var(--shop-color-surface-subtle);
+}
+
+.shop-category-tree-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--shop-space-1);
+    min-width: 0;
+}
+
+.shop-category-tree-card__title {
+    font-size: var(--shop-font-size-md);
+    font-weight: var(--shop-font-weight-semibold);
+    color: var(--shop-color-primary-active);
+    line-height: var(--shop-line-height-tight);
+}
+
+.shop-category-tree-card__desc {
+    font-size: var(--shop-font-size-sm);
+    color: var(--shop-color-text-muted);
+    line-height: var(--shop-line-height-relaxed);
+}
+
+@media (max-width: 575.98px) {
+    .shop-category-tree-card {
+        grid-template-columns: 4.5rem 1fr;
+        padding: var(--shop-space-3);
+    }
+
+    .shop-category-tree-card__img {
+        width: 4.5rem;
+        height: 4.5rem;
+    }
+
+    .shop-category-tree__list--nested {
+        margin-left: var(--shop-space-2);
+        padding-left: var(--shop-space-3);
+    }
+}

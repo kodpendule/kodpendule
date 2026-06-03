@@ -55,7 +55,6 @@ class CheckoutView(ShopLanguageMixin, FormView):
         if user.is_authenticated:
             initial.setdefault("first_name", user.first_name)
             initial.setdefault("last_name", user.last_name)
-            initial.setdefault("guest_email", user.email or "")
             profile = getattr(user, "profile", None)
             if profile:
                 initial.setdefault("phone", profile.phone)
@@ -140,13 +139,6 @@ class CheckoutView(ShopLanguageMixin, FormView):
                 _("We could not place your order. Please try again or contact us."),
             )
             return self.render_to_response(self.get_context_data(form=form))
-
-        user = self.request.user
-        if user.is_authenticated and not (user.email or "").strip():
-            submitted_email = form.cleaned_data["guest_email"].strip()
-            if submitted_email:
-                user.email = submitted_email
-                user.save(update_fields=["email"])
 
         self.request.session["last_order_number"] = order.order_number
         self.request.session["last_order_id"] = order.pk

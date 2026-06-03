@@ -61,14 +61,10 @@ def create_order_from_checkout(
     )
     total = subtotal + shipping_price
 
-    email = guest_email
-    if user and user.is_authenticated and user.email:
-        email = user.email or guest_email
-
     order = Order.objects.create(
         order_number=generate_order_number(),
         user=user if user and user.is_authenticated else None,
-        guest_email=email,
+        guest_email=guest_email,
         first_name=first_name,
         last_name=last_name,
         phone=phone,
@@ -119,7 +115,7 @@ def create_order_from_checkout(
         raise CheckoutError(result.message)
 
     archive_customer_from_checkout(
-        email=email,
+        email=guest_email,
         first_name=first_name,
         last_name=last_name,
         phone=phone,

@@ -1,0 +1,13 @@
+{% load shop_urls i18n %}
+<button type="button" class="shop-cart-fab{% if cart_item_count %} is-visible{% endif %}" id="shopCartFab"
+        data-cart-fab
+        data-bs-toggle="offcanvas"
+        data-bs-target="#shopCartDrawer"
+        aria-controls="shopCartDrawer"
+        {% if not cart_item_count %}hidden{% endif %}
+        aria-label="{% trans 'Cart' %}{% if cart_item_count %} ({{ cart_item_count }}){% endif %}">
+    <svg class="shop-cart-fab__icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+        <path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6l-1-3H3"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/>
+    </svg>
+    <span class="shop-cart-fab__badge" data-cart-header-count{% if not cart_item_count %} hidden{% endif %}>{% if cart_item_count %}{{ cart_item_count }}{% else %}0{% endif %}</span>
+</button>

@@ -585,21 +585,28 @@
         position: static;
     }
 
+    .shop-checkout__layout {
+        display: flex;
+        flex-direction: column;
+    }
+
     .shop-checkout__summary-col {
-        order: -1;
+        order: 1;
+    }
+
+    .shop-checkout__form-col {
+        order: 2;
     }
 
     .shop-checkout-mobile-bar {
-        position: sticky;
-        bottom: 0;
-        z-index: 20;
+        order: 3;
+        position: static;
         margin-top: var(--shop-space-4);
-        padding: var(--shop-space-3) 0 calc(var(--shop-space-3) + env(safe-area-inset-bottom, 0px));
-        background: linear-gradient(transparent, var(--shop-color-bg) 25%);
+        padding: var(--shop-space-3) 0;
     }
 
     .shop-checkout-mobile-bar .shop-btn {
-        box-shadow: var(--shop-shadow-md);
+        box-shadow: var(--shop-shadow-sm);
     }
 
     .shop-checkout-section {

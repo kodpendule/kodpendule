@@ -115,9 +115,12 @@ class Order(models.Model):
 
     @property
     def customer_email(self) -> str:
+        """Email for this order (checkout field; may differ from account email)."""
+        if self.guest_email:
+            return self.guest_email
         if self.user_id and self.user.email:
             return self.user.email
-        return self.guest_email
+        return ""
 
     @property
     def customer_full_name(self) -> str:
