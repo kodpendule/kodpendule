@@ -18,7 +18,8 @@ class OrderStatus(models.TextChoices):
 
 
 class PaymentMethod(models.TextChoices):
-    COD = "cod", _("Cash on delivery")
+    CARD = "card", _("Pay by card")
+    CASH = "cash", _("Pay in cash")
 
 
 class Order(models.Model):
@@ -74,7 +75,7 @@ class Order(models.Model):
         _("Payment method"),
         max_length=20,
         choices=PaymentMethod.choices,
-        default=PaymentMethod.COD,
+        default=PaymentMethod.CASH,
     )
     status = models.CharField(
         _("Status"),

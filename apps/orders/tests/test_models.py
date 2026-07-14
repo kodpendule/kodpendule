@@ -34,7 +34,7 @@ class OrderModelTests(TestCase):
             requested_delivery_date=timezone.localdate(),
             order_notes="Pozvati pre dostave.",
             shipping_price=Decimal("300.00"),
-            payment_method=PaymentMethod.COD,
+            payment_method=PaymentMethod.CASH,
             status=OrderStatus.PENDING,
             subtotal=Decimal("2000.00"),
             total=Decimal("2300.00"),

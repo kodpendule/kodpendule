@@ -16,7 +16,7 @@ from apps.core.checkout_settings import (
     resolve_checkout_shipping_price,
 )
 from apps.core.storefront_urls import shop_reverse
-from apps.orders.models import Order
+from apps.orders.models import Order, PaymentMethod
 from apps.orders.services import create_order_from_checkout
 from apps.products.models import Product
 from apps.shipping.models import City
@@ -32,6 +32,7 @@ def _checkout_post_data(city_pk: int, **overrides) -> dict[str, str]:
         "shipping_street": "Ulica 1",
         "delivery_timing": DeliveryTiming.SAME_DAY,
         "order_notes": "",
+        "payment_method": PaymentMethod.CASH,
         "accept_legal": "on",
     }
     data.update(overrides)
@@ -84,6 +85,7 @@ class CheckoutServiceTests(TestCase):
             shipping_city=self.city,
             shipping_street="Ulica 1",
             order_notes="Pozvati pre dostave.",
+            payment_method=PaymentMethod.CASH,
         )
         self.assertRegex(order.order_number, r"^KP-\d{6}$")
         self.assertTrue(order.is_new)
@@ -138,11 +140,30 @@ class CheckoutServiceTests(TestCase):
                 "shipping_street": "St",
                 "delivery_timing": DeliveryTiming.SAME_DAY,
                 "order_notes": "",
+                "payment_method": PaymentMethod.CARD,
                 "accept_legal": True,
             },
             user=None,
         )
         self.assertTrue(form.is_valid())
+
+    def test_checkout_form_requires_payment_method(self) -> None:
+        form = CheckoutForm(
+            data={
+                "guest_email": "a@b.rs",
+                "first_name": "A",
+                "last_name": "B",
+                "phone": "123",
+                "shipping_city": self.city.pk,
+                "shipping_street": "St",
+                "delivery_timing": DeliveryTiming.SAME_DAY,
+                "order_notes": "",
+                "accept_legal": True,
+            },
+            user=None,
+        )
+        self.assertFalse(form.is_valid())
+        self.assertIn("payment_method", form.errors)
 
     def test_checkout_form_requires_date_for_scheduled_delivery(self) -> None:
         form = CheckoutForm(
@@ -155,6 +176,7 @@ class CheckoutServiceTests(TestCase):
                 "shipping_street": "St",
                 "delivery_timing": DeliveryTiming.SCHEDULED,
                 "order_notes": "",
+                "payment_method": PaymentMethod.CASH,
                 "accept_legal": True,
             },
             user=None,
@@ -174,6 +196,7 @@ class CheckoutServiceTests(TestCase):
                 "delivery_timing": DeliveryTiming.SCHEDULED,
                 "requested_delivery_date": checkout_today().isoformat(),
                 "order_notes": "",
+                "payment_method": PaymentMethod.CASH,
                 "accept_legal": True,
             },
             user=None,

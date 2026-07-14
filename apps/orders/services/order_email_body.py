@@ -35,6 +35,14 @@ def build_order_details_text(order: Order) -> str:
     if order.order_notes:
         lines.extend(["", _("Notes: %(notes)s") % {"notes": order.order_notes}])
 
+    lines.extend(
+        [
+            "",
+            _("Payment method: %(method)s")
+            % {"method": order.get_payment_method_display()},
+        ]
+    )
+
     lines.extend(["", _("Products")])
     for item in order.items.all():
         line_total = item.unit_price * item.quantity

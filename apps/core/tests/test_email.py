@@ -114,7 +114,7 @@ class OrderEmailTests(TestCase):
             shipping_city_name="Beograd",
             requested_delivery_date=timezone.localdate(),
             shipping_price=Decimal("350.00"),
-            payment_method=PaymentMethod.COD,
+            payment_method=PaymentMethod.CASH,
             status=OrderStatus.PENDING,
             subtotal=Decimal("2000.00"),
             total=Decimal("2350.00"),
@@ -141,6 +141,7 @@ class OrderEmailTests(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].to, ["kodpendule@gmail.com"])
         self.assertIn("KP-20260101-ABC123", mail.outbox[0].subject)
+        self.assertIn(str(self.order.get_payment_method_display()), mail.outbox[0].body)
 
 
 @override_settings(**EMAIL_SETTINGS)

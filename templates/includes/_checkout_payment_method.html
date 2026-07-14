@@ -1,0 +1,15 @@
+{% load i18n %}
+<div class="shop-payment-method{% if form.payment_method.errors %} shop-field--invalid{% endif %}">
+    <fieldset class="shop-payment-method__choices">
+        <legend class="visually-hidden">{{ form.payment_method.label }}</legend>
+        {% for radio in form.payment_method %}
+        <label class="shop-payment-method__option" for="{{ radio.id_for_label }}">
+            {{ radio.tag }}
+            <span class="shop-payment-method__title">{{ radio.choice_label }}</span>
+        </label>
+        {% endfor %}
+    </fieldset>
+    {% for error in form.payment_method.errors %}
+    <p class="shop-field__error" role="alert">{{ error }}</p>
+    {% endfor %}
+</div>

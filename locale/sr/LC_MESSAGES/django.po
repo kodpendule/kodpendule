@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kod Pendule\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 22:51+0200\n"
+"POT-Creation-Date: 2026-07-14 13:57+0200\n"
 "Language: sr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
@@ -26,12 +26,10 @@ msgid "Name"
 msgstr "Naziv"
 
 #: .\apps\accounts\admin.py:59
-#| msgid "Register"
 msgid "Registered"
 msgstr "Registrovan"
 
 #: .\apps\accounts\admin.py:65
-#| msgid "Customer contacts"
 msgid "Customer contact"
 msgstr "Kontakt kupca"
 
@@ -88,7 +86,7 @@ msgid "Password"
 msgstr "Lozinka"
 
 #: .\apps\accounts\forms.py:43 .\apps\accounts\models.py:31
-#: .\apps\checkout\forms.py:11 .\apps\core\forms.py:14
+#: .\apps\checkout\forms.py:12 .\apps\core\forms.py:14
 #: .\apps\core\models.py:42
 #: .\apps\dashboard\templates\admin\dashboard\index.html:203
 #: .\templates\includes\_footer.html:67 .\templates\pages\contact.html:28
@@ -100,18 +98,18 @@ msgid "Required for order confirmations and signing in."
 msgstr "Obavezan za potvrde narudžbina i prijavu."
 
 #: .\apps\accounts\forms.py:54 .\apps\accounts\models.py:40
-#: .\apps\checkout\forms.py:16 .\apps\orders\models.py:45
+#: .\apps\checkout\forms.py:17 .\apps\orders\models.py:46
 msgid "First name"
 msgstr "Ime"
 
 #: .\apps\accounts\forms.py:61 .\apps\accounts\models.py:41
-#: .\apps\checkout\forms.py:21 .\apps\orders\models.py:46
+#: .\apps\checkout\forms.py:22 .\apps\orders\models.py:47
 msgid "Last name"
 msgstr "Prezime"
 
 #: .\apps\accounts\forms.py:68 .\apps\accounts\models.py:42
-#: .\apps\accounts\models.py:69 .\apps\checkout\forms.py:26
-#: .\apps\core\forms.py:18 .\apps\core\models.py:41 .\apps\orders\models.py:47
+#: .\apps\accounts\models.py:69 .\apps\checkout\forms.py:27
+#: .\apps\core\forms.py:18 .\apps\core\models.py:41 .\apps\orders\models.py:48
 #: .\templates\includes\_footer.html:63 .\templates\pages\contact.html:24
 msgid "Phone"
 msgstr "Telefon"
@@ -272,11 +270,11 @@ msgid "Sort order"
 msgstr "Redosled"
 
 #: .\apps\categories\models.py:17 .\apps\orders\admin.py:193
-#: .\apps\orders\models.py:96 .\apps\products\models.py:44
+#: .\apps\orders\models.py:97 .\apps\products\models.py:44
 msgid "Created at"
 msgstr "Kreirano"
 
-#: .\apps\categories\models.py:18 .\apps\orders\models.py:97
+#: .\apps\categories\models.py:18 .\apps\orders\models.py:98
 #: .\apps\products\models.py:45
 msgid "Updated at"
 msgstr "Ažurirano"
@@ -316,64 +314,72 @@ msgstr "Kategorija nije pronađena."
 msgid "Checkout"
 msgstr "Plaćanje"
 
-#: .\apps\checkout\forms.py:32
+#: .\apps\checkout\forms.py:33
 msgid "City"
 msgstr "Grad"
 
-#: .\apps\checkout\forms.py:34
+#: .\apps\checkout\forms.py:35
 msgid "Select city"
 msgstr "Izaberite grad"
 
-#: .\apps\checkout\forms.py:38
+#: .\apps\checkout\forms.py:39
 msgid "Street and number"
 msgstr "Ulica i broj"
 
-#: .\apps\checkout\forms.py:44
+#: .\apps\checkout\forms.py:45
 msgid "When should we deliver?"
 msgstr "Kada želite dostavu?"
 
-#: .\apps\checkout\forms.py:50
+#: .\apps\checkout\forms.py:51
 msgid "Preferred delivery date"
 msgstr "Željeni datum dostave"
 
-#: .\apps\checkout\forms.py:59
+#: .\apps\checkout\forms.py:60
 msgid "Choose any date after today — delivery is free for scheduled orders."
 msgstr ""
 "Izaberite bilo koji datum posle danas — dostava je besplatna za zakazane "
 "narudžbine."
 
-#: .\apps\checkout\forms.py:63
+#: .\apps\checkout\forms.py:64
 msgid "Order note"
 msgstr "Napomena"
 
-#: .\apps\checkout\forms.py:69
+#: .\apps\checkout\forms.py:70
 msgid "Delivery instructions, building entrance, etc. (optional)"
 msgstr "Uputstva za dostavu, ulaz u zgradu itd. (opciono)"
 
-#: .\apps\checkout\forms.py:76
+#: .\apps\checkout\forms.py:76 .\apps\orders\models.py:75
+msgid "Payment method"
+msgstr "Način plaćanja"
+
+#: .\apps\checkout\forms.py:80 .\apps\orders\services\order_service.py:55
+msgid "Please select how you want to pay."
+msgstr "Izaberite način plaćanja."
+
+#: .\apps\checkout\forms.py:86
 msgid "I have read and accept the Terms of Service and Privacy Policy."
 msgstr "Pročitao/la sam i prihvatam Uslove korišćenja i Politiku privatnosti."
 
-#: .\apps\checkout\forms.py:79
+#: .\apps\checkout\forms.py:89
 msgid ""
 "You must accept the Terms of Service and Privacy Policy to place an order."
 msgstr ""
 "Morate prihvatiti Uslove korišćenja i Politiku privatnosti da biste "
 "poručili."
 
-#: .\apps\checkout\forms.py:113
+#: .\apps\checkout\forms.py:123
 msgid "Choose a delivery date."
 msgstr "Izaberite datum dostave."
 
-#: .\apps\checkout\forms.py:118
+#: .\apps\checkout\forms.py:128
 msgid "Choose a date after today for free scheduled delivery."
 msgstr "Izaberite datum posle danas za besplatnu zakazanu dostavu."
 
-#: .\apps\checkout\forms.py:125
+#: .\apps\checkout\forms.py:135
 msgid "Email is required for checkout."
 msgstr "Email je obavezan za završetak kupovine."
 
-#: .\apps\checkout\views.py:37 .\apps\orders\services\order_service.py:51
+#: .\apps\checkout\views.py:37 .\apps\orders\services\order_service.py:52
 msgid "Your cart is empty."
 msgstr "Vaša korpa je prazna."
 
@@ -385,16 +391,16 @@ msgstr "Dostava još nije dostupna. Kontaktirajte nas."
 msgid "Please correct the highlighted fields and try again."
 msgstr "Ispravite označena polja i pokušajte ponovo."
 
-#: .\apps\checkout\views.py:139
+#: .\apps\checkout\views.py:140
 msgid "We could not place your order. Please try again or contact us."
 msgstr "Narudžbina nije poslata. Pokušajte ponovo ili nas kontaktirajte."
 
-#: .\apps\checkout\views.py:151
+#: .\apps\checkout\views.py:152
 #, python-format
 msgid "Thank you! Your order %(number)s has been placed."
 msgstr "Hvala! Vaša narudžbina %(number)s je primljena."
 
-#: .\apps\checkout\views.py:171
+#: .\apps\checkout\views.py:172
 msgid "Order confirmed"
 msgstr "Narudžbina potvrđena"
 
@@ -423,7 +429,7 @@ msgid "Orders"
 msgstr "Narudžbine"
 
 #: .\apps\core\admin_navigation.py:40 .\apps\core\breadcrumbs.py:15
-#: .\apps\orders\services\order_email_body.py:38 .\apps\products\apps.py:8
+#: .\apps\orders\services\order_email_body.py:46 .\apps\products\apps.py:8
 #: .\apps\products\views.py:64
 #: .\templates\admin\products\product\promo_sales.html:7
 #: .\templates\admin\products\product\recommended_products.html:7
@@ -444,7 +450,6 @@ msgid "Customers"
 msgstr "Kupci"
 
 #: .\apps\core\admin_navigation.py:44
-#| msgid "User"
 msgid "Users"
 msgstr "Korisnici"
 
@@ -590,11 +595,11 @@ msgstr "Dodaj korisnika"
 msgid "Add group"
 msgstr "Dodaj grupu"
 
-#: .\apps\core\admin_ui.py:38 .\apps\orders\models.py:100
+#: .\apps\core\admin_ui.py:38 .\apps\orders\models.py:101
 msgid "order"
 msgstr "Narudžbina"
 
-#: .\apps\core\admin_ui.py:38 .\apps\orders\models.py:101
+#: .\apps\core\admin_ui.py:38 .\apps\orders\models.py:102
 msgid "orders"
 msgstr "Narudžbine"
 
@@ -819,8 +824,8 @@ msgstr ""
 "Poruka trenutno nije poslata. Pokušajte ponovo kasnije ili nas pozovite "
 "putem podataka ispod."
 
-#: .\apps\core\views.py:146 .\templates\checkout\checkout.html:118
-#: .\templates\checkout\checkout.html:144
+#: .\apps\core\views.py:146 .\templates\checkout\checkout.html:113
+#: .\templates\checkout\checkout.html:139
 #: .\templates\includes\_checkout_legal_consent.html:7
 #: .\templates\includes\_footer.html:49 .\templates\includes\_footer.html:94
 #: .\templates\includes\legal\_privacy_content.html:109
@@ -828,8 +833,8 @@ msgstr ""
 msgid "Terms of Service"
 msgstr "Uslovi korišćenja"
 
-#: .\apps\core\views.py:160 .\templates\checkout\checkout.html:120
-#: .\templates\checkout\checkout.html:146
+#: .\apps\core\views.py:160 .\templates\checkout\checkout.html:115
+#: .\templates\checkout\checkout.html:141
 #: .\templates\includes\_checkout_legal_consent.html:9
 #: .\templates\includes\_cookie_banner.html:20
 #: .\templates\includes\_footer.html:50 .\templates\includes\_footer.html:96
@@ -1024,13 +1029,13 @@ msgid "Best-selling products"
 msgstr "Najprodavaniji proizvodi"
 
 #: .\apps\dashboard\templates\admin\dashboard\index.html:155
-#: .\apps\orders\models.py:151 .\apps\products\models.py:101
+#: .\apps\orders\models.py:152 .\apps\products\models.py:101
 #: .\templates\orders\detail.html:43 .\templates\orders\detail.html:52
 msgid "Product"
 msgstr "Proizvod"
 
 #: .\apps\dashboard\templates\admin\dashboard\index.html:156
-#: .\apps\orders\models.py:154 .\apps\products\models.py:18
+#: .\apps\orders\models.py:155 .\apps\products\models.py:18
 #: .\templates\admin\products\product\promo_sales.html:45
 #: .\templates\admin\products\product\recommended_products.html:31
 #: .\templates\cart\detail.html:41 .\templates\products\detail.html:72
@@ -1086,7 +1091,7 @@ msgstr "Stavke narudžbine"
 msgid "Line total"
 msgstr "Ukupno za stavku"
 
-#: .\apps\orders\admin.py:69 .\apps\orders\models.py:143
+#: .\apps\orders\admin.py:69 .\apps\orders\models.py:144
 #: .\templates\orders\detail.html:20 .\templates\orders\history.html:14
 #: .\templates\orders\history.html:24
 msgid "Order"
@@ -1130,13 +1135,13 @@ msgstr "Označi kao poslato"
 msgid "Mark as delivered"
 msgstr "Označi kao isporučeno"
 
-#: .\apps\orders\admin.py:180 .\apps\orders\models.py:80
+#: .\apps\orders\admin.py:180 .\apps\orders\models.py:81
 #: .\templates\admin\index.html:62 .\templates\orders\detail.html:29
 #: .\templates\orders\history.html:16 .\templates\orders\history.html:26
 msgid "Status"
 msgstr "Status"
 
-#: .\apps\orders\admin.py:184 .\apps\orders\models.py:94
+#: .\apps\orders\admin.py:184 .\apps\orders\models.py:95
 #: .\templates\admin\index.html:63
 #: .\templates\includes\_order_summary_card.html:32
 #: .\templates\orders\history.html:17 .\templates\orders\history.html:27
@@ -1148,7 +1153,7 @@ msgstr "Ukupno"
 msgid "guest"
 msgstr "gost"
 
-#: .\apps\orders\forms.py:9 .\apps\orders\models.py:26
+#: .\apps\orders\forms.py:9 .\apps\orders\models.py:27
 #: .\templates\admin\index.html:60
 msgid "Order number"
 msgstr "Broj narudžbine"
@@ -1176,95 +1181,94 @@ msgstr "U obradi"
 msgid "Cancelled"
 msgstr "Otkazano"
 
-#: .\apps\orders\models.py:21 .\templates\checkout\checkout.html:100
-#: .\templates\includes\_home_trust_details.html:25
-msgid "Cash on delivery"
-msgstr "Plaćanje pouzećem"
+#: .\apps\orders\models.py:21
+msgid "Pay by card"
+msgstr "Plaćanje karticom"
 
-#: .\apps\orders\models.py:38
+#: .\apps\orders\models.py:22
+msgid "Pay in cash"
+msgstr "Plaćanje gotovinom"
+
+#: .\apps\orders\models.py:39
 msgid "User"
 msgstr "Korisnik"
 
-#: .\apps\orders\models.py:41
+#: .\apps\orders\models.py:42
 msgid "Guest email"
 msgstr "Email gosta"
 
-#: .\apps\orders\models.py:42
+#: .\apps\orders\models.py:43
 msgid "Used for guest orders and order tracking."
 msgstr "Koristi se za narudžbine gostiju i praćenje."
 
-#: .\apps\orders\models.py:49
+#: .\apps\orders\models.py:50
 msgid "Shipping street"
 msgstr "Ulica za dostavu"
 
-#: .\apps\orders\models.py:51
+#: .\apps\orders\models.py:52
 msgid "Shipping city name"
 msgstr "Naziv grada dostave"
 
-#: .\apps\orders\models.py:53
+#: .\apps\orders\models.py:54
 msgid "City name as entered by customer."
 msgstr "Naziv grada kako ga je uneo kupac."
 
-#: .\apps\orders\models.py:59
+#: .\apps\orders\models.py:60
 msgid "Shipping city"
 msgstr "Grad dostave"
 
-#: .\apps\orders\models.py:63
+#: .\apps\orders\models.py:64
 msgid "Order notes"
 msgstr "Napomene uz narudžbinu"
 
-#: .\apps\orders\models.py:65
+#: .\apps\orders\models.py:66
 msgid "Optional note from checkout."
 msgstr "Opciona napomena sa plaćanja."
 
-#: .\apps\orders\models.py:68
+#: .\apps\orders\models.py:69
 msgid "Requested delivery date"
 msgstr "Traženi datum dostave"
 
-#: .\apps\orders\models.py:69
+#: .\apps\orders\models.py:70
 msgid "Customer's preferred delivery date from checkout."
 msgstr "Traženi datum dostave koji je kupac izabrao pri plaćanju."
 
-#: .\apps\orders\models.py:71
+#: .\apps\orders\models.py:72
 msgid "Shipping price"
 msgstr "Cena dostave"
 
-#: .\apps\orders\models.py:74
-msgid "Payment method"
-msgstr "Način plaćanja"
-
-#: .\apps\orders\models.py:87
+#: .\apps\orders\models.py:88
 msgid "New (unread)"
 msgstr "Nova (nepročitana)"
 
-#: .\apps\orders\models.py:90
+#: .\apps\orders\models.py:91
 msgid "Marked as read when opened in admin."
 msgstr "Označava se kao pročitana kada je otvorite u adminu."
 
-#: .\apps\orders\models.py:93
+#: .\apps\orders\models.py:94
 msgid "Subtotal"
 msgstr "Ukupno"
 
-#: .\apps\orders\models.py:153
+#: .\apps\orders\models.py:154
 msgid "Product name"
 msgstr "Naziv proizvoda"
 
-#: .\apps\orders\models.py:156
+#: .\apps\orders\models.py:157
 msgid "Unit price"
 msgstr "Jedinična cena"
 
-#: .\apps\orders\models.py:160 .\templates\cart\detail.html:52
+#: .\apps\orders\models.py:161 .\templates\cart\detail.html:52
 #: .\templates\includes\_cart_drawer.html:9
 #: .\templates\includes\_product_card.html:58
 #: .\templates\products\detail.html:121
 msgid "Quantity"
 msgstr "Količina"
 
-#: .\apps\orders\models.py:165
+#: .\apps\orders\models.py:166
 msgid "order item"
 msgstr "Stavka narudžbine"
 
-#: .\apps\orders\models.py:166
+#: .\apps\orders\models.py:167
 msgid "order items"
 msgstr "Stavke narudžbine"
 
@@ -1293,22 +1297,28 @@ msgstr "Traženi datum dostave: %(date)s"
 msgid "Notes: %(notes)s"
 msgstr "Napomene: %(notes)s"
 
-#: .\apps\orders\services\order_email_body.py:42
+#: .\apps\orders\services\order_email_body.py:41
+#, python-format
+#| msgid "Payment method"
+msgid "Payment method: %(method)s"
+msgstr "Način plaćanja: %(method)s"
+
+#: .\apps\orders\services\order_email_body.py:50
 #, python-format
 msgid "- %(name)s × %(qty)s @ %(unit)s = %(total)s"
 msgstr "- %(name)s × %(qty)s @ %(unit)s = %(total)s"
 
-#: .\apps\orders\services\order_email_body.py:54
+#: .\apps\orders\services\order_email_body.py:62
 #, python-format
 msgid "Subtotal: %(amount)s"
 msgstr "Ukupno: %(amount)s"
 
-#: .\apps\orders\services\order_email_body.py:55
+#: .\apps\orders\services\order_email_body.py:63
 #, python-format
 msgid "Shipping: %(amount)s"
 msgstr "Dostava: %(amount)s"
 
-#: .\apps\orders\services\order_email_body.py:56
+#: .\apps\orders\services\order_email_body.py:64
 #, python-format
 msgid "Total: %(amount)s"
 msgstr "Ukupno: %(amount)s"
@@ -1335,8 +1345,8 @@ msgstr "Nova narudžbina %(number)s"
 msgid "A new order has been placed on the shop."
 msgstr "Nova narudžbina je poslata preko prodavnice."
 
-#: .\apps\orders\services\order_service.py:87
-#: .\apps\orders\services\order_service.py:135
+#: .\apps\orders\services\order_service.py:91
+#: .\apps\orders\services\order_service.py:139
 #, python-format
 msgid "Not enough stock for %(name)s."
 msgstr "Nema dovoljno zaliha za %(name)s."
@@ -1673,7 +1683,6 @@ msgid "Already have an account?"
 msgstr "Već imate nalog?"
 
 #: .\templates\admin\accounts\customercontact\change_list.html:7
-#| msgid "Import CSV"
 msgid "Export CSV"
 msgstr "Izvezi CSV"
 
@@ -1981,7 +1990,7 @@ msgid "Remove"
 msgstr "Ukloni"
 
 #: .\templates\cart\detail.html:76 .\templates\cart\detail.html:78
-#: .\templates\checkout\checkout.html:130
+#: .\templates\checkout\checkout.html:125
 #: .\templates\includes\_order_summary_card.html:5
 msgid "Order summary"
 msgstr "Pregled narudžbine"
@@ -2105,21 +2114,17 @@ msgstr "Opciono — napišite sve što treba da znamo o dostavi."
 msgid "Payment"
 msgstr "Plaćanje"
 
-#: .\templates\checkout\checkout.html:102
-msgid "Payment is available in cash or by card when you receive your order."
-msgstr "Plaćanje je moguće gotovinom ili karticom prilikom preuzimanja robe."
-
-#: .\templates\checkout\checkout.html:108
+#: .\templates\checkout\checkout.html:103
 msgid "Legal consent"
 msgstr "Pravna saglasnost"
 
-#: .\templates\checkout\checkout.html:114
-#: .\templates\checkout\checkout.html:140
+#: .\templates\checkout\checkout.html:109
+#: .\templates\checkout\checkout.html:135
 msgid "Place order"
 msgstr "Poruči"
 
-#: .\templates\checkout\checkout.html:117
-#: .\templates\checkout\checkout.html:143
+#: .\templates\checkout\checkout.html:112
+#: .\templates\checkout\checkout.html:138
 msgid "By placing the order you confirm your details are correct."
 msgstr "Poručivanjem potvrđujete da su podaci tačni."
 
@@ -2264,12 +2269,13 @@ msgid "Accept"
 msgstr "Prihvati"
 
 #: .\templates\includes\_footer.html:16
+#| msgid ""
+#| "Quality products and reliable delivery across Serbia — order online, pay on "
+#| "delivery."
 msgid ""
-"Quality products and reliable delivery across Serbia — order online, pay on "
-"delivery."
+"Quality products and reliable delivery — order online, pay on delivery."
 msgstr ""
-"Kvalitetni proizvodi i pouzdana dostava širom Srbije — poručite online, "
-"platite pouzećem."
+"Kvalitetni proizvodi i pouzdana dostava — poručite online, platite pouzećem."
 
 #: .\templates\includes\_footer.html:20
 msgid "Carefully selected assortment and transparent pricing."
@@ -2490,9 +2496,8 @@ msgid "Enter delivery details and confirm your order in a few minutes."
 msgstr "Unesite podatke za dostavu i potvrdite narudžbinu za nekoliko minuta."
 
 #: .\templates\includes\_home_how_it_works.html:29
-msgid ""
-"Receive your package and pay the courier in cash — track status anytime."
-msgstr "Preuzmite paket i platite kurira gotovinom — status pratite uvek."
+msgid "Option to pay on site, by card or in cash."
+msgstr "Mogućnost plaćanja na licu mesta, karticom i gotovinom."
 
 #: .\templates\includes\_home_new_arrivals.html:7
 msgid "Just in"
@@ -2572,6 +2577,10 @@ msgstr ""
 msgid ""
 "We prepare orders quickly and keep you informed about shipping and handover."
 msgstr "Brzo pripremamo narudžbine i obaveštavamo vas o slanju i preuzimanju."
+
+#: .\templates\includes\_home_trust_details.html:25
+msgid "Cash on delivery"
+msgstr "Plaćanje pouzećem"
 
 #: .\templates\includes\_home_trust_details.html:26
 msgid ""

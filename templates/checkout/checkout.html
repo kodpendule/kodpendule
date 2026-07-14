@@ -96,12 +96,7 @@
 
                 <section class="shop-checkout-section shop-checkout-section--payment" aria-labelledby="checkout-payment-heading">
                     <h2 id="checkout-payment-heading" class="shop-checkout-section__title">{% trans "Payment" %}</h2>
-                    <div class="shop-cod-card">
-                        <p class="shop-cod-card__title">{% trans "Cash on delivery" %}</p>
-                        <p class="shop-cod-card__text mb-0">
-                            {% trans "Payment is available in cash or by card when you receive your order." %}
-                        </p>
-                    </div>
+                    {% include "includes/_checkout_payment_method.html" %}
                 </section>
 
                 <section class="shop-checkout-section shop-checkout-section--legal" aria-labelledby="checkout-legal-heading">

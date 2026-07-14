@@ -44,11 +44,15 @@ def create_order_from_checkout(
     shipping_city: City,
     shipping_street: str,
     order_notes: str,
+    payment_method: str,
     requested_delivery_date=None,
 ) -> Order:
     lines = cart.get_lines()
     if not lines:
         raise CheckoutError(_("Your cart is empty."))
+
+    if payment_method not in PaymentMethod.values:
+        raise CheckoutError(_("Please select how you want to pay."))
 
     _validate_stock(lines)
 
@@ -74,7 +78,7 @@ def create_order_from_checkout(
         order_notes=order_notes,
         requested_delivery_date=delivery_date,
         shipping_price=shipping_price,
-        payment_method=PaymentMethod.COD,
+        payment_method=payment_method,
         status=OrderStatus.PENDING,
         subtotal=subtotal,
         total=total,

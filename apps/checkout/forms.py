@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.checkout_settings import DeliveryTiming, checkout_today, min_scheduled_delivery_date
 from apps.core.form_errors import apply_latin_required_messages
+from apps.orders.models import PaymentMethod
 from apps.shipping.selectors import active_cities
 
 
@@ -69,6 +70,15 @@ class CheckoutForm(forms.Form):
                 "placeholder": _("Delivery instructions, building entrance, etc. (optional)"),
             }
         ),
+    )
+
+    payment_method = forms.ChoiceField(
+        label=_("Payment method"),
+        choices=PaymentMethod.choices,
+        widget=forms.RadioSelect(attrs={"class": "shop-payment-method__input"}),
+        error_messages={
+            "required": _("Please select how you want to pay."),
+        },
     )
 
     accept_legal = forms.BooleanField(
