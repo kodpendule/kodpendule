@@ -473,7 +473,7 @@ TRANSLATIONS: dict[str, str] = {
         "%(message)s"
     ),
     "Knez Mihailova 1\n11000 Beograd": "Knez Mihailova 1\n11000 Beograd",
-    "Karađorđeva 11\n21315 Vrdnik": "Karađorđeva 11\n21315 Vrdnik",
+    "Karađorđeva 11\n22408 Vrdnik": "Karađorđeva 11\n22408 Vrdnik",
     "Mon–Fri: 9:00–17:00\nSat: 9:00–13:00": "Pon–Pet: 09:00–17:00\nSub: 09:00–13:00",
     "Featured product sections will appear here once configured in the admin.": "Istaknute sekcije proizvoda pojaviće se kada budu podešene u administraciji.",
     "In stock": "Na stanju",
