@@ -12,6 +12,7 @@ from apps.products.forms import InventoryCategoryForm, InventoryXMLUploadForm
 from apps.products.models import XMLImportBatch
 from apps.products.services.inventory_xml import (
     MAX_XML_BYTES, InventoryImportError, apply_import, build_preview, save_categories,
+    uncategorized_skus,
 )
 
 
@@ -58,20 +59,31 @@ def inventory_import_view(model_admin, request, batch_id=None):
                 messages.success(request, _("Category choices saved. Continue reviewing or apply the import."))
                 return redirect(request.get_full_path())
             elif action == "apply":
-                result = apply_import(batch.pk, user=request.user, acknowledge_rejected=request.POST.get("acknowledge_rejected") == "on")
+                result = apply_import(
+                    batch.pk, user=request.user,
+                    acknowledge_rejected=request.POST.get("acknowledge_rejected") == "on",
+                    skip_uncategorized=request.POST.get("skip_uncategorized") == "on",
+                )
                 messages.success(request, _("Inventory imported: %(created)s new, %(updated)s updated, %(unchanged)s unchanged, %(rejected)s excluded.") % result)
+                if result.get("skipped"):
+                    messages.warning(request, _("New products skipped because they have no category: %(skipped)s.") % result)
                 return redirect("admin:products_product_xml_preview", batch_id=batch.pk)
             elif action != "categories":
                 raise InventoryImportError(_("Invalid import action."))
         except InventoryImportError as exc:
             error = str(exc)
+    uncategorized = uncategorized_skus(batch)
+    remaining = len(uncategorized)
     table_rows = []
     for row in page.object_list:
-        table_rows.append({**row, "category_field": form[f"category_{row['line']}"] if row["action"] == "new" else None})
-    remaining = sum(row["action"] == "new" and row["sku"] not in batch.categories for row in rows)
+        table_rows.append({
+            **row,
+            "category_field": form[f"category_{row['line']}"] if row["action"] == "new" else None,
+            "uncategorized": row["sku"] in uncategorized,
+        })
     context.update({
         "batch": batch, "page_obj": page, "table_rows": table_rows, "category_form": form,
-        "error": error, "remaining": remaining, "show_new": show_new,
+        "error": error, "remaining": remaining, "importable": len(rows) - remaining, "show_new": show_new,
         "can_add": model_admin.has_add_permission(request),
         "has_new_on_page": any(row["action"] == "new" for row in page.object_list),
     })

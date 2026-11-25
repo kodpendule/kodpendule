@@ -200,21 +200,35 @@ def save_categories(batch_id, *, user, categories: dict) -> XMLImportBatch:
     return batch
 
 
-def apply_import(batch_id, *, user, acknowledge_rejected=False) -> dict:
-    """One atomic change set; all checks precede writes and replay is a no-op."""
+def uncategorized_skus(batch) -> set[str]:
+    """New products in the preview that have no saved category yet."""
+    return {row["sku"] for row in batch.payload["rows"] if row["action"] == "new" and row["sku"] not in batch.categories}
+
+
+def apply_import(batch_id, *, user, acknowledge_rejected=False, skip_uncategorized=False) -> dict:
+    """One atomic change set; all checks precede writes and replay is a no-op.
+
+    Uncategorized new products block the import unless the caller explicitly
+    opts into skipping them, so they never hold up stock updates by surprise.
+    """
     try:
         with transaction.atomic():
-            return _apply_locked(batch_id, user=user, acknowledge_rejected=acknowledge_rejected)
+            return _apply_locked(
+                batch_id, user=user, acknowledge_rejected=acknowledge_rejected,
+                skip_uncategorized=skip_uncategorized,
+            )
     except IntegrityError as exc:
         raise InventoryImportError(_("Products changed during import. Upload the XML again.")) from exc
 
 
-def _apply_locked(batch_id, *, user, acknowledge_rejected):
+def _apply_locked(batch_id, *, user, acknowledge_rejected, skip_uncategorized):
     batch = XMLImportBatch.objects.select_for_update().get(pk=batch_id)
     _check_batch(batch, user)
     if batch.applied_at:
         return batch.result
     rows = batch.payload["rows"]
+    skipped = uncategorized_skus(batch) if skip_uncategorized else set()
+    rows = [row for row in rows if row["sku"] not in skipped]
     new_rows = [row for row in rows if row["action"] == "new"]
     _authorize(user, adding=bool(new_rows))
     if batch.payload["rejected"] and not acknowledge_rejected:
@@ -246,7 +260,7 @@ def _apply_locked(batch_id, *, user, acknowledge_rejected):
         if restricted_product_reason(row["name"], row["sku"]):
             raise InventoryImportError(_("A restricted product was detected. Upload the XML again."))
     now = timezone.now()
-    result = {"created": 0, "updated": 0, "unchanged": 0, "rejected": len(batch.payload["rejected"])}
+    result = {"created": 0, "updated": 0, "unchanged": 0, "rejected": len(batch.payload["rejected"]), "skipped": len(skipped)}
     for row in rows:
         if row["action"] == "new":
             product = Product(category_id=batch.categories[row["sku"]], sku=row["sku"], barcode=row["barcode"], price=Decimal(row["price"]), stock=row["stock"])

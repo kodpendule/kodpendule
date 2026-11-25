@@ -32,7 +32,7 @@
     <h2>{{ batch.filename }}</h2><div class="kp-detail-cards"><section><small>{% trans "Total records" %}</small><strong>{{ batch.payload.total }}</strong></section><section><small>{% trans "New" %}</small><strong>{{ batch.payload.counts.new|default:0 }}</strong></section><section><small>{% trans "Stock changes" %}</small><strong>{{ batch.payload.counts.changed|default:0 }}</strong></section><section><small>{% trans "Excluded" %}</small><strong>{{ batch.payload.rejected|length }}</strong></section></div>
     {% if error %}<p class="errornote" role="alert">{{ error }}</p>{% endif %}
     {% if batch.applied_at %}
-        <div class="messagelist"><p class="success">{% trans "Import applied" %} — {{ batch.applied_at|date:"d/m/Y H:i" }}. {% trans "New" %}: {{ batch.result.created }} · {% trans "Stock changes" %}: {{ batch.result.updated }} · {% trans "Unchanged" %}: {{ batch.result.unchanged }} · {% trans "Excluded" %}: {{ batch.result.rejected }}.</p></div>
+        <div class="messagelist"><p class="success">{% trans "Import applied" %} — {{ batch.applied_at|date:"d/m/Y H:i" }}. {% trans "New" %}: {{ batch.result.created }} · {% trans "Stock changes" %}: {{ batch.result.updated }} · {% trans "Unchanged" %}: {{ batch.result.unchanged }} · {% trans "Excluded" %}: {{ batch.result.rejected }}{% if batch.result.skipped %} · {% trans "Skipped — no category" %}: {{ batch.result.skipped }}{% endif %}.</p></div>
     {% else %}
         <p>{% trans "Preview expires" %}: {{ batch.expires_at|date:"d/m/Y H:i" }}. {% trans "If the catalog or stock changes after preview, upload the XML again." %}</p>
         {% if remaining %}<p class="errornote">{% trans "New products still needing a category" %}: {{ remaining }}.</p>{% endif %}
@@ -47,7 +47,7 @@
             <tbody>{% for row in table_rows %}<tr>
                 <td>{{ row.sku }}</td><td>{{ row.name }}</td><td>{{ row.barcode|default:"—" }}</td>
                 <td>{% if row.before %}{{ row.before.stock }}{% else %}—{% endif %}</td><td>{{ row.stock }}</td><td>{{ row.price }}</td>
-                <td>{% if row.action == "new" %}{% if batch.applied_at %}{% trans "Created" %}{% else %}{{ row.category_field.errors }}{{ row.category_field }}{% endif %}
+                <td>{% if row.action == "new" %}{% if batch.applied_at %}{% if row.uncategorized %}{% trans "Skipped — no category" %}{% else %}{% trans "Created" %}{% endif %}{% else %}{{ row.category_field.errors }}{{ row.category_field }}{% endif %}
                 {% elif row.action == "changed" %}{% trans "Update stock" %}{% else %}{% trans "No change" %}{% endif %}</td>
             </tr>{% empty %}<tr><td colspan="7">{% trans "No records in this view." %}</td></tr>{% endfor %}</tbody>
         </table></div>
@@ -69,8 +69,13 @@
     <form method="post" class="kp-card" id="xml-apply-form">
         {% csrf_token %}<input type="hidden" name="action" value="apply">
         {% if batch.payload.rejected %}<p><label><input type="checkbox" name="acknowledge_rejected" required> {% trans "I reviewed the excluded records and agree to skip them." %}</label></p>{% endif %}
+        {% if remaining %}
+        <p class="errornote">{% trans "New products still needing a category" %}: {{ remaining }}. <a href="?show=new">{% trans "Show new products" %}</a></p>
+        {% if importable %}<p><label><input type="checkbox" name="skip_uncategorized" required> {% trans "Import everything else now and skip new products without a category. They will be offered again on the next import." %}</label></p>{% endif %}
+        {% endif %}
         <p>{% trans "Save category choices before applying. All valid changes are applied together." %}</p>
-        <button type="submit" class="default" {% if remaining or not batch.payload.rows %}disabled{% endif %}>{% trans "Apply inventory import" %}</button>
+        <p class="errornote" id="xml-unsaved-note" role="status" hidden>{% trans "Category choices on this page are not saved. Save them before applying the import." %}</p>
+        <button type="submit" class="default" {% if not importable %}disabled{% endif %}>{% trans "Apply inventory import" %}</button>
     </form>
     {% endif %}
     {% endif %}

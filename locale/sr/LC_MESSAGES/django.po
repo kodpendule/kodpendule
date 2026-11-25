@@ -5086,3 +5086,16 @@ msgstr "Zadrži"
 
 msgid "Back to products"
 msgstr "Nazad na proizvode"
+
+msgid "Skipped — no category"
+msgstr "Preskočeno — bez kategorije"
+
+#, python-format
+msgid "New products skipped because they have no category: %(skipped)s."
+msgstr "Novi artikli preskočeni jer nemaju kategoriju: %(skipped)s."
+
+msgid "Import everything else now and skip new products without a category. They will be offered again on the next import."
+msgstr "Uvezi sve ostalo sada, a nove artikle bez kategorije preskoči. Ponudiće se ponovo pri sledećem uvozu."
+
+msgid "Category choices on this page are not saved. Save them before applying the import."
+msgstr "Izbor kategorija na ovoj strani nije sačuvan. Sačuvajte ga pre primene uvoza."
