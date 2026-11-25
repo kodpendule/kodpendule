@@ -26,6 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
             categoriesChanged = true;
             const apply = document.querySelector("#xml-apply-form button");
             if (apply) apply.disabled = true;
+            const note = document.getElementById("xml-unsaved-note");
+            if (note) note.hidden = false;
         });
     });
     document.querySelectorAll("form").forEach(form => {

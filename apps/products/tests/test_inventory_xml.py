@@ -254,6 +254,31 @@ class InventoryXMLImportTests(TestCase):
             apply_import(batch.pk, user=self.user)
         self.assertEqual(apply_import(batch.pk, user=self.user, acknowledge_rejected=True)["rejected"], 1)
 
+    def test_uncategorized_new_products_are_skipped_only_on_request(self):
+        batch = self.preview({}, {"sku": "002", "barcode": "222"}, {"sku": "003", "barcode": "333"})
+        save_categories(batch.pk, user=self.user, categories={"002": self.category.pk})
+        with self.assertRaises(InventoryImportError):
+            apply_import(batch.pk, user=self.user)
+        self.product.refresh_from_db()
+        self.assertEqual(self.product.stock, 3)
+        result = apply_import(batch.pk, user=self.user, skip_uncategorized=True)
+        self.assertEqual((result["updated"], result["created"], result["skipped"]), (1, 1, 1))
+        self.product.refresh_from_db()
+        self.assertEqual(self.product.stock, 8)
+        self.assertTrue(Product.objects.filter(sku="002").exists())
+        self.assertFalse(Product.objects.filter(sku="003").exists())
+        self.assertEqual(self.preview({"sku": "003", "barcode": "333"}).payload["counts"], {"new": 1})
+
+    def test_skipping_never_bypasses_inactive_category_or_empty_import(self):
+        batch = self.preview({}, {"sku": "002", "barcode": "222"})
+        save_categories(batch.pk, user=self.user, categories={"002": self.category.pk})
+        Category.objects.filter(pk=self.category.pk).update(is_active=False)
+        with self.assertRaises(InventoryImportError):
+            apply_import(batch.pk, user=self.user, skip_uncategorized=True)
+        batch = self.preview({"sku": "003", "barcode": "333"})
+        with self.assertRaises(InventoryImportError):
+            apply_import(batch.pk, user=self.user, skip_uncategorized=True)
+
     def test_batches_belong_to_creator(self):
         other = get_user_model().objects.create_superuser("other", "other@test.test", "pass")
         batch = self.preview()
@@ -268,6 +293,11 @@ class InventoryXMLImportTests(TestCase):
         batch = build_preview(xml({"sku": "002", "barcode": "222"}), user=staff)
         with self.assertRaises(PermissionDenied):
             save_categories(batch.pk, user=staff, categories={"002": self.category.pk})
+        batch = build_preview(xml({"stock": "5"}, {"sku": "002", "barcode": "222"}), user=staff)
+        with self.assertRaises(PermissionDenied):
+            apply_import(batch.pk, user=staff)
+        self.assertEqual(apply_import(batch.pk, user=staff, skip_uncategorized=True)["updated"], 1)
+        self.assertFalse(Product.objects.filter(sku="002").exists())
 
     def test_deleted_or_concurrently_created_sku_blocks_apply(self):
         batch = self.preview()
@@ -297,6 +327,28 @@ class InventoryXMLAdminTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Product.objects.get(sku="002").stock, 8)
         self.assertEqual(self.client.get(preview_url).status_code, 200)
+
+    def test_apply_is_available_with_explicit_skip_of_uncategorized_products(self):
+        batch = self.preview({}, {"sku": "002", "barcode": "222"})
+        url = reverse("admin:products_product_xml_preview", args=[batch.pk])
+        response = self.client.get(url)
+        self.assertContains(response, 'name="skip_uncategorized" required')
+        self.assertNotContains(response, '<button type="submit" class="default" disabled>')
+        response = self.client.post(url, {"action": "apply"})
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context["error"])
+        response = self.client.post(url, {"action": "apply", "skip_uncategorized": "on"}, follow=True)
+        self.product.refresh_from_db()
+        self.assertEqual(self.product.stock, 8)
+        self.assertFalse(Product.objects.filter(sku="002").exists())
+        self.assertTrue(response.context["table_rows"][1]["uncategorized"])
+        self.assertEqual(len(list(response.context["messages"])), 2)
+
+    def test_apply_stays_disabled_when_every_record_needs_a_category(self):
+        batch = self.preview({"sku": "002", "barcode": "222"})
+        response = self.client.get(reverse("admin:products_product_xml_preview", args=[batch.pk]))
+        self.assertContains(response, '<button type="submit" class="default" disabled>')
+        self.assertNotContains(response, "skip_uncategorized")
 
     def test_csrf_required(self):
         client = Client(enforce_csrf_checks=True)

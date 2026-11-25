@@ -10,3 +10,4 @@
 .kp-inventory-import button { padding: 12px 20px; cursor: pointer; }
 .kp-inventory-import button:disabled { opacity: .5; cursor: not-allowed; }
 .kp-inventory-import summary { cursor: pointer; font-weight: 600; }
+.kp-inventory-import [hidden] { display: none; }
